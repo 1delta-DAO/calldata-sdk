@@ -1,0 +1,15 @@
+// tsconfig.base.json
+{
+  "files": [],
+  "references": [
+    {
+      "path": "packages/worker"
+    },
+    {
+      "path": "packages/calldata-sdk"
+    },
+    {
+      "path": "packages/calldata-sdk-fuel"
+    }
+  ]
+}

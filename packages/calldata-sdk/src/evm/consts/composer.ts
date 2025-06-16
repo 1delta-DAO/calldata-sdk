@@ -1,0 +1,36 @@
+import { Chain } from '@1delta/asset-registry'
+
+// Staging ones:
+// export const ONE_DELTA_COMPOSER = {
+//   [Chain.MANTLE]: '0x5494b574bEe7aa091799ECbf3DDBFEeF5da4F720',
+//   [Chain.POLYGON_MAINNET]: '0x7cE0eE90c9fd60293B9cA6f52E278F54Af6B41c0',
+//   [Chain.TAIKO_ALETHIA]: '0x164e08ACE9DAe58BEa18eF268b716f5deBD7c692',
+//   [Chain.ARBITRUM_ONE]: '0x816EBC5cb8A5651C902Cb06659907A93E574Db0B',
+// }
+
+// Production ones
+export const ONE_DELTA_COMPOSER = {
+  [Chain.MANTLE]: '0x9bc92bF848FaF2355c429c54d1edE3e767bDd790',
+  [Chain.POLYGON_MAINNET]: '0x6A6faa54B9238f0F079C8e6CBa08a7b9776C7fE4',
+  [Chain.TAIKO_ALETHIA]: '0x0bd7473CbBf81d9dD936c61117eD230d95006CA2',
+  [Chain.ARBITRUM_ONE]: '0x816EBC5cb8A5651C902Cb06659907A93E574Db0B',
+  [Chain.BASE]: '0x816EBC5cb8A5651C902Cb06659907A93E574Db0B',
+  [Chain.OP_MAINNET]: '0x816EBC5cb8A5651C902Cb06659907A93E574Db0B',
+  [Chain.HEMI_NETWORK]: '0x816EBC5cb8A5651C902Cb06659907A93E574Db0B',
+}
+
+const COMPOSER_PROXIES = {
+  [Chain.ARBITRUM_ONE]: '0x05f3f58716a88A52493Be45aA0871c55b3748f18',
+  [Chain.OP_MAINNET]: '0xCDef0A216fcEF809258aA4f341dB1A5aB296ea72',
+  [Chain.POLYGON_MAINNET]: '0xFd245e732b40b6BF2038e42b476bD06580585326',
+  [Chain.BASE]: '0xB7ea94340e65CC68d1274aE483dfBE593fD6f21e',
+}
+
+export function getDeltaComposerAddress(chainId?: string) {
+  if (!chainId) return undefined
+  return ONE_DELTA_COMPOSER[chainId as keyof typeof ONE_DELTA_COMPOSER]
+}
+
+export function getDeltaComposerProxyAddress(chainId: string): string | undefined {
+  return COMPOSER_PROXIES[chainId as keyof typeof COMPOSER_PROXIES]
+}

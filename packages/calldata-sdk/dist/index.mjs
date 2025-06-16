@@ -1,0 +1,11792 @@
+import { zeroAddress, encodePacked as encodePacked$1, encodeAbiParameters, maxUint16 } from 'viem';
+import { DexTypeMappings, encodePacked, encodeApprove, encodeExternalCall, encodeSweep, SweepType, encodePermit, PermitIds, encodePermit2TransferFrom, attachBranch, encodeWrapperSwap, WrapOperation, DexPayConfig, FlashLoanIds, encodeMorphoDepositCollateral, ComposerCommands, LenderOps, encodeMorphoWithdrawCollateral, encodeMorphoBorrow, getMorphoLoanAsset, generateAmountBitmap, uint16, encodeUint8AndBytes, uint128, uint8, encodeTransferIn, encodeWrap, encodeUnwrap, swapHead, encodeUniswapV4FlashLoan, encodeBalancerV3FlashLoan, encodeBalancerV2FlashLoan, encodeFlashLoan, LenderIds } from '@1delta/calldatalib';
+
+// src/evm/spot/index.ts
+
+// ../../node_modules/.pnpm/@1delta+asset-registry@0.0.155/node_modules/@1delta/asset-registry/dist/index.mjs
+var Chain = /* @__PURE__ */ ((Chain2) => {
+  Chain2["ETHEREUM_MAINNET"] = "1";
+  Chain2["OP_MAINNET"] = "10";
+  Chain2["GNOSIS"] = "100";
+  Chain2["GTON_MAINNET"] = "1000";
+  Chain2["ETHOS"] = "100000000";
+  Chain2["QUARKCHAIN_MAINNET_SHARD_0"] = "100001";
+  Chain2["QUARKCHAIN_MAINNET_SHARD_1"] = "100002";
+  Chain2["QUARKCHAIN_MAINNET_SHARD_2"] = "100003";
+  Chain2["QUARKCHAIN_MAINNET_SHARD_3"] = "100004";
+  Chain2["QUARKCHAIN_MAINNET_SHARD_4"] = "100005";
+  Chain2["QUARKCHAIN_MAINNET_SHARD_5"] = "100006";
+  Chain2["QUARKCHAIN_MAINNET_SHARD_6"] = "100007";
+  Chain2["QUARKCHAIN_MAINNET_SHARD_7"] = "100008";
+  Chain2["VECHAIN"] = "100009";
+  Chain2["GON_CHAIN"] = "10024";
+  Chain2["AEON_CHAIN"] = "10025";
+  Chain2["TECTUM_EMISSION_TOKEN"] = "1003";
+  Chain2["EURUS_MAINNET"] = "1008";
+  Chain2["JUMBOCHAIN_MAINNET"] = "1009";
+  Chain2["METANOVA_VERSE"] = "10096";
+  Chain2["GLOBAL_TRUST_NETWORK"] = "101010";
+  Chain2["SOVERUN_MAINNET"] = "10101010";
+  Chain2["REBUS_CLASSIC_MAINNET"] = "1011";
+  Chain2["MAXXCHAIN_MAINNET"] = "10201";
+  Chain2["CREDITCOIN"] = "102030";
+  Chain2["GLSCAN"] = "10222";
+  Chain2["ALIENX_MAINNET"] = "10241024";
+  Chain2["ARTHERA_MAINNET"] = "10242";
+  Chain2["ZERO_XTADE"] = "10248";
+  Chain2["BITTORRENT_CHAIN_DONAU"] = "1029";
+  Chain2["WORLDLAND_MAINNET"] = "103";
+  Chain2["CONFLUX_ESPACE"] = "1030";
+  Chain2["CRYSTALEUM"] = "103090";
+  Chain2["TAO_EVM_MAINNET"] = "10321";
+  Chain2["KASPACLASSIC_MAINNET"] = "104566";
+  Chain2["NUMBERS_MAINNET"] = "10507";
+  Chain2["STRATIS_MAINNET"] = "105105";
+  Chain2["VELAS_EVM_MAINNET"] = "106";
+  Chain2["THUNDERCORE_MAINNET"] = "108";
+  Chain2["MINTARA_MAINNET"] = "1080";
+  Chain2["CRYPTOCOINPAY"] = "10823";
+  Chain2["LAMINA1"] = "10849";
+  Chain2["LAMINA1_IDENTITY"] = "10850";
+  Chain2["METIS_ANDROMEDA_MAINNET"] = "1088";
+  Chain2["BROCHAIN_MAINNET"] = "108801";
+  Chain2["HUMANS_AI_MAINNET"] = "1089";
+  Chain2["SHIBARIUM"] = "109";
+  Chain2["QUADRANS_BLOCKCHAIN"] = "10946";
+  Chain2["DYMENSION"] = "1100";
+  Chain2["KB_CHAIN"] = "11000";
+  Chain2["POLYGON_ZKEVM"] = "1101";
+  Chain2["BLXQ_MAINNET"] = "1108";
+  Chain2["WEMIX3_0_MAINNET"] = "1111";
+  Chain2["ASTRA"] = "11110";
+  Chain2["WAGMI"] = "11111";
+  Chain2["SIBERIUM_NETWORK"] = "111111";
+  Chain2["RE_AL"] = "111188";
+  Chain2["HASHBIT_MAINNET"] = "11119";
+  Chain2["ALPHABET_MAINNET"] = "111222333444";
+  Chain2["CORE_BLOCKCHAIN_MAINNET"] = "1116";
+  Chain2["DOGCOIN_MAINNET"] = "1117";
+  Chain2["COINBIT_MAINNET"] = "112";
+  Chain2["SHINE_CHAIN"] = "11221";
+  Chain2["HAQQ_NETWORK"] = "11235";
+  Chain2["METACHAIN_ONE_MAINNET"] = "112358";
+  Chain2["TAKER_CHAIN_MAINNET"] = "1125";
+  Chain2["TILTYARD_SUBNET"] = "1127469";
+  Chain2["PALM"] = "11297108109";
+  Chain2["DEHVO"] = "113";
+  Chain2["LISK"] = "1135";
+  Chain2["EGOLD_CHAIN"] = "11451";
+  Chain2["CYBERDECKNET"] = "1146703430";
+  Chain2["SYMPLEXIA_SMART_CHAIN"] = "1149";
+  Chain2["BEVM_MAINNET"] = "11501";
+  Chain2["SATSCHAIN"] = "11521";
+  Chain2["UPTICK_MAINNET"] = "117";
+  Chain2["ARTELA_MAINNET"] = "11820";
+  Chain2["CLUBMOS_MAINNET"] = "1188";
+  Chain2["POLYGON_SUPERNET_ARIANEE"] = "11891";
+  Chain2["ENULS_MAINNET"] = "119";
+  Chain2["IORA_CHAIN"] = "1197";
+  Chain2["CUCKOO_CHAIN"] = "1200";
+  Chain2["SATOSHICHAIN_MAINNET"] = "12009";
+  Chain2["WORLD_TRADE_TECHNICAL_CHAIN_MAINNET"] = "1202";
+  Chain2["ATERNOS"] = "12020";
+  Chain2["LUMMIO_NETWORK"] = "12020498";
+  Chain2["SINGULARITY_ZERO_MAINNET"] = "12052";
+  Chain2["SAITABLOCKCHAINSBC"] = "1209";
+  Chain2["REALCHAIN_MAINNET"] = "121";
+  Chain2["FUSHUMA"] = "121224";
+  Chain2["BRC_CHAIN_MAINNET"] = "12123";
+  Chain2["POPCATEUM_MAINNET"] = "1213";
+  Chain2["ENTERCHAIN_MAINNET"] = "1214";
+  Chain2["ADF_CHAIN"] = "1215";
+  Chain2["FUSE_MAINNET"] = "122";
+  Chain2["EXZO_NETWORK_MAINNET"] = "1229";
+  Chain2["FIBONACCI_MAINNET"] = "12306";
+  Chain2["ULTRON_MAINNET"] = "1231";
+  Chain2["HUDDLE01_DRTC_CHAIN"] = "12323";
+  Chain2["L3X_PROTOCOL"] = "12324";
+  Chain2["GEMCHAIN"] = "123321";
+  Chain2["STEP_NETWORK"] = "1234";
+  Chain2["PIN"] = "123420000558";
+  Chain2["VOLMEX"] = "123420000588";
+  Chain2["SHARECLE_MAINNET"] = "1234567";
+  Chain2["ITX_MAINNET"] = "1235";
+  Chain2["GDPR_MAINNET"] = "12358";
+  Chain2["ARC_MAINNET"] = "1243";
+  Chain2["OM_PLATFORM_MAINNET"] = "1246";
+  Chain2["DOGETHER_MAINNET"] = "1248";
+  Chain2["RSS3_VSL_MAINNET"] = "12553";
+  Chain2["OYCHAIN_MAINNET"] = "126";
+  Chain2["HUMAN_PROTOCOL"] = "1273227453";
+  Chain2["OFFICIAL_VASYL"] = "1278060416";
+  Chain2["HUOBI_ECO_CHAIN_MAINNET"] = "128";
+  Chain2["HALO_MAINNET"] = "1280";
+  Chain2["MOONBEAM"] = "1284";
+  Chain2["MOONRIVER"] = "1285";
+  Chain2["INNOVATOR_CHAIN"] = "129";
+  Chain2["ARGOCHAIN"] = "1299";
+  Chain2["UNICHAIN"] = "130";
+  Chain2["GLUE_MAINNET"] = "1300";
+  Chain2["SPS"] = "13000";
+  Chain2["DOS_FUJI_SUBNET"] = "1311";
+  Chain2["JAIHO_CHAIN"] = "1313";
+  Chain2["ETHO_PROTOCOL"] = "1313114";
+  Chain2["AURORA_MAINNET"] = "1313161554";
+  Chain2["POWERGOLD"] = "1313161560";
+  Chain2["TURBO"] = "1313161567";
+  Chain2["ALYX_MAINNET"] = "1314";
+  Chain2["ETND_CHAIN_MAINNETS"] = "131419";
+  Chain2["AIA_MAINNET"] = "1319";
+  Chain2["SEI_NETWORK"] = "1329";
+  Chain2["CREDIT_SMART_CHAIN"] = "13308";
+  Chain2["IMMUTABLE_ZKEVM"] = "13371";
+  Chain2["PHOENIX_MAINNET"] = "13381";
+  Chain2["ELYSIUM_MAINNET"] = "1339";
+  Chain2["MASA"] = "13396";
+  Chain2["IEXEC_SIDECHAIN"] = "134";
+  Chain2["BLITZ_SUBNET"] = "1343";
+  Chain2["SKALE_TITAN_HUB"] = "1350216234";
+  Chain2["CIC_CHAIN_MAINNET"] = "1353";
+  Chain2["DEAMCHAIN_MAINNET"] = "136";
+  Chain2["KRONOBIT_MAINNET"] = "13600";
+  Chain2["ZAFIRIUM_MAINNET"] = "1369";
+  Chain2["POLYGON_MAINNET"] = "137";
+  Chain2["RAMESTTA_MAINNET"] = "1370";
+  Chain2["KALAR_CHAIN"] = "1379";
+  Chain2["DEFI_ORACLE_META_MAINNET"] = "138";
+  Chain2["RARI_CHAIN_MAINNET"] = "1380012617";
+  Chain2["RAPTORCHAIN"] = "1380996178";
+  Chain2["SUSONO"] = "13812";
+  Chain2["AMSTAR_MAINNET"] = "1388";
+  Chain2["WOOPCHAIN_MAINNET"] = "139";
+  Chain2["JOSEON_MAINNET"] = "1392";
+  Chain2["FLARE_MAINNET"] = "14";
+  Chain2["BITHARVEST_CHAIN_MAINNET"] = "14149";
+  Chain2["BITLAZER"] = "14235";
+  Chain2["ICPLAZA_MAINNET"] = "142857";
+  Chain2["ANDUSCHAIN_MAINNET"] = "14288640";
+  Chain2["RIKEZA_NETWORK_MAINNET"] = "1433";
+  Chain2["PHI_NETWORK_V2"] = "144";
+  Chain2["CTEX_SCAN_BLOCKCHAIN"] = "1455";
+  Chain2["ZKBASE_MAINNET"] = "1456";
+  Chain2["SONIC_MAINNET"] = "146";
+  Chain2["FLAG_MAINNET"] = "147";
+  Chain2["SHIMMEREVM"] = "148";
+  Chain2["VANA"] = "1480";
+  Chain2["SKALE_NEBULA_HUB"] = "1482601649";
+  Chain2["VITRUVEO_MAINNET"] = "1490";
+  Chain2["BEVM_CANARY"] = "1501";
+  Chain2["SHERPAX_MAINNET"] = "1506";
+  Chain2["REDBELLY_NETWORK_MAINNET"] = "151";
+  Chain2["GPT_MAINNET"] = "1511670449";
+  Chain2["STORY"] = "1514";
+  Chain2["BEAGLE_MESSAGING_CHAIN"] = "1515";
+  Chain2["POODL_MAINNET"] = "15259";
+  Chain2["ODYSSEY_CHAIN_MAINNET"] = "153153";
+  Chain2["KYMTC_MAINNET"] = "15430";
+  Chain2["DATACORE_SMART_CHAIN"] = "1555";
+  Chain2["LOOPNETWORK_MAINNET"] = "15551";
+  Chain2["TENET"] = "1559";
+  Chain2["SKALE_CALYPSO_HUB"] = "1564830818";
+  Chain2["PUPPYNET"] = "157";
+  Chain2["STARCHAIN"] = "1578";
+  Chain2["ROBURNA_MAINNET"] = "158";
+  Chain2["CRYPTOX"] = "158245";
+  Chain2["XCOIN"] = "158345";
+  Chain2["BETHERANCE"] = "1605";
+  Chain2["DEFIVERSE_MAINNET"] = "16116";
+  Chain2["CYPHERIUM_MAINNET"] = "16166";
+  Chain2["ETHEREUM_INSCRIPTION_MAINNET"] = "1617";
+  Chain2["PLYR_PHI"] = "16180";
+  Chain2["GRAVITY_ALPHA_MAINNET"] = "1625";
+  Chain2["PIVOTAL_MAINNET"] = "1648";
+  Chain2["GENESYS_MAINNET"] = "16507";
+  Chain2["ECLAT_MAINNET"] = "165279";
+  Chain2["OMNI"] = "166";
+  Chain2["HARMONY_MAINNET_SHARD_0"] = "1666600000";
+  Chain2["HARMONY_MAINNET_SHARD_1"] = "1666600001";
+  Chain2["TAIKO_ALETHIA"] = "167000";
+  Chain2["AIRDAO_MAINNET"] = "16718";
+  Chain2["AIOZ_NETWORK"] = "168";
+  Chain2["ZCHAINS"] = "168168";
+  Chain2["NERO_MAINNET"] = "1689";
+  Chain2["MANTA_PACIFIC_MAINNET"] = "169";
+  Chain2["ANYTYPE_EVM_CHAIN"] = "1701";
+  Chain2["GARNET_HOLESKY"] = "17069";
+  Chain2["TBSI_MAINNET"] = "1707";
+  Chain2["ONCHAIN_POINTS"] = "17071";
+  Chain2["CO2E_LEDGER"] = "171";
+  Chain2["DORIC_NETWORK"] = "1717";
+  Chain2["G8CHAIN_MAINNET"] = "17171";
+  Chain2["WADZCHAIN_MAINNET"] = "171717";
+  Chain2["ECLIPSE_SUBNET"] = "17172";
+  Chain2["PALETTE_CHAIN_MAINNET"] = "1718";
+  Chain2["KONET_MAINNET"] = "17217";
+  Chain2["REYA_NETWORK"] = "1729";
+  Chain2["METAL_L2"] = "1750";
+  Chain2["DC_MAINNET"] = "176";
+  Chain2["HASHKEY_CHAIN"] = "177";
+  Chain2["PARTYCHAIN"] = "1773";
+  Chain2["GAUSS_MAINNET"] = "1777";
+  Chain2["EOS_EVM_NETWORK"] = "17777";
+  Chain2["ABEY_MAINNET"] = "179";
+  Chain2["AME_CHAIN_MAINNET"] = "180";
+  Chain2["MANDE_NETWORK_MAINNET"] = "18071918";
+  Chain2["SMART_TRADE_NETWORKS"] = "18122";
+  Chain2["PROOF_OF_MEMES"] = "18159";
+  Chain2["CUBE_CHAIN_MAINNET"] = "1818";
+  Chain2["IOST_MAINNET"] = "182";
+  Chain2["RUBY_SMART_CHAIN_MAINNET"] = "1821";
+  Chain2["PLAYBLOCK"] = "1829";
+  Chain2["ETHERNITY"] = "183";
+  Chain2["MINT_MAINNET"] = "185";
+  Chain2["HIGHOCTANE_SUBNET"] = "1853";
+  Chain2["SEELE_MAINNET"] = "186";
+  Chain2["SONEIUM"] = "1868";
+  Chain2["MXC_ZKEVM_MOONCHAIN"] = "18686";
+  Chain2["DOJIMA"] = "187";
+  Chain2["WHITECHAIN"] = "1875";
+  Chain2["BMC_MAINNET"] = "188";
+  Chain2["BITICA_CHAIN_MAINNET"] = "188710";
+  Chain2["TITAN_TKX"] = "18888";
+  Chain2["LIGHTLINK_PHOENIX_MAINNET"] = "1890";
+  Chain2["BON_NETWORK"] = "1898";
+  Chain2["REDEFI_LAYER_2"] = "1899";
+  Chain2["SONGBIRD_CANARY_NETWORK"] = "19";
+  Chain2["CMDAO_BBQ_CHAIN"] = "190";
+  Chain2["HOME_VERSE_MAINNET"] = "19011";
+  Chain2["SPORTS_CHAIN_NETWORK"] = "1904";
+  Chain2["BITCICHAIN_MAINNET"] = "1907";
+  Chain2["MERKLE_SCAN"] = "1909";
+  Chain2["SCALIND"] = "1911";
+  Chain2["LOCACHAIN_MAINNET"] = "19180";
+  Chain2["BLOCKX_MAINNET"] = "19191";
+  Chain2["DECENTRACONNECT_SOCIAL"] = "19224";
+  Chain2["SWELLCHAIN"] = "1923";
+  Chain2["GATHER_MAINNET_NETWORK"] = "192837465";
+  Chain2["CRYPTO_EMERGENCY"] = "193";
+  Chain2["R0AR_CHAIN"] = "193939";
+  Chain2["SEC_MAINNET"] = "19516";
+  Chain2["X_LAYER_MAINNET"] = "196";
+  Chain2["LBRY_MAINNET"] = "19600";
+  Chain2["SELENDRA_NETWORK_MAINNET"] = "1961";
+  Chain2["SUPER_SMART_CHAIN_MAINNET"] = "1970";
+  Chain2["ONUS_CHAIN_MAINNET"] = "1975";
+  Chain2["NTITY_MAINNET"] = "197710212030";
+  Chain2["BITCHAIN_MAINNET"] = "198";
+  Chain2["BTCIX_NETWORK"] = "19845";
+  Chain2["SATOSHIE"] = "1985";
+  Chain2["DEEPBRAINCHAIN_MAINNET"] = "19880818";
+  Chain2["BITTORRENT_CHAIN_MAINNET"] = "199";
+  Chain2["EKTA"] = "1994";
+  Chain2["SANKO"] = "1996";
+  Chain2["KYOTO"] = "1997";
+  Chain2["ULTRA_EVM_NETWORK"] = "19991";
+  Chain2["ELASTOS_SMART_CHAIN"] = "20";
+  Chain2["ARBITRUM_ON_XDAI"] = "200";
+  Chain2["DOGECHAIN_MAINNET"] = "2000";
+  Chain2["CAMELARK_MAINNET"] = "20001";
+  Chain2["MILKOMEDA_C1_MAINNET"] = "2001";
+  Chain2["MILKOMEDA_A1_MAINNET"] = "2002";
+  Chain2["ZOO_MAINNET"] = "200200";
+  Chain2["METALINK_NETWORK"] = "2004";
+  Chain2["NIZA_CHAIN_MAINNET"] = "20041";
+  Chain2["BITLAYER_MAINNET"] = "200901";
+  Chain2["ALAYA_MAINNET"] = "201018";
+  Chain2["MAINNETZ_MAINNET"] = "2016";
+  Chain2["MYTHICAL_CHAIN"] = "201804";
+  Chain2["SMARTMESH_MAINNET"] = "20180430";
+  Chain2["QUARKBLOCKCHAIN"] = "20181205";
+  Chain2["RONIN_MAINNET"] = "2020";
+  Chain2["PEGO_NETWORK"] = "20201022";
+  Chain2["EDGEWARE_EDGEEVM_MAINNET"] = "2021";
+  Chain2["BETHEL_SYDNEY"] = "202202";
+  Chain2["DBK_CHAIN"] = "20240603";
+  Chain2["BLOCKFIT"] = "202424";
+  Chain2["RANGERS_PROTOCOL_MAINNET"] = "2025";
+  Chain2["ETP_MAINNET"] = "20256789";
+  Chain2["EDGELESS_NETWORK"] = "2026";
+  Chain2["WOWCHAIN_MAINNET"] = "203";
+  Chain2["CENTRIFUGE"] = "2031";
+  Chain2["KIWI_SUBNET"] = "2037";
+  Chain2["ALEPH_ZERO"] = "2039";
+  Chain2["OPBNB_MAINNET"] = "204";
+  Chain2["VANAR_MAINNET"] = "2040";
+  Chain2["X1_NETWORK"] = "204005";
+  Chain2["XUSD_ONE_STABLECHAIN_MAINNET"] = "20441";
+  Chain2["SKALE_EUROPA_HUB"] = "2046399126";
+  Chain2["STRATOS"] = "2048";
+  Chain2["MOVO_SMART_CHAIN_MAINNET"] = "2049";
+  Chain2["VINUCHAIN_NETWORK"] = "207";
+  Chain2["METACCES_MAINNET"] = "2071";
+  Chain2["P12_CHAIN"] = "20736";
+  Chain2["JONO11_SUBNET"] = "20765";
+  Chain2["QUOKKACOIN_MAINNET"] = "2077";
+  Chain2["PLIAN_MAINNET_MAIN"] = "2099156";
+  Chain2["BITNET"] = "210";
+  Chain2["ECOBALL_MAINNET"] = "2100";
+  Chain2["CORN"] = "21000000";
+  Chain2["C4EI"] = "21004";
+  Chain2["PLATON_MAINNET"] = "210425";
+  Chain2["EXOSAMA_NETWORK"] = "2109";
+  Chain2["UCHAIN_MAINNET"] = "2112";
+  Chain2["ALL_ABOUT_HEALTHY"] = "21133";
+  Chain2["LITENTRY"] = "212013";
+  Chain2["CATENA_MAINNET"] = "2121";
+  Chain2["METAPLAYERONE_MAINNET"] = "2122";
+  Chain2["DCPAY_MAINNET"] = "21223";
+  Chain2["B2_HUB_MAINNET"] = "213";
+  Chain2["CENNZNET_AZALEA"] = "21337";
+  Chain2["LESTNET"] = "21363";
+  Chain2["SHINARIUM_MAINNET"] = "214";
+  Chain2["ONENESS_NETWORK"] = "2140";
+  Chain2["BOSAGORA_MAINNET"] = "2151";
+  Chain2["FINDORA_MAINNET"] = "2152";
+  Chain2["SIRIUSNET_V2"] = "217";
+  Chain2["OMCHAIN_MAINNET"] = "21816";
+  Chain2["GAME7"] = "2187";
+  Chain2["BSL_MAINNET"] = "21912";
+  Chain2["SNAXCHAIN"] = "2192";
+  Chain2["MOONSAMA_NETWORK"] = "2199";
+  Chain2["ANTOFY_MAINNET"] = "2202";
+  Chain2["TAYCAN"] = "22023";
+  Chain2["BITCOIN_EVM"] = "2203";
+  Chain2["MAS_MAINNET"] = "220315";
+  Chain2["EXCELON_MAINNET"] = "22052002";
+  Chain2["BLOCKEX_MAINNET"] = "221";
+  Chain2["REAPCHAIN_MAINNET"] = "221230";
+  Chain2["EVANESCO_MAINNET"] = "2213";
+  Chain2["KAVA"] = "2222";
+  Chain2["NAUTILUS_MAINNET"] = "22222";
+  Chain2["HYDRATION"] = "222222";
+  Chain2["COINWEB_BNB_SHARD"] = "2222222";
+  Chain2["VCHAIN_MAINNET"] = "2223";
+  Chain2["DEEPL_MAINNET"] = "222555";
+  Chain2["B2_MAINNET"] = "223";
+  Chain2["KREST_NETWORK"] = "2241";
+  Chain2["TAF_ECO_CHAIN_MAINNET"] = "224168";
+  Chain2["CONET_MAINNET"] = "224400";
+  Chain2["CONET_HOLESKY"] = "224433";
+  Chain2["LACHAIN_MAINNET"] = "225";
+  Chain2["PROM"] = "227";
+  Chain2["MAP_PROTOCOL"] = "22776";
+  Chain2["SWAPDEX"] = "230";
+  Chain2["BOMB_CHAIN"] = "2300";
+  Chain2["PREMIUMBLOCK"] = "23023";
+  Chain2["CRATD2C"] = "2310";
+  Chain2["LENS"] = "232";
+  Chain2["OASIS_SAPPHIRE"] = "23294";
+  Chain2["ALTCOINCHAIN"] = "2330";
+  Chain2["SOMA_NETWORK_MAINNET"] = "2332";
+  Chain2["OMNIA_CHAIN"] = "2342";
+  Chain2["GOAT_NETWORK"] = "2345";
+  Chain2["DREYERX_MAINNET"] = "23451";
+  Chain2["SILICON_ZKEVM"] = "2355";
+  Chain2["BLAST_MAINNET"] = "238";
+  Chain2["TAC_EVM"] = "2390";
+  Chain2["TCG_VERSE_MAINNET"] = "2400";
+  Chain2["K2_MAINNET"] = "2410";
+  Chain2["XODEX"] = "2415";
+  Chain2["PLINGA_MAINNET"] = "242";
+  Chain2["RUFUS"] = "2420";
+  Chain2["KING_OF_LEGENDS_MAINNET"] = "2425";
+  Chain2["NEON_EVM_MAINNET"] = "245022934";
+  Chain2["ENERGY_WEB_CHAIN"] = "246";
+  Chain2["HYBRID_CHAIN_NETWORK_MAINNET"] = "2468";
+  Chain2["SIX_DEGREE_OF_OUTREACH"] = "2477";
+  Chain2["OASYS_MAINNET"] = "248";
+  Chain2["NOW_CHAIN_MAINNET"] = "2488";
+  Chain2["CRONOS_MAINNET"] = "25";
+  Chain2["FANTOM_OPERA"] = "250";
+  Chain2["LIQUIDLAYER_MAINNET"] = "25186";
+  Chain2["FRAXTAL"] = "252";
+  Chain2["INEVM_MAINNET"] = "2525";
+  Chain2["GLIDE_L2_PROTOCOL_XP"] = "253";
+  Chain2["EVERCLEAR_MAINNET"] = "25327";
+  Chain2["FLAME"] = "253368190";
+  Chain2["SWAN_CHAIN_MAINNET"] = "254";
+  Chain2["KROMA"] = "255";
+  Chain2["BAHAMUT_HORIZON"] = "2552";
+  Chain2["CMP_MAINNET"] = "256256";
+  Chain2["TECHPAY_MAINNET"] = "2569";
+  Chain2["HAMMER_CHAIN_MAINNET"] = "25888";
+  Chain2["NEONLINK_MAINNET"] = "259";
+  Chain2["GURU_NETWORK"] = "260";
+  Chain2["PHO_BLOCKCHAIN_MAINNET"] = "2605";
+  Chain2["POCRNET"] = "2606";
+  Chain2["FERRUM_QUANTUM_PORTAL_NETWORK"] = "26100";
+  Chain2["REDLIGHT_CHAIN_MAINNET"] = "2611";
+  Chain2["EZCHAIN_C_CHAIN_MAINNET"] = "2612";
+  Chain2["SUR_BLOCKCHAIN_NETWORK"] = "262";
+  Chain2["DUCATUSX"] = "26483";
+  Chain2["AILAYER_MAINNET"] = "2649";
+  Chain2["HERTZ_NETWORK_MAINNET"] = "26600";
+  Chain2["OASISCHAIN_MAINNET"] = "26863";
+  Chain2["HIGH_PERFORMANCE_BLOCKCHAIN"] = "269";
+  Chain2["SHIBACHAIN"] = "27";
+  Chain2["XTERIO_CHAIN_ETH"] = "2702128";
+  Chain2["EXCOINCIAL_CHAIN_MAINNET"] = "27082022";
+  Chain2["EGONCOIN_MAINNET"] = "271";
+  Chain2["DCHAIN"] = "2716446429837000";
+  Chain2["K_LAOS"] = "2718";
+  Chain2["NXY_AREA_51"] = "272247";
+  Chain2["NXY_OASIS"] = "272520";
+  Chain2["XR_ONE"] = "273";
+  Chain2["LACHAIN"] = "274";
+  Chain2["ABSTRACT"] = "2741";
+  Chain2["NANON"] = "2748";
+  Chain2["GM_NETWORK_MAINNET"] = "2777";
+  Chain2["ZEROONE_MAINNET_SUBNET"] = "27827";
+  Chain2["RAZOR_SKALE_CHAIN"] = "278611351";
+  Chain2["BPX_CHAIN"] = "279";
+  Chain2["ATHENE_PARTHENON"] = "281123";
+  Chain2["MORPH"] = "2818";
+  Chain2["VIZING_MAINNET"] = "28518";
+  Chain2["BOBA_NETWORK"] = "288";
+  Chain2["AARMA_MAINNET"] = "2889";
+  Chain2["GENESIS_L1"] = "29";
+  Chain2["FLACHAIN_MAINNET"] = "29032022";
+  Chain2["ELUX_CHAIN"] = "2907";
+  Chain2["ORDERLY_MAINNET"] = "291";
+  Chain2["HYCHAIN"] = "2911";
+  Chain2["NEXA_METANET"] = "29223";
+  Chain2["DAVINCI"] = "293";
+  Chain2["HEDERA_MAINNET"] = "295";
+  Chain2["MCH_VERSE_MAINNET"] = "29548";
+  Chain2["HEDERA_PREVIEWNET"] = "297";
+  Chain2["BITYUAN_MAINNET"] = "2999";
+  Chain2["ROOTSTOCK_MAINNET"] = "30";
+  Chain2["QCHAIN_MAINNET"] = "30000";
+  Chain2["CENNZNET_NIKAU"] = "3001";
+  Chain2["CANXIUM_MAINNET"] = "3003";
+  Chain2["MIYOU_MAINNET"] = "30088";
+  Chain2["PLAYA3ULL_GAMES"] = "3011";
+  Chain2["BC_HYPER_CHAIN_MAINNET"] = "3030";
+  Chain2["ORLANDO_CHAIN"] = "3031";
+  Chain2["ZKSATS_MAINNET"] = "305";
+  Chain2["BIFROST_MAINNET"] = "3068";
+  Chain2["FURTHEON"] = "308";
+  Chain2["ONE_WORLD_CHAIN_MAINNET"] = "309075";
+  Chain2["OMAX_MAINNET"] = "311";
+  Chain2["ONELEDGER_MAINNET"] = "311752642";
+  Chain2["CLOUDTX_MAINNET"] = "31223";
+  Chain2["NEUROCHAIN_MAINNET"] = "313";
+  Chain2["FILECOIN_MAINNET"] = "314";
+  Chain2["WIREX_PAY_MAINNET"] = "31415";
+  Chain2["WORLDECOMONEY"] = "315";
+  Chain2["KCC_MAINNET"] = "321";
+  Chain2["PAREX_MAINNET"] = "322202";
+  Chain2["COSVM_MAINNET"] = "323";
+  Chain2["SANTIMENT_INTELLIGENCE_NETWORK"] = "32382";
+  Chain2["ZKSYNC_MAINNET"] = "324";
+  Chain2["BITGERT_MAINNET"] = "32520";
+  Chain2["FUSION_MAINNET"] = "32659";
+  Chain2["ZILLIQA_EVM"] = "32769";
+  Chain2["ZILLIQA_2_EVM_PROTO_MAINNET"] = "32770";
+  Chain2["NAL_MAINNET"] = "328527";
+  Chain2["ZILLIQA_EVM_ISOLATED_SERVER"] = "32990";
+  Chain2["ENTANGLE_MAINNET"] = "33033";
+  Chain2["TTCOIN_SMART_CHAIN_MAINNET"] = "330844";
+  Chain2["CURTIS"] = "33111";
+  Chain2["APECHAIN"] = "33139";
+  Chain2["CLOUDVERSE_SUBNET"] = "33210";
+  Chain2["WEB3Q_MAINNET"] = "333";
+  Chain2["MELD"] = "333000333";
+  Chain2["BLOOM_GENESIS_MAINNET"] = "333313";
+  Chain2["AVES_MAINNET"] = "33333";
+  Chain2["WEB3Q_GALILEO"] = "3334";
+  Chain2["PEAQ"] = "3338";
+  Chain2["SLINGSHOT"] = "33401";
+  Chain2["SHIDEN"] = "336";
+  Chain2["MERONEUM"] = "3366";
+  Chain2["UPCHAIN_MAINNET"] = "336666";
+  Chain2["FUNKI"] = "33979";
+  Chain2["SECURECHAIN_MAINNET"] = "34";
+  Chain2["PARIBU_NET_MAINNET"] = "3400";
+  Chain2["EVOLVE_MAINNET"] = "3424";
+  Chain2["MODE"] = "34443";
+  Chain2["TSC_MAINNET"] = "345";
+  Chain2["ZEUS_MAINNET"] = "34504";
+  Chain2["GTCSCAN"] = "3490";
+  Chain2["CITRONUS_CITRO"] = "34949059";
+  Chain2["JFIN_CHAIN"] = "3501";
+  Chain2["J2O_TARO"] = "35011";
+  Chain2["JFINPOS"] = "3502";
+  Chain2["Q_MAINNET"] = "35441";
+  Chain2["BITFINITY_NETWORK_MAINNET"] = "355110";
+  Chain2["DXCHAIN_MAINNET"] = "36";
+  Chain2["SHAPE"] = "360";
+  Chain2["PANDOPROJECT_MAINNET"] = "3601";
+  Chain2["LAVITA_MAINNET"] = "360890";
+  Chain2["THETA_MAINNET"] = "361";
+  Chain2["DIGIT_SOUL_SMART_CHAIN_2"] = "363636";
+  Chain2["BOTANIX_MAINNET"] = "3637";
+  Chain2["ICHAIN_NETWORK"] = "3639";
+  Chain2["JOULEVERSE_MAINNET"] = "3666";
+  Chain2["PULSECHAIN"] = "369";
+  Chain2["BITTEX_MAINNET"] = "3690";
+  Chain2["EMPIRE_NETWORK"] = "3693";
+  Chain2["SENJEPOWERS_MAINNET"] = "3699";
+  Chain2["XPLA_MAINNET"] = "37";
+  Chain2["CROSSBELL"] = "3737";
+  Chain2["ASTAR_ZKEVM"] = "3776";
+  Chain2["ALVEYCHAIN_MAINNET"] = "3797";
+  Chain2["ZKAMOEBA_MAINNET"] = "381";
+  Chain2["METAL_C_CHAIN"] = "381931";
+  Chain2["METAL_TAHOE_C_CHAIN"] = "381932";
+  Chain2["ZENIQ"] = "383414847825";
+  Chain2["CONNECTORMANAGER"] = "38400";
+  Chain2["CONNECTORMANAGER_ROBIN"] = "38401";
+  Chain2["CRONOS_ZKEVM_MAINNET"] = "388";
+  Chain2["KALYCHAIN_MAINNET"] = "3888";
+  Chain2["U2U_SOLARIS_MAINNET"] = "39";
+  Chain2["DRAC_NETWORK"] = "3912";
+  Chain2["PRM_MAINNET"] = "39656";
+  Chain2["DYNO_MAINNET"] = "3966";
+  Chain2["PAYNETWORK_MAINNET"] = "3969";
+  Chain2["NEAR_PROTOCOL"] = "397";
+  Chain2["OHO_MAINNET"] = "39815";
+  Chain2["NATIV3_MAINNET"] = "399";
+  Chain2["KINGDOM_CHAIN"] = "39916801";
+  Chain2["YUANCHAIN_MAINNET"] = "3999";
+  Chain2["TELOS_EVM_MAINNET"] = "40";
+  Chain2["OZONE_CHAIN_MAINNET"] = "4000";
+  Chain2["DIV_CHAIN"] = "40000";
+  Chain2["ALTLAYER_ZERO_GAS_NETWORK"] = "4000003";
+  Chain2["X1_FASTNET"] = "4003";
+  Chain2["SYNDR_L3"] = "404";
+  Chain2["TIPBOXCOIN_MAINNET"] = "404040";
+  Chain2["BAHAMUT_OCEAN"] = "4058";
+  Chain2["NAHMII_3_MAINNET"] = "4061";
+  Chain2["MUSTER_MAINNET"] = "4078";
+  Chain2["ZEROTH_MAINNET"] = "4088";
+  Chain2["BITINDI_MAINNET"] = "4099";
+  Chain2["PEPE_CHAIN_MAINNET"] = "411";
+  Chain2["ALEPH_ZERO_EVM"] = "41455";
+  Chain2["OPULENT_X_BETA"] = "41500";
+  Chain2["CROSSFI_MAINNET"] = "4158";
+  Chain2["SX_NETWORK_MAINNET"] = "416";
+  Chain2["SX_ROLLUP"] = "4162";
+  Chain2["PHI_NETWORK_V1"] = "4181";
+  Chain2["EDU_CHAIN"] = "41923";
+  Chain2["LUKSO_MAINNET"] = "42";
+  Chain2["MERLIN_MAINNET"] = "4200";
+  Chain2["INFINAEON"] = "420000";
+  Chain2["PMON_CHAIN"] = "42001";
+  Chain2["VECTOR_SMART_CHAIN"] = "420042";
+  Chain2["DONATUZ"] = "42026";
+  Chain2["KEKCHAIN"] = "420420";
+  Chain2["WESTEND_ASSET_HUB"] = "420420421";
+  Chain2["ARBITRUM_ONE"] = "42161";
+  Chain2["ARBITRUM_NOVA"] = "42170";
+  Chain2["VIRIDIS_MAINNET"] = "422";
+  Chain2["CELO_MAINNET"] = "42220";
+  Chain2["OASIS_EMERALD"] = "42262";
+  Chain2["GOLDXCHAIN_MAINNET"] = "42355";
+  Chain2["PGN_PUBLIC_GOODS_NETWORK"] = "424";
+  Chain2["NEXI_MAINNET"] = "4242";
+  Chain2["ASSET_CHAIN_MAINNET"] = "42420";
+  Chain2["NEXI_V2_MAINNET"] = "4243";
+  Chain2["STENIX_MAINNET"] = "425";
+  Chain2["THE_WIDOWS_MITE"] = "426";
+  Chain2["ZEETH_CHAIN"] = "427";
+  Chain2["ZKFAIR_MAINNET"] = "42766";
+  Chain2["ETHERLINK_MAINNET"] = "42793";
+  Chain2["GESO_VERSE"] = "428";
+  Chain2["HEMI_NETWORK"] = "43111";
+  Chain2["AVALANCHE_C_CHAIN"] = "43114";
+  Chain2["ECHOS_CHAIN"] = "4321";
+  Chain2["DEXALOT_SUBNET"] = "432204";
+  Chain2["BEAM"] = "4337";
+  Chain2["BOYAA_MAINNET"] = "434";
+  Chain2["CRAB_NETWORK"] = "44";
+  Chain2["CREDIT_SMART_CHAIN_MAINNET"] = "4400";
+  Chain2["GRAPHITE_MAINNET"] = "440017";
+  Chain2["HTMLCOIN_MAINNET"] = "4444";
+  Chain2["FRENCHAIN"] = "44444";
+  Chain2["QUANTUM_NETWORK"] = "44445";
+  Chain2["HYDRA_CHAIN"] = "4488";
+  Chain2["AUTOBAHN_NETWORK"] = "45000";
+  Chain2["EMONEY_NETWORK_MAINNET"] = "4545";
+  Chain2["SWAMPS_L2"] = "45454";
+  Chain2["DEELANCE_MAINNET"] = "45510";
+  Chain2["BLESSNET"] = "45513";
+  Chain2["ARZIO_CHAIN"] = "456";
+  Chain2["DARWINIA_NETWORK"] = "46";
+  Chain2["VERY_MAINNET"] = "4613";
+  Chain2["AREON_NETWORK_MAINNET"] = "463";
+  Chain2["MST_CHAIN"] = "4646";
+  Chain2["APPCHAIN"] = "466";
+  Chain2["IOTEX_NETWORK_MAINNET"] = "4689";
+  Chain2["ACRIA_INTELLICHAIN"] = "47";
+  Chain2["ULTRA_PRO_MAINNET"] = "473861";
+  Chain2["OPENCHAIN_MAINNET"] = "474142";
+  Chain2["NEO_X_MAINNET"] = "47763";
+  Chain2["FORM_NETWORK"] = "478";
+  Chain2["REDEFI_LAYER_1"] = "47803";
+  Chain2["REI_NETWORK"] = "47805";
+  Chain2["ENNOTHEM_MAINNET_PROTEROZOIC"] = "48";
+  Chain2["WORLD_CHAIN"] = "480";
+  Chain2["ZIRCUIT_MAINNET"] = "48900";
+  Chain2["GLOBEL_CHAIN"] = "4893";
+  Chain2["OEV_NETWORK"] = "4913";
+  Chain2["VENIDIUM_MAINNET"] = "4919";
+  Chain2["RUPAYA"] = "499";
+  Chain2["XDC_NETWORK"] = "50";
+  Chain2["CAMINO_C_CHAIN"] = "500";
+  Chain2["MANTLE"] = "5000";
+  Chain2["CITRONUS"] = "50000";
+  Chain2["YOOLDO_VERSE_MAINNET"] = "50005";
+  Chain2["TREASURENET_MAINNET_ALPHA"] = "5002";
+  Chain2["SOPHON"] = "50104";
+  Chain2["ONIGIRI_SUBNET"] = "5040";
+  Chain2["PLAYDAPP_NETWORK"] = "504441";
+  Chain2["SKATE_MAINNET"] = "5050";
+  Chain2["PIONEER_ZERO_CHAIN"] = "5080";
+  Chain2["ERBIE_MAINNET"] = "50888";
+  Chain2["XDC_APOTHEM_NETWORK"] = "51";
+  Chain2["HAM"] = "5112";
+  Chain2["NUMBLOCK_CHAIN"] = "5112023";
+  Chain2["DOUBLE_A_CHAIN_MAINNET"] = "512";
+  Chain2["DISCHAIN"] = "513100";
+  Chain2["BAHAMUT"] = "5165";
+  Chain2["SMART_LAYER_NETWORK"] = "5169";
+  Chain2["SARDIS_MAINNET"] = "51712";
+  Chain2["TLCHAIN_NETWORK_MAINNET"] = "5177";
+  Chain2["COINEX_SMART_CHAIN_MAINNET"] = "52";
+  Chain2["XT_SMART_CHAIN_MAINNET"] = "520";
+  Chain2["ELECTRONEUM_MAINNET"] = "52014";
+  Chain2["HUMANODE_MAINNET"] = "5234";
+  Chain2["DOCOIN_COMMUNITY_CHAIN"] = "526916";
+  Chain2["FXCORE_MAINNET_NETWORK"] = "530";
+  Chain2["DOID"] = "53277";
+  Chain2["SUPERSEED"] = "5330";
+  Chain2["NETSBO"] = "5333";
+  Chain2["CANDLE"] = "534";
+  Chain2["SCROLL"] = "534352";
+  Chain2["SHINARIUM_BETA"] = "534849";
+  Chain2["BEANECO_SMARTCHAIN"] = "535037";
+  Chain2["OPTRUST_MAINNET"] = "537";
+  Chain2["SETTLUS"] = "5371";
+  Chain2["DFK_CHAIN"] = "53935";
+  Chain2["OPENPIECE_MAINNET"] = "54";
+  Chain2["OVERPROTOCOL_MAINNET"] = "54176";
+  Chain2["EDEXA_MAINNET"] = "5424";
+  Chain2["ZERO_NETWORK"] = "543210";
+  Chain2["EGOCHAIN"] = "5439";
+  Chain2["SAGA"] = "5464";
+  Chain2["ZYX_MAINNET"] = "55";
+  Chain2["RIVER"] = "550";
+  Chain2["TITAN"] = "55004";
+  Chain2["POINTPAY_MAINNET"] = "5511";
+  Chain2["SUPERPOSITION"] = "55244";
+  Chain2["VELA1_CHAIN_MAINNET"] = "555";
+  Chain2["NAHMII_2_MAINNET"] = "5551";
+  Chain2["CHAIN_VERSE_MAINNET"] = "5555";
+  Chain2["REI_CHAIN_MAINNET"] = "55555";
+  Chain2["IMVERSED_MAINNET"] = "5555555";
+  Chain2["DUSTBOY_IOT"] = "555888";
+  Chain2["FLAMMA_MAINNET"] = "55614";
+  Chain2["BNB_SMART_CHAIN_MAINNET"] = "56";
+  Chain2["LAMBDA_CHAIN_MAINNET"] = "56026";
+  Chain2["BOBA_BNB_MAINNET"] = "56288";
+  Chain2["QIE_BLOCKCHAIN"] = "5656";
+  Chain2["TANSSI_DEMO"] = "5678";
+  Chain2["VELO_LABS_MAINNET"] = "56789";
+  Chain2["SYSCOIN_MAINNET"] = "57";
+  Chain2["ROLLUX_MAINNET"] = "570";
+  Chain2["INK"] = "57073";
+  Chain2["METACHAIN_MAINNET"] = "571";
+  Chain2["COINSEC_NETWORK"] = "57451";
+  Chain2["FILENOVA_MAINNET"] = "579";
+  Chain2["ONTOLOGY_MAINNET"] = "58";
+  Chain2["TANGLE"] = "5845";
+  Chain2["CHANG_CHAIN_FOUNDATION_MAINNET"] = "5858";
+  Chain2["WEGOCHAIN_RUBIDIUM_MAINNET"] = "5869";
+  Chain2["LINEA"] = "59144";
+  Chain2["ASTAR"] = "592";
+  Chain2["GENESYS_CODE_MAINNET"] = "59971";
+  Chain2["GOCHAIN"] = "60";
+  Chain2["BOUNCEBIT_MAINNET"] = "6001";
+  Chain2["TRES_MAINNET"] = "6066";
+  Chain2["BOB"] = "60808";
+  Chain2["ETHEREUM_CLASSIC"] = "61";
+  Chain2["ORANGE_CHAIN_MAINNET"] = "61022";
+  Chain2["TREASURE"] = "61166";
+  Chain2["UPTN"] = "6119";
+  Chain2["EIOB_MAINNET"] = "612";
+  Chain2["GRAPHLINQ_BLOCKCHAIN_MAINNET"] = "614";
+  Chain2["KAICHAIN"] = "61406";
+  Chain2["ETICA_MAINNET"] = "61803";
+  Chain2["SKYNET"] = "619";
+  Chain2["DOKEN_SUPER_CHAIN_MAINNET"] = "61916";
+  Chain2["OPTOPIA_MAINNET"] = "62050";
+  Chain2["HYPRA_MAINNET"] = "622277";
+  Chain2["BINARY_MAINNET"] = "624";
+  Chain2["MULTIVAC_MAINNET"] = "62621";
+  Chain2["RAILS"] = "6278";
+  Chain2["LAOS"] = "6283";
+  Chain2["ESYNC_NETWORK_MAINNET"] = "63000";
+  Chain2["GEIST_MAINNET"] = "63157";
+  Chain2["NFB_CHAIN"] = "632";
+  Chain2["AURA_MAINNET"] = "6322";
+  Chain2["AVOCADO"] = "634";
+  Chain2["BEAR_NETWORK_CHAIN_MAINNET"] = "641230";
+  Chain2["ENDURANCE_SMART_CHAIN_MAINNET"] = "648";
+  Chain2["ALL_MAINNET"] = "651940";
+  Chain2["VECNO_MAINNET"] = "65357";
+  Chain2["KALICHAIN"] = "654";
+  Chain2["SCOLCOIN_MAINNET"] = "65450";
+  Chain2["CYBERCHAIN_MAINNET"] = "65535";
+  Chain2["AUTOMATA_MAINNET"] = "65536";
+  Chain2["OKXCHAIN_MAINNET"] = "66";
+  Chain2["XAI_MAINNET"] = "660279";
+  Chain2["ULTRONSMARTCHAIN"] = "662";
+  Chain2["PIXIE_CHAIN_MAINNET"] = "6626";
+  Chain2["CYBRIA_MAINNET"] = "6661";
+  Chain2["PDC_MAINNET"] = "666301171999";
+  Chain2["SAFEANWANG_MAINNET"] = "6666665";
+  Chain2["DEGEN_CHAIN"] = "666666666";
+  Chain2["STORCHAIN"] = "6667";
+  Chain2["EDGE_MATRIX_CHAIN"] = "6678";
+  Chain2["JUNCACHAIN"] = "668";
+  Chain2["CONWAI_MAINNET"] = "668668";
+  Chain2["IRISHUB"] = "6688";
+  Chain2["PAXB_MAINNET"] = "6701";
+  Chain2["COMPVERSE_MAINNET"] = "6779";
+  Chain2["GOLD_SMART_CHAIN_MAINNET"] = "6789";
+  Chain2["RACE_MAINNET"] = "6805";
+  Chain2["KARURA_NETWORK"] = "686";
+  Chain2["POOLS_MAINNET"] = "6868";
+  Chain2["WON_NETWORK"] = "686868";
+  Chain2["DM2_VERSE_MAINNET"] = "68770";
+  Chain2["MTT_MAINNET"] = "6880";
+  Chain2["REDSTONE"] = "690";
+  Chain2["LAIKA_MAINNET"] = "6942";
+  Chain2["TOMB_CHAIN_MAINNET"] = "6969";
+  Chain2["MATCHAIN"] = "698";
+  Chain2["THAICHAIN"] = "7";
+  Chain2["HOO_SMART_CHAIN"] = "70";
+  Chain2["ZETACHAIN_MAINNET"] = "7000";
+  Chain2["THINKIUM_MAINNET_CHAIN_0"] = "70000";
+  Chain2["THINKIUM_MAINNET_CHAIN_1"] = "70001";
+  Chain2["THINKIUM_MAINNET_CHAIN_2"] = "70002";
+  Chain2["BST_CHAIN"] = "7007";
+  Chain2["THINKIUM_MAINNET_CHAIN_103"] = "70103";
+  Chain2["ELLA_THE_HEART"] = "7027";
+  Chain2["FIDESINNOVA"] = "706883";
+  Chain2["BLOCKCHAIN_STATION_MAINNET"] = "707";
+  Chain2["PLANQ_MAINNET"] = "7070";
+  Chain2["PROOF_OF_PLAY_APEX"] = "70700";
+  Chain2["PROOF_OF_PLAY_BOSS"] = "70701";
+  Chain2["HIGHBURY"] = "710";
+  Chain2["NUME"] = "7100";
+  Chain2["TILTYARD_MAINNET_SUBNET"] = "710420";
+  Chain2["GUAPCOINX"] = "71111";
+  Chain2["ZERO_XL3"] = "7117";
+  Chain2["VRCSCAN_MAINNET"] = "713";
+  Chain2["GODWOKEN_MAINNET"] = "71402";
+  Chain2["ZETHER_MAINNET"] = "715131";
+  Chain2["BITROCK_MAINNET"] = "7171";
+  Chain2["SHIBARIUM_BETA"] = "719";
+  Chain2["EXSAT_MAINNET"] = "7200";
+  Chain2["LYCAN_CHAIN"] = "721";
+  Chain2["ERAM_MAINNET"] = "721529";
+  Chain2["SAAKURU_MAINNET"] = "7225878";
+  Chain2["INITVERSE_MAINNET"] = "7233";
+  Chain2["TRON_MAINNET"] = "728126428";
+  Chain2["CAGA_MAINNET"] = "72888";
+  Chain2["GROK_CHAIN_MAINNET"] = "72992";
+  Chain2["FNCY"] = "73";
+  Chain2["LOVELY_NETWORK_MAINNET"] = "730";
+  Chain2["XPLA_VERSE"] = "7300";
+  Chain2["ICB_NETWORK"] = "73115";
+  Chain2["HORIZEN_EON_MAINNET"] = "7332";
+  Chain2["SHYFT_MAINNET"] = "7341";
+  Chain2["OPENVESSEL"] = "7355310";
+  Chain2["MIXIN_VIRTUAL_MACHINE"] = "73927";
+  Chain2["IDCHAIN_MAINNET"] = "74";
+  Chain2["TRANCHED_MAINNET"] = "743";
+  Chain2["EVM_ON_FLOW"] = "747";
+  Chain2["RABA_NETWORK_MAINNET"] = "7484";
+  Chain2["DECIMAL_SMART_CHAIN_MAINNET"] = "75";
+  Chain2["MEVERSE_CHAIN_MAINNET"] = "7518";
+  Chain2["TERNOA"] = "752025";
+  Chain2["RIVALZ"] = "753";
+  Chain2["GEEK_VERSE_MAINNET"] = "75512";
+  Chain2["CYBER_MAINNET"] = "7560";
+  Chain2["PAYSCAN_CHAIN"] = "756689";
+  Chain2["ADIL_CHAIN_V2_MAINNET"] = "7576";
+  Chain2["MIEXS_SMARTCHAIN"] = "761412";
+  Chain2["QL1"] = "766";
+  Chain2["THE_ROOT_NETWORK_MAINNET"] = "7668";
+  Chain2["POA_NETWORK_SOKOL"] = "77";
+  Chain2["CANTO"] = "7700";
+  Chain2["BORACHAIN_MAINNET"] = "77001";
+  Chain2["VENTION_SMART_CHAIN_MAINNET"] = "77612";
+  Chain2["MODULARIUM"] = "776877";
+  Chain2["GDCC_MAINNET"] = "7774";
+  Chain2["PANDASEA_MAINNET"] = "7776";
+  Chain2["TORONET_MAINNET"] = "77777";
+  Chain2["ZORA"] = "7777777";
+  Chain2["ORENIUM_MAINNET_PROTOCOL"] = "7778";
+  Chain2["DRAGONFLY_MAINNET_HEXAPOD"] = "78281";
+  Chain2["AMPLIFY_SUBNET"] = "78430";
+  Chain2["BULLETIN_SUBNET"] = "78431";
+  Chain2["CONDUIT_SUBNET"] = "78432";
+  Chain2["MAAL_CHAIN"] = "786";
+  Chain2["MAALCHAIN_V2"] = "7862";
+  Chain2["POWERLOOM_MAINNET"] = "7865";
+  Chain2["ZEBRO_SMART_CHAIN"] = "786786";
+  Chain2["ACALA_NETWORK"] = "787";
+  Chain2["KINTO_MAINNET"] = "7887";
+  Chain2["PATEX"] = "789";
+  Chain2["ARDENIUM_ATHENA"] = "7895";
+  Chain2["ARENA_Z"] = "7897";
+  Chain2["ZENITH_MAINNET"] = "79";
+  Chain2["DOT_BLOX"] = "7923";
+  Chain2["MO_MAINNET"] = "7924";
+  Chain2["SX_TORONTO_ROLLUP"] = "79479957";
+  Chain2["DOS_CHAIN"] = "7979";
+  Chain2["UBIQ"] = "8";
+  Chain2["GENECHAIN"] = "80";
+  Chain2["LUCID_BLOCKCHAIN"] = "800";
+  Chain2["TELEPORT"] = "8000";
+  Chain2["OCTASPACE"] = "800001";
+  Chain2["PLIAN_MAINNET_SUBCHAIN_1"] = "8007736";
+  Chain2["POLYNOMIAL"] = "8008";
+  Chain2["FHENIX_HELIUM"] = "8008135";
+  Chain2["BERACHAIN"] = "80094";
+  Chain2["HIZOCO_MAINNET"] = "80096";
+  Chain2["ISUNCOIN_MAINNET"] = "8017";
+  Chain2["BOAT_MAINNET"] = "8047";
+  Chain2["EVOZ_MAINNET"] = "805";
+  Chain2["SHARDEUM_LIBERTY_1_X"] = "8080";
+  Chain2["HOKUM"] = "8080808";
+  Chain2["SHARDEUM_LIBERTY_2_X"] = "8081";
+  Chain2["SHARDEUM_SPHINX_1_X"] = "8082";
+  Chain2["FORTA_CHAIN"] = "80931";
+  Chain2["JAPAN_OPEN_CHAIN_MAINNET"] = "81";
+  Chain2["ZKLINK_NOVA_MAINNET"] = "810180";
+  Chain2["NORDEK_MAINNET"] = "81041";
+  Chain2["SG_VERSE_MAINNET"] = "812397";
+  Chain2["QITMEER_NETWORK_MAINNET"] = "813";
+  Chain2["BLAST"] = "81457";
+  Chain2["QUANTUM_CHAIN_MAINNET"] = "81720";
+  Chain2["BEONE_CHAIN_MAINNET"] = "818";
+  Chain2["TORUS_MAINNET"] = "8192";
+  Chain2["METER_MAINNET"] = "82";
+  Chain2["CALLISTO_MAINNET"] = "820";
+  Chain2["KAIA_MAINNET"] = "8217";
+  Chain2["SPACE_SUBNET"] = "8227";
+  Chain2["DAILY_NETWORK_MAINNET"] = "824";
+  Chain2["VEMP_HORIZON"] = "82614";
+  Chain2["BLOCKTON_BLOCKCHAIN"] = "8272";
+  Chain2["CURVE_MAINNET"] = "827431";
+  Chain2["LORENZO"] = "8329";
+  Chain2["B3"] = "8333";
+  Chain2["ZEDXION"] = "83872";
+  Chain2["TARAXA_MAINNET"] = "841";
+  Chain2["THAT_MAINNET"] = "8428";
+  Chain2["BASE"] = "8453";
+  Chain2["O_CHAIN"] = "84841";
+  Chain2["AERIE_NETWORK"] = "84886";
+  Chain2["HONGKONG_MAINNET"] = "852";
+  Chain2["DODAO"] = "855456";
+  Chain2["GATECHAIN_MAINNET"] = "86";
+  Chain2["ELECTRA_NETWORK"] = "861";
+  Chain2["HELA_OFFICIAL_RUNTIME_MAINNET"] = "8668";
+  Chain2["FANTASIA_CHAIN_MAINNET"] = "868";
+  Chain2["NOVA_NETWORK"] = "87";
+  Chain2["TOOL_GLOBAL_MAINNET"] = "8723";
+  Chain2["STORAGECHAIN_MAINNET"] = "8726";
+  Chain2["BULLIONS_SMART_CHAIN"] = "8732";
+  Chain2["ALPH_NETWORK"] = "8738";
+  Chain2["BANDAI_NAMCO_RESEARCH_VERSE_MAINNET"] = "876";
+  Chain2["DEXIT_NETWORK"] = "877";
+  Chain2["BLOCX_MAINNET"] = "879151";
+  Chain2["HAPCHAIN"] = "8794598";
+  Chain2["AMBROS_CHAIN_MAINNET"] = "880";
+  Chain2["HAVEN1"] = "8811";
+  Chain2["IOTA_EVM"] = "8822";
+  Chain2["MARO_BLOCKCHAIN_MAINNET"] = "8848";
+  Chain2["INOAI"] = "88559";
+  Chain2["SUPERLUMIO"] = "8866";
+  Chain2["LIF3_CHAIN"] = "8869";
+  Chain2["WANCHAIN"] = "888";
+  Chain2["UNIQUE"] = "8880";
+  Chain2["ZKASINO_MAINNET"] = "88800";
+  Chain2["QUARTZ_BY_UNIQUE"] = "8881";
+  Chain2["UNIT_ZERO_STAGENET"] = "88819";
+  Chain2["SAPPHIRE_BY_UNIQUE"] = "8883";
+  Chain2["XANACHAIN"] = "8888";
+  Chain2["CHILIZ_CHAIN_MAINNET"] = "88888";
+  Chain2["REXX_MAINNET"] = "888882";
+  Chain2["VISION_MAINNET"] = "888888";
+  Chain2["T_E_A_M_BLOCKCHAIN"] = "88888888";
+  Chain2["ANCIENT8"] = "888888888";
+  Chain2["UNITE"] = "88899";
+  Chain2["MAMMOTH_MAINNET"] = "8898";
+  Chain2["JIBCHAIN_L1"] = "8899";
+  Chain2["PTCESCAN_MAINNET"] = "889910246";
+  Chain2["ALGEN"] = "8911";
+  Chain2["ALGEN_LAYER2"] = "8921";
+  Chain2["REYA_CRONOS"] = "89346162";
+  Chain2["GIANT_MAMMOTH_MAINNET"] = "8989";
+  Chain2["MAXI_CHAIN_MAINNET"] = "899";
+  Chain2["GARIZON_STAGE0"] = "90";
+  Chain2["POSICHAIN_MAINNET_SHARD_0"] = "900000";
+  Chain2["UBIT_SMARTCHAIN_MAINNET"] = "90002";
+  Chain2["EVMOS"] = "9001";
+  Chain2["SHIDO_MAINNET_BLOCK"] = "9008";
+  Chain2["BERYLBIT_MAINNET"] = "9012";
+  Chain2["NEXA_MAINNET_BLOCK"] = "9025";
+  Chain2["GARIZON_STAGE1"] = "91";
+  Chain2["TAPROOT_MAINNET"] = "911";
+  Chain2["HENEZ_CHAIN_MAINNET"] = "91111";
+  Chain2["METADAP_ENTERPRISE_MAINNET"] = "91120";
+  Chain2["ASTRIA_EVM_DUSKNET"] = "912559";
+  Chain2["SLERFCHAIN_MAINNET"] = "918";
+  Chain2["GARIZON_STAGE2"] = "92";
+  Chain2["CODEFIN_MAINNET"] = "9223";
+  Chain2["YIDARK_CHAIN_MAINNET"] = "927";
+  Chain2["GARIZON_STAGE3"] = "93";
+  Chain2["XCAP"] = "9322252";
+  Chain2["HAUST_MAINNET"] = "938";
+  Chain2["EVOKE_MAINNET"] = "9395";
+  Chain2["SWISSDLT"] = "94";
+  Chain2["CAMDL_MAINNET"] = "95";
+  Chain2["SRICHAIN"] = "95432";
+  Chain2["JONO12_SUBNET"] = "955081";
+  Chain2["ELUVIO_CONTENT_FABRIC"] = "955305";
+  Chain2["LYRA_CHAIN"] = "957";
+  Chain2["BITKUB_CHAIN"] = "96";
+  Chain2["BTC20_SMART_CHAIN"] = "963";
+  Chain2["LUX_MAINNET"] = "96369";
+  Chain2["ETHXY"] = "969";
+  Chain2["REBUS_MAINNET"] = "9696";
+  Chain2["OORT_MAINNET"] = "970";
+  Chain2["TETRON_SMART_CHAIN"] = "97055";
+  Chain2["OORT_ASCRAEUS"] = "972";
+  Chain2["PALM_SMART_CHAIN"] = "973";
+  Chain2["SIDRA_CHAIN"] = "97453";
+  Chain2["METABENZ_CHAIN"] = "97766";
+  Chain2["PEPENETWORK_MAINNET"] = "9779";
+  Chain2["OPTIMUSZ7_MAINNET"] = "9797";
+  Chain2["SIX_PROTOCOL"] = "98";
+  Chain2["TOP_MAINNET_EVM"] = "980";
+  Chain2["IMPERIUM_MAINNET"] = "9819";
+  Chain2["FORMA"] = "984122";
+  Chain2["FORMA_SKETCHPAD"] = "984123";
+  Chain2["MEMO_SMART_CHAIN_MAINNET"] = "985";
+  Chain2["BINARYCHAIN_MAINNET"] = "987";
+  Chain2["ECROX_CHAIN_MAINNET"] = "988207";
+  Chain2["PLUME_LEGACY"] = "98865";
+  Chain2["DOGELAYER_MAINNET"] = "9888";
+  Chain2["LARISSA_CHAIN"] = "9898";
+  Chain2["POA_NETWORK_CORE"] = "99";
+  Chain2["ELIBERTY_MAINNET"] = "990";
+  Chain2["ZYTRON_LINEA_MAINNET"] = "9901";
+  Chain2["ESPENTO_MAINNET"] = "9911";
+  Chain2["LUMIA_MAINNET"] = "994873017";
+  Chain2["FIVE_IRECHAIN_MAINNET"] = "995";
+  Chain2["COMBO_MAINNET"] = "9980";
+  Chain2["VOLLEY_MAINNET"] = "9981";
+  Chain2["MFEV_CHAIN_MAINNET"] = "9982";
+  Chain2["AGUNG_NETWORK"] = "9990";
+  Chain2["MIND_SMART_CHAIN_MAINNET"] = "9996";
+  Chain2["AMCHAIN"] = "999999";
+  Chain2["FLUENCE"] = "9999999";
+  Chain2["VOLCANO_CHAIN_MAINNET"] = "10085";
+  Chain2["BEVM_SIGNET"] = "11504";
+  Chain2["BASECAMP"] = "123420001114";
+  Chain2["COINZAX"] = "1310";
+  Chain2["TUXAPPCOIN"] = "1313161573";
+  Chain2["REACTIVE_MAINNET"] = "1597";
+  Chain2["MUD_CHAIN"] = "168169";
+  Chain2["PRIVIX_CHAIN_MAINNET"] = "16969696";
+  Chain2["WITNESS_CHAIN"] = "1702448187";
+  Chain2["ETHPAR_MAINNET"] = "1727";
+  Chain2["ACTION_MAINNET"] = "21000";
+  Chain2["MAGICHAIN"] = "24125";
+  Chain2["ATLETA_NETWORK"] = "2440";
+  Chain2["APERTUM"] = "2786";
+  Chain2["XFERCHAIN_MAINNET"] = "28125";
+  Chain2["ZKCANDY_MAINNET"] = "320";
+  Chain2["PEPE_UNCHAINED"] = "3409";
+  Chain2["XONE_MAINNET"] = "3721";
+  Chain2["ARCADIA_MAINNET"] = "4278608";
+  Chain2["MEMECORE"] = "4352";
+  Chain2["JUNEO_MAINNET"] = "45003";
+  Chain2["TRUMPCHAIN"] = "4547";
+  Chain2["BLACKFORT_EXCHANGE_NETWORK"] = "488";
+  Chain2["BIRDLAYER"] = "53456";
+  Chain2["RARIMO"] = "7368";
+  Chain2["OONE_CHAIN_MAINNET"] = "777888";
+  Chain2["EMERALDZ"] = "789789";
+  Chain2["ONFA_CHAIN"] = "8691942025";
+  Chain2["WEBER_GOVERNANCE_MAINNET"] = "881";
+  Chain2["MIRACLE_CHAIN"] = "92278";
+  Chain2["Z_CHAIN"] = "9369";
+  Chain2["LUMOZ_CHAIN_MAINNET"] = "96370";
+  Chain2["LAGOM_MAINNET"] = "986";
+  Chain2["PLUME_MAINNET"] = "98866";
+  Chain2["POINTLEDGER"] = "9889";
+  Chain2["FUEL"] = "fuel";
+  Chain2["SOCOTRA_JUNE_CHAIN"] = "101003";
+  Chain2["OPENGPU_MAINNET"] = "1071";
+  Chain2["STATEMESH"] = "1134";
+  Chain2["PERENNIAL"] = "1424";
+  Chain2["ONINO_MAINNET"] = "1425";
+  Chain2["EVENTUM_MAINNET"] = "161803";
+  Chain2["ESPORTS_CHAIN"] = "17735";
+  Chain2["SWISSTRONIK_MAINNET"] = "1848";
+  Chain2["ALTBLOCKSCAN_MAINNET"] = "191919";
+  Chain2["FIRACHAIN"] = "194";
+  Chain2["XPHERE_MAINNET"] = "20250217";
+  Chain2["VCITYCHAIN_MAINNET"] = "20250825";
+  Chain2["IDN_MAINNET"] = "215";
+  Chain2["CHOOCHAIN"] = "247";
+  Chain2["TRON_SHASTA"] = "2494104990";
+  Chain2["COTI"] = "2632500";
+  Chain2["MEZO"] = "31612";
+  Chain2["BASEDAI"] = "32323";
+  Chain2["PENTAGON_CHAIN"] = "3344";
+  Chain2["R5_NETWORK"] = "337";
+  Chain2["GUNZ"] = "43419";
+  Chain2["JUNEO_DAI1_CHAIN"] = "45004";
+  Chain2["JUNEO_USDT1_CHAIN"] = "45005";
+  Chain2["JUNEO_USD1_CHAIN"] = "45006";
+  Chain2["JUNEO_MBTC1_CHAIN"] = "45007";
+  Chain2["JUNEO_GLD1_CHAIN"] = "45008";
+  Chain2["JUNEO_LTC1_CHAIN"] = "45009";
+  Chain2["JUNEO_DOGE1_CHAIN"] = "45010";
+  Chain2["JUNEO_EUR1_CHAIN"] = "45011";
+  Chain2["JUNEO_SGD1_CHAIN"] = "45012";
+  Chain2["JUNEO_BCH1_CHAIN"] = "45013";
+  Chain2["JUNEO_LINK1_CHAIN"] = "45014";
+  Chain2["INERTIA_SCAN"] = "5433";
+  Chain2["WINR_PROTOCOL_MAINNET"] = "777777";
+  Chain2["DRAW_COIN"] = "7788";
+  Chain2["POWERLOOM_MAINNET_V2"] = "7869";
+  Chain2["SHARDEUM"] = "8118";
+  Chain2["XCHAIN"] = "94524";
+  Chain2["HYPEREVM"] = "999";
+  return Chain2;
+})(Chain || {});
+var AAVE_STYLE_TOKENS = {
+  "AAVE_V3": {
+    "1": {
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": { "aToken": "0x4d5f47fa6a74757f35c14fd3a6ef8e3c9bc514e8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xea51d7853eefb32b6ee06b1c12e6dcca88be0ffe" },
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0": { "aToken": "0x0b925ed163218f6662a35e0f0371ac234f9e9371", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xc96113eed8cab59cd8a66813bcb0ceb29f06d2e4" },
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": { "aToken": "0x5ee5bf7ae06d1be5997a1a72006fe6c607ec6de8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x40aabef1aa8f0eec637e0e7d92fbffb2f26a8b7b" },
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": { "aToken": "0x98c23e9d8f34fefb1b7bd6a91b7ff122f4e16f5c", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x72e95b8931767c79ba4eee721354d6e99a61d004" },
+      "0x6b175474e89094c44da98b954eedeac495271d0f": { "aToken": "0x018008bfb33d285247a21d44e50697654f754e63", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xcf8d0c70c850859266f5c338b38f9d663181c314" },
+      "0x514910771af9ca656af840dff83e8264ecf986ca": { "aToken": "0x5e8c8a7243651db1384c0ddfdbe39761e8e7e51a", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x4228f8895c7dda20227f6a5c6751b8ebf19a6ba8" },
+      "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": { "aToken": "0xa700b4eb416be35b2911fd5dee80678ff64ff6c9", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xbae535520abd9f8c85e58929e0006a2c8b372f74" },
+      "0xbe9895146f7af43049ca1c1ae358b0541ea49704": { "aToken": "0x977b6fc5de62598b08c85ac8cf2b745874e8b78c", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x0c91bca95b5fe69164ce583a2ec9429a569798ed" },
+      "0xdac17f958d2ee523a2206206994597c13d831ec7": { "aToken": "0x23878914efe38d27c4d67ab83ed1b93a74d4086a", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x6df1c1e379bc5a00a7b4c6e67a203333772f45a8" },
+      "0xae78736cd615f374d3085123a210448e74fc6393": { "aToken": "0xcc9ee9483f662091a1de4795249e24ac0ac2630f", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xae8593dd575fe29a9745056aa91c4b746eee62c8" },
+      "0x5f98805a4e8be255a32880fdec7f6728c6568ba0": { "aToken": "0x3fe6a295459fae07df8a0cecc36f37160fe86aa9", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x33652e48e4b74d18520f11bfe58edd2ed2cec5a2" },
+      "0xd533a949740bb3306d119cc777fa900ba034cd52": { "aToken": "0x7b95ec873268a6bfc6427e7a28e396db9d0ebc65", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x1b7d3f4b3c032a5ae656e30eea4e8e1ba376068f" },
+      "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2": { "aToken": "0x8a458a9dc9048e005d22849f470891b840296619", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x6efc73e54e41b27d2134ff9f98f15550f30df9b1" },
+      "0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f": { "aToken": "0xc7b4c17861357b8abb91f25581e7263e08dcb59c", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8d0de040e8aad872ec3c33a3776de9152d3c34ca" },
+      "0xba100000625a3754423978a60c9317c58a424e3d": { "aToken": "0x2516e7b3f76294e03c42aa4c5b5b4dce9c436fb8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x3d3efceb4ff0966d34d9545d3a2fa2dcdbf451f2" },
+      "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": { "aToken": "0xf6d2224916ddfbbab6e6bd0d1b7034f4ae0cab18", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xf64178ebd2e2719f2b1233bcb5ef6db4bcc4d09a" },
+      "0x5a98fcbea516cf06857215779fd812ca3bef1b32": { "aToken": "0x9a44fd41566876a39655f74971a3a6ea0a17a454", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xc30808705c01289a3d306ca9cab081ba9114ec82" },
+      "0xc18360217d8f7ab5e7c516566761ea12ce7f9d72": { "aToken": "0x545bd6c032efdde65a377a6719def2796c8e0f2e", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xd180d7fdd4092f07428efe801e17bc03576b3192" },
+      "0x111111111117dc0aa78b770fa6a738034120c302": { "aToken": "0x71aef7b30728b9bb371578f36c5a1f1502a5723e", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xa38fca8c6bf9bda52e76eb78f08caa3be7c5a970" },
+      "0x853d955acef822db058eb8505911ed77f175b99e": { "aToken": "0xd4e245848d6e1220dbe62e155d89fa327e43cb06", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x88b8358f5bc87c2d7e116cca5b65a9eeb2c5ea3f" },
+      "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f": { "aToken": "0x00907f9921424583e7ffbfedf84f92b7b2be4977", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x786dbff3f1292ae8f92ea68cf93c30b34b1ed04b" },
+      "0xd33526068d116ce69f19a9ee46f0bd304f21a51f": { "aToken": "0xb76cf92076adbf1d9c39294fa8e7a67579fde357", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8988eca19d502fd8b9ccd03fa3bd20a6f599bc2a" },
+      "0x83f20f44975d03b1b09e64809b757c47f942beea": { "aToken": "0x4c612e3b15b96ff9a6faed838f8d07d479a8dd4c", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8db9d35e117d8b93c6ca9b644b25bad5d9908141" },
+      "0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6": { "aToken": "0x1ba9843bd4327c6c77011406de5fa8749f7e3479", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x655568bdd6168325ec7e58bf39b21a856f906dc2" },
+      "0xdefa4e8a7bcba345f687a2f1456f5edd9ce97202": { "aToken": "0x5b502e3796385e1e9755d7043b9c945c3accec9c", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x253127ffc04981cea8932f406710661c2f2c3fd2" },
+      "0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0": { "aToken": "0x82f9c5ad306bba1ad0de49bb5fa6f01bf61085ef", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x68e9f0ad4e6f8f5db70f6923d4d6d5b225b83b16" },
+      "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e": { "aToken": "0xb82fa9f31612989525992fcfbb09ab22eff5c85a", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x028f7886f3e937f8479efad64f31b3fe1119857a" },
+      "0x6c3ea9036406852006290770bedfcaba0e23a0e8": { "aToken": "0x0c0d01abf3e6adfca0989ebba9d6e85dd58eab1e", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x57b67e4de077085fd0af2174e9c14871be664546" },
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": { "aToken": "0xbdfa7b7893081b35fb54027489e2bc7a38275129", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x77ad9bf13a52517ad698d65913e8d381300c8bf3" },
+      "0xf1c9acdc66974dfb6decb12aa385b9cd01190e38": { "aToken": "0x927709711794f3de5ddbf1d176bee2d55ba13c21", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8838eeff2af391863e1bb8b1df563f86743a8470" },
+      "0x4c9edd5852cd905f086c759e8383e09bff1e68b3": { "aToken": "0x4f5923fc5fd4a93352581b38b7cd26943012decf", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x015396e1f286289ae23a762088e863b3ec465145" },
+      "0xa35b1b31ce002fbf2058d22f30f95d405200a15b": { "aToken": "0x1c0e06a0b1a4c160c17545ff2a951bfca57c0002", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x08a8dc81aea67f84745623ac6c72cda3967aab8b" },
+      "0x9d39a5de30e57443bff2a8307a4256c8797a3497": { "aToken": "0x4579a27af00a62c0eb156349f31b345c08386419", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xeffde9bfa8ec77c14c364055a200746d6e12bed6" },
+      "0x18084fba666a33d37592fa2633fd49a74dd93a88": { "aToken": "0x10ac93971cdb1f5c778144084242374473c350da", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xac50890a80a2731eb1ea2e9b4f29569ceb06d960" },
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": { "aToken": "0x5c647ce0ae10658ec44fa4e11a51c96e94efd1dd", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xeb284a70557efe3591b9e6d9d720040e02c54a4d" },
+      "0xdc035d45d973e3ec169d2276ddab16f1e407384f": { "aToken": "0x32a6268f9ba3642dda7892add74f1d34469a4259", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x490e0e6255bf65b43e2e02f7acb783c5e04572ff" },
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": { "aToken": "0x2d62109243b87c4ba3ee7ba1d91b0dd0a074d7b1", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x6de3e52a1b7294a34e271a508082b1ff4a37e30e" },
+      "0x8236a87084f8b84306f72007f36f2618a5634494": { "aToken": "0x65906988adee75306021c417a1a3458040239602", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x68aeb290c7727d899b47c56d1c96aeac475cd0dd" },
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642": { "aToken": "0x5fefd7069a7d91d01f269dade14526ccf3487810", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x47ed0509e64615c0d5c6d39af1b38d02bc9fe58f" },
+      "0x8292bb45bf1ee4d140127049757c2e0ff06317ed": { "aToken": "0xfa82580c16a31d0c1bc632a36f82e83efef3eec0", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xbdfe7ad7976d5d7e0965ea83a81ca1bcff7e84a9" },
+      "0x50d2c7992b802eef16c04feadab310f31866a545": { "aToken": "0x4b0821e768ed9039a70ed1e80e15e76a5be5df5f", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x3c20fbfd32243dd9899301c84bce17413eee0a0c" },
+      "0x3b3fb9c57858ef816833dc91565efcd85d96f634": { "aToken": "0xde6ef6cb4abd3a473ffc2942eef5d84536f8e864", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8c6feaf5d58ba1a6541f9c4af685f62bfcbac3b1" },
+      "0xc139190f447e929f090edeb554d95abb8b18ac1c": { "aToken": "0xec4ef66d4fceeba34abb4de69db391bc5476ccc8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xea85a065f87fe28aa8fbf0d6c7dec472b106252c" },
+      "0x917459337caac939d41d7493b3999f571d20d667": { "aToken": "0x312ffc57778cefa11989733e6e08143e7e229c1c", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xd90da2df915b87fe1621a7f2201fbf4ff2cca031" },
+      "0x14bdc3a3ae09f5518b923b69489cbcafb238e617": { "aToken": "0x2edff5af94334fbd7c38ae318edf1c40e072b73b", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x22517fe16ded08e52e7ea3423a2ea4995b1f1731" },
+      "0x90d2af7d622ca3141efa4d8f1f24d86e5974cc8f": { "aToken": "0x5f9190496e0dfc831c3bd307978de4a245e2f5cd", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x48351fcc9536da440ae9471220f6dc921b0eb703" },
+      "0xc96de26018a54d51c097160568752c4e3bd6c364": { "aToken": "0xcca43cef272c30415866914351fdfc3e881bb7c2", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x4a35fd7f93324cc48bc12190d3f37493437b1eff" }
+    },
+    "10": {
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": { "aToken": "0x82e64f49ed5ec1bc6e43dad4fc8af9bb3a2312ee", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8619d80fb0141ba7f184cbf22fd724116d9f7ffc" },
+      "0x350a791bfc2c21f9ed5d10980dad2e2638ffa7f6": { "aToken": "0x191c10aa4af7c30e871e70c95db0e4eb77237530", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x953a573793604af8d41f306feb8274190db4ae0e" },
+      "0x7f5c764cbc14f9669b88837ca1490cca17c31607": { "aToken": "0x625e7708f30ca75bfd92586e17077590c60eb4cd", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xfccf3cabbe80101232d343252614b6a3ee81c989" },
+      "0x68f180fcce6836688e9084f035309e29bf0a2095": { "aToken": "0x078f358208685046a11c85e8ad32895ded33a249", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x92b42c66840c7ad907b4bf74879ff3ef7c529473" },
+      "0x4200000000000000000000000000000000000006": { "aToken": "0xe50fa9b3c56ffb159cb0fca61f5c9d750e8128c8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x0c84331e39d6658cd6e6b9ba04736cc4c4734351" },
+      "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58": { "aToken": "0x6ab707aca953edaefbc4fd23ba73294241490620", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xfb00ac187a8eb5afae4eace434f493eb62672df7" },
+      "0x76fb31fb4af56892a25e32cfc43de717950c9278": { "aToken": "0xf329e36c7bf6e5e86ce2150875a84ce77f477375", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xe80761ea617f66f96274ea5e8c37f03960ecc679" },
+      "0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9": { "aToken": "0x6d80113e533a2c0fe82eabd35f1875dcea89ea97", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x4a1c3ad6ed28a636ee1751c69071f6be75deb8b8" },
+      "0x4200000000000000000000000000000000000042": { "aToken": "0x513c7e3a9c69ca3e22550ef58ac1c0088e918fff", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x77ca01483f379e58174739308945f044e1a764dc" },
+      "0x1f32b1c2345538c0c6f582fcb022739c4a194ebb": { "aToken": "0xc45a479877e1e9dfe9fcd4056c699575a1045daa", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x34e2ed44ef7466d5f9e0b782b5c08b57475e7907" },
+      "0xc40f949f8a4e094d1b49a23ea9241d289b7b2819": { "aToken": "0x8eb270e296023e9d92081fdf967ddd7878724424", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xce186f6cccb0c955445bb9d10c59cae488fea559" },
+      "0xdfa46478f9e5ea86d57387849598dbfb2e964b02": { "aToken": "0x8ffdf2de812095b1d19cb146e4c004587c0a0692", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xa8669021776bc142dfca87c21b4a52595bcbb40a" },
+      "0x9bcef72be871e61ed4fbbc7630889bee758eb81d": { "aToken": "0x724dc807b04555b71ed48a6896b6f41593b8c637", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xf611aeb5013fd2c0511c9cd55c7dc5c1140741a6" },
+      "0x0b2c639c533813f4aa9d7837caf62653d097ff85": { "aToken": "0x38d693ce1df5aadf7bc62595a37d667ad57922e5", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x5d557b07776d12967914379c71a1310e917c7555" }
+    },
+    "56": {
+      "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82": { "aToken": "0x4199cc1f5ed0d796563d7ccb2e036253e2c18281", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xe20dbc7119c635b1b51462f844861258770e0699" },
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": { "aToken": "0x9b00a09492a626678e5a3009982191586c444df9", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x0e76414d433ddfe8004d2a7505d218874875a996" },
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": { "aToken": "0x56a7ddc4e848ebf43845854205ad71d5d5f72d3d", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x7b1e82f4f542fbb25d64c5523fe3e44abe4f2702" },
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8": { "aToken": "0x2e94171493fabe316b6205f1585779c887771e2f", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8fdea7891b4d6dbdc746309245b316af691a636c" },
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": { "aToken": "0x00901a076785e0906d1028c7d6372d247bec7d61", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xcdbbed5606d9c5c98eeedd67933991dc17f0c68d" },
+      "0x55d398326f99059ff775485246999027b3197955": { "aToken": "0xa9251ca9de909cb71783723713b21e4233fbf1b1", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xf8bb2be50647447fb355e3a77b81be4db64107cd" },
+      "0xc5f0f7b66764f6ec8c8dff7ba683102295e16409": { "aToken": "0x75bd1a659bdc62e4c313950d44a2416fab43e785", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xe628b8a123e6037f1542e662b9f55141a16945c8" },
+      "0x26c5e01524d2e6280a48f2c50ff6de7e52e9611c": { "aToken": "0xbdfd4e51d3c14a232135f04988a42576efb31519", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x2c391998308c56d7572a8f501d58cb56fb9fe1c5" }
+    },
+    "100": {
+      "0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1": { "aToken": "0xa818f1b57c201e092c4a2017a91815034326efd1", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x0c0fce05f2314540ecb095bf4d069e5e0ed90ff8" },
+      "0x6c76971f98945ae98dd7d4dfca8711ebea946ea6": { "aToken": "0x23e4e76d01b2002be436ce8d6044b0aa2f68b68a", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x9d881f67f20b49243c98f53d2b9e91e39d02ae09" },
+      "0x9c58bacc331c9aa871afd802db6379a98e80cedb": { "aToken": "0xa1fa064a85266e2ca82dee5c5ccec84df445760e", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xbc59e99198dba71985a66e1713cc89ffec53f7fc" },
+      "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83": { "aToken": "0xc6b7aca6de8a6044e0e32d0c841a89244a10d284", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x5f6f7b0a87ca3cf3d0b431ae03ef3305180bff4d" },
+      "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d": { "aToken": "0xd0dd6cef72143e22cced4867eb0d5f2328715533", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x281963d7471ecdc3a2bd4503e24e89691cfe420d" },
+      "0xcb444e90d8198415266c6a2724b7900fb12fc56e": { "aToken": "0xedbc7449a9b594ca4e053d9737ec5dc4cbccbfb2", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xb96404e475f337a7e98e4a541c9b71309bb66c5a" },
+      "0xaf204776c7245bf4147c2612bf6e5972ee483701": { "aToken": "0x7a5c3860a77a8dc1b225bd46d0fb2ac1c6d191bc", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8fe06e1d8aff42bf6812cacf7854a2249a00bed7" },
+      "0x2a22f9c3b484c3629090feed35f17ff8f88f76f0": { "aToken": "0xc0333cb85b59a788d8c7cae5e1fd6e229a3e5a65", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x37b9ad6b5dc8ad977ad716e92f49e9d200e58431" }
+    },
+    "137": {
+      "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063": { "aToken": "0x82e64f49ed5ec1bc6e43dad4fc8af9bb3a2312ee", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8619d80fb0141ba7f184cbf22fd724116d9f7ffc" },
+      "0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39": { "aToken": "0x191c10aa4af7c30e871e70c95db0e4eb77237530", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x953a573793604af8d41f306feb8274190db4ae0e" },
+      "0x2791bca1f2de4661ed88a30c99a7a9449aa84174": { "aToken": "0x625e7708f30ca75bfd92586e17077590c60eb4cd", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xfccf3cabbe80101232d343252614b6a3ee81c989" },
+      "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6": { "aToken": "0x078f358208685046a11c85e8ad32895ded33a249", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x92b42c66840c7ad907b4bf74879ff3ef7c529473" },
+      "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619": { "aToken": "0xe50fa9b3c56ffb159cb0fca61f5c9d750e8128c8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x0c84331e39d6658cd6e6b9ba04736cc4c4734351" },
+      "0xc2132d05d31c914a87c6611c10748aeb04b58e8f": { "aToken": "0x6ab707aca953edaefbc4fd23ba73294241490620", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xfb00ac187a8eb5afae4eace434f493eb62672df7" },
+      "0xd6df932a45c0f255f85145f286ea0b292b21c90b": { "aToken": "0xf329e36c7bf6e5e86ce2150875a84ce77f477375", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xe80761ea617f66f96274ea5e8c37f03960ecc679" },
+      "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270": { "aToken": "0x6d80113e533a2c0fe82eabd35f1875dcea89ea97", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x4a1c3ad6ed28a636ee1751c69071f6be75deb8b8" },
+      "0x172370d5cd63279efa6d502dab29171933a610af": { "aToken": "0x513c7e3a9c69ca3e22550ef58ac1c0088e918fff", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x77ca01483f379e58174739308945f044e1a764dc" },
+      "0x0b3f868e0be5597d5db7feb59e1cadbb0fdda50a": { "aToken": "0xc45a479877e1e9dfe9fcd4056c699575a1045daa", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x34e2ed44ef7466d5f9e0b782b5c08b57475e7907" },
+      "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7": { "aToken": "0x8eb270e296023e9d92081fdf967ddd7878724424", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xce186f6cccb0c955445bb9d10c59cae488fea559" },
+      "0x9a71012b13ca4d3d0cdc72a177df3ef03b0e76a3": { "aToken": "0x8ffdf2de812095b1d19cb146e4c004587c0a0692", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xa8669021776bc142dfca87c21b4a52595bcbb40a" },
+      "0x85955046df4668e1dd369d2de9f3aeb98dd2a369": { "aToken": "0x724dc807b04555b71ed48a6896b6f41593b8c637", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xf611aeb5013fd2c0511c9cd55c7dc5c1140741a6" },
+      "0xe111178a87a3bff0c8d18decba5798827539ae99": { "aToken": "0x38d693ce1df5aadf7bc62595a37d667ad57922e5", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x5d557b07776d12967914379c71a1310e917c7555" },
+      "0x4e3decbb3645551b8a19f0ea1678079fcb33fb4c": { "aToken": "0x6533afac2e7bccb20dca161449a13a32d391fb00", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x44705f578135cc5d703b4c9c122528c73eb87145" },
+      "0xe0b52e49357fd4daf2c15e02058dce6bc0057db4": { "aToken": "0x8437d7c167dfb82ed4cb79cd44b7a32a1dd95c77", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x3ca5fa07689f266e907439afd1fbb59c44fe12f6" },
+      "0xa3fa99a148fa48d14ed51d610c367c61876997f1": { "aToken": "0xebe517846d0f36eced99c735cbf6131e1feb775d", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x18248226c16bf76c032817854e7c83a2113b4f06" },
+      "0x3a58a54c066fdc0f2d55fc9c89f0415c92ebf3c4": { "aToken": "0xea1132120ddcdda2f119e99fa7a27a0d036f7ac9", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x6b030ff3fb9956b1b69f475b77ae0d3cf2cc5afa" },
+      "0xfa68fb4628dff1028cfec22b4162fccd0d45efb6": { "aToken": "0x80ca0d8c38d2e2bcbab66aa1648bd1c7160500fe", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xb5b46f918c2923fc7f26db76e8a6a6e9c4347cf9" },
+      "0x03b54a6e9a984069379fae1a4fc4dbae93b3bccd": { "aToken": "0xf59036caebea7dc4b86638dfa2e3c97da9fccd40", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x77fa66882a8854d883101fb8501bd3cad347fc32" },
+      "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359": { "aToken": "0xa4d94019934d8333ef880abffbf2fdd611c762bd", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xe701126012ec0290822eea17b794454d1af8b030" }
+    },
+    "146": {
+      "0x50c42deacd8fc9773493ed674b675be577f2634b": { "aToken": "0xe18ab82c81e7eecff32b8a82b1b7d2d23f1ece96", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x07b1adfb7d5795cf21bae8a77eceb222f2fafbce" },
+      "0x29219dd400f2bf60e5a23d13be72b486d4038894": { "aToken": "0x578ee1ca3a8e1b54554da1bf7c583506c4cd11c6", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x2273cabad63b7d247a6b107e723c803fc49953a0" },
+      "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38": { "aToken": "0x6c5e14a212c1c3e4baf6f871ac9b1a969918c131", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xf6089b790fbf8f4812a79a31cfabeb00b06ba7bd" },
+      "0xe5da20f15420ad15de0fa650600afc998bbe3955": { "aToken": "0xeaa74d7f42267eb907092af4bc700f667eed0b8b", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x333cfdcb6457c409e4f0c88f3806252bee5fe425" }
+    },
+    "324": {
+      "0x1d17cbcf0d6d143135ae902365d2e5e2a16538d4": { "aToken": "0xe977f9b2a5ccf0457870a67231f23be4daecfbdb", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x0049250d15a8550c5a14baa5af5b662a93a525b9" },
+      "0x493257fd37edb34451f62edf8d2a0c418852ba4c": { "aToken": "0xc48574bc5358c967d9447e7df70230fdb469e4e7", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8992db58077fe8c7b80c1b3a738eae8a7bddba34" },
+      "0x5aea5775959fbc2557cc8789bc1bf90a239d9a91": { "aToken": "0xb7b93bcf82519bb757fd18b23a389245dbd8ca64", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x98dc737ea0e9bcb254c3f98510a71c5e11f74238" },
+      "0x703b52f2b28febcb60e1372858af5b18849fe867": { "aToken": "0xd4e607633f3d984633e946aea4eb71f92564c1c9", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x6ad279f6523f6421fd5b0324a97d8f62eecd80c8" },
+      "0x5a7d6b2f92c77fad6ccabd7ee0624e64907eaf3e": { "aToken": "0xd6cd2c0fc55936498726cacc497832052a9b2d1b", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x6450fd7f877b5bb726f7bc6bf0e6ffabd48d72ad" },
+      "0xc1fa6e2e8667d9be0ca938a54c7e0285e9df924a": { "aToken": "0xe818a67ee5c0531afaa31aa6e20bcac36227a641", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xf31e1599b4480d07fa96a7248c4f05ca84da7fa8" },
+      "0xad17da2f6ac76746ef261e835c50b2651ce36da8": { "aToken": "0xf3c9d58b76ac6ee6811520021e9a9318c49e4cfa", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xdebb4ddaaab1676775214552a7a05d6a13f905da" }
+    },
+    "1088": {
+      "0x4c078361fc9bbb78df910800a991c7c3dd2f6ce0": { "aToken": "0x85abaddcae06efee2cb5f75f33b6471759efde24", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x13bd89af338f3c7eae9a75852fc2f1ca28b4ddbf" },
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000": { "aToken": "0x7314ef2ca509490f65f52cc8fc9e0675c66390b8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x0110174183e13d5ea59d7512226c5d5a47ba2c40" },
+      "0xea32a96608495e54156ae48931a7c20f0dcc1a21": { "aToken": "0x885c8aec5867571582545f894a5906971db9bf27", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x571171a7ef1e3c8c83d47ef1a50e225e9c351380" },
+      "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc": { "aToken": "0xd9fa75d14c26720d5ce7ee2530793a823e8f07b9", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x6b45dce8af4fe5ab3bfcf030d8fb57718eab54e5" },
+      "0x420000000000000000000000000000000000000a": { "aToken": "0x8acae35059c9ae27709028ff6689386a44c09f3a", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8bb19e3dd277a73d4a95ee434f14ce4b92898421" }
+    },
+    "1868": {
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x1bd45cc20ce61be344a64218e6ade01e72b08f39", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xc52375a5a04c0abe5a6ca5f3a344be2415ef54db" },
+      "0xba9986d2381edf1da03b0b9c1f8b00dc4aacc369": { "aToken": "0xb2c9e934a55b58d20496a5019f8722a96d8a44d8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xcce2594ea5bc482db9b4826ce25d0764fe56bfd8" },
+      "0x3a337a6ada9d885b6ad95ec48f9b75f197b5ae35": { "aToken": "0xbab0366adda6d2845c6bb5db4339a824350d24f7", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xb3b6f42ef71ddd9348136ffbdf02b545c0d2b799" }
+    },
+    "8453": {
+      "0x4200000000000000000000000000000000000006": { "aToken": "0xd4a0e0b9149bcee3c920d2e00b5de09138fd8bb7", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x24e6e0795b3c7c71d965fcc4f371803d1c1dca1e" },
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22": { "aToken": "0xcf3d55c10db69f28fd1a75bd73f3d8a2d9c595ad", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x1dabc36f19909425f654777249815c073e8fd79f" },
+      "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca": { "aToken": "0x0a1d576f3efef75b330424287a95a366e8281d54", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x7376b2f323dc56fcd4c191b34163ac8a84702dab" },
+      "0xc1cba3fcea344f92d9239c08c0568f6f2f0ee452": { "aToken": "0x99cbc45ea5bb7ef3a5bc08fb1b7e56bb2442ef0d", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x41a7c3f5904ad176dacbb1d99101f59ef0811dc1" },
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913": { "aToken": "0x4e65fe4dba92790696d040ac24aa414708f5c0ab", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x59dca05b6c26dbd64b5381374aaac5cd05644c28" },
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a": { "aToken": "0x7c307e128efa31f540f2e2d976c995e0b65f51f6", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8d2e3f1f4b38aa9f1ced22ac06019c7561b03901" },
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": { "aToken": "0xbdb9300b7cde636d9cd4aff00f6f009ffbbc8ee6", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x05e08702028de6aad395dc6478b554a56920b9ad" },
+      "0x2416092f143378750bb29b79ed961ab195cceea5": { "aToken": "0xdd5745756c2de109183c6b5bb886f9207bef114d", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xbc4f5631f2843488792e4f1660d0a51ba489bdbd" },
+      "0x6bb7a212910682dcfdbd5bcbb3e28fb4e8da10ee": { "aToken": "0x067ae75628177fd257c2b1e500993e1a0babcbd1", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x38e59ade183bbeb94583d44213c8f3297e9933e9" },
+      "0xedfa23602d0ec14714057867a78d01e94176bea0": { "aToken": "0x80a94c36747cf51b2fbabdff045f6d22c1930ed1", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xe9541c77a111bcaa5df56839bbc50894eba7afcb" },
+      "0xecac9c5f704e954931349da37f60e39f515c11c1": { "aToken": "0x90072a4aa69b5eb74984ab823efc5f91e90b3a72", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xa2525b3f058846075506903d792d58c5a0d834c9" },
+      "0x60a3e35cc302bfa44cb288bc5a4f316fdb1adb42": { "aToken": "0x90da57e0a6c0d166bf15764e03b83745dc90025b", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x03d01595769333174036832e18fa2f17c74f8161" },
+      "0x63706e401c06ac8513145b7687a14804d17f814b": { "aToken": "0x67eaf2bee4384a2f84da9eb8105c661c123736ba", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xcec1ea95ddef7cfc27d3d9615e05b035af460978" }
+    },
+    "42161": {
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": { "aToken": "0x82e64f49ed5ec1bc6e43dad4fc8af9bb3a2312ee", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8619d80fb0141ba7f184cbf22fd724116d9f7ffc" },
+      "0xf97f4df75117a78c1a5a0dbb814af92458539fb4": { "aToken": "0x191c10aa4af7c30e871e70c95db0e4eb77237530", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x953a573793604af8d41f306feb8274190db4ae0e" },
+      "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8": { "aToken": "0x625e7708f30ca75bfd92586e17077590c60eb4cd", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xfccf3cabbe80101232d343252614b6a3ee81c989" },
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": { "aToken": "0x078f358208685046a11c85e8ad32895ded33a249", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x92b42c66840c7ad907b4bf74879ff3ef7c529473" },
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1": { "aToken": "0xe50fa9b3c56ffb159cb0fca61f5c9d750e8128c8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x0c84331e39d6658cd6e6b9ba04736cc4c4734351" },
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": { "aToken": "0x6ab707aca953edaefbc4fd23ba73294241490620", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xfb00ac187a8eb5afae4eace434f493eb62672df7" },
+      "0xba5ddd1f9d7f570dc94a51479a000e3bce967196": { "aToken": "0xf329e36c7bf6e5e86ce2150875a84ce77f477375", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xe80761ea617f66f96274ea5e8c37f03960ecc679" },
+      "0xd22a58f79e9481d1a88e00c343885a588b34b68b": { "aToken": "0x6d80113e533a2c0fe82eabd35f1875dcea89ea97", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x4a1c3ad6ed28a636ee1751c69071f6be75deb8b8" },
+      "0x5979d7b546e38e414f7e9822514be443a4800529": { "aToken": "0x513c7e3a9c69ca3e22550ef58ac1c0088e918fff", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x77ca01483f379e58174739308945f044e1a764dc" },
+      "0x3f56e0c36d275367b8c502090edf38289b3dea0d": { "aToken": "0xc45a479877e1e9dfe9fcd4056c699575a1045daa", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x34e2ed44ef7466d5f9e0b782b5c08b57475e7907" },
+      "0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8": { "aToken": "0x8eb270e296023e9d92081fdf967ddd7878724424", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xce186f6cccb0c955445bb9d10c59cae488fea559" },
+      "0x93b346b6bc2548da6a1e7d98e9a421b42541425b": { "aToken": "0x8ffdf2de812095b1d19cb146e4c004587c0a0692", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xa8669021776bc142dfca87c21b4a52595bcbb40a" },
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831": { "aToken": "0x724dc807b04555b71ed48a6896b6f41593b8c637", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xf611aeb5013fd2c0511c9cd55c7dc5c1140741a6" },
+      "0x17fc002b466eec40dae837fc4be5c67993ddbd6f": { "aToken": "0x38d693ce1df5aadf7bc62595a37d667ad57922e5", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x5d557b07776d12967914379c71a1310e917c7555" },
+      "0x912ce59144191c1204e64559fe8253a0e49e6548": { "aToken": "0x6533afac2e7bccb20dca161449a13a32d391fb00", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x44705f578135cc5d703b4c9c122528c73eb87145" },
+      "0x35751007a407ca6feffe80b3cb397736d2cf4dbe": { "aToken": "0x8437d7c167dfb82ed4cb79cd44b7a32a1dd95c77", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x3ca5fa07689f266e907439afd1fbb59c44fe12f6" },
+      "0x7dff72693f6a4149b17e7c6314655f6a9f7c8b33": { "aToken": "0xebe517846d0f36eced99c735cbf6131e1feb775d", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x18248226c16bf76c032817854e7c83a2113b4f06" },
+      "0x2416092f143378750bb29b79ed961ab195cceea5": { "aToken": "0xea1132120ddcdda2f119e99fa7a27a0d036f7ac9", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x1ffd28689da7d0148ff0fcb669e9f9f0fc13a219" },
+      "0x4186bfc76e2e237523cbc30fd220fe055156b41f": { "aToken": "0x6b030ff3fb9956b1b69f475b77ae0d3cf2cc5afa", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x80ca0d8c38d2e2bcbab66aa1648bd1c7160500fe" }
+    },
+    "42220": {
+      "0xceba9300f2b948710d2653dd7b07f33a8b32118c": { "aToken": "0xff8309b9e99bfd2d4021bc71a362abd93dbd4785", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xdbe517c0fa6467873b684eccbed77217e471e862" },
+      "0x48065fbbe25f71c9282ddf5e1cd6d6a887483d5e": { "aToken": "0xdee98402a302e4d707fb9bf2bac66faeec31e8df", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xe15324a9887999803b931ac45aa89a94a9750052" },
+      "0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73": { "aToken": "0x34c02571094e08e935b8cf8dc10f1ad6795f1f81", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x5c2b7eb5886b3cec5cce1019e34493da33291af5" },
+      "0x765de816845861e75a25fca122bb6898b8b1282a": { "aToken": "0xbba98352628b0b0c4b40583f593ffcb630935a45", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x05ee3d1fbacbdba1259946033cd7a42fdfcccf0d" },
+      "0x471ece3750da237f93b8e339c536989b8978a438": { "aToken": "0xc3e77dc389537db1eec7c33b95cf3beeca71a209", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xaea37b42955de2ba2e4af6581e46349bcd3ea2d6" },
+      "0xd221812de1bd094f35587ee8e174b07b6167d9af": { "aToken": "0xf385280f36e009c157697d25e0b802efabfd789c", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x6508cff7c5fba053af00a4e894500e6fa00274b7" }
+    },
+    "43114": {
+      "0xd586e7f844cea2f87f50152665bcbc2c279d8d70": { "aToken": "0x82e64f49ed5ec1bc6e43dad4fc8af9bb3a2312ee", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8619d80fb0141ba7f184cbf22fd724116d9f7ffc" },
+      "0x5947bb275c521040051d82396192181b413227a3": { "aToken": "0x191c10aa4af7c30e871e70c95db0e4eb77237530", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x953a573793604af8d41f306feb8274190db4ae0e" },
+      "0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e": { "aToken": "0x625e7708f30ca75bfd92586e17077590c60eb4cd", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xfccf3cabbe80101232d343252614b6a3ee81c989" },
+      "0x50b7545627a5162f82a992c33b87adc75187b218": { "aToken": "0x078f358208685046a11c85e8ad32895ded33a249", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x92b42c66840c7ad907b4bf74879ff3ef7c529473" },
+      "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab": { "aToken": "0xe50fa9b3c56ffb159cb0fca61f5c9d750e8128c8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x0c84331e39d6658cd6e6b9ba04736cc4c4734351" },
+      "0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7": { "aToken": "0x6ab707aca953edaefbc4fd23ba73294241490620", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xfb00ac187a8eb5afae4eace434f493eb62672df7" },
+      "0x63a72806098bd3d9520cc43356dd78afe5d386d9": { "aToken": "0xf329e36c7bf6e5e86ce2150875a84ce77f477375", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xe80761ea617f66f96274ea5e8c37f03960ecc679" },
+      "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7": { "aToken": "0x6d80113e533a2c0fe82eabd35f1875dcea89ea97", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x4a1c3ad6ed28a636ee1751c69071f6be75deb8b8" },
+      "0x2b2c81e08f1af8835a78bb2a90ae924ace0ea4be": { "aToken": "0x513c7e3a9c69ca3e22550ef58ac1c0088e918fff", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x77ca01483f379e58174739308945f044e1a764dc" },
+      "0xd24c2ad096400b6fbcd2ad8b24e7acbc21a1da64": { "aToken": "0xc45a479877e1e9dfe9fcd4056c699575a1045daa", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x34e2ed44ef7466d5f9e0b782b5c08b57475e7907" },
+      "0x5c49b268c9841aff1cc3b0a418ff5c3442ee3f3b": { "aToken": "0x8eb270e296023e9d92081fdf967ddd7878724424", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xce186f6cccb0c955445bb9d10c59cae488fea559" },
+      "0x152b9d0fdc40c096757f570a51e494bd4b943e50": { "aToken": "0x8ffdf2de812095b1d19cb146e4c004587c0a0692", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xa8669021776bc142dfca87c21b4a52595bcbb40a" },
+      "0x00000000efe302beaa2b3e6e1b18d08d69a9012a": { "aToken": "0x724dc807b04555b71ed48a6896b6f41593b8c637", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xdc1fad70953bb3918592b6fcc374fe05f5811b6a" }
+    },
+    "59144": {
+      "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f": { "aToken": "0x787897df92703bb3fc4d9ee98e15c0b8130bf163", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x0e7543a9da61b2e71fc880685ed2945b7426a689" },
+      "0x3aab2285ddcddad8edf438c1bab47e1a9d05a9b4": { "aToken": "0x37f7e06359f98162615e016d0008023d910bb576", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x74a1b56f5137b00aa0ada1dd964a3a361ecc32e9" },
+      "0x176211869ca2b568f2a7d4ee941e073a821ee1ff": { "aToken": "0x374d7860c4f2f604de0191298dd393703cce84f3", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x63ab166e6e1b6fb705b6ca23686fad9705eb3534" },
+      "0xa219439258ca9da29e9cc4ce5596924745e12b93": { "aToken": "0x88231dfec71d4ff5c1e466d08c321944a7adc673", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x4cedfa47f7d0e9036110b850ce49f4cd47b28a2f" },
+      "0xb5bedd42000b71fdde22d3ee8a79bd49a568fc8f": { "aToken": "0x58943d20e010d9e34c4511990e232783460d0219", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x81c1a619be23050b3242b41a739e6b6cfda56687" },
+      "0x2416092f143378750bb29b79ed961ab195cceea5": { "aToken": "0x935efcbefc1df0541afc3fe145134f8c9a0beb89", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x1fe3452cef885724f8adf1382ee17d05d7e01cab" },
+      "0x1bf74c010e6320bab11e2e5a532b5ac15e0b8aa6": { "aToken": "0x0c7921ab4888fd06731898b3ffffeb06781d5f4f", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x37a843725508243952950307ceace7a9f5d5c280" }
+    },
+    "534352": {
+      "0x5300000000000000000000000000000000000004": { "aToken": "0xf301805be1df81102c957f6d4ce29d2b8c056b2a", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xfd7344ceb1df9cf238ecd667f4a6f99c6ef44a56" },
+      "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4": { "aToken": "0x1d738a3436a8c49ceffbab7fbf04b660fb528cbd", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x3d2e209af5bfa79297c88d6b57f89d792f6e28ee" },
+      "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32": { "aToken": "0x5b1322eeb46240b02e20062b8f0f9908d525b09c", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8a035644322129800c3f747f54db0f4d3c0a2877" },
+      "0x01f0a31698c4d065659b9bdc21b3610292a1c506": { "aToken": "0xd80a5e16dbdc52bd1c947cedfa22c562be9129c8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x009d88c6a6b4caa240b71c98ba93732e26f2a55a" },
+      "0xd29687c813d741e2f938f4ac377128810e217b1b": { "aToken": "0x25718130c2a8eb94e2e1fafb5f1cdd4b459acf64", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xffba405bbf25b2e6c454d18165f2fd8786858c6b" }
+    },
+    "1666600000": {
+      "0xef977d2f931c1978db5f6747666fa1eacb0d0339": { "aToken": "0x82e64f49ed5ec1bc6e43dad4fc8af9bb3a2312ee", "sToken": "0xd94112b5b62d53c9402e7a60289c6810def1dc9b", "vToken": "0x8619d80fb0141ba7f184cbf22fd724116d9f7ffc" },
+      "0x218532a12a389a4a92fc0c5fb22901d1c19198aa": { "aToken": "0x191c10aa4af7c30e871e70c95db0e4eb77237530", "sToken": "0x89d976629b7055ff1ca02b927ba3e020f22a44e4", "vToken": "0x953a573793604af8d41f306feb8274190db4ae0e" },
+      "0x985458e523db3d53125813ed68c274899e9dfab4": { "aToken": "0x625e7708f30ca75bfd92586e17077590c60eb4cd", "sToken": "0x307ffe186f84a3bc2613d1ea417a5737d69a7007", "vToken": "0xfccf3cabbe80101232d343252614b6a3ee81c989" },
+      "0x3095c7557bcb296ccc6e363de01b760ba031f2d9": { "aToken": "0x078f358208685046a11c85e8ad32895ded33a249", "sToken": "0x633b207dd676331c413d4c013a6294b0fe47cd0e", "vToken": "0x92b42c66840c7ad907b4bf74879ff3ef7c529473" },
+      "0x6983d1e6def3690c4d616b13597a09e6193ea013": { "aToken": "0xe50fa9b3c56ffb159cb0fca61f5c9d750e8128c8", "sToken": "0xd8ad37849950903571df17049516a5cd4cbe55f6", "vToken": "0x0c84331e39d6658cd6e6b9ba04736cc4c4734351" },
+      "0x3c2b8be99c50593081eaa2a724f0b8285f5aba8f": { "aToken": "0x6ab707aca953edaefbc4fd23ba73294241490620", "sToken": "0x70effc565db6eef7b927610155602d31b670e802", "vToken": "0xfb00ac187a8eb5afae4eace434f493eb62672df7" },
+      "0xcf323aad9e522b93f11c352caa519ad0e14eb40f": { "aToken": "0xf329e36c7bf6e5e86ce2150875a84ce77f477375", "sToken": "0xfaef6a702d15428e588d4c0614aefb4348d83d48", "vToken": "0xe80761ea617f66f96274ea5e8c37f03960ecc679" },
+      "0xcf664087a5bb0237a0bad6742852ec6c8d69a27a": { "aToken": "0x6d80113e533a2c0fe82eabd35f1875dcea89ea97", "sToken": "0xf15f26710c827dde8acba678682f3ce24f2fb56e", "vToken": "0x4a1c3ad6ed28a636ee1751c69071f6be75deb8b8" }
+    }
+  },
+  "AAVE_V3_PRIME": {
+    "1": {
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0": { "aToken": "0xc035a7cf15375ce2706766804551791ad035e0c2", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xe439edd2625772aa635b437c099c607b6eb7d35f" },
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": { "aToken": "0xfa1fdbbd71b0aa16162d76914d69cd8cb3ef92da", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x91b7d78bf92db564221f6b5aee744d1727d1dd1e" },
+      "0xdc035d45d973e3ec169d2276ddab16f1e407384f": { "aToken": "0x09aa30b182488f769a9824f15e6ce58591da4781", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x2d9fe18b6c35fe439cc15d932cc5c943bf2d901e" },
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": { "aToken": "0x2a1fbcb52ed4d9b23dad17e1e8aed4bb0e6079b8", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xed90de2d824ee766c6fd22e90b12e598f681dc9f" },
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110": { "aToken": "0x74e5664394998f13b07af42446380acef637969f", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x08e1bba76d27841dd91fab4b3a636a0d5cf8c3e9" },
+      "0x9d39a5de30e57443bff2a8307a4256c8797a3497": { "aToken": "0xc2015641564a5914a17cb9a92ec8d8fecfa8f2d0", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x2abbaab3ef4e4a899d39e7ec996b5715e76b399a" },
+      "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f": { "aToken": "0x18efe565a5373f430e2f809b97de30335b3ad96a", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x18577f0f4a0b2ee6f4048db51c7acd8699f97db8" },
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": { "aToken": "0x56d919e7b25aa42f3f8a4bc77b8982048f2e84b4", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x2c2163f120cf58631368981bc16e90190bc6c644" }
+    }
+  },
+  "AAVE_V3_ETHER_FI": {
+    "1": {
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": { "aToken": "0xbe1f842e7e0afd2c2322aae5d34ba899544b29db", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x16264412cb72f0d16a446f7d928dd0d822810048" },
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": { "aToken": "0x7380c583cde4409eff5dd3320d93a45d96b80e2e", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x9355032d747f1e08f8720cd01950e652ee15cdb7" },
+      "0x6c3ea9036406852006290770bedfcaba0e23a0e8": { "aToken": "0xdf7f48892244c6106ea784609f7de10ab36f9c7e", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xd2cf07dee40d3d530d15b88d689f5cd97a31fc3d" },
+      "0x853d955acef822db058eb8505911ed77f175b99e": { "aToken": "0x6914eccf50837dc61b43ee478a9bd9b439648956", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xfd3ada5aabdc6531c7c2ac46c00ebf870f5a0e6b" }
+    }
+  },
+  "AAVE_V2": {
+    "137": {
+      "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063": { "aToken": "0x27f8d03b3a2196956ed754badc28d73be8830a6e", "sToken": "0x2238101b7014c279aaf6b408a284e49cdbd5db55", "vToken": "0x75c4d1fb84429023170086f06e682dcbbf537b7d" },
+      "0x2791bca1f2de4661ed88a30c99a7a9449aa84174": { "aToken": "0x1a13f4ca1d028320a707d99520abfefca3998b7f", "sToken": "0xdeb05676db0db85cecafe8933c903466bf20c572", "vToken": "0x248960a9d75edfa3de94f7193eae3161eb349a12" },
+      "0xc2132d05d31c914a87c6611c10748aeb04b58e8f": { "aToken": "0x60d55f02a771d515e077c9c2403a1ef324885cec", "sToken": "0xe590cfca10e81fed9b0e4496381f02256f5d2f61", "vToken": "0x8038857fd47108a07d1f6bf652ef1cbec279a2f3" },
+      "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6": { "aToken": "0x5c2ed810328349100a66b82b78a1791b101c9d61", "sToken": "0x2551b15db740db8348bfadfe06830210ec2c2f13", "vToken": "0xf664f50631a6f0d72ecdaa0e49b0c019fa72a8dc" },
+      "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619": { "aToken": "0x28424507fefb6f7f8e9d3860f56504e4e5f5f390", "sToken": "0xc478cbbeb590c76b01ce658f8c4dda04f30e2c6f", "vToken": "0xede17e9d79fc6f9ff9250d9eefbdb88cc18038b5" },
+      "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270": { "aToken": "0x8df3aad3a84da6b69a4da8aec3ea40d9091b2ac4", "sToken": "0xb9a6e29fb540c5f1243ef643eb39b0acbc2e68e3", "vToken": "0x59e8e9100cbfcbcbadf86b9279fa61526bbb8765" },
+      "0xd6df932a45c0f255f85145f286ea0b292b21c90b": { "aToken": "0x1d2a0e5ec8e5bbdca5cb219e649b565d8e5c3360", "sToken": "0x17912140e780b29ba01381f088f21e8d75f954f9", "vToken": "0x1c313e9d0d826662f5ce692134d938656f681350" },
+      "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7": { "aToken": "0x080b5bf8f360f624628e0fb961f4e67c9e3c7cf1", "sToken": "0x6a01db46ae51b19a6b85be38f1aa102d8735d05b", "vToken": "0x36e988a38542c3482013bb54ee46ac1fb1efedcd" },
+      "0x9a71012b13ca4d3d0cdc72a177df3ef03b0e76a3": { "aToken": "0xc4195d4060daeac44058ed668aa5efec50d77ff6", "sToken": "0xbc30bbe0472e0e86b6f395f9876b950a13b23923", "vToken": "0x773e0e32e7b6a00b7ca9daa85dfba9d61b7f2574" },
+      "0x85955046df4668e1dd369d2de9f3aeb98dd2a369": { "aToken": "0x81fb82aacb4abe262fc57f06fd4c1d2de347d7b1", "sToken": "0xa742710c0244a8ebcf533368e3f0b956b6e53f7b", "vToken": "0x43150aa0b7e19293d935a412c8607f9172d3d3f3" },
+      "0x172370d5cd63279efa6d502dab29171933a610af": { "aToken": "0x3df8f92b7e798820ddcca2ebea7babda2c90c4ad", "sToken": "0x807c97744e6c9452e7c2914d78f49d171a9974a0", "vToken": "0x780bbcbcda2cdb0d2c61fd9bc68c9046b18f3229" },
+      "0x0b3f868e0be5597d5db7feb59e1cadbb0fdda50a": { "aToken": "0x21ec9431b5b55c5339eb1ae7582763087f98fac2", "sToken": "0x7ed588dcb30ea11a54d8a5e9645960262a97cd54", "vToken": "0x9cb9feafa73bf392c905eebf5669ad3d073c3dfc" },
+      "0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39": { "aToken": "0x0ca2e42e8c21954af73bc9af1213e4e81d6a669a", "sToken": "0x9fb7f546e60ddfaa242caef146fa2f4172088117", "vToken": "0xcc71e4a38c974e19bdbc6c0c19b63b8520b1bb09" }
+    }
+  },
+  "LENDLE": {
+    "5000": {
+      "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9": { "aToken": "0xf36afb467d1f05541d998bbbcd5f7167d67bd8fc", "sToken": "0xee8d412a4ef6613c08889f9cd1fd7d4a065f9a8b", "vToken": "0x334a542b51212b8bcd6f96efd718d55a9b7d1c35" },
+      "0x201eba5cc46d216ce6dc03f6a759e8e766e956ae": { "aToken": "0xe71cbaaa6b093fce66211e6f218780685077d8b5", "sToken": "0xea8bd20f6c5424ab4acf132c70b6c7355e11f62e", "vToken": "0xac3c14071c80819113df501e1ab767be910d5e5a" },
+      "0xcabae6f6ea1ecab08ad02fe02ce9a44f09aebfa2": { "aToken": "0x44cccbbd7a5a9e2202076ea80c185da0058f1715", "sToken": "0x1817cde5cd6423c3b87039e1cb000bb2ac4e05c7", "vToken": "0x42f9f9202d5f4412148662cf3bc68d704c8e354f" },
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111": { "aToken": "0x787cb0d29194f0faca73884c383cf4d2501bb874", "sToken": "0x0ca5e3cd5f3273b066422291edda3768451fbb68", "vToken": "0x5df9a4be4f9d717b2bfece9ec350dcf4cbcb91d8" },
+      "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8": { "aToken": "0x683696523512636b46a826a7e3d1b0658e8e2e1c", "sToken": "0xafefc53be7e32c7510f054abb1ec5e44c03fccab", "vToken": "0x18d3e4f9951fedcddd806538857ebed2f5f423b7" },
+      "0xcda86a272531e8640cd7f1a92c01839911b90bb0": { "aToken": "0x0e927aa52a38783c1fd5dfa5c8873cbdbd01d2ca", "sToken": "0x614110493ceae1171532eb635242e4ca71ccbba2", "vToken": "0xd739fb7a3b652306d00f92b20439afc637650254" },
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34": { "aToken": "0x2cfa1e69c8a8083aa52cfcf22d8caff7521e1e7e", "sToken": "0x10475947aba834a0dbe60910ee787968b3e14917", "vToken": "0x08c830f79917205ff1605325fcfbb3efc0c16cb5" },
+      "0xc96de26018a54d51c097160568752c4e3bd6c364": { "aToken": "0xdef3542bb1b2969c1966dd91ebc504f4b37462fe", "sToken": "0x08fc23af290d538647aa2836c5b3cf2fb3313759", "vToken": "0x874712c653aaaa7cfb201317f46e00238c2649bb" },
+      "0xe6829d9a7ee3040e1276fa75293bde931859e8fa": { "aToken": "0x68a1b2756b41ce837d73a801e18a06e13eac50e1", "sToken": "0x2ab8f08a60c17f801bf3cdd1373fd40e99f4f9fd", "vToken": "0x880a809ca9dc0a35f5015d31f1f2273a489695eb" },
+      "0x00000000efe302beaa2b3e6e1b18d08d69a9012a": { "aToken": "0x90f22aa619217765c8ea84b18130ff60ad0d5de1", "sToken": "0x20efccbda64abc26b96f0aebe475aa1db9a984bd", "vToken": "0xa1d2e7033d691a2b87a92f95c6735fdbc2032b9a" },
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2": { "aToken": "0x8e3f5e745a030a384fbd19c97a56da5337147376", "sToken": "0xa74f820deeee37a963c826395b67cf8c9e66eca0", "vToken": "0x48b6c9ad51009061f02ba36cddc4bf5ffd08519e" }
+    }
+  },
+  "HANA": {
+    "167000": {
+      "0x07d83526730c7438048d55a4fc0b850e2aab6f0b": { "aToken": "0x5c9bc967e338f48535c3df7f80f2db0a366d36b2", "sToken": "0x56ecd6ec282e650be8405ad374fbeb5bee5ed616", "vToken": "0x0247606c3d3f62213bbc9d7373318369e6860eb1" },
+      "0xa51894664a773981c6c112c43ce576f315d5b1b6": { "aToken": "0xacd2e13c933ae1ef97698f00d14117bb70c77ef1", "sToken": "0x7379c947f186b1023d3c51ca997dd74ad7ead003", "vToken": "0xf1777ead4098f574c68e59905588f3c9875251ed" },
+      "0xa9d23408b9ba935c230493c40c73824df71a0975": { "aToken": "0x67f1e0a9c9d540f61d50b974dbd63aabf636a296", "sToken": "0x0b56c272ed45016563096cde3a67b261dd81892b", "vToken": "0x1592ff6f057d65a17be56116e2b3cbfd4d2314c2" },
+      "0x19e26b0638bf63aa9fa4d14c6baf8d52ebe86c5c": { "aToken": "0x5f438f142225aab92d6d234b9df3180891bb52c4", "sToken": "0x85e0a512bcf466f90ac7f46f0202917b9c250fc0", "vToken": "0xe5e8fe8e8891123ff9994734c3dcdca7500b3d79" }
+    }
+  },
+  "AURELIUS": {
+    "5000": {
+      "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9": { "aToken": "0x833b5c0379a597351c6cd3efe246534bf3ae5f9f", "sToken": "0xb41cf1eeadfd17fbc0086e9e856f1ac5460064d2", "vToken": "0xaa9c890ca3e6b163487de3c11847b50e48230b45" },
+      "0x201eba5cc46d216ce6dc03f6a759e8e766e956ae": { "aToken": "0x893da3225a2fcf13cca674d1a1bb5a2ea1f3dd14", "sToken": "0x61627c3e37a4e57a4edb5cd52ce8221d9c5bda3d", "vToken": "0xc799fe29b67599010a55ec14a8031af2a2521470" },
+      "0xcabae6f6ea1ecab08ad02fe02ce9a44f09aebfa2": { "aToken": "0xf91798762cc61971df6df0e15f0904e174387477", "sToken": "0xbc9b223d335c624f55c8b3a70f883ffefb890a0e", "vToken": "0xd632fd1d737c6db356d747d09642bef8ae453f4d" },
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111": { "aToken": "0xc3b515bca486520483ef182c3128f72ce270c069", "sToken": "0xfbace7bf40dd1b9158236a23e96c11ebd03a2d42", "vToken": "0x45ccce9bc8e883ef7805ea73b88d5d528c7cec55" },
+      "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8": { "aToken": "0x067ddc903148968d49abc3144fd7619820f16949", "sToken": "0x6110868e963f8badf4d79bc79c8ac1e13cd59735", "vToken": "0x4c3c0650ddcb767d71c91fa89ee9e5a2cd335834" },
+      "0xcda86a272531e8640cd7f1a92c01839911b90bb0": { "aToken": "0xbb406187c01cc1c9eaf9d4b5c924b7fa37aecefd", "sToken": "0x2d422c5ead5fa3c26aec97d070343353e2086a1d", "vToken": "0x00dfd5f920ccf08eb0581d605bab413d289c21b4" },
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34": { "aToken": "0x7bdb0095429f8eff1efb718aabc912b2489ba5b3", "sToken": "0x7f9c39386be3f6a8c1753b5fbe8c96f7eaef88e1", "vToken": "0xcbe019c9c44954d388602a99a45a1d7da61321cf" },
+      "0x5be26527e817998a7206475496fde1e68957c5a6": { "aToken": "0xfdd2ebc184b4ff6df14562715452e970c82fe49a", "sToken": "0xe0ae10fb6cb1a366c56204afe1ae2a94a0ed9a11", "vToken": "0x2d55f5558aea4c25fcc1ff78b10265755aff3856" },
+      "0xc96de26018a54d51c097160568752c4e3bd6c364": { "aToken": "0x491f8fbc6b9a5db31c959a702ab6a0dcbea73a48", "sToken": "0x88140812ee16b48447eaf7ba9a5649d1f9a2d949", "vToken": "0xd2ea6612f6c7c11626f7d5d801d08b53bce52511" },
+      "0xe6829d9a7ee3040e1276fa75293bde931859e8fa": { "aToken": "0x76f727f55074931221fc88a188b7915084011dcf", "sToken": "0x5625062966b5c7e36cda5a7e18c5c8d2fd2bff98", "vToken": "0x0aa17f21dc8977cdf0141e35543f094fb9edaece" },
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2": { "aToken": "0x32670a5337ae105a67312006f190503a0bee4dd2", "sToken": "0x37694c364560e8736c80c0cf27111f9efc7f8cf3", "vToken": "0x899bf182caba1038205d32f22dd88490daa85826" }
+    }
+  },
+  "TAKOTAKO": {
+    "167000": {
+      "0x07d83526730c7438048d55a4fc0b850e2aab6f0b": { "aToken": "0x79a741ebfe9c323cf63180c405c050cdd98c21d8", "sToken": "0x4617e7cd8387cb5cc9f2b71055b012c3691bf8cc", "vToken": "0x72c6bdf69952b6bc8acc18c178d9e03eac5ead50" },
+      "0x9c2dc7377717603eb92b2655c5f2e7997a4945bd": { "aToken": "0x86a76cb11b5b17e048360a9d6d04135fc9138e12", "sToken": "0xffac48df9c21769cf2aad19fe48916c5a7d99e25", "vToken": "0x3b8c0590b95021509cc7bc8c905166f9d0c471a2" },
+      "0xa51894664a773981c6c112c43ce576f315d5b1b6": { "aToken": "0x6afa285ab05657f7102f66f1b384347aef3ef6aa", "sToken": "0x3194b9f616d289dafc6e05a8d4fc3e985a4f2be8", "vToken": "0x19871b9911ddbd422e06f66427768f9b65d36f81" },
+      "0xa9d23408b9ba935c230493c40c73824df71a0975": { "aToken": "0xbbfa45a92d9d071554b59d2d29174584d9b06bc3", "sToken": "0x9fe2d5104e1299a31c62db35306233dc1bbb1f14", "vToken": "0x0f0244337f1215e6d8e13af1b5ae639244d8a6f6" },
+      "0x2def195713cf4a606b49d07e520e22c17899a736": { "aToken": "0x7945f98240b310bd21f8814bdceeba6775a9a36a", "sToken": "0x3340ca54dffb17dfea5be60802757b84c31dad2d", "vToken": "0x820c66d8316856655adb42b3b6cb6a1728d29567" },
+      "0xf7fb2df9280eb0a76427dc3b34761db8b1441a49": { "aToken": "0x418d47e8283bc7867a6e42a2f62425f8798f060e", "sToken": "0xe1eb0d79dfaabb0837b4705b7b1195912bd99779", "vToken": "0xa6325b88bf0c69679c93f9750b1cb62ff63333ee" }
+    }
+  },
+  "TAKOTAKO_ETH": {
+    "167000": {
+      "0xa51894664a773981c6c112c43ce576f315d5b1b6": { "aToken": "0x46a0e9885e848e90fd353622762f1a550a0393f1", "sToken": "0xd0029bca9a299a7a684f1795330b4f4d4681cb3f", "vToken": "0xe8f7a8a185d6f9401ef0ccb6c4f9a0793eba57ee" },
+      "0x756b6574b3162077a630895995b443aa68cd2015": { "aToken": "0xfd789fc41f673e5be0f6a0768899ec79db86aac5", "sToken": "0x7b81391c0d3d04da0239c56f9a9de762120fb695", "vToken": "0xb87c9c0394cba6a3e4f72fa98aebce27c8bec4e1" }
+    }
+  },
+  "MERIDIAN": {
+    "167000": {
+      "0xa51894664a773981c6c112c43ce576f315d5b1b6": { "aToken": "0xb908808f52116380ffadcaebcab97a8cad9409d2", "sToken": "0x6171390c9e926ee91e0d055fda2c46675b59fb86", "vToken": "0x3ef9b96d8a88df1caab4a060e2904fe26ae518ce" },
+      "0xa9d23408b9ba935c230493c40c73824df71a0975": { "aToken": "0xc2ab0fe37db900ed7b7d3e0bc6a194cb78e33fb4", "sToken": "0x56252761c000c3f30c5273f6985d798289719fa4", "vToken": "0xce0f8615380843efa8cf6650a712c05e534a0e3f" },
+      "0x07d83526730c7438048d55a4fc0b850e2aab6f0b": { "aToken": "0x3807a7d65d82784e91fb4ead75044c7b4f03a462", "sToken": "0xce3b4ae5266146823cc60ae06b4a8a34fcca5ab6", "vToken": "0xd37b96c82d4540610017126c042afdde28578afa" },
+      "0x19e26b0638bf63aa9fa4d14c6baf8d52ebe86c5c": { "aToken": "0xa3f248a1779364fb8b6b59304395229ea8241229", "sToken": "0x73a3329d4ad0b472d3720266b113b4b0826b14b3", "vToken": "0x22f48ddbc34fa22eda937496fe702f2095d70a8e" },
+      "0x9c2dc7377717603eb92b2655c5f2e7997a4945bd": { "aToken": "0x4361736820d9fe2a354225c7afdc246e5013135d", "sToken": "0xe7a5596a2b9e11b98a14547807a236b53b0dedc5", "vToken": "0x6cd8f57977bb325359d0761b6b334d76697da441" }
+    }
+  },
+  "SPARK": {
+    "1": {
+      "0x6b175474e89094c44da98b954eedeac495271d0f": { "aToken": "0x4dedf26112b3ec8ec46e7e31ea5e123490b05b8b", "sToken": "0xfe2b7a7f4cc0fb76f7fc1c6518d586f1e4559176", "vToken": "0xf705d2b7e92b3f38e6ae7afadaa2fee110fe5914" },
+      "0x83f20f44975d03b1b09e64809b757c47f942beea": { "aToken": "0x78f897f0fe2d3b5690ebae7f19862deacedf10a7", "sToken": "0xec6c6abed4dc03299eff82ac8a0a83643d3cb335", "vToken": "0xabc57081c04d921388240393ec4088aa47c6832b" },
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": { "aToken": "0x377c3bd93f2a2984e1e7be6a5c22c525ed4a4815", "sToken": "0x887ac022983ff083aeb623923789052a955c6798", "vToken": "0x7b70d04099cb9cfb1db7b6820badafb4c5c70a67" },
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": { "aToken": "0x59cd1c87501baa753d0b5b5ab5d8416a45cd71db", "sToken": "0x3c6b93d38ffa15ea995d1bc950d5d0fa6b22bd05", "vToken": "0x2e7576042566f8d6990e07a1b61ad1efd86ae70d" },
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0": { "aToken": "0x12b54025c112aa61face2cdb7118740875a566e9", "sToken": "0x9832d969a0c8662d98fff334a4ba7fee62b109c2", "vToken": "0xd5c3e3b566a42a6110513ac7670c1a86d76e13e6" },
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": { "aToken": "0x4197ba364ae6698015ae5c1468f54087602715b2", "sToken": "0x4b29e6cbee62935cfc92efcb3839ed2c2f35c1d9", "vToken": "0xf6fee3a8ac8040c3d6d81d9a4a168516ec9b51d2" },
+      "0x6810e776880c02933d47db1b9fc05908e5386b96": { "aToken": "0x7b481acc9fdaddc9af2cbea1ff2342cb1733e50f", "sToken": "0xbf13910620722d4d4f8a03962894eb3335bf4fae", "vToken": "0x57a2957651da467fcd4104d749f2f3684784c25a" },
+      "0xae78736cd615f374d3085123a210448e74fc6393": { "aToken": "0x9985df20d7e9103ecbceb16a84956434b6f06ae8", "sToken": "0xa9a4037295ea3a168dc3f65fe69fda524d52b3e1", "vToken": "0xba2c8f2ea5b56690bfb8b709438f049e5dd76b96" },
+      "0xdac17f958d2ee523a2206206994597c13d831ec7": { "aToken": "0xe7df13b8e3d6740fe17cbe928c7334243d86c92f", "sToken": "0x0dae62f953ceb2e969fb4de85f3f9074fa920776", "vToken": "0x529b6158d1d2992e3129f7c69e81a7c677dc3b12" },
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": { "aToken": "0x3cfd5c0d4acaa8faee335842e4f31159fc76b008", "sToken": "0x5b1f8af3e6c0bf4d20e8e5220a4e4a3a8fa6dc0a", "vToken": "0xc2bd6d2fee70a0a73a33795bdbee0368aef5c766" },
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": { "aToken": "0xb3973d459df38ae57797811f2a1fd061da1bc123", "sToken": "0x26a76e2fa1eadbe7c30f0c333059bcc3642c28d2", "vToken": "0x661fe667d2103eb52d3632a3eb2cabd123f27938" },
+      "0xa3931d71877c0e7a3148cb7eb4463524fec27fbd": { "aToken": "0x6715bc100a183cc65502f05845b589c1919ca3d3", "sToken": "0x55580770e14e008082ab2e8d08a16cc1dc192741", "vToken": "0x4e89b83f426fed3f2ef7bb2d7eb5b53e288e1a13" },
+      "0xdc035d45d973e3ec169d2276ddab16f1e407384f": { "aToken": "0xc02ab1a5eaa8d1b114ef786d9bde108cd4364359", "sToken": "0xdff828d767e560cf94e4907b2e60673e772748a4", "vToken": "0x8c147debea24fb98ade8dda4bf142992928b449e" },
+      "0x8236a87084f8b84306f72007f36f2618a5634494": { "aToken": "0xa9d4ecebd48c282a70cfd3c469d6c8f178a5738e", "sToken": "0xfbaf333a919cb92caf9e85966d4e28fff80e5d1d", "vToken": "0x096bddfee63f44a97cc6d2945539ee7c8f94637d" },
+      "0x18084fba666a33d37592fa2633fd49a74dd93a88": { "aToken": "0xce6ca9cdce00a2b0c0d1dac93894f4bd2c960567", "sToken": "0xf4b45ed75b50ec613661bcdf2353aa45a288872e", "vToken": "0x764591dc9ba21c1b92049331b80b6e2a2acf8b17" },
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110": { "aToken": "0xb131cd463d83782d4de33e00e35ef034f0869ba1", "sToken": "0x6ba1a093f5328ca31ee6ed70e243cba40d24b174", "vToken": "0xb0b14dd477e6159b4f3f210cf45f0954f57c0fab" },
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": { "aToken": "0x856f1ea78361140834fdcd0db0b08079e4a45062", "sToken": "0x1b16e95958e06291c028e709727f8b0bb56451d3", "vToken": "0xc528f0c91cfae4fd86a68f6dfd4d7284707bec68" }
+    },
+    "100": {
+      "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d": { "aToken": "0xc9fe2d32e96bb364c7d29f3663ed3b27e30767bb", "sToken": "0xab1b62a1346acf534b581684940e2fd781f2ea22", "vToken": "0x868adfdf12a86422524eab6978beae08a0008f37" },
+      "0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1": { "aToken": "0x629d562e92fed431122e865cc650bc6bde6b96b0", "sToken": "0xe21bf3fb5a2b5bf7bae8c6f1696c4b097f5d2f93", "vToken": "0x0ad6ccf9a2e81d4d48ab7db791e9da492967eb84" },
+      "0x6c76971f98945ae98dd7d4dfca8711ebea946ea6": { "aToken": "0x9ee4271e17e3a427678344fd2ee64663cb78b4be", "sToken": "0x0f0e336ab69d9516a9acf448bc59ea0ce79e4a42", "vToken": "0x3294da2e28b29d1c08d556e2b86879d221256d31" },
+      "0x9c58bacc331c9aa871afd802db6379a98e80cedb": { "aToken": "0x5671b0b8ac13dc7813d36b99c21c53f6cd376a14", "sToken": "0x2f589badbe2024a94f144ef24344af91de21a33c", "vToken": "0xd4babf714964e399f95a7bb94b3deaf22d9f575d" },
+      "0xaf204776c7245bf4147c2612bf6e5972ee483701": { "aToken": "0xe877b96caf9f180916bf2b5ce7ea8069e0123182", "sToken": "0x2cf710377b3576287be7cf352ff75d4472902789", "vToken": "0x1022e390e2457a78e18aeee0bbf0e96e482eee19" },
+      "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83": { "aToken": "0x5850d127a04ed0b4f1fcdfb051b3409fb9fe6b90", "sToken": "0x40bf0bf6aecee50ece10c74e81a52c654a467ae4", "vToken": "0xbc4f20daf4e05c17e93676d2cec39769506b8219" },
+      "0x4ecaba5870353805a9f068101a40e0f32ed605c6": { "aToken": "0x08b0caebe352c3613302774cd9b82d08afd7bdc4", "sToken": "0x4cb3f681b5e393947bd1e5cae84764f5892923c2", "vToken": "0x3a98abc6f46ca2fc6c7d06ed02184d63c55e19b2" },
+      "0xcb444e90d8198415266c6a2724b7900fb12fc56e": { "aToken": "0x6dc304337bf3eb397241d1889cae7da638e6e782", "sToken": "0x80f87b8f9c1199e468923d8ee87cee311690fda6", "vToken": "0x0b33480d3fbd1e2dbe88c82aabe191d7473759d5" },
+      "0x2a22f9c3b484c3629090feed35f17ff8f88f76f0": { "aToken": "0xa34db0ee8f84c4b90ed268df5abbe7dcd3c277ec", "sToken": "0xc5dfde524371f9424c81f453260b2ccd24936c15", "vToken": "0x397b97b572281d0b3e3513bd4a7b38050a75962b" }
+    }
+  },
+  "RHOMBUS": {
+    "8217": {
+      "0x19aac5f612f524b754ca7e7c41cbfa2e981a4432": { "aToken": "0xa5b2312ddf69a4246b7bad2104a95d977d818cff", "sToken": "0xbbd02c805b13ab41ae536eef7d015111e70e008b", "vToken": "0xcd03a36155b6f1f643b5c5be3be72da61e555a99" },
+      "0x5c13e303a62fc5dedf5b52d66873f2e59fedadc2": { "aToken": "0x2d722711f868dc060c09aa766ef51f883f4969de", "sToken": "0x08a7b222a00f27e4ef338a6059bbdf431ca573ce", "vToken": "0x406e0ebe5deb1a4cc0ce7f73dde8be1efe2480b0" },
+      "0x608792deb376cce1c9fa4d0e6b7b44f507cffa6a": { "aToken": "0x64f46414a52fbf9dcdb98c06ab5dbe388f061353", "sToken": "0xf3e5fff1440fc5b95d4e992901403a3511177514", "vToken": "0x02a2e27210b129dfc95353ee52c102901e5349c8" },
+      "0x98a8345bb9d3dda9d808ca1c9142a28f6b0430e1": { "aToken": "0xae1d479c877a7d16d60f9c099f1f40ec478866cb", "sToken": "0xe77639f7503cbb2b17fb4f39e703f492c23b0c31", "vToken": "0x6f239a867d9db8310b9f40f0d7d4504f1b387e7c" },
+      "0x42952b873ed6f7f0a7e4992e2a9818e3a9001995": { "aToken": "0xed259bdaa23978eadc61697f2e27e0a3f003664b", "sToken": "0x4531455d86cb69cc726ee7d42d581baedc014799", "vToken": "0x306c95483a70ba2514d98470840eb5bbe2d08d54" },
+      "0xa9999999c3d05fb75ce7230e0d22f5625527d583": { "aToken": "0xb598fafc0d4140e5c167c58c21ccb895845aea94", "sToken": "0xdbe4e0dd0b5d82bc87bbb9ce2f18aef92d6205ed", "vToken": "0xce9e35787c1d646baeba0f01383830bace1d9c6f" },
+      "0x84f8c3c8d6ee30a559d73ec570d574f671e82647": { "aToken": "0x266fd06f005833a00acd1a2e4f37e2abe9a7e464", "sToken": "0xc4ab1d0b4f7a738827ab118b48bfc21a810b5f77", "vToken": "0x5a5cc5d8d1877fbcf1ba718f03aa5a1b5b35cac3" },
+      "0x9bcb2efc545f89986cf70d3adc39079a1b730d63": { "aToken": "0x8c92f2408e5471225a1998582948a8fee85d1941", "sToken": "0xbf971ae4e6b18eebf52045bc5a55f180442e3b8b", "vToken": "0x9cf5cf2c03110ad99e4faa333908ff931e604f99" },
+      "0x7fc692699f2216647a0e06225d8bdf8cdee40e7f": { "aToken": "0x29e7d1070808d47ddf60217d42c7976caf8eb3fc", "sToken": "0x4e8b7e204c85f6596da34fff857fa29ee9489edf", "vToken": "0xfdddcd6eeb39de5447445b982fe8a64e75474bf7" },
+      "0x02cbe46fb8a1f579254a9b485788f2d86cad51aa": { "aToken": "0xb38706e363f3bc04c0c420b028270a3411097902", "sToken": "0x073e6d84b93ac73dd7af219d053c29acb88a7c35", "vToken": "0x7dfc38c5dd47add601001b148d19ef1fc2c67a0a" }
+    }
+  },
+  "KLAP": {
+    "8217": {
+      "0x078db7827a5531359f6cb63f62cfa20183c4f10c": { "aToken": "0xca3bac04c7e7e0afeff9a5180119a9f64ea3e5f9", "sToken": "0x0ffd09d4ea35bc3fad2f47b803f1be3052d93bfa", "vToken": "0x1ef3b5a08736ee46af98a9d14e6abfe67da6139c" },
+      "0x6270b58be569a7c0b8f47594f191631ae5b2c86c": { "aToken": "0x7d274dce8e2467fc4cdb6e8e1755db5686daebbb", "sToken": "0xcd02c5549c5780ec5735672d03de075cf5a3ac55", "vToken": "0x20ce3cda90632fff46b9f93038da97b4e65a0106" },
+      "0xd6dab4cff47df175349e6e7ee2bf7c40bb8c05a3": { "aToken": "0xfd19c7c4c37332b8cc71b8a7fb42b6f58db78cdf", "sToken": "0xd90045d45cbd43d4fe3bd8460b99b6803ed9d325", "vToken": "0xa41881f4435e60a96f88031a68272bfc31951840" },
+      "0xdcbacf3f7a069922e677912998c8d57423c37dfa": { "aToken": "0x364166aff4699f21f541c235f674774b07b75ca7", "sToken": "0x70fc0e8b39f18e0ec9d5a5d47dcc1a2e777bc026", "vToken": "0xe4c1a6f1c177d03754b74647c94583053ac85c21" },
+      "0xcd6f29dc9ca217d0973d3d21bf58edd3ca871a86": { "aToken": "0x0098108191e4e8cd37f13f347743ec76b1bf8852", "sToken": "0xc41f40b340573543c3710aba89bed94061ce6d9d", "vToken": "0xf992337092aa80097a995a2f40913969e0ca391b" },
+      "0xe4f05a66ec68b54a58b17c22107b02e0232cc817": { "aToken": "0x5bc2785782c0bba162c78a76f0ee308ec5f601b7", "sToken": "0x0ff94bde71c0eb14ea34ceb81b016ba01cb8184d", "vToken": "0x5061fb48f937b4bc42f818a9730b4ca65d5d4925" },
+      "0x98a8345bb9d3dda9d808ca1c9142a28f6b0430e1": { "aToken": "0x09aa7178049ba617119425a80faeee12dbe121de", "sToken": "0x61d23b71a6413fc79e0eb9eacf28d7d1764c1503", "vToken": "0x44f3a877d801954626d19939d18aff86a58cfe7d" },
+      "0x981846be8d2d697f4dfef6689a161a25ffbab8f9": { "aToken": "0xcb56645c57e02a981f89505dba4fef65ea78d869", "sToken": "0xb215746cabf3486e22a97a77b7ca9bf9ed2c8593", "vToken": "0xc29568e1fbb2cf5917a9bec388de66256d757d24" },
+      "0x608792deb376cce1c9fa4d0e6b7b44f507cffa6a": { "aToken": "0x98cb7533a3dbcb295c360bc24c2e7f169fc90d30", "sToken": "0x899985f892e5da0eccc69e23807eb62ea11db20f", "vToken": "0xd6dc9802ccfa43871a424fc561732ebc44faff31" },
+      "0x5c13e303a62fc5dedf5b52d66873f2e59fedadc2": { "aToken": "0x46896309c943fb642e7e564bb25ac3e85a80698b", "sToken": "0xfa77d532e1234d9c7f0c4f2d60632cc668124795", "vToken": "0x292fef4f3982babf05f89482150d4ff530cedd92" },
+      "0xcb2c7998696ef7a582dfd0aafadcd008d03e791a": { "aToken": "0x4c86823ed95a0a85ea91cb783b559a93b6a2dd02", "sToken": "0xdd010c606cbc59830644978013e3e06b1d2fd0e8", "vToken": "0xc8b6bcd627948193202576f87b3376b2c8dd5f32" },
+      "0xac9c1e4787139af4c751b1c0fadfb513c44ed833": { "aToken": "0xa6822cc9041d27b318aeb2f6509b27f1e81175fc", "sToken": "0x6db200ed6c7fc29d9d2a86eb729c122e29c3a7ac", "vToken": "0xd21d33118b0fe704c25a4c5e7065136edba26376" },
+      "0xe2765f3721dab5f080cf14ace661529e1ab9ade7": { "aToken": "0x98671f24b2b5215b937524a1073fd382f3972e0d", "sToken": "0xad58da118b6fcf5ccf17fcda6e328b42f49cc610", "vToken": "0xabd47e52313ea57a36350227f6cc61ee948a9047" },
+      "0x45830b92443a8f750247da2a76c85c70d0f1ebf3": { "aToken": "0x219df846addcc4da8c95ce204ff49e35a712fe00", "sToken": "0xbef05eb13fe78b2d35e1aa10a08583fb697bca26", "vToken": "0xb19888951ea51046fd8664b5d54aba1ff8a4a07a" },
+      "0xfaa03a2ac2d1b8481ec3ff44a0152ea818340e6d": { "aToken": "0x1b7576e52cee48791926d81012b534c923cc602a", "sToken": "0x90d06d639d620ab3a9f404ead6ba41fcafa5d289", "vToken": "0xbb1a25a5a8f694604a6e3e11b00407c532afe1a2" },
+      "0xcee8faf64bb97a73bb51e115aa89c17ffa8dd167": { "aToken": "0x006a4d856ff905849b0999978d95bd30ca0d6f66", "sToken": "0x5eb92aa72de1ed1020ec3c6fcff5d04641a9eac4", "vToken": "0x68baf69056b83d999bac4ab5464b34b565575184" },
+      "0x4fa62f1f404188ce860c8f0041d6ac3765a72e67": { "aToken": "0x09db8199a93c90e066a50898e569629e86ad17bd", "sToken": "0xa5dcc2d63222d42985eb09f1774220aabe3cb8fd", "vToken": "0xea2f4468f4af80139ee43fbfe8ced24e009b2188" }
+    }
+  },
+  "RMM": {
+    "100": {
+      "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d": { "aToken": "0x0ca4f5554dd9da6217d62d8df2816c82bba4157b", "sToken": "0x8acd88d494cfa56f542234f8924f06024b5795b5", "vToken": "0x9908801df7902675c3fedd6fea0294d18d5d5d34" },
+      "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83": { "aToken": "0xed56f76e9cbc6a64b821e9c016eafbd3db5436d1", "sToken": "0x3d1dae285860153169e17a5365492c6bba16979e", "vToken": "0x69c731ae5f5356a779f44c355abb685d84e5e9e6" },
+      "0xd3dff217818b4f33eb38a243158fbed2bbb029d3": { "aToken": "0xf3220cd8f66aeb86fc2a82502977eab4bfd2f647", "sToken": "0x2629eedfd294172b26972444e5985c362eb9604d", "vToken": "0x9fc319476836e4b7d70d332aea3e33ec3f14ffde" }
+    }
+  },
+  "SAKE": {
+    "1868": {
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x4dc7c9ec156188ea46f645e8407738c32c2b5b58", "sToken": "0x38e49164ccfb46ef446ff056c5bb97b7fa50f155", "vToken": "0x310dde1db3611d78b24dc17460dd1beb15354000" },
+      "0x2cae934a1e84f693fbb78ca5ed3b0a6893259441": { "aToken": "0xa0b7108f28b4449354152334e14140b7a6d2070b", "sToken": "0xa2f5e16d9c16d417ad80b8939688ae861f9ff018", "vToken": "0xc51fcfe6e8e4b95f818d0a7b635901e7c3e03c12" },
+      "0xba9986d2381edf1da03b0b9c1f8b00dc4aacc369": { "aToken": "0x4491b60c8fdd668fcc2c4dcadf9012b3fa71a726", "sToken": "0x9bc851d790ce02c27490e5645d5dd876f6511ffc", "vToken": "0xe0c2e7dda57ae7caf8d61d5b5f3395a0928cc331" },
+      "0xf24e57b1cb00d98c31f04f86328e22e8fca457fb": { "aToken": "0x9fe39076043d19b87247de15095b4e9b3c7d6f61", "sToken": "0xbab6a0f56d53dff21bf990676c5fed9b47a060c8", "vToken": "0xec00bf784a650ac162599efe651a18b31ce0847f" },
+      "0x3a337a6ada9d885b6ad95ec48f9b75f197b5ae35": { "aToken": "0xe4dd5ef3c90136f72a163904d2a7e9de3771ece7", "sToken": "0x02a6832af138abb790e9e8769eba3790efd3c6d8", "vToken": "0x91872142444dd849c6bc5e3f0bf28600a612bc76" },
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77": { "aToken": "0xe11d68ac80d6d8ccbac28ed5d0f80bd6477bfe41", "sToken": "0xbde521efd65341b3ad48c11de371be7546987482", "vToken": "0xcc388dac15ceb26f4d668664e458f40c49ccb2ae" },
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c": { "aToken": "0xa95f849718acffc6ce1736416aafb4d14a998af3", "sToken": "0xef214ffdc037badf8d9c34bd68235cac820570e1", "vToken": "0x7e1f9ba9f9db09cd0294e5ebdc551e42a727d045" },
+      "0x6c460b2c6d6719562d5da43e5152b375e79b9a8b": { "aToken": "0x0526cf96ad808f8e11a5a9f1012edf67f4baf519", "sToken": "0x6345447100c2ad8dfc962926ba76bf7656d72d75", "vToken": "0x2b510b2fdf38148c7ebca0a9b9777fbd9aaadadd" },
+      "0x102d758f688a4c1c5a80b116bd945d4455460282": { "aToken": "0xc04d50506986504f992fe4e68f98a6e23c11bcef", "sToken": "0x84d59eacc5c0d12d87c9bf56a695cc58517cec23", "vToken": "0x3d15ff402140ee524981d512e079ab1354aa115b" },
+      "0xaffeb8576b927050f5a3b6fba43f360d2883a118": { "aToken": "0xe41959f80437496a9b2241609e6e7f3feefa4c3a", "sToken": "0xf854251e650b4c5bf65366805667fa9f59fa4edb", "vToken": "0x40b49b84ba6aa416980a76faebe2f5828db701ff" }
+    }
+  },
+  "SAKE_ASTAR": {
+    "1868": {
+      "0x2cae934a1e84f693fbb78ca5ed3b0a6893259441": { "aToken": "0x36ed877d3bbb868eae4a89d6705e55a3ed2b66dc", "sToken": "0x863db6084f0625ed20c9797f79b5747d98e4d302", "vToken": "0xdbbe40d007f12b74b0a06153753afdd26a0dfb5b" },
+      "0xc67476893c166c537afd9bc6bc87b3f228b44337": { "aToken": "0x8007b302b5208a2f75faa241f7b2653ac61e1df0", "sToken": "0x45db2a72ffccd2e0aec67885ce92f9e2bf4f6607", "vToken": "0xc905aa400b788a74c6ec369f1df152ab08d8d654" },
+      "0x3b0dc2dac9498a024003609031d973b1171de09e": { "aToken": "0x8b76ac181fd1e8ce6f6338b58afa60bd1911fbf4", "sToken": "0x98c012564f4b41091c5f2a8ba1bd45645fea088b", "vToken": "0x5795f80b2d74b682278230f3ceaafc4e5cf51350" }
+    }
+  },
+  "LAYERBANK_V3": {
+    "43111": {
+      "0xf9775085d726e782e83585033b58606f7731ab18": { "aToken": "0x8331beca9ebc2489f07ef484ef84718480f7a648", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x7259e12f985a712e0af32565757a784eff28dda1" },
+      "0xbb0d083fb1be0a9f6157ec484b6c79e0a4e31c2e": { "aToken": "0x7e238b5cf1860484b77c0f1d09bc89b931e6235c", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xccfcc21ece4702af98cbb63058b3799d2991eccc" },
+      "0x7a06c4aef988e7925575c50261297a946ad204a8": { "aToken": "0x3ab333d502792231d86a946e564ab8344c85d9d0", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xc8c0ed6bfa789a440beb238b0599238e443c8e71" },
+      "0xad11a8beb98bbf61dbb1aa0f6d6f2ecd87b35afa": { "aToken": "0x04d37b3b79ce30cd95582dc4b5394d6942e2c3a7", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x33214895fea90d1ac4c7993b1d03cdfdcae0a9f4" },
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x2858a7065e7694c496b710fdaee52225953ca8c4", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x32ad91629aaea085c8d00f757da5804f5de65706" },
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3": { "aToken": "0x8ae2ba1c439469cdfd0d915e57cbd5fbd01bd451", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xadba20998183e801d72c7048c2fbbe0fc3142213" },
+      "0x93919784c523f39cacaa98ee0a9d96c3f32b593e": { "aToken": "0x988ce0809806f5cff00fe16d31c0e719c26a9649", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x014ee047620c4941c93baa3ff33cb2d013ecaa2f" },
+      "0x78e26e8b953c7c78a58d69d8b9a91745c2bbb258": { "aToken": "0x979a38146e6763e10e9be88ddcaa3c90d23998eb", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x5f1340a374d4d4c8076223a8873cc9e5c980f10c" },
+      "0x8154aaf094c2f03ad550b6890e1d4264b5ddad9a": { "aToken": "0x9979a1406f67d47c1715411767e7db734b691ba0", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x748bc8f14426eea7307aff5d0273dc81e14b3cb4" },
+      "0x9bfa177621119e64cecbeabe184ab9993e2ef727": { "aToken": "0xc796ae0f952edc249cb03e322326edacc32f5b48", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xec099b5516e65b112138b438042ab18dc5d44607" },
+      "0x6a9a65b84843f5fd4ac9a0471c4fc11afffbce4a": { "aToken": "0x9260c231349153853bf77d39c1203f8c50855e59", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0x8556754fb8bac8a447d8448feb5059b9e3f8af8a" },
+      "0xaa40c0c7644e0b2b224509571e10ad20d9c4ef28": { "aToken": "0x9d33a5cc90a328c8d0af588e44689aecfe4ae421", "sToken": "0x0000000000000000000000000000000000000000", "vToken": "0xc82f430f87b9ec2c9b960b8d644d2bebbb8f26d1" }
+    }
+  },
+  "AVALON_SOLV_BTC": {
+    "1": {
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": { "aToken": "0x822790ffcce58eaf79d869404402378c05bc2c69", "sToken": "0x6e26bf6122b68ee15d54e7d486e6242d0688ec92", "vToken": "0x3cc219f53d813054dd5f5a6126404e6a029006a6" },
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642": { "aToken": "0x3c9f186f1c11d28d28cdfbfbb74fe311bae9c059", "sToken": "0x1d76fd1466a356d6a823408f3139669dea21cb23", "vToken": "0x9e1bfcb533104b5aa1f80b33e10bebdbd78f0637" },
+      "0x332a8ee60edff0a11cf3994b1b846bbc27d3dcd6": { "aToken": "0x243744653a4cf96e974a3b9c19c93bff287727ec", "sToken": "0x27b58833bb08dd478d12bb93ae0dda012fe7468a", "vToken": "0x682a2b28e94bd3b52140feaebbd4efec02082a48" },
+      "0xb997b3418935a1df0f914ee901ec83927c1509a0": { "aToken": "0x442252245af0e6f7410f1a79e0f186e2d91907cb", "sToken": "0x128321c3fa48b47ba4e4bd1648f829f5f6048ffa", "vToken": "0xd350e7dacdbe19008d2530fb256b5b6c8a583033" },
+      "0xec5a52c685cc3ad79a6a347abace330d69e0b1ed": { "aToken": "0x950ab8c438099dda466020986c4ad74f0747441b", "sToken": "0x7216b99e42c2537dd0f1e36fbb5ce0336b225a95", "vToken": "0x87423fca4eef5f4144fd8df95f158c8579c0ee52" },
+      "0x8236a87084f8b84306f72007f36f2618a5634494": { "aToken": "0x8ae0014964227fe378bc1c4cc27982e6b4351a65", "sToken": "0x37d07bdd191e77ee5538bf6446a3e77a3158ff79", "vToken": "0xba835c7e44d522814486ceaeddad030add6c00f0" }
+    },
+    "56": {
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": { "aToken": "0xb74eb18445a5cde001fdfcc74ddba368cf4c6f2f", "sToken": "0x4568911872e6ad1f641ef59a5c3962aef4fce46e", "vToken": "0xfb6950161d274ad71e60a133a026809ba3ae76ed" },
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8": { "aToken": "0xd9f57906908a81b9ebb9d1aad8e9e0182ac40cca", "sToken": "0x05dd96317bf7c6d412e96807c36da0521f856f0e", "vToken": "0x6fa965fba8cac1c7ecc34d17ba8da5da68e3b6c5" },
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": { "aToken": "0xfcefbd84ba5d64cd530afb2e8ddea7b399a9fc53", "sToken": "0xb1cba901451fa865e0ebbfa8f96786824d21f3d0", "vToken": "0xf9bfca5be4b8f0ea9897c3aefeee2600d8f482f4" },
+      "0x55d398326f99059ff775485246999027b3197955": { "aToken": "0x5d0bce6c62ccaab75eb91916e58639205c421828", "sToken": "0x5ab9c74d24131bbe78eecbcd8c7f341e71ca5fd2", "vToken": "0xbda5e2c16c0c116815ceeb9addbc71cd03a58f04" },
+      "0x4aae823a6a0b376de6a78e74ecc5b079d38cbcf7": { "aToken": "0x516490f83f7587fc74c02bf0a0d06547f8edb0ab", "sToken": "0xa8a1efb71af0bbfe357cb922c7e88ec111e50995", "vToken": "0xde42ce975c4d1164ddc2a51911d75c56390c09f1" },
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": { "aToken": "0x69a8727c11d82fac82bedecc51ae5513eceb6989", "sToken": "0x66dfa369fc913c16dcea3dc12c28c1cd3e2b9ed7", "vToken": "0xaa43ce91bdebcccedd0d2a974b0f534af7f010fa" },
+      "0x53e63a31fd1077f949204b94f431bcab98f72bce": { "aToken": "0x81f3652c30644e5608318767dfa5cf34ca74fdf5", "sToken": "0xf755a976b925f4daa397e8abd6f189b0fabc10dd", "vToken": "0xb34ba89157b22f8e4a9f177f203c9ae4bbc4df84" },
+      "0x1346b618dc92810ec74163e4c27004c921d446a5": { "aToken": "0x5264ddcf2bb6a14ea72300e6e7f2d547be386553", "sToken": "0x1217a4fc546bdc9f5600f07a3e1c55daa25b9eb9", "vToken": "0xb73bec58fd93c56beeb22f1967cded1c994bf7c9" },
+      "0x541b5eeac7d4434c8f87e2d32019d67611179606": { "aToken": "0xdfdcc76a07cd126f43d3845184e56d4bb4f253bc", "sToken": "0x0ff054d3c7ea2097d9682139744399f6c4e83b3b", "vToken": "0xd0b3f785df374f7ee8ae8a4760e2ff8a515bb772" }
+    },
+    "34443": {
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77": { "aToken": "0x81f758c30b4c32e928b0e46aa9e98b0831da8da3", "sToken": "0x90fe578317018ca5dcca53573a6e9beb838747d0", "vToken": "0xfdb6b779779b5e6426779ea2680cdb19967dd240" },
+      "0x59889b7021243db5b1e065385f918316cd90d46c": { "aToken": "0xeceed2a7be46f06aee1d8f1b6ad73020e67ddf32", "sToken": "0x1f9e332806c67dc741ddf25f52abd0e4230eb22c", "vToken": "0xf8432fb5921e380b17daed24c0be669ece3d6248" }
+    },
+    "167000": {
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77": { "aToken": "0x8c9510db49b00f44e9c358016e95c8103b362bde", "sToken": "0x88449b49264b948929ffa0e6986f528da9bf4114", "vToken": "0xf8b03861429336d592225a404360ee96c7cbc411" },
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c": { "aToken": "0x2e7dc6260112f2d496a9ff7d0a5cc38b3eadddba", "sToken": "0xdee8aff742789a51cece45a2ee849eb5c2d98967", "vToken": "0xae28c4d9ec1f095ae9151c13b29c58c74e020141" },
+      "0xf7fb2df9280eb0a76427dc3b34761db8b1441a49": { "aToken": "0x89c4e1834f4b3131f8a67f60d85e0c36f12d3fcc", "sToken": "0x731b895d0cd5f2210d259c6e95bd320816f11aaf", "vToken": "0xb128d37bc3f84022a667440bc5d4340f313a8522" }
+    },
+    "21000000": {
+      "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2": { "aToken": "0x1c0e090319797284d30e346f18a56389d52a4825", "sToken": "0xef31abf53dc6d89dcad8ae71f044e698cf46937f", "vToken": "0x2258c93b4dd7108407b83cf5028d45536401d963" },
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c": { "aToken": "0xbaba0f474c481f4e8420ab9a7e0c82e5198cfc93", "sToken": "0x625c588c1f18eb3cb2a21f7a38245038f8b92338", "vToken": "0x077d0583b68873e8ee726ad6225d7ae96da22267" },
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77": { "aToken": "0xa5e99997daffaafd74e2f521c5dcfc5ac37cfe6a", "sToken": "0x75733a2eb3e3466e09f8fec9f92524167ded99d0", "vToken": "0x172e6af1202d6753edf7cba82f34c3aa412dd11d" }
+    }
+  },
+  "AVALON_PUMP_BTC": {
+    "1": {
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e": { "aToken": "0x1a91e084c693db7dbeacd7726db56e5a340fef10", "sToken": "0x6b5480427b0c2e3816fbb30ca1a481a32a07e76d", "vToken": "0x35afaec9c4fd186235efca0f5e56c5a421c48876" },
+      "0xc96de26018a54d51c097160568752c4e3bd6c364": { "aToken": "0x249e8e0045d7c3d0dcd38943b83feed190a62f44", "sToken": "0xba37b83e82bccbd1a48b500692f6106cf9e36c14", "vToken": "0xbe6089669bcfabefa6e87599d7205ba8cd4fae20" },
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": { "aToken": "0xdd92bb45815ea0c3461ec2ff2b6f5cd6b99294c6", "sToken": "0x0f2a52e961ece431e40cc1068862d96e54d76e54", "vToken": "0x9ce87e03e3e2623e79fc8020da472715bfcbf40f" }
+    },
+    "56": {
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": { "aToken": "0x67ff045c9e904616f650e8125a4176ae6ec23ecc", "sToken": "0x9126f9bc64ce6ad0f326a6e31b4c27db38a5b5b0", "vToken": "0x8834e0732ac0d37e14956c542b9d8dc30eb40ee4" },
+      "0xf9c4ff105803a77ecb5dae300871ad76c2794fa4": { "aToken": "0x1fa40670a571b17e3f61251880c768ede5764fcc", "sToken": "0x373611a337b6c7a89a1202f8fcd04045e47b233f", "vToken": "0x65a3b6e4c557aae79d0f1fb3184b732ade66fe7a" }
+    },
+    "7000": {
+      "0x1fcca65fb6ae3b2758b9b2b394cb227eae404e1e": { "aToken": "0x81f758c30b4c32e928b0e46aa9e98b0831da8da3", "sToken": "0x90fe578317018ca5dcca53573a6e9beb838747d0", "vToken": "0xfdb6b779779b5e6426779ea2680cdb19967dd240" },
+      "0x13a0c5930c028511dc02665e7285134b6d11a5f4": { "aToken": "0xeceed2a7be46f06aee1d8f1b6ad73020e67ddf32", "sToken": "0x1f9e332806c67dc741ddf25f52abd0e4230eb22c", "vToken": "0xf8432fb5921e380b17daed24c0be669ece3d6248" }
+    },
+    "42161": {
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e": { "aToken": "0x9a02588ddff4d079cc5beb1b864b12410049288a", "sToken": "0xb765168e68936ce1c6dd03a56f0d4d70b833a5bc", "vToken": "0x02edffa0298313763803089e92e491c915e0e7dd" },
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": { "aToken": "0x0b37ee41a3b80431a444d7f3d9f0ede9023be000", "sToken": "0xd7470feb942daa7baee8b1ea807db7abe5d04447", "vToken": "0xcb4d00eaaf3562469a397994897e7384a124395a" }
+    },
+    "21000000": {
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e": { "aToken": "0x6b00d96982bdddabc6c8b77c7f927fc36f52956f", "sToken": "0xdd95bb6898a50422341ccd5888cf7ec3188a7cc2", "vToken": "0x7a2f15121a318b4c62c8f7cc3b8112c4e4c20ae5" },
+      "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2": { "aToken": "0x397070528a821d68c26f0558f4e816c91a0b3417", "sToken": "0xf3b59e299bf9cfbc2e5729d88b5b1f2797d4d72b", "vToken": "0xb3da65fb32382292aac3fa2638c71f142362c537" }
+    }
+  },
+  "AVALON_SWELL_BTC": {
+    "1": {
+      "0x8db2350d78abc13f5673a411d4700bcf87864dde": { "aToken": "0x1f0b7f50f8b4f4e7c65988cb074bf96bead580ba", "sToken": "0xbc1b3b8dc8adead5556359454e8e2f1f27125d7f", "vToken": "0xc3ff8f91f47487a2ba8de69f901d6b91cc4fe797" },
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": { "aToken": "0x1c2c0b01e32b747a06e6ea0c2d07da1a586c59bb", "sToken": "0x0f84a47844ffd67db55a3013a68a7dfbf5c1de83", "vToken": "0xce9ceff2e11c8e28b7f70bfa62c65d3bf46b7bcd" }
+    }
+  },
+  "AVALON_EBTC_LBTC": {
+    "1": {
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": { "aToken": "0x822790ffcce58eaf79d869404402378c05bc2c69", "sToken": "0x6e26bf6122b68ee15d54e7d486e6242d0688ec92", "vToken": "0x3cc219f53d813054dd5f5a6126404e6a029006a6" },
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642": { "aToken": "0x3c9f186f1c11d28d28cdfbfbb74fe311bae9c059", "sToken": "0x1d76fd1466a356d6a823408f3139669dea21cb23", "vToken": "0x9e1bfcb533104b5aa1f80b33e10bebdbd78f0637" },
+      "0x332a8ee60edff0a11cf3994b1b846bbc27d3dcd6": { "aToken": "0x243744653a4cf96e974a3b9c19c93bff287727ec", "sToken": "0x27b58833bb08dd478d12bb93ae0dda012fe7468a", "vToken": "0x682a2b28e94bd3b52140feaebbd4efec02082a48" },
+      "0xb997b3418935a1df0f914ee901ec83927c1509a0": { "aToken": "0x442252245af0e6f7410f1a79e0f186e2d91907cb", "sToken": "0x128321c3fa48b47ba4e4bd1648f829f5f6048ffa", "vToken": "0xd350e7dacdbe19008d2530fb256b5b6c8a583033" },
+      "0xec5a52c685cc3ad79a6a347abace330d69e0b1ed": { "aToken": "0x950ab8c438099dda466020986c4ad74f0747441b", "sToken": "0x7216b99e42c2537dd0f1e36fbb5ce0336b225a95", "vToken": "0x87423fca4eef5f4144fd8df95f158c8579c0ee52" },
+      "0x8236a87084f8b84306f72007f36f2618a5634494": { "aToken": "0x8ae0014964227fe378bc1c4cc27982e6b4351a65", "sToken": "0x37d07bdd191e77ee5538bf6446a3e77a3158ff79", "vToken": "0xba835c7e44d522814486ceaeddad030add6c00f0" }
+    }
+  },
+  "AVALON_UNIBTC": {
+    "56": {
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": { "aToken": "0xd8207b6d219c5d40c868f1c4e5235573a8b566bf", "sToken": "0xa5cdaffb57e7c1e73483c1b394b317553058b10e", "vToken": "0x1348a512bc5aea5a39bb3c78636e230d27c71f1c" },
+      "0x6b2a01a5f79deb4c2f3c0eda7b01df456fbd726a": { "aToken": "0x12ce224e5948288ee8f5eca838195db472f5428a", "sToken": "0xb16d7cbad0942647aa15eff717f39bc644cb519f", "vToken": "0xb1e1c2635a35210e49d0e7a47378330295870fd4" }
+    },
+    "4200": {
+      "0xf6d226f9dc15d9bb51182815b320d3fbe324e1ba": { "aToken": "0x810405900a4bf739a6fe39227f5f7b95a4b929a8", "sToken": "0x024bcb9944f019cb2ef3fdddecbb81abc006e543", "vToken": "0x2300b1ed110050d46a3999a9c1c79d44c7fd6919" },
+      "0xb880fd278198bd590252621d4cd071b1842e9bcd": { "aToken": "0x2edba2700891b285bff6d7951579e27ea7abe8a5", "sToken": "0xffc00750b49e9846991e6113b2d8587bb57fedaa", "vToken": "0x5609caa0914cfcb6164b5b84483524779aa2516a" },
+      "0x93919784c523f39cacaa98ee0a9d96c3f32b593e": { "aToken": "0xcb0f3a8fd1ef0548bd4bf0454546c7b304920e9e", "sToken": "0x4af698391297c36351217a0a450b0bec39166c30", "vToken": "0x23b8138ade9c304582c97dfcea7f490cda0c73e1" }
+    },
+    "4689": {
+      "0x93919784c523f39cacaa98ee0a9d96c3f32b593e": { "aToken": "0x7b15b3267e8bfae333e09f5829fc25e9a1d1ca2a", "sToken": "0xfceab0b7700d5037411016d44e4b5a6428f5d7a4", "vToken": "0x1c37e7285511fc4414fbe6d270a7fdb1b86b1cd5" },
+      "0x6fbcdc1169b5130c59e72e51ed68a84841c98cd1": { "aToken": "0x3a6ad8be3dfbee6d41ffcca63d770c23b3b426e2", "sToken": "0xc469bdae8255c3a42cdcd53344920ccb053c9c1b", "vToken": "0x359fde7d98989a6701d98a24477f3a194f978e3f" }
+    },
+    "34443": {
+      "0x6b2a01a5f79deb4c2f3c0eda7b01df456fbd726a": { "aToken": "0x72419c43bd1d16a1c1dbaac6dd46e696c6584b87", "sToken": "0x0ee4609905d0421c95bd2869ae5981a3dcba6fda", "vToken": "0x4a5d56b92b0384579102abf131c45a1ed425f935" },
+      "0x59889b7021243db5b1e065385f918316cd90d46c": { "aToken": "0x78637bfb0f5989c4f595ad46dae9f255e00862bc", "sToken": "0xd3b07edaf1deece44d87bc84d6feb5afe383964f", "vToken": "0xb4309e1559c857758c82cd469431cfa81d19e8e4" }
+    },
+    "42161": {
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e": { "aToken": "0x9a02588ddff4d079cc5beb1b864b12410049288a", "sToken": "0xb765168e68936ce1c6dd03a56f0d4d70b833a5bc", "vToken": "0x02edffa0298313763803089e92e491c915e0e7dd" },
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": { "aToken": "0x0b37ee41a3b80431a444d7f3d9f0ede9023be000", "sToken": "0xd7470feb942daa7baee8b1ea807db7abe5d04447", "vToken": "0xcb4d00eaaf3562469a397994897e7384a124395a" }
+    },
+    "60808": {
+      "0x236f8c0a61da474db21b693fb2ea7aab0c803894": { "aToken": "0x68a9830103793ab3b3b4114e1e4e7efd5f776dca", "sToken": "0x10f118b8e31435dd3e7ef1bfe3ce9fa7ad27b598", "vToken": "0xa33bc30b0d2f9390f81110911265feba75842e14" },
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3": { "aToken": "0xed9bdae9e7cae0e7f2775ef5acdbc2ea800edad5", "sToken": "0x33d348bbe2480cc3e3e189fccccccbf592a12314", "vToken": "0xda41747b8617305b0e370bcc49259f876489b4f5" }
+    },
+    "200901": {
+      "0xff204e2681a6fa0e2c3fade68a1b28fb90e4fc5f": { "aToken": "0xbdd2e24c10bd4668bf838dbca5287bbd21da0ca8", "sToken": "0xbacf6534a60d8dbb599d755b4355f4b2c480f44f", "vToken": "0x0d62fe8f31fd249747e6169e453ba5162142162a" },
+      "0x93919784c523f39cacaa98ee0a9d96c3f32b593e": { "aToken": "0x513794d3d6c3b6dce31dd58c7f27e2529105f90c", "sToken": "0x379628f8563a1b90f552447f4c195fca5f1a5f5b", "vToken": "0xfb10da763b363ab911a95763a8a01fc7a58e1ab6" }
+    }
+  },
+  "AVALON": {
+    "146": {
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77": { "aToken": "0x6c56ddccb3726faa089a5e9e29b712525cf916d7", "sToken": "0x56f4e2cedd5f33040bf3381870c0ba7df843dc27", "vToken": "0x09d18c81d3e651c0f892233ae5b39a9cbf684ff0" },
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c": { "aToken": "0xe3a97c4cc6725b96fb133c636d2e88cc3d6cfdbe", "sToken": "0x7d2a701b4de51a751e8c744207f1b4db6e180c14", "vToken": "0xa28677f431e3597b70cbbd561f801868dc37e946" }
+    },
+    "223": {
+      "0x796e4d53067ff374b89b2ac101ce0c1f72ccaac2": { "aToken": "0x3c38b2e9a9f5213748f68cd4d4cd04168bc727a3", "sToken": "0x5ae01d9996c7af35768f571267397e230d94d858", "vToken": "0x16f7b7e84aca905fa45eabedc4e1d0e098557c27" },
+      "0xf6718b2701d4a6498ef77d7c152b2137ab28b8a3": { "aToken": "0x7f9771a4515e21aff520ce7aff5df34c39389002", "sToken": "0x680915169d27fa3fcf6d94ebd0dab15d6332a2b2", "vToken": "0x296831a1c196ad924c21243e26f5e286ecacdf08" }
+    },
+    "1116": {
+      "0x40375c92d9faf44d2f9db9bd9ba41a3317a2404f": { "aToken": "0x93de2dbbf2e4905dbc3186558f0dba15be00f7f8", "sToken": "0xaaddfb476c1c895ec4bcd024420a2267a56709fa", "vToken": "0xe27ede8d845801ef9e3362eb0580840b97630f26" },
+      "0x8034ab88c3512246bf7894f57c834dddbd1de01f": { "aToken": "0xab91398e0c94064f7725a169bf8889efdada153f", "sToken": "0x07c6a61dbc10d44a4518d02bd73b08bee096399c", "vToken": "0x399142e408265a4d1913e9ce8f711e4509482c84" },
+      "0xa4151b2b3e269645181dccf2d426ce75fcbdeca9": { "aToken": "0x07820af656f52fce6a98e0096a5a2b3289c88022", "sToken": "0x6ce20896ffbbea849f0a183ba7e032e62dcdf7e1", "vToken": "0x9726aafc19a4c3bacc23ace00754675ef783b8d3" },
+      "0x900101d06a7426441ae63e9ab3b9b0f63be145f1": { "aToken": "0x3b4102fdce56e1ab83a2003c2c82750fece130b7", "sToken": "0x071d70ac38eac7bfba7d5e33d27d62c02c33a725", "vToken": "0xa5c74913b5895ba84eb6f0eb61878a3ea96268d5" },
+      "0x5b1fb849f1f76217246b8aaac053b5c7b15b7dc3": { "aToken": "0x4c94260bf9e0e1f168f3812a34f8e16eaf1446d5", "sToken": "0xe12ea0eb3e6d221574bf7a66c97bb6269a55b895", "vToken": "0x4a474c53a4e62d9fba99711907507ef1c9607097" },
+      "0xe04d21d999faedf1e72ade6629e20a11a1ed14fa": { "aToken": "0x848f91afefadfc925c57939494599e44280e55e7", "sToken": "0xa3b1153313667a91e7f5c0d95c1de19c9cc978b2", "vToken": "0xa401101c7b035773d536c734643cc31fb0d31368" }
+    },
+    "1329": {
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77": { "aToken": "0xb580f9e4936f3ff990a4fbe4821f43d42efffa67", "sToken": "0xb3665339b5e81b0d9ebdfcc95ac28f5c546995a1", "vToken": "0x56db14ca01dc473ee585917760717f8db0bce431" },
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c": { "aToken": "0xab7035bb3c8511191dcc059831511cc116e60300", "sToken": "0xe4607cfc503cdfb91882396e67379bf9cb137573", "vToken": "0xd767f1b7504d1c0dcb4cfb7ccccf0402c6e7d923" }
+    },
+    "2345": {
+      "0xe1ad845d93853fff44990ae0dcecd8575293681e": { "aToken": "0x9a02588ddff4d079cc5beb1b864b12410049288a", "sToken": "0xb765168e68936ce1c6dd03a56f0d4d70b833a5bc", "vToken": "0x02edffa0298313763803089e92e491c915e0e7dd" },
+      "0x3022b87ac063de95b1570f46f5e470f8b53112d8": { "aToken": "0x0b37ee41a3b80431a444d7f3d9f0ede9023be000", "sToken": "0xd7470feb942daa7baee8b1ea807db7abe5d04447", "vToken": "0xcb4d00eaaf3562469a397994897e7384a124395a" },
+      "0xbc10000000000000000000000000000000000000": { "aToken": "0x0ba2d99059e43f0437e28f9c5b5de1a736643ad0", "sToken": "0x55ce81413fa3df21a42ce54dd94762de58c3a664", "vToken": "0x812b06c9d2985eda494a1c8bba1f25a369f84848" },
+      "0xfe41e7e5cb3460c483ab2a38eb605cda9e2d248e": { "aToken": "0xf3b922f1554bbca5225b76d4386a5b35eec56668", "sToken": "0x234c3fba94830a22dbf0f1385f2431fd118b76eb", "vToken": "0xd3d9a5517f5dee1362ef8e4e14c1e7d0e139fb89" },
+      "0x1e0d0303a8c4ad428953f5acb1477db42bb838cf": { "aToken": "0xfa4474be3227456e6e648cbedcb3cc9c4374b0ca", "sToken": "0x5cad4ac41925d19d1ff403fdbcbf7fdce20c66a0", "vToken": "0x9a342d5205a4895aeb3ed4b7ec24fc7b29461132" },
+      "0x3a1293bdb83bbbdd5ebf4fac96605ad2021bbc0f": { "aToken": "0x7a3bfa1250bf14233350a67b8849d9fc15ce0a09", "sToken": "0x564810351842a5ccdd02b57a86c45964d167607b", "vToken": "0x50eae08834fa629cb689f99543d6a628d54af197" }
+    },
+    "4200": {
+      "0xf6d226f9dc15d9bb51182815b320d3fbe324e1ba": { "aToken": "0xa984b70f7b41ee736b487d5f3d9c1e1026476ea3", "sToken": "0xfbf7754a9e38bbbfe1cb746419f3e8f0bf3ba79d", "vToken": "0xc7d82b035ca1a8aefc1c7a077aeeffbbac27e3bb" },
+      "0xb880fd278198bd590252621d4cd071b1842e9bcd": { "aToken": "0xf5b689d772e4bd839ad9247a326a21a0a74a07f0", "sToken": "0x4586d19d085e498925b20105254684acdf6f531a", "vToken": "0xd07a95547961c080401733139f225b694489291a" },
+      "0x967aec3276b63c5e2262da9641db9dbebb07dc0d": { "aToken": "0xccec084081deacae8ea1b539f33d17f555316990", "sToken": "0xd2a8a0be29e2d2a2c40e84cdef39e6d2a1fd2963", "vToken": "0xe3fc988f3e86f47e95cf85d86647c91bb35b4dcd" },
+      "0x6b4ecada640f1b30dbdb68f77821a03a5f282ebe": { "aToken": "0x9a6ae5622990ba5ec1691648c3a2872469d161f9", "sToken": "0xd8bc00d2548a320232801ab474414ef73c35730d", "vToken": "0xf813c26941d7435c06c17cc044c300081168d700" },
+      "0x41d9036454be47d3745a823c4aacd0e29cfb0f71": { "aToken": "0xc39e757dcb2b17b79a411ea1c2810735dc9032f8", "sToken": "0x475483d8cfeb10ce87e4cd330fdfb347726cdac3", "vToken": "0x273b485837b95871d56b2dad7884d57362aead6b" },
+      "0x0726523eba12edad467c55a962842ef358865559": { "aToken": "0xe465c55d68ec371b79a40fbc3b62ba78a1d3cc7f", "sToken": "0xec5acf563d57877b51fef8ba2fffadea1b334175", "vToken": "0x8db8693e8e9ba494cf16b7f381c12417b14a0a87" },
+      "0x5c46bff4b38dc1eae09c5bac65872a1d8bc87378": { "aToken": "0xfa4be25a704df74064eb0bfd0e3e3e460f4d16fc", "sToken": "0xb82b4e6e19ef0c0a738b1eff93a582fbd29fa1c9", "vToken": "0x39025b6e71bd95c8a5c241c23c3665b3585996a4" },
+      "0xb5d8b1e73c79483d7750c5b8df8db45a0d24e2cf": { "aToken": "0x610765eb14b1508bd1e8a987f820617a0ab742ff", "sToken": "0xa40a72be6cd2e71402882a93d0dc9f1def23703a", "vToken": "0x5af0f8de3fb66430d2eef8c23f8168d4caa90148" },
+      "0x7dcb50b2180bc896da1200d2726a88af5d2cbb5a": { "aToken": "0x114e9fcc2895b82552d1fa5a6b3ba5d572f58557", "sToken": "0x71df6f472f560fc7e89ec69cf6f445e89f14ccb8", "vToken": "0x62d81409d85f10b035bfed444b605e3fa928c184" },
+      "0x88c618b2396c1a11a6aabd1bf89228a08462f2d2": { "aToken": "0x5cc81d1e35618a15291e418c32ae99b4c6aa8430", "sToken": "0xc7967a4412928d355ffedc856ca74fda43a6fe7a", "vToken": "0xba41bce29150c9e93edc0d3f6109edea1e102476" },
+      "0x1760900aca15b90fa2eca70ce4b4ec441c2cf6c5": { "aToken": "0x2a9ab4560f30dbb4231db16d2f86a4ff5ea889c0", "sToken": "0x12123ac2bbd007b6b40acfd4a0b01a3fb4a4d3b7", "vToken": "0xf5a73dc1aa6d672e3329e30d6647b23d59383835" }
+    },
+    "4689": {
+      "0xa00744882684c3e4747faefd68d283ea44099d03": { "aToken": "0x2ee273d00253af3c8db56dcdc1f33bff4f5efe98", "sToken": "0xf820feef75da5d0f73202f90334341a81e95d2a8", "vToken": "0xfe463c00d6e06ae6720a2f055a56fff580dea3aa" },
+      "0x6fbcdc1169b5130c59e72e51ed68a84841c98cd1": { "aToken": "0x5e5914a018d7ee9c93c6727e5c7e5aeebea1fbc6", "sToken": "0x312fc46802ac581294edde4123d4f73006f7d101", "vToken": "0x75a992db54e1ff6ee864519713a0480a1e701c2b" },
+      "0x3b2bf2b523f54c4e454f08aa286d03115aff326c": { "aToken": "0x74f94406b6561c6cf9a952696e1316ee85b4beb8", "sToken": "0x4456c5fd76cb2600bf989090b48c3f8c816c0dc7", "vToken": "0xe7986a0d68ab54f5729fead2ee405fc663b41dd4" },
+      "0xcdf79194c6c285077a58da47641d4dbe51f63542": { "aToken": "0x91e0ced4656b88078b9abfd8664c223584f21187", "sToken": "0x10b43573e15c453a421d51a1dff5201d8c3ca2b3", "vToken": "0xfba234d0204bd2032667e671702f6b0105085efd" }
+    },
+    "7000": {
+      "0x5f0b1a82749cb4e2278ec87f8bf6b618dc71a8bf": { "aToken": "0x1f6804674ad75895d446df4d32e23085a68261cf", "sToken": "0xee7a8a28147e79693d4799845afb04f144ed9c94", "vToken": "0xc823d0d62cf9d3f5eed220a214b2167ed663b0ce" },
+      "0x7c8dda80bbbe1254a7aacf3219ebe1481c6e01d7": { "aToken": "0xfcfe0aa262b47cda89c4461fbd52ee49f30e9cb5", "sToken": "0x364cd4567a9401e66020bd04b83572a7d249bd9d", "vToken": "0x7872dc150a355ceaad962db9ad6cdb9e371ee1ab" },
+      "0xd97b1de3619ed2c6beb3860147e30ca8a7dc9891": { "aToken": "0x61c301b789552d01938841a566a820fc625efa69", "sToken": "0x62fe24ad3f564f59ad3f6a77eff0c16ac824e5a0", "vToken": "0x1b579abc45ca519ee0edf0a0637f2bb61e164223" },
+      "0x91d4f0d54090df2d81e834c3c8ce71c6c865e79f": { "aToken": "0xaeca3d82084cd1999639772303fda7130588483f", "sToken": "0x1eb1392b714b59c7efdb069314c30360a3a071db", "vToken": "0xb5d23a8695274b3cc4bfec523ff7688241fb67db" },
+      "0x05ba149a7bd6dc1f937fa9046a9e05c05f3b18b0": { "aToken": "0xfc6480c5c89183224d4b81b8f153ffcc359ac94d", "sToken": "0xe9a53bae360ca8b94248b594a5032167865bd21f", "vToken": "0xdbe32d6bb7a8a5240525ecd7ad41dc549ff6d488" },
+      "0x0cbe0df132a6c6b4a2974fa1b7fb953cf0cc798a": { "aToken": "0x4f5504f3ba8ae8da3b48cb90c28980fa5a46a49b", "sToken": "0x6c5822ab68302da484be52f260acdaa64db81088", "vToken": "0x1f8d3471092de67c88c05fa34a4c44c5e76b5e24" },
+      "0x13a0c5930c028511dc02665e7285134b6d11a5f4": { "aToken": "0x849ada0648857b44c97f6d1e981e5fe0160dc15a", "sToken": "0xc606c6aa2d4bb6a479fa023ad5835f92fa203d5d", "vToken": "0x0046185a91b0efde66a123483d242713e19d9bd9" },
+      "0x48f80608b672dc30dc7e3dbbd0343c5f02c738eb": { "aToken": "0x2c3fd0d9500bca142363e83559493fde5644b699", "sToken": "0x4489ec031549abdc65f1fad7e9ed7241dbc8500b", "vToken": "0xb7666e1f3d124b65befe9f81daf0f81d98e85abf" }
+    },
+    "8217": {
+      "0x19aac5f612f524b754ca7e7c41cbfa2e981a4432": { "aToken": "0x75879754040101f831ccbf13b3d5a785612051cb", "sToken": "0x23f8182237152e8c1280a77fe976e5f85d34c47a", "vToken": "0xada27a9e7fc5e5256adf1225bc94e30973fac274" },
+      "0x98a8345bb9d3dda9d808ca1c9142a28f6b0430e1": { "aToken": "0xaf4f993cf366edfe80f6fab9446287f9a33c999b", "sToken": "0x6608a29101d6d2f5c31d19bf7972985c3eea6160", "vToken": "0xa0f150b6a7649b3bfb3973d5c3a011de237be58c" },
+      "0x15d9f3ab1982b0e5a415451259994ff40369f584": { "aToken": "0x1cdd79a4725ad4c484f623d351994b3a6bcbd31b", "sToken": "0xe9aa3b72837fd8e472c9b6fcd277f5960865cc9e", "vToken": "0xf36e7e7f71b64068aa34bf3a7728180a9d9e89c2" },
+      "0x5c13e303a62fc5dedf5b52d66873f2e59fedadc2": { "aToken": "0xf79305376841810112d1a37ba4d1f6fe5fd610ec", "sToken": "0x689034d0c674685a03576e0beb9ab601ce33db7a", "vToken": "0xa9f23143c38fbfb2fa299b604a2402bab1e541fc" },
+      "0x608792deb376cce1c9fa4d0e6b7b44f507cffa6a": { "aToken": "0x9503482f84b07b487b6001433d2f2f685769e8b9", "sToken": "0xe403d4f591535c10b53fe347aba4b55672df350e", "vToken": "0x4880c4b5a3d83965c78faed3373154610b39046b" },
+      "0x585e26627c3b630b3c45b4f0e007db5d90fae9b2": { "aToken": "0x59ebf20504d4e50eec63e30c546349e1bb94c6a3", "sToken": "0x70baa14712dd09b10330781af50b34f0ff90e07e", "vToken": "0x2c5a402ae0b9d2f587457cfc682ab20aa7db631e" },
+      "0xd077a400968890eacc75cdc901f0356c943e4fdb": { "aToken": "0x03d111e76c70e5003f0e30dc732aa1bab1ea119d", "sToken": "0x0db9ae7fe1cf1db1a612a8b718ae8ed07014347c", "vToken": "0x3a5724329f807eef8f2a069e66c9aa34982afbec" }
+    },
+    "8453": {
+      "0x3b86ad95859b6ab773f55f8d94b4b9d443ee931f": { "aToken": "0x3d315de4fddff5f6ff0fd524d662d043d2f0318c", "sToken": "0xa3b7f215e678f8e971d3cd3617e21d737b50ee74", "vToken": "0x15bcb8789568d82c8a3d8bd2be133a5f44404c1d" },
+      "0xc26c9099bd3789107888c35bb41178079b282561": { "aToken": "0xebe7445081a9ce942f6dcff724355e235862a822", "sToken": "0xc242b0ba6fb60cf7dda34a06c5c8d5961f65aaca", "vToken": "0xe11333bc86f00895d9b147113c1bb8aa2d6787ff" },
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": { "aToken": "0xb142ea19c5c6b01c71068778696d442e9cc62c8e", "sToken": "0xa10cca1dd26a394781e22549abb8411d7285ed2c", "vToken": "0xce85098c171ef00165d55cc9d27fedc011fb30d0" }
+    },
+    "42161": {
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": { "aToken": "0x09586f5eef369909f321f9a313b6d51db1946119", "sToken": "0x40a13e22fb4b041e3d9e8482b343c09baeafedaf", "vToken": "0x2b8360cfc4d18d0c614c8e3bad1990858b9b68c0" },
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831": { "aToken": "0xb05088c49f74092a1fda87257648f92ad0547753", "sToken": "0x753dc449bcaf4706159f8e8078a47acc7d844d49", "vToken": "0x15d67fa0a1e579765d0e9211313e4d0f5788256f" },
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": { "aToken": "0x5d383d2a1dc3e5e82acb2035c10ba1bac989fe42", "sToken": "0x2af52ef42f352f160c7042925d1cbef4792b9fd5", "vToken": "0x703cc5fca1c0bcb3446e20bf52ab9c5a188c9425" },
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1": { "aToken": "0xb57905ab2c72e4354acba8a885294de277c0a7ae", "sToken": "0x66a81fbbfed54d8888c44d9e0b57f9ce28aa7b0d", "vToken": "0xa8c3064709a53f8d1c5784b060b29464028c61c4" },
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": { "aToken": "0xabc4b43c27b458745a802e8fa3d00c5e96db0bfc", "sToken": "0x5cce6387b88b4911eae01037213d2d75624aecd7", "vToken": "0x9dca1b6e1f62b324166de1c2ae7b640fad80a237" },
+      "0x3647c54c4c2c65bc7a2d63c0da2809b399dbbdc0": { "aToken": "0x3e5e8569b2aa2a8bd235104944868913b23a0d64", "sToken": "0x3a791e680019072bf8a353f142de7610282e52c2", "vToken": "0x504ed6c8a0c5b04990da91c0bf9d11f6ee2e6c28" },
+      "0xafafd68afe3fe65d376eec9eab1802616cfaccb8": { "aToken": "0x039fad6071212ac685833f2060d29cd9f75d8ad7", "sToken": "0xc887a51a9156ad3a388b8fcfeee35aa3ca735b97", "vToken": "0xf14f9f26ac113c1899d4c1eaaf67d4c04a2b5565" },
+      "0x346c574c56e1a4aaa8dc88cda8f7eb12b39947ab": { "aToken": "0x95118fb8aed1877db25e5f72d319b7ae45e9d101", "sToken": "0xf45080fa91f6317b92e29efdc14dbeb4bf695d80", "vToken": "0x93c138d0295a1b1a715b2751d286732d8f2f4a92" }
+    },
+    "167000": {
+      "0x2def195713cf4a606b49d07e520e22c17899a736": { "aToken": "0x0b22c0dc82842c407cbae963853b48de7dc7b743", "sToken": "0xf039cf20b133ecc1fbd0a47c3f09d41f3c81feff", "vToken": "0x34a651ba099127ffab65ff7e7c8e78d5e3b4c1f0" },
+      "0x07d83526730c7438048d55a4fc0b850e2aab6f0b": { "aToken": "0x23c94de1451b0b76958c8ac6347c211e063aa8e5", "sToken": "0xb7d517481dc8569d9451a7dbb27cf02d89c8a68d", "vToken": "0x2ad41c6a230b7f570829f78271bc829b4e41b2ca" },
+      "0xa9d23408b9ba935c230493c40c73824df71a0975": { "aToken": "0x367e33d5562b03ed89165f59247b9562f6168999", "sToken": "0x0dd7a778c6d57d102acd9e24a55518c8012f0b29", "vToken": "0x566f56b37959e0d1c928bf0fe01b4bd27f2bbe1e" }
+    },
+    "200901": {
+      "0xff204e2681a6fa0e2c3fade68a1b28fb90e4fc5f": { "aToken": "0xa984b70f7b41ee736b487d5f3d9c1e1026476ea3", "sToken": "0xfbf7754a9e38bbbfe1cb746419f3e8f0bf3ba79d", "vToken": "0xc7d82b035ca1a8aefc1c7a077aeeffbbac27e3bb" },
+      "0xef63d4e178b3180beec9b0e143e0f37f4c93f4c2": { "aToken": "0xf5b689d772e4bd839ad9247a326a21a0a74a07f0", "sToken": "0x4586d19d085e498925b20105254684acdf6f531a", "vToken": "0xd07a95547961c080401733139f225b694489291a" },
+      "0x9827431e8b77e87c9894bd50b055d6be56be0030": { "aToken": "0x8ae2e5e6c5c7c9e88c05083a3010c8d8667c6867", "sToken": "0x6367bd452ecd97f509b0f351e99f384064f19cbb", "vToken": "0x52e222b0401705fd868fd95150e5ce46c27439ef" },
+      "0xfe9f969faf8ad72a83b761138bf25de87eff9dd2": { "aToken": "0x47392ddbfa39dd373822bf6d3b8556407d148ae6", "sToken": "0xc9451447e5f95e8d77798c5967a9748df54801a9", "vToken": "0x35d5ead2450483c6e892af2d7c774bdff9c77f54" },
+      "0x07373d112edc4570b46996ad1187bc4ac9fb5ed0": { "aToken": "0xccec084081deacae8ea1b539f33d17f555316990", "sToken": "0xd2a8a0be29e2d2a2c40e84cdef39e6d2a1fd2963", "vToken": "0xe3fc988f3e86f47e95cf85d86647c91bb35b4dcd" },
+      "0xf6718b2701d4a6498ef77d7c152b2137ab28b8a3": { "aToken": "0x9a6ae5622990ba5ec1691648c3a2872469d161f9", "sToken": "0xd8bc00d2548a320232801ab474414ef73c35730d", "vToken": "0xf813c26941d7435c06c17cc044c300081168d700" },
+      "0xe04d21d999faedf1e72ade6629e20a11a1ed14fa": { "aToken": "0xc39e757dcb2b17b79a411ea1c2810735dc9032f8", "sToken": "0x475483d8cfeb10ce87e4cd330fdfb347726cdac3", "vToken": "0x273b485837b95871d56b2dad7884d57362aead6b" },
+      "0xb88a54ebbda8edbc1c2816ace1dc2b7c6715972d": { "aToken": "0xe465c55d68ec371b79a40fbc3b62ba78a1d3cc7f", "sToken": "0xec5acf563d57877b51fef8ba2fffadea1b334175", "vToken": "0x8db8693e8e9ba494cf16b7f381c12417b14a0a87" },
+      "0xb750f79cf4768597f4d05d8009fcc7cee2704824": { "aToken": "0xfa4be25a704df74064eb0bfd0e3e3e460f4d16fc", "sToken": "0xb82b4e6e19ef0c0a738b1eff93a582fbd29fa1c9", "vToken": "0x39025b6e71bd95c8a5c241c23c3665b3585996a4" },
+      "0xf8c374ce88a3be3d374e8888349c7768b607c755": { "aToken": "0x610765eb14b1508bd1e8a987f820617a0ab742ff", "sToken": "0xa40a72be6cd2e71402882a93d0dc9f1def23703a", "vToken": "0x5af0f8de3fb66430d2eef8c23f8168d4caa90148" }
+    },
+    "534352": {
+      "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32": { "aToken": "0xa0eaf2406597a4c38139d3d31350c17896f7d959", "sToken": "0xaf2b2993ed33bd94cbb75c9aa6db750a0d2ba6b8", "vToken": "0xef6c22d039caa6bc3fd8a5c58f3d38c70d4abe83" },
+      "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4": { "aToken": "0x4d95814493da9e96de31dbc6f32ad2be92cae3cd", "sToken": "0x08b0020498ec336eb005372bf369ba9ca869eb57", "vToken": "0xf2059ec09e885f717b6580f394d76dfa0441e5c5" }
+    },
+    "21000000": {
+      "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2": { "aToken": "0x75c2354b9076795169aab4fef124b571214963d1", "sToken": "0x4c9bfcaf04e8b2dcee0bba0febf37276543a4ce7", "vToken": "0xd161151e9262405c33638f31b81e1f2acf918f31" },
+      "0xdf0b24095e15044538866576754f3c964e902ee6": { "aToken": "0x7db9a5458432e810a2787b15f712da1ecc3afe41", "sToken": "0xde2ffc43ed62ba2ecdf9c56d3e94f4faf19ba5d9", "vToken": "0x052ef2323d022a2401daef88b68e563efe8fe1fa" }
+    }
+  },
+  "AVALON_USDA": {
+    "146": {
+      "0x2840f9d9f96321435ab0f977e7fdbf32ea8b304f": { "aToken": "0x91aee6cc85ab68a02c288f8d8e7a4f5a704ad746", "sToken": "0xd6662e373c826dd99e641371b79c28c158ed3afe", "vToken": "0xbec96e9263fb57af244e8266bf954a1cc0c89499" },
+      "0xff12470a969dd362eb6595ffb44c82c959fe9acc": { "aToken": "0x9d703fe0324fe009b55e8837f88b4bc131ef77ad", "sToken": "0x4f90bced506a38e037e4161867d0156ae845a0b0", "vToken": "0x9b3633199cd79b9723fec0211a1441f6dc83b05f" },
+      "0x29219dd400f2bf60e5a23d13be72b486d4038894": { "aToken": "0x8ef62553117f7b613101d5f729c7718f4b8936eb", "sToken": "0x241680050bf8b3169c76078449a7441c7e304b6c", "vToken": "0xba6d7cfd50891c797eaa636c45d5f4dad7a0664e" }
+    },
+    "1329": {
+      "0x6ab5d5e96ac59f66bab57450275cc16961219796": { "aToken": "0x9586f42695b7cd2c451d6d361e9c08d04395bb07", "sToken": "0x4312af8a2f3a8313ded042de942e3ebbd4f0f6ec", "vToken": "0x591e6e66958a254e2c0133598bb9cb2ab5255c95" },
+      "0xff12470a969dd362eb6595ffb44c82c959fe9acc": { "aToken": "0xf501e9153e4a14e2eb314c6383027179c9516db1", "sToken": "0x73135cf7b7f9eb6a5f3951150533b36af00e6b93", "vToken": "0xbb94cc4c4b96a60f3d2e508591f6cf8535422f83" },
+      "0x3894085ef7ff0f0aedf52e2a2704928d1ec074f1": { "aToken": "0x80d515b3c537896a8e2f5800bc9e55ff8cc4a377", "sToken": "0xa101a1014e84c2778e96c7fe877cd44f7d657867", "vToken": "0x7869e9e1600bd7f14c32d920573906a6daaf625c" },
+      "0xb75d0b03c06a926e488e2659df1a861f860bd3d1": { "aToken": "0x6be8b7c145041b02e0859233c62a1e69f4eff821", "sToken": "0x586449a809f3bc4739909d25ca67371157091f28", "vToken": "0xe8c660ec6213b82546b1b73235699fd1b7c34917" }
+    },
+    "4689": {
+      "0xa00744882684c3e4747faefd68d283ea44099d03": { "aToken": "0xe96f26ec61a17dda747b0f28c409173b353545e7", "sToken": "0xc90eff0980facd84e97eec83b3779d7c1732808c", "vToken": "0x3e9cdd0adc08e2dce7eaad4f43cd73b5e9b9b729" },
+      "0x2d9526e2cabd30c6e8f89ea60d230503c59c6603": { "aToken": "0x02c4fdd91e45088183b4d2a161caf2aac301f3d6", "sToken": "0xf351b7a6b34f6e4d571aa709ddd5bcababef28b7", "vToken": "0x5f5da68dee05c8f507ec12eaf51d3f2e19282af9" }
+    },
+    "8217": {
+      "0x585e26627c3b630b3c45b4f0e007db5d90fae9b2": { "aToken": "0x786f2243352c95a9ec86d800092cf0d3463a89c8", "sToken": "0xef495c30c4c1bdbc07255da7b4de3600847dd873", "vToken": "0xadf40a99d7652895fe745d4b1552550863a5181c" },
+      "0xdc3cf1961b08da169b078f7df6f26676bf6a4ff6": { "aToken": "0xbc0aabef3148c25288c73f0d2d5e1c231e6e8ba1", "sToken": "0x833b18d395881cd623d7181122010a6011c87c17", "vToken": "0x86d6f9097b80d320700292000c9874f0c5f97950" },
+      "0x5c13e303a62fc5dedf5b52d66873f2e59fedadc2": { "aToken": "0x7b19a6b38dc8d40a3c22a7a8bcc229b1d55e3dbe", "sToken": "0x5a09359ad3a75c3aaa8917ff389e7085cd0dac70", "vToken": "0xb06492e2de0f835af7ed1c1511d7cd810f813e49" },
+      "0x608792deb376cce1c9fa4d0e6b7b44f507cffa6a": { "aToken": "0x6a04c4528ee1ea1f2bbd3ea73843f0a8b38979a0", "sToken": "0x0c4919ce3a6c49b583203b702769e5a7ae9d87ee", "vToken": "0x01be555a133988549f89be1a719983ceb09278a3" }
+    },
+    "167000": {
+      "0x5d5c8aec46661f029a5136a4411c73647a5714a7": { "aToken": "0x9586f42695b7cd2c451d6d361e9c08d04395bb07", "sToken": "0x4312af8a2f3a8313ded042de942e3ebbd4f0f6ec", "vToken": "0x591e6e66958a254e2c0133598bb9cb2ab5255c95" },
+      "0xff12470a969dd362eb6595ffb44c82c959fe9acc": { "aToken": "0xf501e9153e4a14e2eb314c6383027179c9516db1", "sToken": "0x73135cf7b7f9eb6a5f3951150533b36af00e6b93", "vToken": "0xbb94cc4c4b96a60f3d2e508591f6cf8535422f83" },
+      "0x2def195713cf4a606b49d07e520e22c17899a736": { "aToken": "0x80d515b3c537896a8e2f5800bc9e55ff8cc4a377", "sToken": "0xa101a1014e84c2778e96c7fe877cd44f7d657867", "vToken": "0x7869e9e1600bd7f14c32d920573906a6daaf625c" },
+      "0x07d83526730c7438048d55a4fc0b850e2aab6f0b": { "aToken": "0x6be8b7c145041b02e0859233c62a1e69f4eff821", "sToken": "0x586449a809f3bc4739909d25ca67371157091f28", "vToken": "0xe8c660ec6213b82546b1b73235699fd1b7c34917" }
+    },
+    "200901": {
+      "0xe8cfc9f5c3ad6eeeced88534aa641355451db326": { "aToken": "0xae407d0dcc0006194a4fa2f16375f0250d8cb71a", "sToken": "0xce41cf8989e446d9c95c438d989dd36ff6735b7b", "vToken": "0x7231f628c7539e156d8b61edc167bae012642142" },
+      "0x91bd7f5e328aecd1024e4118ade0ccb786f55db1": { "aToken": "0xb081f19737831c9d3c0de2004e7e4fb1b52d10fb", "sToken": "0xa390ce82d76f3249f11ed154af43f34c31ef4de2", "vToken": "0xa145ca16ca92a64946320972eaa4047c1f718f78" },
+      "0xfe9f969faf8ad72a83b761138bf25de87eff9dd2": { "aToken": "0x156c9b35f4b9f01b22d2fa845a1a9e327f14e8fa", "sToken": "0x62a32941b25a9a757240c1449f3634112dca7f4b", "vToken": "0x9fe0cd07f3d3140848a1183b820a1f5961458a33" },
+      "0x9827431e8b77e87c9894bd50b055d6be56be0030": { "aToken": "0xa2b1db2342c6243cb27d8c61bb64921f54195c82", "sToken": "0xbbe5113d1860ad35214b04890ecf75e96325f7f7", "vToken": "0x829a11ea619527fd26ead1e797d31036e719033c" }
+    },
+    "21000000": {
+      "0x2840f9d9f96321435ab0f977e7fdbf32ea8b304f": { "aToken": "0x6d6a39fc102a970db5d746a2075a9e949ce3bacb", "sToken": "0x534c84da649b23e93f50b51a951e6dc7f85b64e9", "vToken": "0x881e7c8c4b1e6322b9999f604ecb89087ee58a64" },
+      "0xff12470a969dd362eb6595ffb44c82c959fe9acc": { "aToken": "0x6d5ed8185986bacac3e01963d7d546da3a2d9e59", "sToken": "0x946f32144085972fdc1275b049bae8ea33b760cf", "vToken": "0xf49e64c72421cf712afc982db2329f9efaadb818" },
+      "0xdf0b24095e15044538866576754f3c964e902ee6": { "aToken": "0x8f4118c4a978c7a2434f5fd79ac5dc1215c11f56", "sToken": "0x2c1e453db68d1ed76a66ebf3c8b69c5dc171b7a1", "vToken": "0xf93f89bffdf9b65a382a75fd88d943c3ebc2be29" }
+    }
+  },
+  "AVALON_SKAIA": {
+    "8217": {
+      "0x19aac5f612f524b754ca7e7c41cbfa2e981a4432": { "aToken": "0xe0ca3726cc7affe829d836377e85ab897e232c80", "sToken": "0x3a282091dd8875ac957c41fdd4be162b01f26205", "vToken": "0xd9239bc54d3cc9c4cc1c199579f57bb0f7325ab1" },
+      "0x42952b873ed6f7f0a7e4992e2a9818e3a9001995": { "aToken": "0x99a7b7112e489902a130d0c5b6c43293828a0c30", "sToken": "0xf68ad4b0adb3fe1d1806b8587e046b97ea376434", "vToken": "0x68b5602b86239a7d6d00cbf1651502137bf5a70d" }
+    }
+  },
+  "AVALON_USDX": {
+    "56": {
+      "0x7788a3538c5fc7f9c7c8a74eac4c898fc8d87d92": { "aToken": "0xa3e657d8e18748b570d0a0dd8fe5904756c1c8a7", "sToken": "0x540addfd7883667d2229b593478fce28c6dfa01f", "vToken": "0xc24b34a2241b7e1a009a0af672374108c3158825" },
+      "0xf3527ef8de265eaa3716fb312c12847bfba66cef": { "aToken": "0xaa84af1d9d52fcaeb2f1bea08446a40ee6965639", "sToken": "0xb933669990c2c9189687307a9953bbacf5781871", "vToken": "0xe2017c935b0859029ecfd858d4f67505db8ada84" },
+      "0x55d398326f99059ff775485246999027b3197955": { "aToken": "0x6ad8d45cd6830a5f72e71793f0f8925d4fb8042f", "sToken": "0x19dc7fe9e9a353bf2777edf1ad6960f4f8280734", "vToken": "0x5f1bbb29224a51b5e1f296087484edf501d3deeb" },
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": { "aToken": "0xd4c3c2fe42e9868cea6c7c85107e4cdb9e37d0eb", "sToken": "0x3740412b9d9a8d1128bf5b241ab9d16a9167aaab", "vToken": "0x42ec32b6275f044a2f81b10d4cd029b83dadd0b9" }
+    }
+  },
+  "AVALON_XAUM": {
+    "56": {
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": { "aToken": "0x9a02588ddff4d079cc5beb1b864b12410049288a", "sToken": "0xb765168e68936ce1c6dd03a56f0d4d70b833a5bc", "vToken": "0x02edffa0298313763803089e92e491c915e0e7dd" },
+      "0x55d398326f99059ff775485246999027b3197955": { "aToken": "0x0b37ee41a3b80431a444d7f3d9f0ede9023be000", "sToken": "0xd7470feb942daa7baee8b1ea807db7abe5d04447", "vToken": "0xcb4d00eaaf3562469a397994897e7384a124395a" },
+      "0x23ae4fd8e7844cdbc97775496ebd0e8248656028": { "aToken": "0x0ba2d99059e43f0437e28f9c5b5de1a736643ad0", "sToken": "0x55ce81413fa3df21a42ce54dd94762de58c3a664", "vToken": "0x812b06c9d2985eda494a1c8bba1f25a369f84848" }
+    }
+  },
+  "AVALON_LBTC": {
+    "56": {
+      "0xecac9c5f704e954931349da37f60e39f515c11c1": { "aToken": "0x18b424b44134ae47a7f68f59a854568789e8132b", "sToken": "0x5d149a1fdcbce0cb5dce6044fe9953c425c28fd2", "vToken": "0xa963e7e0870fd4869a1518eb40128f56f7adb934" },
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": { "aToken": "0x0ca8f4c7a8820aa3e1678dde67816bb27582fb67", "sToken": "0x4ff96c3631c4379e8e38f46eeb0120d1bca22b70", "vToken": "0xa8055d0a95efc2a0f1b5b1f17345203b11183f4e" }
+    },
+    "21000000": {
+      "0xecac9c5f704e954931349da37f60e39f515c11c1": { "aToken": "0x9586f42695b7cd2c451d6d361e9c08d04395bb07", "sToken": "0x4312af8a2f3a8313ded042de942e3ebbd4f0f6ec", "vToken": "0x591e6e66958a254e2c0133598bb9cb2ab5255c95" },
+      "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2": { "aToken": "0xf501e9153e4a14e2eb314c6383027179c9516db1", "sToken": "0x73135cf7b7f9eb6a5f3951150533b36af00e6b93", "vToken": "0xbb94cc4c4b96a60f3d2e508591f6cf8535422f83" },
+      "0xdf0b24095e15044538866576754f3c964e902ee6": { "aToken": "0x80d515b3c537896a8e2f5800bc9e55ff8cc4a377", "sToken": "0xa101a1014e84c2778e96c7fe877cd44f7d657867", "vToken": "0x7869e9e1600bd7f14c32d920573906a6daaf625c" }
+    }
+  },
+  "AVALON_WBTC": {
+    "56": {
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": { "aToken": "0xd381eaacbd0fbd3f06d9f8a668a8f3cae6a027f4", "sToken": "0x0738c89c28b149b06a1cc0595e1677288dc170b2", "vToken": "0xa6308152ec0cb8d7158fa98d7f3644cdf5d462ef" },
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8": { "aToken": "0xb5de799e18d291b4e9ad145ea7c10c74d4063f19", "sToken": "0xc306824985618fd945b5c24db420320e67396d14", "vToken": "0xa009058792c6ad29130bc4106c977428c5ebaf1d" },
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": { "aToken": "0xf01b9fb0199276790a3d7cef93c0683a9dd97744", "sToken": "0x6c093f61d05db65614d0b5504025d77868ad914f", "vToken": "0xafab2b9b98014f5707f63432770854178f2d2311" },
+      "0x55d398326f99059ff775485246999027b3197955": { "aToken": "0x038754f29f84b0bd891877d08b4b0481fc123f63", "sToken": "0x7f9c2243dab239ab1e07560998e8bbbdeec9858d", "vToken": "0xdda33db9464ebd6516274c808c13b37a5e645117" },
+      "0x0555e30da8f98308edb960aa94c0db47230d2b9c": { "aToken": "0x31964267dca022b4a6496c404679c8ca3d6e6b99", "sToken": "0x7854fb71189294c7774652495f16eb8ba6a99bf9", "vToken": "0xc14bae99f67e876c076bc566dbe4bcb633d005eb" }
+    }
+  },
+  "AVALON_LISTA": {
+    "56": {
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": { "aToken": "0xcde1b8bc80f971f1f09842b1ad824c48111b95dd", "sToken": "0xcde62fe4f736baa4e15f90cc7c97cd7b9b06a424", "vToken": "0x3b4b6c1757779ba05ef5946f5b9916a2678da2ee" },
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8": { "aToken": "0x5657e23f2802cfb7193f9dd49bc9c4a1bcecad2d", "sToken": "0x349d0d38495a0fe057caf92a572727f6e848329c", "vToken": "0x289a36392b0cc0717199748f6d881a005093e928" },
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": { "aToken": "0xe28339350c884a77f9194b58c149265e1c175f85", "sToken": "0xd4f31e1edb4d753fa56a5842edf30219c8f6f975", "vToken": "0x06c753347ed228773918400518d16597e9c488c4" },
+      "0x55d398326f99059ff775485246999027b3197955": { "aToken": "0x5525016cc03e336cf7dd46c193c90e5a3a80cce0", "sToken": "0xae80eb30a1ae25bf459cde7e1fc6e0fd7b4e75bd", "vToken": "0x81c7dd6531173044b015ec296b4579312190961f" },
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": { "aToken": "0xbc60701885a1393c26308a9ab12877b9f27de480", "sToken": "0x2029a8686fe24617a88479feb8ac7e7333fc7450", "vToken": "0x27114d631860a0df1ac2848c9e9218c0252fa04b" },
+      "0xfceb31a79f71ac9cbdcf853519c1b12d379edc46": { "aToken": "0xb371bca4217735c5df6d07a2101ab3942142265a", "sToken": "0x6b4d92a2a2b76eae607899bc0608f122d7a13edf", "vToken": "0xb72d4e761e0afa19c1b4819312e2684c81eeb496" },
+      "0xc5f0f7b66764f6ec8c8dff7ba683102295e16409": { "aToken": "0x6a9e4c20a9850308263b7d529f102a163958e9c5", "sToken": "0x65a55d9724ac52edb613864f60d9a6b7abb4bab5", "vToken": "0x3e41342d217183a673955b5766be573ad22960b0" },
+      "0xb0b84d294e0c75a6abe60171b70edeb2efd14a1b": { "aToken": "0x892c4250ce1c2f1ba41c6cab81f636fd8ee6fd88", "sToken": "0xbc6f78f15163ccdc26dc5ae33e8a9f06ece35314", "vToken": "0x665eeeb7fb2f63a772a91b1b6e1eb24f4df9d4b2" },
+      "0x0782b6d8c4551b9760e74c0545a9bcd90bdc41e5": { "aToken": "0x90e69ca775bc254fdb0d2b20749d980a903349a8", "sToken": "0x6e04462730fd51ba0f806ed3a53f3674274846ce", "vToken": "0xada976f1664228029674091bfc9a1dc206387a14" }
+    }
+  },
+  "AVALON_STBTC": {
+    "56": {
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": { "aToken": "0x4bcc83780cfda6ad663f4639c8430bb088cd74fe", "sToken": "0xa0169b051681bc0174eb8942746736be840d9afb", "vToken": "0xe479ef0e4ce928ed49877714ed97c12bc0a4a764" },
+      "0xf6718b2701d4a6498ef77d7c152b2137ab28b8a3": { "aToken": "0x52c6bb4fc974cf73c37a169f5d0dc88a76f52f5d", "sToken": "0x4ae77ff56d07fba1ff0acdd46065993221edb3a1", "vToken": "0xfd9d9c357443267c2ef210a12cd44c3f2c588a84" }
+    }
+  },
+  "AVALON_UNILOTX": {
+    "4689": {
+      "0xa00744882684c3e4747faefd68d283ea44099d03": { "aToken": "0x9a02588ddff4d079cc5beb1b864b12410049288a", "sToken": "0xb765168e68936ce1c6dd03a56f0d4d70b833a5bc", "vToken": "0x02edffa0298313763803089e92e491c915e0e7dd" },
+      "0x236f8c0a61da474db21b693fb2ea7aab0c803894": { "aToken": "0x0b37ee41a3b80431a444d7f3d9f0ede9023be000", "sToken": "0xd7470feb942daa7baee8b1ea807db7abe5d04447", "vToken": "0xcb4d00eaaf3562469a397994897e7384a124395a" }
+    }
+  },
+  "AVALON_BOB": {
+    "60808": {
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3": { "aToken": "0xd6890176e8d912142ac489e8b5d8d93f8de74d60", "sToken": "0xb05b8d868153d656eb40444b0333fb0dad464fb8", "vToken": "0xc319b085c78b55683bbdbe717a3aeb6858d5bac3" },
+      "0xbba2ef945d523c4e2608c9e1214c2cc64d4fc2e2": { "aToken": "0x5e007ed35c7d89f5889eb6fd0cdcaa38059560ef", "sToken": "0xaf84eb227e51dbbb5560f7cf507e3101ef98147b", "vToken": "0xf7d1f417712205d51350ae9585e0a277695d9dee" },
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77": { "aToken": "0x81392304a5be58e1eb72053a47798b9285eb948e", "sToken": "0xd684c4b6abeeaa5ca79f30d346719c727d2072d3", "vToken": "0x33d54cdd544bfdb408dabd916af6736ea5be867d" },
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c": { "aToken": "0x2e6500a7add9a788753a897e4e3477f651c612eb", "sToken": "0xe8fd5c5f889cd7fb67ea2b58e9246131fb2abb6a", "vToken": "0x5ee930400cc7675b301d57e38ae627822cafdf68" }
+    }
+  },
+  "AVALON_OBTC": {
+    "1116": {
+      "0x5832f53d147b3d6cd4578b9cbd62425c7ea9d0bd": { "aToken": "0x4d6faad7630e1b5e35de0d6c1e43834aa2b4be80", "sToken": "0x1c7e501b5d1273328847fc54fa33938cd2f6de84", "vToken": "0x0e3b48ccda6e547ce6411b22fb4909c379fb6ea3" },
+      "0x000734cf9e469bad78c8ec1b0deed83d0a03c1f8": { "aToken": "0x87fd795665b5ffbb3d547bb51734c025d0fbd1ff", "sToken": "0x91fb4e6265414d19ca35461a28398fc16089ee13", "vToken": "0xbb665c4582eeedf8e50f55fb1139e49c83ae93d6" }
+    }
+  },
+  "AVALON_UBTC": {
+    "1116": {
+      "0x5832f53d147b3d6cd4578b9cbd62425c7ea9d0bd": { "aToken": "0x0b7d80cc8dda70d2b1c4aa9935bc4625444de87d", "sToken": "0x11e7f21cb553a119047feec781ce1f699bbc6387", "vToken": "0xe95ad7eb372c3e267162500b2d0dbb5aa5cd89d0" },
+      "0xbb4a26a053b217bb28766a4ed4b062c3b4de58ce": { "aToken": "0x24a30623c0f281a3f609b1301e571da9a2775bc7", "sToken": "0x3445c170d07c1416f5af59b42d0a092bf62866b6", "vToken": "0x2038c26e95060969547d4cec4a949eddb82f3f0c" }
+    }
+  },
+  "AVALON_LORENZO": {
+    "200901": {
+      "0xff204e2681a6fa0e2c3fade68a1b28fb90e4fc5f": { "aToken": "0x70c65e0f9618604a8bd9047a32df2444e80669b9", "sToken": "0xc5d85103a76931424ec254e0814df911a2792274", "vToken": "0xa39f81095df0531e34d251056fabc901d04f66b2" },
+      "0xf6718b2701d4a6498ef77d7c152b2137ab28b8a3": { "aToken": "0xea5ce3b4a20c27436d9866620df331aa7fbce88a", "sToken": "0xdff1a8dff6fa073bb3e9c893260bef5f03c681aa", "vToken": "0x27a8f1e66fe35191443a6a9c9eb937236c83e588" }
+    }
+  },
+  "AVALON_BEETS": {
+    "146": {
+      "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38": { "aToken": "0xef360ea0d9f9c354ce5df48cdcfe2337c491afc9", "sToken": "0x818d4e6575d686b096d4ece2f572ce7a1e8cc893", "vToken": "0x6b900ead4addb843a57c50c77e0cce7efc648da5" },
+      "0xe5da20f15420ad15de0fa650600afc998bbe3955": { "aToken": "0x718aa85242149102262ef492bbdd1fa66e2b1aab", "sToken": "0x048327822dd0499b77b124153d01d7723a47a1ff", "vToken": "0xb4d5814efcb4bb65cfeb6ac93976c9e08b8298c5" }
+    }
+  },
+  "AVALON_INNOVATION": {
+    "4200": {
+      "0xb880fd278198bd590252621d4cd071b1842e9bcd": { "aToken": "0xaeb2b74c730fa1b1d677ca845e5e5c23be2d1e82", "sToken": "0xe987bcb0b79a12545af247153143ea60acb72754", "vToken": "0x0de878f7d7d72a82ca17cca430ecade6f189834b" },
+      "0x480e158395cc5b41e5584347c495584ca2caf78d": { "aToken": "0xfde83259c37d5ef194d26ca578a9f63a96a068a6", "sToken": "0x027a444d2afd8d95f4fca593d6d02a6c307b6025", "vToken": "0x45d5406ae6668335851781c292fd233542ec2f8b" },
+      "0x7a677e59dc2c8a42d6af3a62748c5595034a008b": { "aToken": "0xf99de300aa64faf4987fdac6268e092ba17e2527", "sToken": "0x3f5b70f2a2a9fc560f71ddd169d890dc9950ecda", "vToken": "0x22868bfb68a901a4aeaf6a7bf9ca9b010c31e4cf" },
+      "0x4dcb91cc19aadfe5a6672781eb09abad00c19e4c": { "aToken": "0x7b64c30c517b5a1cbd907611985a5ff5ca01f9b0", "sToken": "0x5f06b0cf96e846a9ff1171a98454eeabad003d05", "vToken": "0x76af72d3e4ff21b3aadfd9b88ee949fe222f35d4" },
+      "0x69181a1f082ea83a152621e4fa527c936abfa501": { "aToken": "0xc5fdf4d0bed781508675fa921baee71b23c875ab", "sToken": "0x2d564157c416fb6979699dbc114198314067f3b8", "vToken": "0xfd7a79c0f3c797539f9dbf8d42af67eec9cdf2c1" },
+      "0xbd40c74cb5cf9f9252b3298230cb916d80430bba": { "aToken": "0x9e918dfb9b0e756395e2e8e86e892364c1d804db", "sToken": "0x0f53a51d5548d8d327a302a5615560ca71055a28", "vToken": "0xac25fb3c99d1cb64d987faffcba9ffeb64fde36a" },
+      "0x7126bd63713a7212792b08fa2c39d39190a4cf5b": { "aToken": "0x203307e615d7eb459eeed83b5a900dc853f7e57d", "sToken": "0xce059fa3a0f0112054d4a77c4ce7482e16529fb6", "vToken": "0x91c8159129e049d43140b53509e09bddbc19c3a9" },
+      "0x27622b326ff3ffa7dc10ae291800c3073b55aa39": { "aToken": "0xa1e50d0303ce3e0f6114d3c6d610e7e0bfc6f92a", "sToken": "0x912f362b293629d587635ab04d3bfefa4ec148e1", "vToken": "0x1835343135602298aa798a87fdadcaaac5bb2437" },
+      "0x33c70a08d0d427ee916576a7594b50d7f8f3fbe1": { "aToken": "0x44d637a62ee64af6cc87a6fc8d877110c5738087", "sToken": "0x2ee3cfa015bbdb348c58da136acf88162e6f9ace", "vToken": "0x00d67a35707f6e2eb2efd006cfea41a7ce9923b1" },
+      "0x09401c470a76ec07512eeddef5477be74bac2338": { "aToken": "0x7ca6a097a5fa5c3c90be425e404247c5fb1c20ef", "sToken": "0xf3166638786e9b2d601231d23c49a236c130dc5a", "vToken": "0x946d8d84dc4d602b306db6ec16fdc88fd0aa58b9" },
+      "0x4920fb03f3ea1c189dd216751f8d073dd680a136": { "aToken": "0x28d05426331532d9a6e6c719f58ba022ea0c2e40", "sToken": "0x2d406426225bd2538b2ee612b4255f5c9ce4be58", "vToken": "0x5e0b994a8b412b27941d0711c8da2af0eac0a8f6" },
+      "0xb00db5faae7682d80ca3ce5019e710ca08bfbd66": { "aToken": "0x524ca87aa172286f72d7c75b4f19164c73e011f7", "sToken": "0x9ef4ec76492da47eec7148d379f875d189f41d5d", "vToken": "0xb8437b673ba5fb9e06ef3396d88134ef2f685e68" },
+      "0xa41a8c64a324cd00cb70c2448697e248ea0b1ff2": { "aToken": "0x729cc15fdb243a51b643a4b0f2a97b4763eb664a", "sToken": "0x05c89e5f2b6b4c539b8bd165b544de9f90109a29", "vToken": "0x29da8d6b7cec3312e1b05652476938711a09a578" },
+      "0x32a4b8b10222f85301874837f27f4c416117b811": { "aToken": "0xf6171ccbb2fa1bd9f08cd4ddf012696fcdec1bd9", "sToken": "0x6f257c732f836c0f64f95ff6dc1e5dbb116e9900", "vToken": "0xe8cdffea60e01adeb44c7521e27a455da4cea349" },
+      "0x5c46bff4b38dc1eae09c5bac65872a1d8bc87378": { "aToken": "0xb9dea832b5b734932f8bfba2d8d9fe2fc7f58430", "sToken": "0x31e438d7449995162142d5d95c59e724ebf5a7bf", "vToken": "0x3d3c17134a0f4d7b529fb5c05002f949313806af" }
+    }
+  },
+  "NEREUS": {
+    "43114": {
+      "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab": { "aToken": "0x92f79834fc52f0aa328f991c91185e081ea4f957", "sToken": "0x38e5b3ba108d7cc204db1873965c5442d6525c42", "vToken": "0x21cba92ce2cff49c3557fc97854bdc4f33d91690" },
+      "0xd586e7f844cea2f87f50152665bcbc2c279d8d70": { "aToken": "0x6ce0e6e81dc7a5d997e6169cd5f8c982da83e49e", "sToken": "0xd7215143d2e083464c2c2faa7958a2e7e7571666", "vToken": "0x12a2a382f84e21fca9a25caf2bb74ef453b5079e" },
+      "0xc7198437980c041c805a1edcba50c1ce5db95118": { "aToken": "0x29f511e6f62118b27d9b47d1acd6fdd5cd0b4c64", "sToken": "0x8d8ebd44bebf42eac0eec7252c129de73a5d79a3", "vToken": "0x61824d93f80bcaeb1ef4faf076b9e12ec49f5d1b" },
+      "0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664": { "aToken": "0x723191e7f8d87ec22e682c13df504e5e3432e53e", "sToken": "0x3b25ad77a16da4905513b2639d9857d129dc7521", "vToken": "0x385b7ba56a779c4f84e80506687add054d0be0e8" },
+      "0x50b7545627a5162f82a992c33b87adc75187b218": { "aToken": "0x3d8231ce419886a5d400dd5a168c8917aeeab25c", "sToken": "0x8ed258d46d24272e5aa206eb46f05a96bb720a82", "vToken": "0x62aa44df460c048b06ac50dae4c7aa56ebefa141" },
+      "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7": { "aToken": "0x6d9336ce867606dcb1aec02c8ef0edf0ff22d247", "sToken": "0x598b152acce4f811f8378b4d63f8b5933a96ba78", "vToken": "0x1eff4e26f7a7bb4fefa93f678de98971f6a75723" },
+      "0x249848beca43ac405b8102ec90dd5f22ca513c06": { "aToken": "0x073ac157ee4ba69f47e0ca8b99ebab0365ef23de", "sToken": "0xee0b9648626978cd1d2acd6e6c5b839c7a74ce2b", "vToken": "0xbdfc5aa69f781c56e592b4d7c7c5cbee8a20a771" },
+      "0x6e84a6216ea6dacc71ee8e6b0a5b7322eebc0fdd": { "aToken": "0xfaf3d4a4988c9a9209b1160a741907e1d552082b", "sToken": "0xd941c501d2ef885ce970fe6ca8b4c19ecf66fee8", "vToken": "0xf5d0e380f694056293cecce7235df5d1b7381ec9" },
+      "0xb599c3590f42f8f995ecfa0f85d2980b76862fc1": { "aToken": "0xfde88d24253474e02a32729159f4d6c14cffabb8", "sToken": "0x05fd5435d0307b5eae64ba311804105a92dcdfcb", "vToken": "0x74048560b06ca507f3804509ec9f5513211d390e" },
+      "0x47536f17f4ff30e64a96a7555826b8f9e66ec468": { "aToken": "0xb8f2cd4e08ec2f192cfb916b8c9a4308baaf3c90", "sToken": "0xf19655fa22bd8efd04a88ef0bc825263361a361f", "vToken": "0x771e2e1d0bfd4615cfa011f86f9ee30bb5453495" },
+      "0xfcde4a87b8b6fa58326bb462882f1778158b02f1": { "aToken": "0xab95ae6510c7415b7af4ae04674b408708c5bc72", "sToken": "0x821e1c1d9e2a87ec014991ce581cc50069ea5613", "vToken": "0xc46739c2d5854d6b40ca8f81233255a412a6216b" }
+    }
+  },
+  "KINZA": {
+    "1": {
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": { "aToken": "0x6bdcbef41ca2abe587ce7ccc895320e0061edba4", "sToken": "0xb40ae838b300f0d260ac2e915e339bbb616e28fb", "vToken": "0xcd74352a42940cdf07bf494babf2b289696f7a0c" },
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0": { "aToken": "0xf818fbb391f0e84b620d48d8c2c8345e59f605eb", "sToken": "0x7904647f8056c077c540f7a396137b2c1a8737f3", "vToken": "0xa4e3adba0308c4e12dfc9489f11200395537a29f" },
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110": { "aToken": "0x6679dfcbc9000dcf9a798b8f0f2b1c12d164cdd4", "sToken": "0xdc3c3a77a709605f07c500edd05c8a86defe5404", "vToken": "0xd025bbac4d3a7ab979dc0bb82f0466417d76e952" },
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": { "aToken": "0x0cf5a1ab4185c69ef715190b9c9f93b3b05ff55b", "sToken": "0x995dc3420a58943108a9229e0039a5f0920708b4", "vToken": "0xaf3b303f904cada1e4a648555f78735bb432106b" },
+      "0xd9a442856c234a39a81a089c06451ebaa4306a72": { "aToken": "0x5651bb75de3c78815d420602b4ce67d04a233873", "sToken": "0xbc0ae314a016e9b0bf92e9116fcee2071c3ec8a0", "vToken": "0x62c4405476250d28af421ca7839064ce4ad96b5f" },
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": { "aToken": "0xd7ecacf4cdae0c59cdd034c6f0d959e7933bfd6c", "sToken": "0x45d36490b0658ba7c05c3b994b4bb283a3a03cd0", "vToken": "0x2cf0f840d0dcc15daa37f4899371951b934c02ac" },
+      "0xae78736cd615f374d3085123a210448e74fc6393": { "aToken": "0x16e22798a2064adfaa09fd7c380d5ca8c895c296", "sToken": "0x9f941e3eef5baa6992e5ec141216da051b221684", "vToken": "0x240c6bab702ba827ed11a99df390326ad6662119" },
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": { "aToken": "0x89c15cade77cba4f5c78d1fa845b854623ad8696", "sToken": "0x1d21395b8fea4e0cc20f7b13ecffcee7a86255c1", "vToken": "0xa3c0a19b999ff397a4b3c62ca10611eee315f426" },
+      "0x6b175474e89094c44da98b954eedeac495271d0f": { "aToken": "0x75287853d44f263639af649283403ec39f895dab", "sToken": "0xd15d760bdf334b3c217cc7b341c91361b592e254", "vToken": "0xf8f0198a277f71f15d4e8c32ae533f36dfa3084a" },
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": { "aToken": "0x48dfa0f826e8026ba51342fff61e9584eccadf69", "sToken": "0x37d9d4dff739ac695ef6c5cbb1ebc4ebaec750da", "vToken": "0xe9e4064e4e4f7dacb787c5466dbca8579b9def2b" },
+      "0xdac17f958d2ee523a2206206994597c13d831ec7": { "aToken": "0xf96eb7018654082198da9be23dd8ab1cd05a175b", "sToken": "0x87a4c77f204b75fe758b61f03b803667f5ab2d24", "vToken": "0x271e7ba790dded05e5f1cffdf6f75d0e069c34db" },
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": { "aToken": "0x23a1e3281500ab6cf9f7cae71939a6cbfbe79435", "sToken": "0x7d9bf3bdcae5bdd09c23ccf93492bc86f04bc361", "vToken": "0x8b134d066242e74e65d7da62953350cce4d2d022" },
+      "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f": { "aToken": "0x31fd1bf3c7cd90b9bec6cde73fb51763365a5522", "sToken": "0x63e4d1fb7e0ea421915d4b9a224eb40b37152ef3", "vToken": "0xef0791c1906190977906a49f76d3270b4c03f0c4" },
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642": { "aToken": "0x022c0c5d172c91e7428867549db2a77aff86059a", "sToken": "0x6acaf88f5c16bd449162e7df7020ff12f6321f5a", "vToken": "0xb9ff21d4e4cbd1cee4c1cfd0f3c953d515d9b2c8" },
+      "0x73a15fed60bf67631dc6cd7bc5b6e8da8190acf5": { "aToken": "0x7aae11fac797e9b21794abd8132079cc64b6b4d4", "sToken": "0x781d2cf1b7bac969d6f67db80d2352759dc05953", "vToken": "0x992d2d8387b0cd432408907dd5eac70e18760e38" }
+    },
+    "56": {
+      "0xe9e7cea3dedca5984780bafc599bd69add087d56": { "aToken": "0x77800d2550d1115fb2cdbff440f85d98a1792139", "sToken": "0x985a6ce1d8a6fd51fad7685b36f278a1a85d4503", "vToken": "0x1e91220b7321767a7b1c2ba7584ee32bbbf278fd" },
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": { "aToken": "0x26c8c9d74eae6182316b30de9ac60e2adc9f4a04", "sToken": "0xdbfd649a8d5427d32742cc82e7ced5e81e42f74d", "vToken": "0x6dadaaf2d4a191db51854a60e4a6e23d3776eb16" },
+      "0x55d398326f99059ff775485246999027b3197955": { "aToken": "0xa1c7f76cbcdb87b17abf825ec2b5a1eb823e26f1", "sToken": "0x2e9481be233bb47a4bc79a4dba55d1dabde6c687", "vToken": "0xb82c3631081ee5d1339e77b46c3e476f1fdd4a19" },
+      "0x40af3827f39d0eacbf4a168f8d4ee67c121d11c9": { "aToken": "0xc65132d8289d39bccc3b0e72a8b901b8b180e7d9", "sToken": "0xfe59cf48605c6280065a30e54d223cb8fb232c66", "vToken": "0x0158d5a1d32f96f4ce68bed28f9addb0c43361e5" },
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": { "aToken": "0x95aae09ad8557126b169056b9bd0ff6b5456239d", "sToken": "0xb4f997e78cf3b1b69aa69f786303939f322dfad0", "vToken": "0x2682bd101e64f0367d3ac1261eb311eed8b7f751" },
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8": { "aToken": "0xfd087dd64fb79e749fd8c85c64096144118b9554", "sToken": "0xc8f32e6d09cab228467971dc63baca9ec48b3695", "vToken": "0xb5d9e75141dc6c264666782fa31c1b4330a5e6b4" },
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": { "aToken": "0xf5e0adda6fb191a332a787deedfd2cffc72dba0c", "sToken": "0x098591e7f7051388d5ad79146161105288bc73df", "vToken": "0xeabcda7cfb0780a028c1fd1162e52942b96fbe10" },
+      "0xa2e3356610840701bdf5611a53974510ae27e2e1": { "aToken": "0xb98eaf6ca73c13c7533daa722223e3dc32dd0ee5", "sToken": "0xee50f476af1c599a9b8ddbe1951f6b039e327994", "vToken": "0xb9755ecea9bb7080414b0a3a4c9504f985f3f9ad" },
+      "0x0782b6d8c4551b9760e74c0545a9bcd90bdc41e5": { "aToken": "0xc16bbfba00a2264aab2883c49d53833f42c80b95", "sToken": "0x85305e89cbf53744c59fd04c8a2513dd67aff724", "vToken": "0x00107060f34b437c5a7daf6c247e6329cf613759" },
+      "0xb0b84d294e0c75a6abe60171b70edeb2efd14a1b": { "aToken": "0xa79befa293c06396dc49f5f80c07c2f44862eefc", "sToken": "0xc80dffb9f13790e599af13829ded8b2125557037", "vToken": "0xee302680c91ea5773c7dc11f6d4a4096f22c1f04" },
+      "0xeeaa03ed0aa69fcb6e340d47ffa91a0b3426e1cd": { "aToken": "0x38fc72e24ea7372c9f9d842467c629680cdb6cbc", "sToken": "0x79d382b572df5f4a0c8cee50a05595dbb8ace3ce", "vToken": "0xb0298302028681e5d71f1e469842b3e4eafed04b" },
+      "0x45b817b36cadba2c3b6c2427db5b22e2e65400dd": { "aToken": "0xeeaa5aa3388d6a2796ac815447a301607b52d25f", "sToken": "0x8d20545bf6bfd29024d018062a06903276c6c683", "vToken": "0x23cfae853cdf08d3efe4817e2016dbe47b937d35" },
+      "0xcee8c9ccd07ac0981ef42f80fb63df3cc36f196e": { "aToken": "0xc5606c8a773f4399d52391830522f113a1448404", "sToken": "0x78625bdf48c2905fa30a53fa43816076a756ea6a", "vToken": "0x658823636ba31060382ea01cebb9b6b3ffe80985" },
+      "0x2dd73dcc565761b684c56908fa01ac270a03f70f": { "aToken": "0x9f65da9bd6bc7d14eacff42e918344784dfc2384", "sToken": "0xb9c9db2ee269bf6a155eae9060e769f13bc1daab", "vToken": "0x0d2ef920e4ddf573266ef9b6304407b64127e8b7" },
+      "0xf0daf89f387d9d4ac5e3326eadb20e7bec0ffc7c": { "aToken": "0x294c4a3eb851e7b6d296a5e8a250ade2a24dc40d", "sToken": "0x3810f111fb7e5861e5f66a8922758936c9a841ab", "vToken": "0x2a1431415f9f729c557e6c817eb80791e9d2c974" },
+      "0xc5f0f7b66764f6ec8c8dff7ba683102295e16409": { "aToken": "0x8473168406d620b5cf2fc55e80b6d331e737d2e1", "sToken": "0x17ce8aa97fb745bfb595ee5db22dfbdf41e68074", "vToken": "0x74afc76da686cac5ec786566e128cfe61822c055" },
+      "0x2416092f143378750bb29b79ed961ab195cceea5": { "aToken": "0x19136a96b202685a2768eb99068adf3341414bdb", "sToken": "0x8e48fa01c17760bc91de60af8af8a43b505f57a5", "vToken": "0xed692ba8dfabddcaeac2bb76f833e00906824874" },
+      "0x80137510979822322193fc997d400d5a6c747bf7": { "aToken": "0x96619fc54940e4147f2445b06be857e8f11f5e8a", "sToken": "0x41266eda9adecdece2cba377992c31cc2327db88", "vToken": "0xd197294763a82b930ab578491dfbd293846f759e" },
+      "0x64274835d88f5c0215da8aadd9a5f2d2a2569381": { "aToken": "0x9c6fae23fdfffbe1199babb11bc9a6859493a5a1", "sToken": "0x8ddc850430d96aa537bb5053950c9e031eed4b00", "vToken": "0x9cf92292c4d58745964c7ea076950438f519f3fb" },
+      "0x4aae823a6a0b376de6a78e74ecc5b079d38cbcf7": { "aToken": "0x446b2ab906c20f9aea62b03c86b332004eceaadc", "sToken": "0xd28cbc4a9fdcd05c75083a0412477f0e949cb653", "vToken": "0xa66ae2356735ec9cd35ede3ed87e556561ce462a" },
+      "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82": { "aToken": "0xa8d9bfcd2b4bb9c30794ad7d49ab1b8da2b9f700", "sToken": "0x8ede75b9793d258a31f7911be84c1c80d7962e79", "vToken": "0x55371316eb587078c5576f0f24597b1e92c5b208" },
+      "0x1346b618dc92810ec74163e4c27004c921d446a5": { "aToken": "0xe0169336403f03922bbf66ca01394e4191b87c78", "sToken": "0x29185275606acd18fe52d0df0ea8132c9c859635", "vToken": "0x910d7ce736ee2e7f108ad2fffea66d19a8179cbb" },
+      "0xf6718b2701d4a6498ef77d7c152b2137ab28b8a3": { "aToken": "0xe4c60c28943a7d8945683d5a6c15f59280a0d29e", "sToken": "0x063aa144af15367ab566913c2f4f41244a8630a4", "vToken": "0xe3c7183648dcae991425fe22117b37aca7e91d3f" },
+      "0x23ae4fd8e7844cdbc97775496ebd0e8248656028": { "aToken": "0xc390614e71512b2aa9d91afa7e183cb00eb92518", "sToken": "0xe188c03d384208551de30a748c6d870a9201c535", "vToken": "0xa5b7da4e275b1e8a5fa0b5c9088a937af5d565d2" },
+      "0x8d0d000ee44948fc98c9b98a4fa4921476f08b0d": { "aToken": "0xe48967b3ea41484cf70f171627948084cb796f5c", "sToken": "0xe0ec0caab656426be033cb0045be4517f7f595ab", "vToken": "0x7a07518d4bfcbf3baddf69718711345dd4907c19" }
+    },
+    "204": {
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x54c547d42b16eb2b6ab84be94c2dec2bd810df4c", "sToken": "0xf8492a69f5ab2f677f4ea1798aa10bc2837f2441", "vToken": "0x30c16485e6753c0ded57a9a49c86c08a968baf78" },
+      "0x9e5aac1ba1a2e6aed6b32689dfcf62a509ca96f3": { "aToken": "0x8934b92c2be79399ab78a06847cce8a5db5b07a2", "sToken": "0xc9f77e3fa84f188a3e587dba8764743e85c2319c", "vToken": "0x996908b0633710d0800326478ea0e14e2d7ef7cb" }
+    },
+    "5000": {
+      "0x5be26527e817998a7206475496fde1e68957c5a6": { "aToken": "0xa077eed346acc9dfa18c9ab7c9d76977495e27ce", "sToken": "0x54d02834d033158aa39d6cb44de2a5bb3ba75de4", "vToken": "0x03bf771b1ead173608625264b1702ef96378d875" },
+      "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9": { "aToken": "0x1b66b556fe5b75b327d8ec6cc1cb4a8b76963986", "sToken": "0x37491858e76a19f0e010b7bf69c673a260a1a5f1", "vToken": "0x8e5d37568b64e81d99c4fbeaf6981bf83da44bfe" },
+      "0x201eba5cc46d216ce6dc03f6a759e8e766e956ae": { "aToken": "0x6565b79a30f38199679ac604d4d0077a08a7f982", "sToken": "0xcf168d295fe13fc8a34dc9a4c9c8151c40a3173c", "vToken": "0x72a7fce2e6db4347dc9f0e92c81b3a62dea2d829" },
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34": { "aToken": "0xc1dc4f83788edaac72d41e0a2751a194882c86d2", "sToken": "0xadc60f68d003f48c80821f804b90a016d7a2c412", "vToken": "0x3f83be6e450a44ced037452185f83d5f8c910089" },
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111": { "aToken": "0x438af1fed30ee1c849e731878fa1901a6b61a723", "sToken": "0x5e493fbfc6edb28e736b4a47c3791c3cd9a2a79d", "vToken": "0x9b2b7b7c38fc3b70045f7e3cb282d30ae31dccde" },
+      "0xcda86a272531e8640cd7f1a92c01839911b90bb0": { "aToken": "0x9ac70a8142c616e23d4756268bbc4e6c55bc0d4b", "sToken": "0x55e29eafd72e2c0f54871f6b51f41c9292a2867a", "vToken": "0x9e83a5829072e251e5fdbcef89b953e670805b3b" },
+      "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8": { "aToken": "0x84bda98851b20ba5d5c39ce1a859a51370195624", "sToken": "0x67d993891aea01a3dfe250283d5a1aa5c8ea9917", "vToken": "0x59224ea7f07a7fb0cfea1fc57e8ed2bfe3bd14d9" },
+      "0xc96de26018a54d51c097160568752c4e3bd6c364": { "aToken": "0xb408192471491b4fcdf5483cfe66df9780e8fcdf", "sToken": "0x3a556faba96fb8cf0d1264f4094b108585993ecc", "vToken": "0x59f476dec1da0ca2d1a1cd7f43a5349cac5c7882" }
+    }
+  },
+  "ZEROLEND_STABLECOINS_RWA": {
+    "1": {
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": { "aToken": "0x3ce38a9e2403415c50661a3f78acf4d392320e7e", "sToken": "0xbbf306933b1a0e8f0f7e9e4cbc49cc83e2969ddf", "vToken": "0xda6991cf0eb96d29d42682bd201b678944bf9d6b" },
+      "0xdac17f958d2ee523a2206206994597c13d831ec7": { "aToken": "0x4aeafa9f24096bfe4b7354c16b2d34e2a7b92b78", "sToken": "0xf4bd886991234a94e7b1ef6d4032bb6373e27135", "vToken": "0xe7a632694dc4ac65583248aaf92fb5becb54011e" },
+      "0xdc035d45d973e3ec169d2276ddab16f1e407384f": { "aToken": "0x6125f4a075a793d53307f077d22671c57f4d1d1a", "sToken": "0x35d76f23ce40c91a9601f4d776195fde7c38b60c", "vToken": "0x2e15d7e91a4cdc41f7feb0e1060161ff53d8a388" },
+      "0x69000405f9dce69bd4cbf4f2865b79144a69bfe0": { "aToken": "0xc79b0af546577fd71c14641473451836abb6f109", "sToken": "0x391fd24c210dd0aa7d4c62309d30d8d9b6c718ee", "vToken": "0x8f3d01e68ce1c6c4d80d015c02fbc02eca2cd157" },
+      "0x939778d83b46b456224a33fb59630b11dec56663": { "aToken": "0x00cb081494bda5acbdda7e2740f9f8b2fbe61ee4", "sToken": "0xaac420348cf19c9f0a22ca424aaffa1766b57a9c", "vToken": "0x8f6e597e6972a1dd1844004543af0ea786f63e35" },
+      "0x73a15fed60bf67631dc6cd7bc5b6e8da8190acf5": { "aToken": "0xe4f3c29ae5fa179a86bb707d6aab3db2655edcee", "sToken": "0xfd9d36be93d02b04165f39ec27e1fcb4e3151533", "vToken": "0x69b43ff2cad50fa9a5d567a4a4c51f804fcf6b21" },
+      "0x35d8949372d46b7a3d5a56006ae77b215fc69bc0": { "aToken": "0xeb02a10b2d083b08365c59a8df01786236a29c5b", "sToken": "0xa00d15745da54b17e78efc4a1fc762f4561703b6", "vToken": "0x1178dfa1c6a1d7e9ed1347f13b50ca76a399f623" },
+      "0x270d664d2fc7d962012a787aec8661ca83df24eb": { "aToken": "0x905cb1537d65fd48a2068eda270ac2bd30376da6", "sToken": "0x988cd1d7c812896f81588f54ec4c1bcf55b468d4", "vToken": "0xc4a2a577deca52b7ce26fa7a3d2893db8429680d" },
+      "0x0022228a2cc5e7ef0274a7baa600d44da5ab5776": { "aToken": "0x529877d3e56991080161eb1751a4b96b7109504b", "sToken": "0x797f7efb3e4a6fbc12a80f68b804b478e375b40a", "vToken": "0x1453d1e45157b434178770a75bfeb6be0c2e5253" },
+      "0x5bae9a5d67d1ca5b09b14c91935f635cfbf3b685": { "aToken": "0x81f6494de3854cbd9d2f59dd98f4f1eca57bfca9", "sToken": "0x24fe0b5c92a1e3c184ec76c47fde06b5d4a25739", "vToken": "0x1247e1e295368c721ab8d8d48685eb4f143d432a" },
+      "0x9d39a5de30e57443bff2a8307a4256c8797a3497": { "aToken": "0xe24933aa6dfb66a32df7ea897a1818ecaabd54e1", "sToken": "0x647b33d0b4ef15c6198eefe7ab2f151a080b5fc5", "vToken": "0x04a4ef5f64b31ca668380f1f0306e87b3237dd88" },
+      "0x4c9edd5852cd905f086c759e8383e09bff1e68b3": { "aToken": "0x11cb6fd58eff7db834bf00469963f7643a319fc7", "sToken": "0xe4c5171b9c648bd37693c6e1dd0cff266fd0e2f6", "vToken": "0x934a8b117204e236d1b20b54efdababb141e67e8" },
+      "0x80ac24aa929eaf5013f6436cda2a7ba190f5cc0b": { "aToken": "0x4f5db48d5f352b3640bcad228f37d5c982ac1718", "sToken": "0x18b09afe507f865c3cee682c9c9af9cbc3cef59e", "vToken": "0x1fc0d61075c31b72172c8a2d01225ef330059853" },
+      "0x1a88df1cfe15af22b3c4c783d4e6f7f9e0c1885d": { "aToken": "0xa3f893ef2d974569dfb726b87779ed99cbe813ab", "sToken": "0x56bbeef5694c872adcc209c607a06f8de60b9985", "vToken": "0xc25ae3eb2e8c93852cc4aa2e54811b9cd44f73fd" },
+      "0xe00bd3df25fb187d6abbb620b3dfd19839947b81": { "aToken": "0xb73ca924bf3e1c2c5ac4d7718700650d706aad73", "sToken": "0x2f131e389445e7d6c44794192cae17a3cc9d189a", "vToken": "0x6e5b5334aa7156076f71a71472bc9e70efca8855" },
+      "0x8a47b431a7d947c6a3ed6e42d501803615a97eaa": { "aToken": "0x691ad41906e3fe78c3fe1328ecddc9bd7c0e5eb8", "sToken": "0xb182265117182989986fd6a693908deae69abcc2", "vToken": "0x985da6368e99afb371b01cb32e34a4d7b444f70f" },
+      "0x69000dfd5025e82f48eb28325a2b88a241182ced": { "aToken": "0x61c6e3081323c673d9e447a4f353f57fad2562ec", "sToken": "0x92400fdfde8eedeb7df6fb580a48b5a4ad54787c", "vToken": "0x9ef8dbac7eb158f16503675a96be3e392d83e505" },
+      "0x69000195d5e3201cf73c9ae4a1559244df38d47c": { "aToken": "0xe5df480329595dd4be082be548629c0e5420eb9f", "sToken": "0xd26cb0d7ddacb19392769218f4e379181898b92e", "vToken": "0x984a2c88f1d71bc6e415c36965fa155cb724980c" },
+      "0x4f8e1426a9d10bddc11d26042ad270f16ccb95f2": { "aToken": "0xc57c57523416671e494f4594a6926f39d255674b", "sToken": "0xc49c40f7018fa3c1e1c799434aca435a67d028a8", "vToken": "0xbbb1920b54f096c8ecf1ee9cf8d4726e5c86ac0e" },
+      "0x1ce7d9942ff78c328a4181b9f3826fee6d845a97": { "aToken": "0x798d024f96fb220f701f4aee3bc0ef5c64dd172e", "sToken": "0xd2c66e588b2917dc2cde8037b50a5a4c4a8215f1", "vToken": "0xbf9126198ee2ddf2c59b0b2db35844e600557edb" }
+    }
+  },
+  "ZEROLEND_ETH_LRTS": {
+    "1": {
+      "0x6b175474e89094c44da98b954eedeac495271d0f": { "aToken": "0x29a3a6af690942a3b7665bb2839a3f563c6f987b", "sToken": "0x8569052157069ed81f603001596ee8ae1c85e049", "vToken": "0x0047cac82cf5fb36954de1b9d86d657915ab3b47" },
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": { "aToken": "0xb2feb2c46305329a340e6188532f31fce9347a5c", "sToken": "0x7fae822dc0a2ae436ec10b83ae5686c008fca718", "vToken": "0x227f86fbfccb5664403b62a5b6d4e0e593968275" },
+      "0xdac17f958d2ee523a2206206994597c13d831ec7": { "aToken": "0x6c735966bc965bd4066c14fca3df443496ce14fb", "sToken": "0x14b0f7edb2471350dee88b1c423e0df25c37b638", "vToken": "0xdaccf47046ae4fee3f9f3bcfe68696a95db6ccb7" },
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": { "aToken": "0xfb932a75c5f69d03b0f6e59573fde6976af0d88c", "sToken": "0x346623faf3cd1dbe9024c1d160cd40e6a90092ed", "vToken": "0x7ef98cd28902ce57b7aeec66dfb06b454cda1941" },
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": { "aToken": "0x84e55c6bc5b7e9505d87b3df6ceff7753e15a0c5", "sToken": "0x4931dae3f419649931918d9e545d0f52cae0dbec", "vToken": "0x53c94fd63ef4001d45744c311d6bbe2171d4a11e" },
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110": { "aToken": "0x68fd75cf5a91f49effad0e857ef2e97e5d1f35e7", "sToken": "0x1e7f2afd1d534077656a0cfa7871358cb346f578", "vToken": "0x27c1706ddd2467622ca63aaec03332127919a690" },
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": { "aToken": "0xef4a41e692319ae4aa596314d282b3f2a3830bed", "sToken": "0x3af8bad4ca56afae60fa3a2f116cdea803c80fbc", "vToken": "0xe4fe2d282dead5759199df364f3f419dfac17339" },
+      "0xd9a442856c234a39a81a089c06451ebaa4306a72": { "aToken": "0xdd7afc0f014a1e1716307ff040704fa12e8d33a3", "sToken": "0x0155719a1401fdbaa62e7c6ccd46207a0de3282a", "vToken": "0xf99728a4b9f3371cfcf671099edf00f49b006125" },
+      "0xf951e335afb289353dc249e82926178eac7ded78": { "aToken": "0xb7cadc9cdfbbef6d230dd99a7c62e294fc44bfc6", "sToken": "0x9924462b20a93551efbec5eecc437b632b3cb48c", "vToken": "0xb04adaff2f221f63b977185f5a7d8ee49aacbaff" },
+      "0x8c9532a60e0e7c6bbd2b2c1303f63ace1c3e9811": { "aToken": "0xd9855847ffd9bc0c5f3effbef67b558dbf090a71", "sToken": "0x7333113ac92a86e7d562fbe9f03c62d2007cd295", "vToken": "0x8e3e54599d6f40c8306b895214f54882d98cd2b5" },
+      "0x7baf258049cc8b9a78097723dc19a8b103d4098f": { "aToken": "0x7740f60f773bc743ed76310ac1d054a4a4a17e7c", "sToken": "0x8983845311f9df4465b8a94713a2d5824b943251", "vToken": "0xb8d45c7fbbbc6e1d36bc1caa7d43dcc7d0513cfd" },
+      "0xf7906f274c174a52d444175729e3fa98f9bde285": { "aToken": "0xb2db477a6c198f5c524302bb67085f8f3ab06059", "sToken": "0x11acaa3c40a2885dbab3265df94272ecfeb2b8fb", "vToken": "0x8eb2f05a24b6859aadb5d26abbc129f53d10e934" }
+    }
+  },
+  "ZEROLEND_BTC_LRTS": {
+    "1": {
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": { "aToken": "0x1d5f4e8c842a5655f9b722cac40c6722794b75f5", "sToken": "0xff9e7b7b8ca570a0d655a6d6d2338721df51e505", "vToken": "0xa2962376f68edb09b08f9b433f4ecae8d3217eec" },
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642": { "aToken": "0x52bb650211e8a6986287306a4c09b73a9affd5e9", "sToken": "0x5cb91bead3a3e9ad4c030a13ef5c209dc41e4bd7", "vToken": "0x57c0fbfefa18c6b438a4eb3c01354640017bf154" },
+      "0xb997b3418935a1df0f914ee901ec83927c1509a0": { "aToken": "0x75351765d44e322681dceb691c85eace247e5627", "sToken": "0x10c71923abfdae4dbe5e78df23fd98f9787ecb80", "vToken": "0xcfbfcfdd63fb2305b433cbf433d7eba21d8bf0ea" },
+      "0x8236a87084f8b84306f72007f36f2618a5634494": { "aToken": "0xcabb8fa209ccdf98a7a0dc30b1979fc855cb3eb3", "sToken": "0xe2b6adeedccb6302397135aa8254b843103871ad", "vToken": "0x028cf048867d37566b60cee7822c857441dac9e7" },
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": { "aToken": "0x0ea724a5571ed15209dd173b77fe3cda3f371fe3", "sToken": "0xa8ce68264e58c0a0b2553a28890af090b0855b28", "vToken": "0x0519d972fdca215e6b555b0bb4d8d95704206b58" },
+      "0x332a8ee60edff0a11cf3994b1b846bbc27d3dcd6": { "aToken": "0xd9484f9d140f3300c6527b50ff81d46a9d53acca", "sToken": "0x59dff8a0c065722ee0c150780ffc2c4a0bb6f122", "vToken": "0xef25246cfa723fddfb54e87060a750fd5af8679e" },
+      "0xd9d920aa40f578ab794426f5c90f6c731d159def": { "aToken": "0x5d9155032e3cd6bb2c6b6a448b79bacb0ff01be9", "sToken": "0xfae48848b299553ea3061c0257a86e8b36b43e53", "vToken": "0x250d1435b02ddce933f73317feeba58f78861108" },
+      "0x2f913c820ed3beb3a67391a6eff64e70c4b20b19": { "aToken": "0xffb7fea7567e5a84656e4fcb66a743a8c62eef36", "sToken": "0x8cd349fefabe744e9ba136a705bccc196610a87c", "vToken": "0x7f9cf95f4b8cbdc754a797da420eaed2c6cd586a" },
+      "0xec5a52c685cc3ad79a6a347abace330d69e0b1ed": { "aToken": "0x813ff1cf08b381632d0087cc6d9e17ff73a7afc8", "sToken": "0x19936593a4cc9019a3a8d8f93ccd759097bf170d", "vToken": "0x479fd96c82ea46dd12244000ba8040c9461d71d9" },
+      "0x44a7876ca99460ef3218bf08b5f52e2dbe199566": { "aToken": "0xe2e3075c8962010e0d0b3a945c4671cc652ad5b7", "sToken": "0xd8eefcb25f18ed5b537a760e12424dcfa4306dbf", "vToken": "0x6f8d2d734a77616eb45b941d12cf7d989c483421" },
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e": { "aToken": "0x4bf0c3a20367fa710173e660ef7411b8b72e1795", "sToken": "0x9a76a2677a9f47f516137d338c6f1035966adc02", "vToken": "0x8ae28540b53b3a874ded303ddbc5a233d331f6c2" },
+      "0x18084fba666a33d37592fa2633fd49a74dd93a88": { "aToken": "0xbbf42226bf52241fbeaee2331817cfd8f678676c", "sToken": "0x0bc9726596a8c7d176382a75cff6715ec9c9cce8", "vToken": "0x7d3ee60d86fd918d5ab699c63093ce9566ffc8a9" }
+    }
+  },
+  "ZEROLEND": {
+    "169": {
+      "0x6fae4d9935e2fcb11fc79a64e917fb2bf14dafaa": { "aToken": "0x8b6e58ea81679eecd63468c6d4eaefa48a45868d", "sToken": "0x60c28a4cb4e78e9fee49bcaae3f4dbcde77f412f", "vToken": "0xf61a1d02103958b8603f1780702982e2ec9f9e68" },
+      "0xec901da9c68e90798bbbb74c11406a32a70652c3": { "aToken": "0x8d8b70a576113feedd7e3810ce61f5e243b01264", "sToken": "0x7675abdc6139dbf46d3bb5a3dcf79e6cad936765", "vToken": "0x3da71ad7e055ee9716bba4dac53e37cddf60d509" },
+      "0xb73603c5d87fa094b7314c74ace2e64d165016fb": { "aToken": "0xb4ffef15daf4c02787bc5332580b838ce39805f5", "sToken": "0x27c7733d7a0f142720af777e70ebc33ca485d014", "vToken": "0xcb2da0f5aece616e2cbf29576cfc795fb15c6133" },
+      "0xf417f5a458ec102b90352f697d6e2ac3a3d2851f": { "aToken": "0x759cb97fbc452bafd49992ba88d3c5da4dd9b0e7", "sToken": "0xb8e26f3c4afb4f56f430a390dc3f3b12f8a50b26", "vToken": "0xc1d9ca73f57930d4303d380c5dc668c40b38598b" },
+      "0x305e88d809c9dc03179554bfbf85ac05ce8f18d6": { "aToken": "0xe7e54ca3d6f8a5561f8cee361260e537bdc5be48", "sToken": "0x7c2e57764ec33292fe098636aaa5d0357d814d16", "vToken": "0xe6b9b00d42fa5831cce4e44d9d6d8c51ba17cd1e" },
+      "0x0dc808adce2099a9f62aa87d9670745aba741746": { "aToken": "0x0684fc172a0b8e6a65cf4684edb2082272fe9050", "sToken": "0xffa256ad2487c4d989c3dfa6a6e9c13fe33beba4", "vToken": "0xcc7b5fd2f290a61587352343b7cf77bb35cb6f00" },
+      "0x2fe3ad97a60eb7c79a976fc18bb5ffd07dd94ba5": { "aToken": "0x0ab214f127998a36ce7ab0087a9b0d20adc2d5ad", "sToken": "0x28d7246cd9da102c75faa7d4cf1c5399b323f084", "vToken": "0xb5eef4df2e48fb41e6eae6778c14787baaa181f1" },
+      "0xbdad407f77f44f7da6684b416b1951eca461fb07": { "aToken": "0x77e305b4d4d3b9da4e82cefd564f5b948366a44b", "sToken": "0xba832bc55af97867170271f3afeab5eba1405ebc", "vToken": "0x5f62aea5549cdf5dc309255946d69e516a9c2042" },
+      "0x95cef13441be50d20ca4558cc0a27b601ac544e5": { "aToken": "0x03114e4c29ea95bf26108c2c47338488555ced1a", "sToken": "0x7101ff22ea63464cc106e0a3274ef4a2d28cd292", "vToken": "0x061ca6fdf24d586ee9a4e4b4a1d61f9090ab48e9" }
+    },
+    "196": {
+      "0xc5015b9d9161dca7e18e32f6f25c4ad850731fd4": { "aToken": "0xa8184c63fd78ebaed24e8f9d1c3d322357b4aedc", "sToken": "0xd9dd8c0df3ccdc87d0c24afe9a5d94c68e6eb9f8", "vToken": "0xa0e48fe416ff74ae711b01540ff2144e3a1a9171" },
+      "0x74b7f16337b8972027f6196a17a631ac6de26d22": { "aToken": "0x8c2399b1b6cdeee1dce3d211660536abb6a19eae", "sToken": "0xa316d2a934c2ed41d3f2d8a5ee99adae92008263", "vToken": "0xe6c189b3f6cdf47184dc6dd59b28fef0d0862b39" },
+      "0x1e4a5963abfd975d8c9021ce480b42188849d41d": { "aToken": "0x6d7df47e72891c0217761b7f9a636fdbb7ad28cb", "sToken": "0x19796424b4af33460294ffd616f6c422fc61410a", "vToken": "0xca63175f32ab1962eeefd80734ad2dc360292c3c" },
+      "0xea034fb02eb1808c2cc3adbc15f447b93cbe08e1": { "aToken": "0x11f1e8ad126d19f58947cf4555118c456aff2a41", "sToken": "0x9a01ff3a7459a75c46f8c407ba50031f830516c0", "vToken": "0x0c87ca5de4b9313d15337cdc0dbde5f835558bde" },
+      "0x5a77f1443d16ee5761d310e38b62f77f726bc71c": { "aToken": "0xb85018b38030e51745b97e4d1f7814ad724c932a", "sToken": "0xe1b1167655b52782e8660bb04bc93ce3fa6f241f", "vToken": "0x0d78fac08b5dc929219ed534df28ce3616d8b9de" },
+      "0xe538905cf8410324e03a5a23c1c177a474d59b2b": { "aToken": "0xdb32fcf62fc0f8720944f136a72c47c17929c877", "sToken": "0x9e5a96adeed6f94adbf76f0e50f630a62769d1e1", "vToken": "0x099963068180e0f616a0040f31144b4f6218a1fc" },
+      "0xd077abe1663166c0920d41fd37ea2d9a00fabd40": { "aToken": "0xed68d1ae4edb847ff62398b0003a5d8c31670efb", "sToken": "0x54c63a74068aa0a43fac05771d00857a7bedad0f", "vToken": "0x9328632d4b0dec7055c32a42cf08d9daa16330a9" },
+      "0x5a7a183b6b44dc4ec2e3d2ef43f98c5152b1d76d": { "aToken": "0x4d63006426acbc2ca59d92025403f821f3bc4603", "sToken": "0x21786646667964ac7d402ceea87f251fa1dd65d4", "vToken": "0x1ad866cce39698861a0a8f1e4c9b71afea23e15d" },
+      "0x80137510979822322193fc997d400d5a6c747bf7": { "aToken": "0x9cb22ee01f5b75cb6ed8f94cc53103bf8b31341e", "sToken": "0x905449d38c6945192a23abc17cbd2395d3b72538", "vToken": "0x087bd20a1efc11c78aacc8246edac67f871a2a8b" },
+      "0x5a71f5888ee05b36ded9149e6d32ee93812ee5e9": { "aToken": "0x8fb68c7367ecd7086aaffb4b614cc793e8db6cf6", "sToken": "0x98d55416e44f47fa3be059da597d6b4bc610fbe0", "vToken": "0xab9d326dbb9c17da56fba2af61895ac3fcd6bd67" }
+    },
+    "324": {
+      "0x3355df6d4c9c3035724fd0e3914de96a5a83aaf4": { "aToken": "0x016341e6da8da66b33fd32189328c102f32da7cc", "sToken": "0x5fac4fd2e4bce392d34600d94aa1114274e54dff", "vToken": "0xe60e1953af56db378184997cab20731d17c65004" },
+      "0x5aea5775959fbc2557cc8789bc1bf90a239d9a91": { "aToken": "0x9002ecb8a06060e3b56669c6b8f18e1c3b119914", "sToken": "0x9c9158bff47342a20b7d2ac09f89e96f3a209b9b", "vToken": "0x56f58d9be10929cda709c4134ef7343d73b080cf" },
+      "0x493257fd37edb34451f62edf8d2a0c418852ba4c": { "aToken": "0x9ca4806fa54984bf5da4e280b7aa8bb821d21505", "sToken": "0x6f977fd05962d67eb7b16b15684fbea0462f442d", "vToken": "0xa333c6ff89525939271e796fbde2a2d9a970f831" },
+      "0x90059c32eeeb1a2aa1351a58860d98855f3655ad": { "aToken": "0x52846a8d972abbf49f67d83d5509aa4129257f46", "sToken": "0x10eb1198b55e709309d1e6c94dbee2b9b4977924", "vToken": "0x77dced4833e3a91437ed9891117bd5a61c2ad520" },
+      "0x503234f203fc7eb888eec8513210612a43cf6115": { "aToken": "0xd97ac0ce99329ee19b97d03e099eb42d7aa19ddb", "sToken": "0x029214a5cd528433b8a4eccd7ef798210db3518c", "vToken": "0x41c618cce58fb27caf4eeb1dd25de1d03a0daac6" },
+      "0xbbeb516fb02a01611cbbe0453fe3c580d7281011": { "aToken": "0x7c65e6ec6feceb333092e6fe69672a3475c591fb", "sToken": "0x3f574632d049f7cded52c529238e5c530e589b36", "vToken": "0xabd3c4e4ac6e0d81fcfa5c41a76e9583a8f81909" },
+      "0xfd282f16a64c6d304ac05d1a58da15bed0467c71": { "aToken": "0x54330d2333adbf715eb449aad38153378601cf67", "sToken": "0xba0ba840a827aa9f3c5ec0e6e13e6bb4dd026dde", "vToken": "0x963cc035edd4bc0f4a89987888304580dfa9be60" },
+      "0x2039bb4116b4efc145ec4f0e2ea75012d6c0f181": { "aToken": "0xb727f8e11bc417c90d4dcaf82eda06cf590533b5", "sToken": "0xd47c789f91cef19c124d53087d99860ce34be4a5", "vToken": "0x3e1f1812c2a4f356d1b4fb5ff7cca5b2ac653b94" },
+      "0x4d321cd88c5680ce4f85bb58c578dfe9c2cc1ef6": { "aToken": "0x2b1bbe3ba39b943eeef675d6d42607c958f8d20f", "sToken": "0xeea10809dd23febf628003b4b998821bc6af4217", "vToken": "0x0eede84dd0dea309382d23dd5591077127759a77" },
+      "0x240f765af2273b0cab6caff2880d6d8f8b285fa4": { "aToken": "0xdb87a5493e308ee0deb24c822a559bee52460afc", "sToken": "0xea8d6ce63498dda36a58374106fd6dd3bed9dff7", "vToken": "0x1f3da58fac996c2094eec9801867028953a45325" },
+      "0x99bbe51be7cce6c8b84883148fd3d12ace5787f2": { "aToken": "0x1f2da4ff84d46b12f8931766d6d728a806b410d6", "sToken": "0xba15a3ac405c7311dd1234bfc21cc9e1f5c1b52f", "vToken": "0x9bad0035b31c0193fed4322d1eb2c29aead799f8" },
+      "0x0e97c7a0f8b2c9885c8ac9fc6136e829cbc21d42": { "aToken": "0xc3b6d357e0beadb18a23a53e1dc4839c2d15bdc2", "sToken": "0x0b272319cf39cf5fa8d2976d54189dade1e90c2c", "vToken": "0xa734abe2a512dabf23146c97307cfc5b347ae50a" },
+      "0x4b9eb6c0b6ea15176bbf62841c6b2a8a398cb656": { "aToken": "0x15b362768465f966f1e5983b7ae87f4c5bf75c55", "sToken": "0xb6abb4183b98a2a85e1d8e9ac93542446461e2d7", "vToken": "0x0325f21eb0a16802e2bacd931964434929985548" },
+      "0x3a287a06c66f9e95a56327185ca2bdf5f031cecd": { "aToken": "0x0a2374d4387e9c8d730e7c90eed23c045938fdbb", "sToken": "0x033599b0bc6012be8cd08b258569773b610e680b", "vToken": "0xf001d84605b2e7dbaaec545b431088bbf8e21dea" },
+      "0x703b52f2b28febcb60e1372858af5b18849fe867": { "aToken": "0xe855e73cad110d2f3ee2288d506d6140722c04c7", "sToken": "0xad99d8aafb6aaa110e7883f0b91ab912219f965d", "vToken": "0xa351d9eb46d4fb3269e0fe9b7416ec2318151bc0" },
+      "0x5a7d6b2f92c77fad6ccabd7ee0624e64907eaf3e": { "aToken": "0x072416442a0e40135e75c0eefb4be708b74b6c8a", "sToken": "0x09990d77de57895c9227321811afe2d6f3c8b55c", "vToken": "0x863cd5f43a50e1141574b796d412f73232cba60c" },
+      "0xe757355edba7ced7b8c0271bba4efda184ad75ab": { "aToken": "0xafe91971600af83d23ab691b0a1a566d5f8e42c0", "sToken": "0xf84e6afeab770e08299f20c1f039de2c07175a12", "vToken": "0x8450646d1ea5f4fef8ab6af95cffbb29664af011" },
+      "0x1d17cbcf0d6d143135ae902365d2e5e2a16538d4": { "aToken": "0x9e20e83d636870a887ce7c85cecfb8b3e95c9db2", "sToken": "0x8f44d6ab626b2c3831b9a0d84322961e20d94b26", "vToken": "0x5c9fa0a3ee84cbc892ab9968d7c5086cc506432d" },
+      "0xa900cbe7739c96d2b153a273953620a701d5442b": { "aToken": "0x76d2f67698b7bd6ec78262e4170de089b9bb7549", "sToken": "0xde4ea959ffa449e516287e77da69d10447c6e02d", "vToken": "0x27024aec8e3b9e1b2b255b982e4f2b1fecfbb2a3" },
+      "0xc1fa6e2e8667d9be0ca938a54c7e0285e9df924a": { "aToken": "0x05ef103f8ea305f71f037af636bcf68f8ae047c5", "sToken": "0x4376bef9f6f3342f8b94a1cd520c13f4704e417c", "vToken": "0x06f7b47194b9956d0eac62adf0827752a29c08f5" },
+      "0x0469d9d1de0ee58fa1153ef00836b9bbcb84c0b6": { "aToken": "0xe2b026b30dea792e56201308bd566c1e1f43fb2c", "sToken": "0x01c8c65d352b7c0e7d3a3f45f21b4cb66f41d8db", "vToken": "0xd3cee59667ac8ee5a1e2fbff75e3f3195811885b" }
+    },
+    "2741": {},
+    "8453": {
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x4677201dbb575d485ad69e5c5b1e7e7888c3ab29", "sToken": "0xb375197dc09e06382a05be306df6a551f08a3b7b", "vToken": "0xfec889b48d8cb51bfd988bf211d4cfe854af085c" },
+      "0x940181a94a35a4569e4529a3cdfb74e38fd98631": { "aToken": "0x3c2b86d6308c24632bb8716ed013567c952b53ae", "sToken": "0xe37b9dd1cdf9f411a9f6bb8d0c1fa2af6b960a47", "vToken": "0x98ef767a6184323bf2788a0936706432698d3400" },
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913": { "aToken": "0xd09600475435cab0e40dabdb161fb5a3311efcb3", "sToken": "0x1d32fd6f0dda3f3ef74e5bc3da3166febdd698b5", "vToken": "0xa397391b718f3c7f21c63e8beb09b66607419c38" },
+      "0x0a27e060c0406f8ab7b64e3bee036a37e5a62853": { "aToken": "0x2e1f66d89a95a88afe594f6ed936b1ca76efb74c", "sToken": "0x6017b28d5b8a46474673ad7a4914318ad5e6db5e", "vToken": "0x5e4043a302a827bfa4cb51fa18c66109683d08ee" },
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22": { "aToken": "0x1f3f89ffc8cd686cecc845b5f52246598f1e3196", "sToken": "0x65d178978a458ff3ca39bc3df3ad9d0a0957d1bd", "vToken": "0x371cfa36ef5e33c46d1e0ef2111862d5ff9f78cd" },
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": { "aToken": "0x4433cf6e9458027ff0833f22a3cf73318908e48e", "sToken": "0xf29fab0a70ad1f8aa88b2b389d4c84083f73301e", "vToken": "0x7e1b2ac5339e8bba83c67a9444e9ee981c46ce42" },
+      "0x6cdcb1c4a4d1c3c6d054b27ac5b77e89eafb971d": { "aToken": "0xb6ccd85f92fb9a8bbc99b55091855714aaeebfee", "sToken": "0xcd18e7d74d8ae9228c3405149725d7813363fcde", "vToken": "0x80e898e5ad81940fe094ac3159b08a3494198570" },
+      "0x1097dfe9539350cb466df9ca89a5e61195a520b0": { "aToken": "0x89bb87137afe8bae03f4ab286de667a513ceebdd", "sToken": "0x6bb22ac00925f75e0a089178835cb98239b0ad30", "vToken": "0x6b0b75c223ddd146b213ef4e35bc61d1de7b46a4" },
+      "0x04d5ddf5f3a8939889f11e97f8c4bb48317f1938": { "aToken": "0x9357e7f1c49e6d0094287f882fc47774fd3bc291", "sToken": "0xa5760c5e8927ddff5fe77719890522d5432a7c3a", "vToken": "0x19887e3d984cbbd75805dfdbc9810efe923b897f" },
+      "0xe31ee12bdfdd0573d634124611e85338e2cbf0cf": { "aToken": "0xf382e613ff8ee69f3f7557424e7cfd48792286c5", "sToken": "0x1f69f0a0204f059527eae5df451460a1cbe4b54f", "vToken": "0x591d8d962278bd35182decb2852de50f83dd29d0" },
+      "0xdbfefd2e8460a6ee4955a68582f85708baea60a3": { "aToken": "0xe48d605bb303f7e88561a9b09640af4323c5b921", "sToken": "0xe126b8ecaf14c5485b31dfdc29241d0f9141be73", "vToken": "0xd6290195faab4b78f43eb38554e36f243218f334" },
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e": { "aToken": "0x4759417285100f0a11846304af76d1ed8d9ad253", "sToken": "0xe4616a793e4533c1b3069afd70161c31fd323b5a", "vToken": "0x95beb0d11951e3e4140f1265b3df76f685740e18" },
+      "0x7fcd174e80f264448ebee8c88a7c4476aaf58ea6": { "aToken": "0x134efc999957fc7984c5ab91bc7ec0f0d373b71e", "sToken": "0xe3f7084849029144233f00036611245d638033ed", "vToken": "0x1c7f3d9d02ad5fefd1a8feed65957be1ea5f649c" },
+      "0xecac9c5f704e954931349da37f60e39f515c11c1": { "aToken": "0xbbb4080b4d4510ace168d1ff8c5cc256ab74e1fb", "sToken": "0x33a0a85a3f184e75333b8c25307acfb9a5e4cb57", "vToken": "0x8307952247925a2ed9f5729eaf67172a77e08999" },
+      "0xe46c8ba948f8071b425a1f7ba45c0a65cbacea2e": { "aToken": "0xfc68bfbf891c0e61bc0dba0a2db05632e551e570", "sToken": "0x34793c55a62c345edd897b01d1cc78418167cac0", "vToken": "0x053cf31de7d82deac8e026ac2078bf7d9d3eab14" },
+      "0x5d746848005507da0b1717c137a10c30ad9ee307": { "aToken": "0x09ff10b3bd188eaf1b972379cc4940833361e5a8", "sToken": "0x5b8aa69c812bcf29040ec1119b0d8c6dac4122c3", "vToken": "0xa59ba82be54926368407f67fc80a26e4768b6dd1" },
+      "0x69000dfd5025e82f48eb28325a2b88a241182ced": { "aToken": "0xb2de5acea05a42b05d05bcf252a2e15a3c93c19e", "sToken": "0x93503ecc378f723a1520bed1b24e906db6cc8801", "vToken": "0xc9fcd2e88662191706657adc69a3cbdd641d53ae" },
+      "0x35e5db674d8e93a03d814fa0ada70731efe8a4b9": { "aToken": "0x9e08e9119883f9ffc59f97bbab45340f4da0db39", "sToken": "0x52582bc17928f6a0f365728fa715649367455d05", "vToken": "0x4dfa4449f0ddd7fdea916d1242acd8a7f78259df" }
+    },
+    "43111": {
+      "0xaa40c0c7644e0b2b224509571e10ad20d9c4ef28": { "aToken": "0x0300fae55cee71a38fd80df46ed005dbb40b11d7", "sToken": "0x65c2dd0af6c8fc10b2ca7d228c024c718e5efb83", "vToken": "0xab3a8aeeafcfaeee357db1a92f44587d70a7ad60" },
+      "0x9bfa177621119e64cecbeabe184ab9993e2ef727": { "aToken": "0x65394234796c6df1f1749cc86959162faba3c9ff", "sToken": "0x57576485bef9683c0bcd1714401b57ade6629e72", "vToken": "0x5f9d238dbadeabfc4300d7086f7c9fefad1301bd" },
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e": { "aToken": "0x341f4b7f8ef76d7d8ff024cca0aa4ea16371dfef", "sToken": "0xf4ceb2416f2d028caa0aa3f01b11fc6bd7774f13", "vToken": "0xdc44c343824798f57fa294cf521a864b04dd1bee" },
+      "0xc3eacf0612346366db554c991d7858716db09f58": { "aToken": "0x93101c75ba01877d5719bf1063129995fd552982", "sToken": "0xb6ff6bee848c1de0651ee838f16ec63a78b061f4", "vToken": "0x961a14baa7110939eda43cebc61197087d26fe75" },
+      "0xad11a8beb98bbf61dbb1aa0f6d6f2ecd87b35afa": { "aToken": "0x9d6256c132ede5cef0c0f2041e81831ae1ea5838", "sToken": "0xa7c5eae8042564df81518bd1f994ac84b53babe3", "vToken": "0x9076292c7203ba41a03dc59758ac4321ea54cc03" },
+      "0xbb0d083fb1be0a9f6157ec484b6c79e0a4e31c2e": { "aToken": "0xa9d26645559c765190d6d72370fd68c084bc56d3", "sToken": "0x62eb4696ba6bc9978b36c7dad4eed2a1e518c871", "vToken": "0x4852f3d4986f25e71379db7cd41db7d6c44ecfa9" },
+      "0x7a06c4aef988e7925575c50261297a946ad204a8": { "aToken": "0x007a47d8e27cd142e300737296121ad11ffefd8e", "sToken": "0x8f3e2c8c4c66fb473227ff4679bc6e2e398995a5", "vToken": "0x02c20e02b8f5fb96ff975e0fc3f5e852e8936638" },
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3": { "aToken": "0x4cd05d0b76e0bd902494ac41f76970b0516fe284", "sToken": "0xa27ebaad7a92e5579dd248f6b6b1f8d2cf415007", "vToken": "0x15f1ffa884dd3635972b963db9ca6c00f60b2ed8" },
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x568059251e0fc2df2558671507ef5d7a59dcc6c3", "sToken": "0x2d861763d7416b0d693badc1a358f727e99c9e88", "vToken": "0x0c5e1e5d86c208cc3a6282bef3859cedfbcb65c1" },
+      "0x93919784c523f39cacaa98ee0a9d96c3f32b593e": { "aToken": "0x9dd7af507b64dcc08d22d5bfc5ad682fa19fbe26", "sToken": "0xc5ddfebface7eedeff36666071ed84123c75d973", "vToken": "0xb160a2667e2a491aafc2c00e631ab54791d99b01" },
+      "0xf9775085d726e782e83585033b58606f7731ab18": { "aToken": "0xcc6485fb5fb3f939f59580091f290b432024b674", "sToken": "0xd235a0bebbd42feaf6146ac41b39c0b423f2bdaa", "vToken": "0x53a20a4150786c2e0e2645b42cdeaba0e6c45394" }
+    },
+    "48900": {
+      "0x4200000000000000000000000000000000000006": { "aToken": "0xe4d979a39aaf84757c06a6843f549aaf93921498", "sToken": "0xa7698fd08d5cf5a4e8113bf5f54cee35ff70c035", "vToken": "0xc669e9570014a8139504e300f7308f172af06124" },
+      "0x2416092f143378750bb29b79ed961ab195cceea5": { "aToken": "0x273c0d86c1a7f0f365d19b265210059c5fb9b2e1", "sToken": "0xa620ab4b297fa515a7e9e1ab5fc747d44c1e7ad8", "vToken": "0xd431f76ad34d1be98435661d9fe1755ba957e34f" },
+      "0x3535df6e1d776631d0cba53fe9efd34bcbdceed4": { "aToken": "0xa4e3a07be0c49f84e3467f32824c1e075b0b7939", "sToken": "0x040c2f04058b80e0bd978c1e6eef4702fb9e4457", "vToken": "0x201bfbd89fe6ed6813c81420e9628459009b6e9d" },
+      "0x4b03831043082e3e5191218ad5331e99aaac4a81": { "aToken": "0xeae490592cd82b7ac038565b1f55f8ffda86b4b2", "sToken": "0xd4ffdb36e220b1685710be1d78ac7ba4988a0314", "vToken": "0xf30362aacd4c7e7b3c42c30f01bbd854a5a04b6e" },
+      "0x1c1fb35334290b5ff1bf7b4c09130885b10fc0f4": { "aToken": "0x9262eaf2d85da1733bf5db1e847165e00fa6508c", "sToken": "0x13388b4fb0367e64f8a2ce4e58b47edbacdb6fea", "vToken": "0xac5ee931538fa57d54af226927e18229fd8e3f8f" },
+      "0x4bcc7c793534246bc18acd3737aa4897ff23b458": { "aToken": "0x8aff6d7e9dbf66a23e10d6622d569683ecd58392", "sToken": "0x15ee531bdc57827f6349473e1b3fbf4d3eecdd9c", "vToken": "0x4c47e5f6f6c3c416ceb49de20a6f4d1f3fdb5a6b" },
+      "0x4186bfc76e2e237523cbc30fd220fe055156b41f": { "aToken": "0x20bf3382a3d1bde527b6f834ff872813b4a04f10", "sToken": "0x4e1dcfe916d299b21bb7dfc9b3b331f62b091264", "vToken": "0x59b520efc1c6d4604451ebd357a21c09a09d4e1f" },
+      "0x46dda6a5a559d861c06ec9a95fb395f5c3db0742": { "aToken": "0x0b1de50cb3238ec0cbd82cc6f80dee27901e6809", "sToken": "0x50e45ab181e6a6813b4c49fcf7f2b01c8057aa20", "vToken": "0x203edd0f2df99d47a15afe0d5b0856b92260b9a5" },
+      "0x3b952c8c9c44e8fe201e2b26f6b2200203214cff": { "aToken": "0x0885a3a0abb4a530815b8da6fb0db88332b6dfa8", "sToken": "0x9113dbadfff93920cae164a2ae8cc751039f2074", "vToken": "0xca4c0010c55acd28eeba83c37f79de4be56e56f1" },
+      "0x19df5689cfce64bc2a55f7220b0cd522659955ef": { "aToken": "0x6f025be4f5e80662d2925fcffdeed636507805ea", "sToken": "0x67eefbbc80a860d73806808c274e047891e298ee", "vToken": "0x565a46a9b9e1bd26fb9b2eebbc47ea7e65adf419" },
+      "0xfd418e42783382e86ae91e445406600ba144d162": { "aToken": "0xb22b4c8651afbee80d0e413ffe73ac6463d07fc5", "sToken": "0xea8e96bffcf8011c9e97951abd769dfeafb2da4d", "vToken": "0xa3c3f2e326ba7253531718efeafa5bb80067468e" }
+    },
+    "59144": {
+      "0x176211869ca2b568f2a7d4ee941e073a821ee1ff": { "aToken": "0x2e207eca8b6bf77a6ac82763eeed2a94de4f081d", "sToken": "0xd07e6a4da4e360ba6edde42ce7867051ea4be024", "vToken": "0xa2703dc9fbaccd6ec2e4cbfa700989d0238133f6" },
+      "0xa219439258ca9da29e9cc4ce5596924745e12b93": { "aToken": "0x508c39cd02736535d5cb85f3925218e5e0e8f07a", "sToken": "0x607f422f2e2de0fd1b084223ed16ae51c2453b06", "vToken": "0x476f206511a18c9956fc79726108a03e647a1817" },
+      "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f": { "aToken": "0xb4ffef15daf4c02787bc5332580b838ce39805f5", "sToken": "0x27c7733d7a0f142720af777e70ebc33ca485d014", "vToken": "0xcb2da0f5aece616e2cbf29576cfc795fb15c6133" },
+      "0xf3b001d64c656e30a62fbaaca003b1336b4ce12a": { "aToken": "0x759cb97fbc452bafd49992ba88d3c5da4dd9b0e7", "sToken": "0xb8e26f3c4afb4f56f430a390dc3f3b12f8a50b26", "vToken": "0xc1d9ca73f57930d4303d380c5dc668c40b38598b" },
+      "0x894134a25a5fac1c2c26f1d8fbf05111a3cb9487": { "aToken": "0xe7e54ca3d6f8a5561f8cee361260e537bdc5be48", "sToken": "0x7c2e57764ec33292fe098636aaa5d0357d814d16", "vToken": "0xe6b9b00d42fa5831cce4e44d9d6d8c51ba17cd1e" },
+      "0x2416092f143378750bb29b79ed961ab195cceea5": { "aToken": "0x0684fc172a0b8e6a65cf4684edb2082272fe9050", "sToken": "0xffa256ad2487c4d989c3dfa6a6e9c13fe33beba4", "vToken": "0xcc7b5fd2f290a61587352343b7cf77bb35cb6f00" },
+      "0x3aab2285ddcddad8edf438c1bab47e1a9d05a9b4": { "aToken": "0x8b6e58ea81679eecd63468c6d4eaefa48a45868d", "sToken": "0x60c28a4cb4e78e9fee49bcaae3f4dbcde77f412f", "vToken": "0xf61a1d02103958b8603f1780702982e2ec9f9e68" },
+      "0xd2671165570f41bbb3b0097893300b6eb6101e6c": { "aToken": "0x8d8b70a576113feedd7e3810ce61f5e243b01264", "sToken": "0x7675abdc6139dbf46d3bb5a3dcf79e6cad936765", "vToken": "0x3da71ad7e055ee9716bba4dac53e37cddf60d509" },
+      "0x1bf74c010e6320bab11e2e5a532b5ac15e0b8aa6": { "aToken": "0x77e305b4d4d3b9da4e82cefd564f5b948366a44b", "sToken": "0xba832bc55af97867170271f3afeab5eba1405ebc", "vToken": "0x5f62aea5549cdf5dc309255946d69e516a9c2042" },
+      "0x15eefe5b297136b8712291b632404b66a8ef4d25": { "aToken": "0x03114e4c29ea95bf26108c2c47338488555ced1a", "sToken": "0x7101ff22ea63464cc106e0a3274ef4a2d28cd292", "vToken": "0x061ca6fdf24d586ee9a4e4b4a1d61f9090ab48e9" },
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34": { "aToken": "0x529d26aae1606910ab32e1aeb9dbee8597618f28", "sToken": "0x144285bcd4169b7dc2b8661ccd432608a2532ac5", "vToken": "0xabe144177c341e30a35cde436ee159cd7c1db77a" },
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2": { "aToken": "0x5c44c9e5182193ce4e24b8f85c9c914c59d57767", "sToken": "0x0410fb2330217120ed8e9590543e1c0ea9a00e70", "vToken": "0x068b5441787b0b973e25d5dbdacb7a7c2161af51" },
+      "0xb5bedd42000b71fdde22d3ee8a79bd49a568fc8f": { "aToken": "0x9eb8879231c71bd739967628ca26b72810beead8", "sToken": "0xa824332668c9f48af566cb248f9bcf70666cccc7", "vToken": "0xa26982964e57e8cb5639e3a44c55f085695e0a26" },
+      "0x93f4d0ab6a8b4271f4a28db399b5e30612d21116": { "aToken": "0xccf76f25d5cc39db7cd644a5a66eff91b2cdcc25", "sToken": "0x2a43d971b2d4d3649bca8d14d665c65d9e981345", "vToken": "0xd039544fca3d8df85a0f4441fdf8b0836db97871" },
+      "0xecc68d0451e20292406967fe7c04280e5238ac7d": { "aToken": "0x1820335eba09b72ce46c0de4650f71c7505b4824", "sToken": "0x9861087fe7f894c52efc7b9e12bfaba57fd03961", "vToken": "0x06ecdfde2d468aed563d5765356b6def4901b6bc" },
+      "0x4af15ec2a0bd43db75dd04e62faa3b8ef36b00d5": { "aToken": "0x0f87d0618b873be947ff7d3620c51b832b71c4d0", "sToken": "0x0368cf2183de1d0a8187e63cab2de9c53ffd4d8b", "vToken": "0x0889b840f9285d790ccd3d09703af347e0299f42" },
+      "0x5a7a183b6b44dc4ec2e3d2ef43f98c5152b1d76d": { "aToken": "0x4585cbe390df68cbaa36c0d0886e8528c31c7c11", "sToken": "0x705b5ee015f12fc29066b1e5214a2cac702211fa", "vToken": "0x53a44b6384c28c099dc168fd1d9044105e23c632" },
+      "0xb20116ee399f15647bb1eef9a74f6ef3b58bc951": { "aToken": "0x5bb96d49de7f1049dabe055d37f1a32f05639756", "sToken": "0x9c5800ab1b2a466fffd69a891aac7a54a616f48f", "vToken": "0x35f01b5200165b5cf67b09917452b0e434a63965" },
+      "0x5ffce65a40f6d3de5332766fff6a28bf491c868c": { "aToken": "0x8fab2e296934d9e930aa6c3150059b0b4adb06f5", "sToken": "0x6aa675f7c9a351a95bb3324bfd12b7bcc7cbeceb", "vToken": "0x46519da582e2231e05613f0908ac991374905db6" },
+      "0xe4d584ae9b753e549cae66200a6475d2f00705f7": { "aToken": "0x537d6dd4e12c16efa951591c66d0c1a14970a980", "sToken": "0x9f8239f73f173c69576048918d06aabd0d47a3f4", "vToken": "0x205e01ef33fcd660ff4a7caa6d12413f23d2bace" }
+    },
+    "80094": {
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642": { "aToken": "0xa1346360c5b5b05c379957329ad553a823040a9c", "sToken": "0x802c1e2ec2960bc1a20b072684231849a8c37202", "vToken": "0xe70e300d0b06697606c5e733eb2d0ceb9cdda05c" },
+      "0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590": { "aToken": "0x893dbf4e886488f85b0ba4b5ac8e45ac6f3a4f75", "sToken": "0x047db0362fa8afc275417fb87ad4514ff6adf9d7", "vToken": "0x4ff3fd28797c3bbd2ba4a13253623df756905dbb" },
+      "0xfcbd14dc51f0a4d49d5e53c2e0950e0bc26d0dce": { "aToken": "0x6c8362c4237717a6a1da87dc933781d2fa002608", "sToken": "0x292f55e2e753260ac1d48ea84b37587b2231b30b", "vToken": "0xca19a7d43fdb6f2be9af3970d5e1393d094a5bb6" },
+      "0xac03caba51e17c86c921e1f6cbfbdc91f8bb2e6b": { "aToken": "0x14a1ec80053bae6469d97cb5b3fedfaa1d8a6789", "sToken": "0x8805ac99517816b9336b63c701df25cbfaa8dbf9", "vToken": "0xc8f4fe78375515b6849be367c411458f6c25a2d3" },
+      "0xecac9c5f704e954931349da37f60e39f515c11c1": { "aToken": "0xb2b4a2886b9e790a6eb8068f544364c589b8205b", "sToken": "0x12ec8cf95732d534ca3970fdd9cc25f178854757", "vToken": "0x7e29e47989820477877ee64f92f55c024a28b3f7" },
+      "0x1ce0a25d13ce4d52071ae7e02cf1f6606f4c79d3": { "aToken": "0xa494d58d9ff0165073b81d290c22f6b6f68e1d31", "sToken": "0x67321f550b41e9976d1b2a99a62269fe11a07888", "vToken": "0x51c0a5bff0b17a5d907b75dd2f61ec3b6bc42806" },
+      "0x4186bfc76e2e237523cbc30fd220fe055156b41f": { "aToken": "0x966473cca4803725201ccb343fd6dfa027e53cd3", "sToken": "0x2e9ac4523a9187bf17b5b91e961c314bded4693a", "vToken": "0xe208b81f98e3264249050f2ba8d21adf1af62454" },
+      "0x850cdf416668210ed0c36bfff5d21921c7ada3b8": { "aToken": "0xf228dc73b2e2906e717365f8897b9ffafb6a8697", "sToken": "0xcd6d03156e03933352b4b292d83165255ddad6a4", "vToken": "0x8f2f7b3637c52378806af676da2e42f4e7f32c99" },
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2": { "aToken": "0x385867d0742e4855f6391aa778cdc737fe773139", "sToken": "0x621d217bd88ec06cb82f6fb801e97fa4d63484b3", "vToken": "0xe479d88d5186d9f1fdbf7b89a7122d733c3ede8e" },
+      "0x549943e04f40284185054145c6e4e9568c1d3241": { "aToken": "0x89befe1253e6452aea08ae297da9401816b39cd4", "sToken": "0x0c0e63a3a4877f6bf0e3ce5e7df7d7c0a896735b", "vToken": "0xee9635ec44699264c1074ee18156b22a0e73e76b" },
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34": { "aToken": "0x194e899dc8cd36c8bc19613d52130f6b08695773", "sToken": "0x62dc405c88794a82d546a0626ae8b984eb2d785e", "vToken": "0xda41c182029fb899b9af1735d3eccf5bef2f3750" },
+      "0x779ded0c9e1022225f8e0630b35a9b54be713736": { "aToken": "0xca47be2f687e1811a623593752994c74c190b52e", "sToken": "0x65adc9081b68954ae95763d0c0a7a285bde68b1f", "vToken": "0x5d3fb96a3707c52d2127342ab6e73e50917b70cf" },
+      "0x6969696969696969696969696969696969696969": { "aToken": "0x710184c3639e0abc94f4bd5a59a16b4f5bedcec6", "sToken": "0xaece9740584f0577d156d64402fd3580b1e6c039", "vToken": "0x7e61e42202a835aa8968a3a5a75ac16b29b77944" },
+      "0x7dcc39b4d1c53cb31e1abc0e358b43987fef80f7": { "aToken": "0x6ad5726d6b151f95e1622cf3c1e895c4854ac9ba", "sToken": "0x2eaa299c9bf59ff35e9b29be8f9b8fc0a39ec64a", "vToken": "0x574e5a73ea36b886b0b3b0a461a6dddeee59c168" }
+    },
+    "81457": {
+      "0x4300000000000000000000000000000000000003": { "aToken": "0x23a58cbe25e36e26639bdd969b0531d3ad5f9c34", "sToken": "0xbc83dcbc06876b463efde74a0539d78c586f90e8", "vToken": "0x0e914b7669e97fd0c2644af60e90ea7ddb4f91d1" },
+      "0x4300000000000000000000000000000000000004": { "aToken": "0x53a3aa617afe3c12550a93ba6262430010037b04", "sToken": "0x045d5602faf1abb4c3f3c62fa70293450d9d5106", "vToken": "0x29c2bc372728dacb472a7e90e5fc8aa0f203c8cd" },
+      "0x2416092f143378750bb29b79ed961ab195cceea5": { "aToken": "0xeaad75b283ec8779b9c7b5b2cc245f4755ed4595", "sToken": "0x74f2887af800cbb688df6ceee5ebb58e9491c063", "vToken": "0x95241286314b57ebdcdfe7daa0e0bec651e8de61" },
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a": { "aToken": "0x99b68c56e6c1ac19f52132c3023b5270aadadb07", "sToken": "0x8feab183e51439ddc7d73a24908389ccc214baa2", "vToken": "0xee09b82100481065bced265bcb35ea4ecb240598" }
+    },
+    "21000000": {
+      "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2": { "aToken": "0x126d09b159b8b07985f279f93a55c4c65af9a1cb", "sToken": "0x936e510d448054e4a05920d5e92436127f0e1bea", "vToken": "0x1624e9561dfb170ef48a5b6974c98dcf35d63dd2" },
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642": { "aToken": "0xfad13d1cdcfbb9042fbec263194d7f48f870e35a", "sToken": "0x37ead94959a4f3a44a9a1086af4e364db0854412", "vToken": "0x967916d3b842944cafd0ef4a03bfe3fbeef87f09" },
+      "0xecac9c5f704e954931349da37f60e39f515c11c1": { "aToken": "0xbc596c5794c12ea9d41922a5d13cc1fadbe4b37f", "sToken": "0xd26710c7a18ea0e572aacef285373fa1c4c9ce45", "vToken": "0xc27af31dc029abc7fe57cdd3f038335074bec2fe" },
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e": { "aToken": "0xce23e3b746d1425d01df06134680753166b3d02f", "sToken": "0xa4a0aed915e563baccb54d2191ca677475236ed4", "vToken": "0x37744f56f31778dbbf5f61d137db939f5a1e55c4" }
+    }
+  },
+  "ZEROLEND_CROAK": {
+    "59144": {
+      "0x176211869ca2b568f2a7d4ee941e073a821ee1ff": { "aToken": "0x711449ea0f3c6d9e1626e72aa431597b9216f3d4", "sToken": "0x8cb14e515a98fc3ba7495867ef2e6450cf12c2aa", "vToken": "0x2b9881ddb5570ae9eba081fa7fdf334e4195e3de" },
+      "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f": { "aToken": "0x176e1e2be1704bf5cf9c55d5ac2282355355b8d0", "sToken": "0x86453bd0075dc4b5f255a3679f0c9475107847d9", "vToken": "0x5c8957af6341d824d615fabacb3dbab75932695b" },
+      "0xacb54d07ca167934f57f829bee2cc665e1a5ebef": { "aToken": "0xe59691dd4b38ba4632a51d1f7596c431ad36907c", "sToken": "0x5d30efee91787133ecacf1ca40808123382adc8f", "vToken": "0xb1048e86a1a1faf0ee53ce78cdd5e0180643dc46" }
+    }
+  },
+  "ZEROLEND_FOXY": {
+    "59144": {
+      "0x176211869ca2b568f2a7d4ee941e073a821ee1ff": { "aToken": "0xdae1f8cfd0293bd3ef2541ccb4f265290181cac2", "sToken": "0x0aa52b766999bd7570c5999f2e5e7c0989c5f79f", "vToken": "0x384a318215aca36084af3719f3c84aa2167de6be" },
+      "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f": { "aToken": "0x9cab55d186a45bb29fabdbc0118855cf642d8012", "sToken": "0xf6f54eb569dc28e68c35a640846f0ce70c2ac86b", "vToken": "0xfbb30e625ba0aa35c13a86ef49ab4f2bafa21538" },
+      "0x5fbdf89403270a1846f5ae7d113a989f850d1566": { "aToken": "0xd84a3f1380ec35ab4cdb16a95508a11f2f474356", "sToken": "0xb490091282a566d4b6d466c7cb5f0cc0a8c3d230", "vToken": "0x613ac3930a5b2805e48be151bea8c29d394f8a86" }
+    }
+  },
+  "GRANARY": {
+    "1": {
+      "0x6b175474e89094c44da98b954eedeac495271d0f": { "aToken": "0xe7334ad0e325139329e747cf2fc24538dd564987", "sToken": "0xc40709470139657e6d80249c5cc998efb44898c9", "vToken": "0xe5415fa763489c813694d7a79d133f0a7363310c" },
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": { "aToken": "0x02cd18c03b5b3f250d2b29c87949cdab4ee11488", "sToken": "0x73c177510cb7b5c6a7c770376fc6ebd29ef9e1a7", "vToken": "0xbce07537df8ad5519c1d65e902e10aa48af83d88" },
+      "0xdac17f958d2ee523a2206206994597c13d831ec7": { "aToken": "0x9c29a8ec901dbec4fff165cd57d4f9e03d4838f7", "sToken": "0x6f66c5c5e2ff94929582eabfc19051f19ed9eb70", "vToken": "0x06d38c309d1dc541a23b0025b35d163c25754288" },
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": { "aToken": "0x272cfccefbefbe1518cd87002a8f9dfd8845a6c4", "sToken": "0x09ab5ca2d537b81520f78474d6ed43675451a7f8", "vToken": "0x5eea43129024eee861481f32c2541b12ddd44c08" },
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": { "aToken": "0x58254000ee8127288387b04ce70292b56098d55c", "sToken": "0xc73ac4d26025622167a2bc67c93a855c1c6bdb24", "vToken": "0x05249f9ba88f7d98fe21a8f3c460f4746689aea5" }
+    },
+    "10": {
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": { "aToken": "0x18d2b18af9a1f379025f46b8aeb4af75f6642c9f", "sToken": "0xf3f47cc1d683c3e8862ecce239e6679c331499d3", "vToken": "0xbabdd3e2231990b1f47844536e19b2f1cc1d5077" },
+      "0x7f5c764cbc14f9669b88837ca1490cca17c31607": { "aToken": "0x7a0fddba78ff45d353b1630b77f4d175a00df0c0", "sToken": "0xbd11f9ad2522447849c376b9cbbcdcfd80814f17", "vToken": "0xb271973b367e50fcde5ee5e426944c37045dd0bf" },
+      "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58": { "aToken": "0x4e7849f846f8cddaf37c72065b65ec22cecee109", "sToken": "0xd3d5fd831c00c5cb54a925b8263508cccabf070e", "vToken": "0x5c4acfcba420f8a0e14b7aada3d8726452642fbb" },
+      "0x68f180fcce6836688e9084f035309e29bf0a2095": { "aToken": "0xbd3dbf914f3e9c3133a815b04a4d0e5930957cb9", "sToken": "0x5b015f3e5535d972c47c303854cbc304743aefcc", "vToken": "0x62bbfaef552522be2bda7f69cc5b2c36c1879600" },
+      "0x4200000000000000000000000000000000000006": { "aToken": "0xff94cc8e2c4b17e3cc65d7b83c7e8c643030d936", "sToken": "0x757abeffede648f482e13c9a05cfc1879619e270", "vToken": "0x0a05d3d77b66af45233599fe4f5558326e4ad269" },
+      "0x4200000000000000000000000000000000000042": { "aToken": "0x30091e843deb234ebb45c7e1da4bbc4c33b3f0b4", "sToken": "0x9c6eb7b564f1b81e9e8a41a6e8e5e34d0d9a570f", "vToken": "0xb1afe7c8d6d94e8ef04ab3c99848a3b21a33d9ef" },
+      "0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9": { "aToken": "0x8aaa9d29305d331ae67ad65495b9e22cf98f9035", "sToken": "0xf0e94bdc2d589ead059072ac1bf27c67acf931b6", "vToken": "0xc0031304549e494f1f48a9ac568242b1a6ca1804" },
+      "0xfe8b128ba8c78aabc59d4c64cee7ff28e9379921": { "aToken": "0x7fb37ae8be7f6177f265e3ff6d6731672779eb0b", "sToken": "0xb9131478fb7d590948b2948fca0b8c3c06fc053f", "vToken": "0x49e03c399f0f84083d6f6549383fc80d11701bd4" },
+      "0x8700daec35af8ff88c16bdf0418774cb3d7599b4": { "aToken": "0xa73b7c26ef3221bf9ea7e5981840519427f7dcaf", "sToken": "0xc539ca809d6d7c3b37759c4a4484202204aa1484", "vToken": "0x9dd559b1d7454979b1699d710885ba5c658277e3" },
+      "0x1f32b1c2345538c0c6f582fcb022739c4a194ebb": { "aToken": "0x1a7450aacc67d90afb9e2c056229973354cc8987", "sToken": "0x855ee76ba443e36aeb3775ee30b8f94947b0cde9", "vToken": "0xd0260ea91b263619a27efeef512a04fb482915e7" },
+      "0xaddb6a0412de1ba0f936dcaeb8aaa24578dcf3b2": { "aToken": "0xc69ec3664687659dc541cd88ef9d52a470b93fbe", "sToken": "0x1ddaab33e2b360f28c1e24f196d34ce5d1e813d9", "vToken": "0xbed938b24e2432168cb1c09f10ec9609bf5badb0" }
+    },
+    "56": {
+      "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3": { "aToken": "0x6055558d88dde78df51bf9e90bdd225d525cf80b", "sToken": "0x6f4fde7277e70483c344e3175b1262928fb52bae", "vToken": "0xa0758cd24cf68f486f3f6d96e833680d4971ccf8" },
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": { "aToken": "0xe37bbfdd50b715d49df6e596f9248bfe6b967cd7", "sToken": "0xe56873b4886e4c08a07498a90d6cdb2f0069c4b3", "vToken": "0x2f4e44316af0cac2154f95acca305082a2382e98" },
+      "0x55d398326f99059ff775485246999027b3197955": { "aToken": "0x7e25119b5e52c32970161f1e0da3e66bbef100f1", "sToken": "0xaf8ed214adf8358d296a3135bfef8167594d181d", "vToken": "0x573bce236692b48f5faa07947e78c1e282e16c28" },
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": { "aToken": "0x6c578574a5400c5e45f18be65227cfc2a64d94f7", "sToken": "0x60516165bcee35870499acd040ba8b586f280959", "vToken": "0x7f459f3c6d068168ef791746602ca29180b5d03f" },
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8": { "aToken": "0x2a050a0d74c9a12ba44bd2aca9d7d7d1bdf988e9", "sToken": "0x64f719b2a1668835337fff491e7c88402093fbb4", "vToken": "0xa7ede8701d7dac898b04ddf27c781b4eb961443f" },
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": { "aToken": "0x70ad5e32e6ea548dce7d331b447c2791cf695a98", "sToken": "0x24f515b64f1d5dc8d702daa4e0ce0ef9fcdce589", "vToken": "0x839c8ca0873de853c5f8df1ef3e82e9da398abf6" }
+    },
+    "250": {
+      "0x91a40c733c97a6e1bf876eaf9ed8c08102eb491f": { "aToken": "0x74c79b7766cdc565b96a5dc5db3209095354a425", "sToken": "0x103f51e07dbd38802aff8c9eb1d2be0a15d26beb", "vToken": "0x165c922f73d6f928f477ace411fa83ce8baf003d" },
+      "0x28a92dde19d9989f39a49905d7c9c2fac7799bdf": { "aToken": "0x59c5c2cc79dea0585d118e61236c162e63c68418", "sToken": "0xb3002ad5ac9c8e46f42276bfff2f107a4a2fdada", "vToken": "0x24fddc9d15136d678fe2b9b474eed18ce8c1531f" },
+      "0xcc1b99ddac1a33c201a742a1851662e87bc7f22c": { "aToken": "0x2c5f206787e0960782498448e420c02855c2f3e6", "sToken": "0xe0bbb7b04b293b4e622232488d0c85c34e1eedbc", "vToken": "0x577dce25f4aa35e7dc11e37f550c1e0e179cc736" },
+      "0xf1648c50d2863f780c57849d812b4b7686031a3d": { "aToken": "0x1ee82200c8fdc956f8fbc6ae9b0bb6c2d8f3e826", "sToken": "0x1bad4d2921e2ff87b3c4209a323434529d003205", "vToken": "0xdde6f2dce052716d9f9ff2d61de3dcd8cdb62def" },
+      "0x695921034f0387eac4e11620ee91b1b15a6a09fe": { "aToken": "0xb805310418de7a41eb65f8097bae43180196cc78", "sToken": "0x99ee23e5440d537cf04698fe33f0e00ac98fa896", "vToken": "0x3c35e97cacb269472b8bc2d483667c1eaf4a817e" },
+      "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83": { "aToken": "0xdc1e55c321f2dc8d95275cfc4e9bd1555526872a", "sToken": "0x4a4f7efa2ea2ad2caff8bae75530f28403e8e135", "vToken": "0x703ea7db0f2a5cce716a110d45e64ad5905d15b7" }
+    },
+    "1088": {
+      "0xea32a96608495e54156ae48931a7c20f0dcc1a21": { "aToken": "0x37fa438edfb7044e9444b4022b2516c4daa4592f", "sToken": "0x9e398d935d3e9e02319124110aab1b4646944f45", "vToken": "0x1eee9a7452c6e73e6fae6b6f95bfcb3afebeddbd" },
+      "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc": { "aToken": "0x18ba3e87876f4982810d321d447b81d01cdf6668", "sToken": "0x179659d5e67c64b54b0df4960389787ffa4db6c2", "vToken": "0xeaf4cbd2622bf807a02091804db775cdce2169fb" },
+      "0xa5b55ab1daf0f8e1efc0eb1931a957fd89b918f4": { "aToken": "0x826ed083724909196e6598452be4fdfe0fa6c7cd", "sToken": "0xcdce2de35069a192c74a44adc94323bf80f8adcf", "vToken": "0x9ae05c138ebaa84c0e65ee63edd5ad64a8b78ab6" },
+      "0x420000000000000000000000000000000000000a": { "aToken": "0x73d49ac28c4fea2b8e7c6bf45d64a2e68ed53be0", "sToken": "0xcbd8930edde3f64cff1f1b1f079282d1377db62b", "vToken": "0xe772bf4d6f458552bc6a0e067efd69b9c1acbcc3" },
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000": { "aToken": "0x7f5ec43a46df54471dae95d3c05bebe7301b75ff", "sToken": "0x3064632ac6d1442b1b1d5e37b28451463fc2abd0", "vToken": "0xad7db4df1454497ed1a972c0b699fb9267daa6fe" },
+      "0x433e43047b95cb83517abd7c9978bdf7005e9938": { "aToken": "0x475f3ab387157ebc645874aea1836223b7cc5d19", "sToken": "0xd4a4e9211d9a780b84f306ddd65dfd954cd77db7", "vToken": "0x019f9fcd645b673c75b57d112bb184c6b6696c01" }
+    },
+    "8453": {
+      "0x50c5725949a6f0c72e6c4a641f24049a917db0cb": { "aToken": "0xe7334ad0e325139329e747cf2fc24538dd564987", "sToken": "0xc40709470139657e6d80249c5cc998efb44898c9", "vToken": "0xe5415fa763489c813694d7a79d133f0a7363310c" },
+      "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca": { "aToken": "0x02cd18c03b5b3f250d2b29c87949cdab4ee11488", "sToken": "0x73c177510cb7b5c6a7c770376fc6ebd29ef9e1a7", "vToken": "0xbce07537df8ad5519c1d65e902e10aa48af83d88" },
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x9c29a8ec901dbec4fff165cd57d4f9e03d4838f7", "sToken": "0x6f66c5c5e2ff94929582eabfc19051f19ed9eb70", "vToken": "0x06d38c309d1dc541a23b0025b35d163c25754288" },
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22": { "aToken": "0x272cfccefbefbe1518cd87002a8f9dfd8845a6c4", "sToken": "0x09ab5ca2d537b81520f78474d6ed43675451a7f8", "vToken": "0x5eea43129024eee861481f32c2541b12ddd44c08" },
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": { "aToken": "0x58254000ee8127288387b04ce70292b56098d55c", "sToken": "0xc73ac4d26025622167a2bc67c93a855c1c6bdb24", "vToken": "0x05249f9ba88f7d98fe21a8f3c460f4746689aea5" },
+      "0x940181a94a35a4569e4529a3cdfb74e38fd98631": { "aToken": "0xe3f709397e87032e61f4248f53ee5c9a9abb6440", "sToken": "0x383995fd2e86a2e067ffb31674aa0d1b370b39bd", "vToken": "0x083e519e76fe7e68c15a6163279eaaf87e2addae" },
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913": { "aToken": "0xc17312076f48764d6b4d263efdd5a30833e311dc", "sToken": "0x5183adca8472b7c999c310e4d5aaab04ad12e252", "vToken": "0x3f332f38926b809670b3cac52df67706856a1555" }
+    },
+    "42161": {
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": { "aToken": "0xfc2eac1aeb490d5ff727e659273c8afc5dd2b0bb", "sToken": "0x75803d39db1f2d3c84fd1b3ad74d5070283c0e39", "vToken": "0xfdf4ee30ceff9a6253d4eb43257abc361433bf04" },
+      "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8": { "aToken": "0x6c4cb1115927d50e495e554d38b83f2973f05361", "sToken": "0x3fc33103748cb94495be26a35c6b77b2d7a71a61", "vToken": "0xe2b1674f85c8a1729567f38cb502088c6e147938" },
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": { "aToken": "0x66ddd8f3a0c4ceb6a324376ea6c00b4c8c1bb3d9", "sToken": "0x03adcec5d760e50a2bed982cb5e6a6ab2580d55e", "vToken": "0x3e2deeda33d8ba579430f38868db3ed0e2394576" },
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": { "aToken": "0x731e2246a0c67b1b19188c7019094ba9f107404f", "sToken": "0x01c4dd26296e7a13418d0dc6822591810da8b989", "vToken": "0x8daec4344a99f575b13de9f16c53d5bf65e75a42" },
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1": { "aToken": "0x712f1955e5ed3f7a5ac7b5e4c480db8edf9b3fd7", "sToken": "0xc39b18f5e6f3338b787d10bb6c37058d29c1da79", "vToken": "0xc5e029c1097d9585629ae4bdf74c37182ec8d1ba" },
+      "0x912ce59144191c1204e64559fe8253a0e49e6548": { "aToken": "0x8b9a4ded05ad8c3ab959980538437b0562dbb129", "sToken": "0xa05934acb42768343035bce74f72bfd6d2f61010", "vToken": "0x5935530b52332d1030d98c1ce06f2943e06b75ad" },
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831": { "aToken": "0x2af47e1786c1af2debee2dede590a0d00005129b", "sToken": "0x9e14e90c3912731531d8ee5b397526e3b2807452", "vToken": "0x86547cb041c7a98576da7fa87acd6eac66c51e0c" },
+      "0x5979d7b546e38e414f7e9822514be443a4800529": { "aToken": "0x93e5e80029b36e5e5e75311cf50ebc60995f9ea6", "sToken": "0x73b4cdf788ac8bf0b0104966cdae4dc482fc3800", "vToken": "0x5d13ffbc005a2bdd16f3c50e527d42c387759299" },
+      "0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8": { "aToken": "0x883b786504a2c6bfa2c9e578e5d1752ecbc24dee", "sToken": "0xe0b08f55697fea5272604fc002b96b8379298f1a", "vToken": "0x458d60c27b433a157462c7959e2a103389de3fce" }
+    },
+    "43114": {
+      "0xd586e7f844cea2f87f50152665bcbc2c279d8d70": { "aToken": "0xe7334ad0e325139329e747cf2fc24538dd564987", "sToken": "0xc40709470139657e6d80249c5cc998efb44898c9", "vToken": "0xe5415fa763489c813694d7a79d133f0a7363310c" },
+      "0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664": { "aToken": "0x02cd18c03b5b3f250d2b29c87949cdab4ee11488", "sToken": "0x73c177510cb7b5c6a7c770376fc6ebd29ef9e1a7", "vToken": "0xbce07537df8ad5519c1d65e902e10aa48af83d88" },
+      "0xc7198437980c041c805a1edcba50c1ce5db95118": { "aToken": "0x9c29a8ec901dbec4fff165cd57d4f9e03d4838f7", "sToken": "0x6f66c5c5e2ff94929582eabfc19051f19ed9eb70", "vToken": "0x06d38c309d1dc541a23b0025b35d163c25754288" },
+      "0x50b7545627a5162f82a992c33b87adc75187b218": { "aToken": "0x272cfccefbefbe1518cd87002a8f9dfd8845a6c4", "sToken": "0x09ab5ca2d537b81520f78474d6ed43675451a7f8", "vToken": "0x5eea43129024eee861481f32c2541b12ddd44c08" },
+      "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab": { "aToken": "0x58254000ee8127288387b04ce70292b56098d55c", "sToken": "0xc73ac4d26025622167a2bc67c93a855c1c6bdb24", "vToken": "0x05249f9ba88f7d98fe21a8f3c460f4746689aea5" },
+      "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7": { "aToken": "0xe3f709397e87032e61f4248f53ee5c9a9abb6440", "sToken": "0x383995fd2e86a2e067ffb31674aa0d1b370b39bd", "vToken": "0x083e519e76fe7e68c15a6163279eaaf87e2addae" },
+      "0xd1c3f94de7e5b45fa4edbba472491a9f4b166fc4": { "aToken": "0xc17312076f48764d6b4d263efdd5a30833e311dc", "sToken": "0x5183adca8472b7c999c310e4d5aaab04ad12e252", "vToken": "0x3f332f38926b809670b3cac52df67706856a1555" }
+    },
+    "59144": {
+      "0x4af15ec2a0bd43db75dd04e62faa3b8ef36b00d5": { "aToken": "0x245b368d5a969179df711774e7bdc5ec670e92ef", "sToken": "0x6f2783e0f6fdacd7ce8e87b69cefb5fb6be25791", "vToken": "0xd4c3692b753302ef0ef1d50dd7928d60ef00b9ff" },
+      "0x176211869ca2b568f2a7d4ee941e073a821ee1ff": { "aToken": "0x5c4866349ff0bf1e7c4b7f6d8bb2dbcbe76f8895", "sToken": "0xaa36a2840a4a3666989c51751ce2d2f9db658ba0", "vToken": "0x157903b7c6d759c9d3c65a675a15aa0723eea95b" },
+      "0xa219439258ca9da29e9cc4ce5596924745e12b93": { "aToken": "0xa0f8323a84adc89346ed3f7c5dcddf799916b51e", "sToken": "0x0b624a977087ed828560636bbe26fbd6df489696", "vToken": "0x393a64fc561d6c8f5d8d8c427005cab66dfeca9d" },
+      "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f": { "aToken": "0xb36535765a7421b397cfd9fec03cf96aa99c8d08", "sToken": "0x9ff79431a180249b229341d8597bdc7f64a73c74", "vToken": "0xd8a40a27dd36565cc2b17c8b937ee50b69209e22" },
+      "0x3aab2285ddcddad8edf438c1bab47e1a9d05a9b4": { "aToken": "0xdc66ac2336742e387b766b4c264c993ee6a3ef28", "sToken": "0x58dcb9517a9757710898000b31f54db44e19d7e9", "vToken": "0x9576c6fdd82474177781330fc47c38d89936e7c8" }
+    }
+  },
+  "LORE": {
+    "534352": {
+      "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4": { "aToken": "0x19624e5e4ad3f8de2ab516c67645bb5b79ecffe6", "sToken": "0xc852ee24d51ebd1cd9371ed2daddb46febc2b0fa", "vToken": "0x8ec1b2570809cb5c6b10a85d952d40b8cf0deddc" },
+      "0xf55bec9cafdbe8730f096aa55dad6d22d44099df": { "aToken": "0xc5776416ea3e88e04e95bcd3ff99b27902da7892", "sToken": "0x7be4c4defb1c9fe04a48150f0e5e416ba3171f28", "vToken": "0x63591c6bde1deb1fca7fcea7b1aaef96e8260f39" },
+      "0x5300000000000000000000000000000000000004": { "aToken": "0xf1792ec678e2c90f44b8fcd137cc373280894927", "sToken": "0xb6a1bf12b59d7009637add07d3e5002382fe218d", "vToken": "0xb41adc2a1189810989d45d92417cc558e8eee66d" },
+      "0x80137510979822322193fc997d400d5a6c747bf7": { "aToken": "0x4f908f7e51e5f03c937452f74c467bf071858aaf", "sToken": "0xa0ffe748e72507b89fdab163241a9d76fe2b6456", "vToken": "0xf2a1fc52d4cfb59789faa7625c481984d44d6d21" },
+      "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32": { "aToken": "0xa847eaa620c3ddd8e25909eaa0cc94659abe8939", "sToken": "0x5431d6a6cabecbfa5f0bbf1b9529382d375ee919", "vToken": "0xf38164575228dbc6ec4e38e460edb4b8ece86c33" },
+      "0x01f0a31698c4d065659b9bdc21b3610292a1c506": { "aToken": "0x80e0fb6b416e1ae9bbd02a9bc6a6d10c9e9d51b7", "sToken": "0xdc80674646de58a89702301a14c5b0c435816d3e", "vToken": "0x9d4725c7e14bfcae7cfb03925cbc3c1c1de6cdb0" },
+      "0xa25b25548b4c98b0c7d3d27dca5d5ca743d68b7f": { "aToken": "0xc28a5a35e98bcac257440a4759b0e7da3b35ed69", "sToken": "0xa0acb749f120ab37bcba371d2031b80c9f656421", "vToken": "0xbd5e7ae1dbf72fe0ea15207fae21a4396246468c" },
+      "0xd29687c813d741e2f938f4ac377128810e217b1b": { "aToken": "0x34804222d65522ea542b711226008f7ef960784d", "sToken": "0x72c82aed2ed2d4c8638f7990f5ef03dedc2753d4", "vToken": "0xa738cc439c5220692b8a7d9d86f88a603e70b730" }
+    }
+  },
+  "LENDOS": {
+    "43111": {
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x85b05b841438cb63a11361ede54982cd32d76fd7", "sToken": "0x01b552a06127b09ab738073ce0b9dac6c42027a8", "vToken": "0x2c06043c973e142d64441de596fd8bb5b29be1d8" },
+      "0xad11a8beb98bbf61dbb1aa0f6d6f2ecd87b35afa": { "aToken": "0x417c0b97d9ef489bd828ad19cf79313e0d5f9294", "sToken": "0xb24e9294e17d529140883c6305c0c5cf13e2a9f4", "vToken": "0xe5716646f351a07437ded137a189deb0cb992f66" },
+      "0xbb0d083fb1be0a9f6157ec484b6c79e0a4e31c2e": { "aToken": "0x45f80ae894fc102a2c1e40f7781db621f554c075", "sToken": "0x2512cbb7e107abaf67b4710f8bd8ea72003a1e75", "vToken": "0xe476506a7606e9c471e29cc2841e9fbf877139d3" },
+      "0xaa40c0c7644e0b2b224509571e10ad20d9c4ef28": { "aToken": "0xe0073b0e72726c8e3a5921af493f021f1aad2aba", "sToken": "0xd12cbabf143621a4d24684b4209f56e31f0495c4", "vToken": "0x016cb26685d53e218727ef4d8052bbf96443592b" },
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3": { "aToken": "0xd5c7f6ab4d9cca88dcf5dcf7d330d5ebe6f79eef", "sToken": "0x21f08c0a227a9d5a06467b0d4bae9c879dcaf96b", "vToken": "0x7433ce0fb3c01a9328332db14d976af6708f4219" },
+      "0x7a06c4aef988e7925575c50261297a946ad204a8": { "aToken": "0xc12a9d63e122d64247ab3d865e956b2b3eff9639", "sToken": "0xde3f62f8ec0f027a59687ed771b9560903f5e37d", "vToken": "0xff0e853717ab7c7c1fd7dd3db7c4296a95fd8339" },
+      "0xaf6ed58980b5a0732423469dd9f3f69d9dc6dab5": { "aToken": "0x1f22ac506c90b410c726a5e7df278e3e85c3c6f3", "sToken": "0x4a139ca502691d6edf846eb5b6cd2c37cc216ad3", "vToken": "0x9c0d3a1df756c6ff75a01192f5e20b69239a2b38" },
+      "0x0ffb62483517309afd039b117d795521e8320a1b": { "aToken": "0x046dbf4aa7db014c41c9d69ef3c3650da806ca63", "sToken": "0x70fbe04cdfec844f350f9d0bace17f8ba8730126", "vToken": "0xff1f67992455617c1a1bb38919b4b8513b6625b2" },
+      "0xf23eec60263de9b0c8472c58be10feba28d9eb53": { "aToken": "0x29faf557315cbe130dcb4eaddfdcf20bf130be32", "sToken": "0x640ad49c294ab480a257154a78c80b41e6f53f36", "vToken": "0x47250d28f0bda904b7a7bcf3c80a4b4a9c3902fd" }
+    },
+    "245022934": {
+      "0x202c35e517fa803b537565c40f0a6965d7204609": { "aToken": "0xe064d7cf9b0836ef27f0423f0e36f26abe963e4e", "sToken": "0x3929156034b4fd7e71ba07e4967e0d20d6d7f548", "vToken": "0xf081caf2c019e62d627f2b84bfb76900fe99d26f" },
+      "0x5f38248f339bf4e84a2caf4e4c0552862dc9f82a": { "aToken": "0x444cc2a0bed1bc91ff0096477cef52b3a5e08933", "sToken": "0x23f49b9b68b5625c3fc435d4d9e5c1d4ac7018ea", "vToken": "0xb6f5108e9794892330bc24ab6b0a603f1e85e551" },
+      "0xea6b04272f9f62f997f666f07d3a974134f7ffb9": { "aToken": "0x8b35eab3b8439ad09c52775954a6340ac5e24dd3", "sToken": "0x34e3917745572c2a574abad068caee7c2687941c", "vToken": "0x9d1f74573d608493913733c64b29a01441f477e9" },
+      "0xcffd84d468220c11be64dc9df64eafe02af60e8a": { "aToken": "0x6c036caadb5f88a50576992427179d643c9b453f", "sToken": "0x6057f03769155ecc5a64462056d59aeadc6ca9b3", "vToken": "0x3fd6facea7b502d22fb610abc306cae5d7d64414" },
+      "0xfa8fb7e3bd299b2a9693b1bfdcf5dd13ab57007e": { "aToken": "0x55c37a9c9864e526cbf9c2eeb7161ec0bf5ffa29", "sToken": "0xce53fdc75e4208db4ae370a890c7a098c9ab286a", "vToken": "0x41c30d1ab57cda334290e027b2d327f9df2ca2b5" },
+      "0x5f0155d08ef4aae2b500aefb64a3419da8bb611a": { "aToken": "0xb9b369ae5e285fd97f026a442d40d6f747bc9881", "sToken": "0xd9d8c338a737a295d74ea5a07271803d47ddf5a0", "vToken": "0xaba718dbbc8a497d04fbb462a1200b3ba07bf79b" }
+    }
+  },
+  "YLDR": {
+    "1": {
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": { "aToken": "0xddbe14a7cd032e58368cf9db59b89d0ba8663703", "vToken": "0x8cee2c02df3ff9dd9cab1762d86c04dd6e7f9b22", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0xdac17f958d2ee523a2206206994597c13d831ec7": { "aToken": "0x6a03202ca61f6a756c97f23eddfbf93d69d7baa1", "vToken": "0xbdb5610184c4f9855d04ce59eaaef7386ff3827b", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": { "aToken": "0xb2de9be4b2ac812b69974521fb6a0f983aade16e", "vToken": "0x641f307e2527394e09b999fdc7726e93faa725a0", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0": { "aToken": "0x2be2140b3692b150aba5969dad174c7af35714f4", "vToken": "0x9da06f30b08126eab91de119d9ca9e345a2d2eae", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0xbe9895146f7af43049ca1c1ae358b0541ea49704": { "aToken": "0xec2e11a95fb96783ccbbae27a04219738dcde36b", "vToken": "0xfc992b5ab3f938655fcb578de8365f22eb79de0a", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0xae78736cd615f374d3085123a210448e74fc6393": { "aToken": "0xbab39ac382396c6763db5047f0b41175feae65ef", "vToken": "0x8ad492788cbc8f4b43768d7d8e1110367fa4a8ce", "sToken": "0x0000000000000000000000000000000000000000" }
+    },
+    "137": {
+      "0x2791bca1f2de4661ed88a30c99a7a9449aa84174": { "aToken": "0xafcc7719edfcba9215749c8e399f4e20c9024cf7", "vToken": "0x42037d996611ed4378a508f67470fbced1436555", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359": { "aToken": "0xd8ab1e396cfc5d9d7922e2ca0b9084ab64dd6cee", "vToken": "0x477768d8230f2b914554491414d5e76c73314ed2", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619": { "aToken": "0xd85552a6e8df8dce06b157d33b383ce9f5f9ade2", "vToken": "0x2cd174a79f40e67d390c12ced441b17de70f9765", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0xc2132d05d31c914a87c6611c10748aeb04b58e8f": { "aToken": "0xf309ada8651891a99b251cab253ad10895b3d028", "vToken": "0x9113f0d78bc64712e9560f58dc0749e6ac227fff", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270": { "aToken": "0xf6535aa0cd4988855247cbefa7fbe64e3e78e024", "vToken": "0x23219a2d278e99b0f170ad963d34373069159ab1", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6": { "aToken": "0x62b1bf965cc3051c73e0db6b2025cbc371b6ea9c", "vToken": "0x87b98ef3ae0488fe509a129025988956a8962eda", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x7b99506c8e89d5ba835e00e2bc48e118264d44ff": { "aToken": "0x6e0ba5168ee1fadf18f483a96a10ce1e9beccdc9", "vToken": "0x3aa17fb2ab6caab7d294d71793a6261ba307c483", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x3974fbdc22741a1632e024192111107b202f214f": { "aToken": "0xa9876aad44377291ec40ca8e61a98a4487f21e59", "vToken": "0xae253124d0030125bc8f194e68954f9ae64a593e", "sToken": "0x0000000000000000000000000000000000000000" }
+    },
+    "8453": {
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913": { "aToken": "0x8fef557ecb4c1caf2f35d73ec4dcf989f02c85d2", "vToken": "0xa897cd83fa02b4e83f2842194bb09c271fa3225b", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca": { "aToken": "0x4f96677d62c7e646538379e45fa2243b354a69a4", "vToken": "0x4a042a3f69620c152e23638acb981e99cbc8e988", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x91d74d72df2d5af2c04fb00a5092e75e33ed6a8b", "vToken": "0x38b772a6f7acecf6133b9dbe640d94517dbd4c9b", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0xc1cba3fcea344f92d9239c08c0568f6f2f0ee452": { "aToken": "0xe2a3f0b559fb3f23426705a8c4e3fb56f61f9571", "vToken": "0xd42d82fc67fc9258816d1d2c33f943874251a412", "sToken": "0x0000000000000000000000000000000000000000" }
+    },
+    "42161": {
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831": { "aToken": "0xaa40dca2d69ded3eb17991aa17d83653f1084091", "vToken": "0x7bcc957f8f86aa78762fccc0bfec6dbf8b1ad987", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1": { "aToken": "0x6d7197fa1f2b9d01a25705b5558a748a2b5f0605", "vToken": "0xa350429bc896a95f1ef6936e4c4c5a2c62052ed1", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8": { "aToken": "0x8f46fb23d1d7e1385809bc304f979651fd374deb", "vToken": "0x57c2e352e867238a96c300ff6434f7c8d63b3c14", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": { "aToken": "0x172c9dce43198154dc0dacc843fd8103ad09145c", "vToken": "0xcda3934b7dda7fc07ff09e669137c49782812f82", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x5979d7b546e38e414f7e9822514be443a4800529": { "aToken": "0x4107b60471eef310fce240e4dfad14b7e326a6e0", "vToken": "0x16359d6cf2ec7f9020707653d4758ad8969752f0", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x912ce59144191c1204e64559fe8253a0e49e6548": { "aToken": "0x609772eeeda6dd1537177737823ffb3b3bc9b6e4", "vToken": "0xda27be910ca3e205927cc43088b5681d19de05fa", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": { "aToken": "0xcb14e172f16db1e8e3cbca41a56281022633414d", "vToken": "0xd5c41944a760c23caa11815c47e43b66719a213d", "sToken": "0x0000000000000000000000000000000000000000" },
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": { "aToken": "0x43274582edbc3d17ccb8c752da8aa9d471b5a093", "vToken": "0x23a12b967ac30e04e844af3017f5c80b115b476d", "sToken": "0x0000000000000000000000000000000000000000" }
+    }
+  },
+  "IRONCLAD_FINANCE": {
+    "34443": {
+      "0xd988097fb8612cc24eec14542bc03424c656005f": { "aToken": "0xe7334ad0e325139329e747cf2fc24538dd564987", "sToken": "0xc40709470139657e6d80249c5cc998efb44898c9", "vToken": "0xe5415fa763489c813694d7a79d133f0a7363310c" },
+      "0xf0f161fda2712db8b566946122a5af183995e2ed": { "aToken": "0x02cd18c03b5b3f250d2b29c87949cdab4ee11488", "sToken": "0x73c177510cb7b5c6a7c770376fc6ebd29ef9e1a7", "vToken": "0xbce07537df8ad5519c1d65e902e10aa48af83d88" },
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x9c29a8ec901dbec4fff165cd57d4f9e03d4838f7", "sToken": "0x6f66c5c5e2ff94929582eabfc19051f19ed9eb70", "vToken": "0x06d38c309d1dc541a23b0025b35d163c25754288" },
+      "0x2416092f143378750bb29b79ed961ab195cceea5": { "aToken": "0x272cfccefbefbe1518cd87002a8f9dfd8845a6c4", "sToken": "0x09ab5ca2d537b81520f78474d6ed43675451a7f8", "vToken": "0x5eea43129024eee861481f32c2541b12ddd44c08" },
+      "0x028227c4dd1e5419d11bb6fa6e661920c519d4f5": { "aToken": "0x58254000ee8127288387b04ce70292b56098d55c", "sToken": "0xc73ac4d26025622167a2bc67c93a855c1c6bdb24", "vToken": "0x05249f9ba88f7d98fe21a8f3c460f4746689aea5" },
+      "0xe7903b1f75c534dd8159b313d92cdcfbc62cb3cd": { "aToken": "0xe3f709397e87032e61f4248f53ee5c9a9abb6440", "sToken": "0x383995fd2e86a2e067ffb31674aa0d1b370b39bd", "vToken": "0x083e519e76fe7e68c15a6163279eaaf87e2addae" },
+      "0x59889b7021243db5b1e065385f918316cd90d46c": { "aToken": "0xc17312076f48764d6b4d263efdd5a30833e311dc", "sToken": "0x5183adca8472b7c999c310e4d5aaab04ad12e252", "vToken": "0x3f332f38926b809670b3cac52df67706856a1555" },
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a": { "aToken": "0x4522dbc3b2ca81809fa38fee8c1fb11c78826268", "sToken": "0xe6ad2c410c60ced626bc998bfcfea934278538c5", "vToken": "0xf8d68e1d22ffc4f09aaa809b21c46560174afe9c" },
+      "0xdfc7c877a950e49d2610114102175a06c2e3167a": { "aToken": "0x0f4f2805a6d15dc534d43635314444181a0e82cd", "sToken": "0x2e714eb72cd8f709993b9faf4347e1072ab17c8a", "vToken": "0xe57bf381fc0a7c5e6c2a3a38cc09de37b29cc4c3" },
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2": { "aToken": "0x0eb9c75689d7db53727723e42263b44d7a31618c", "sToken": "0x6b24ced4a6628c207cd1eeae4ef9a1edc6ee864e", "vToken": "0xe6075a86f4517b1b8136498fe23640c73aa1b711" },
+      "0x6b2a01a5f79deb4c2f3c0eda7b01df456fbd726a": { "aToken": "0x0f041cf2ae959f39215effb50d681df55d4d90b1", "sToken": "0x8a468142b1199ab49ac6dc915a1b9fbde3d1b70e", "vToken": "0x80215c38dcb6ae91520f8251a077c124e7259688" }
+    }
+  },
+  "MOLEND": {
+    "34443": {
+      "0xd988097fb8612cc24eec14542bc03424c656005f": { "aToken": "0xa509cbe0acb9eb39c01ef6a23073927a1f339ba2", "sToken": "0x1d5a5d03105f87493bced94ff3a6853081c0c290", "vToken": "0xb84ec47ce839ca1ce21ea343b6f487983225f52c" },
+      "0xf0f161fda2712db8b566946122a5af183995e2ed": { "aToken": "0x554da9a2052f9a63d1f562fa49aa150fdab32120", "sToken": "0xd70345fa7a81f65f4e2bea80a39ae63ddc4cafd7", "vToken": "0xb1bb70096e315213af4f992d8580271e71cee620" },
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x4080ec9b7159fe74e5e4f25304a8aa8293815f16", "sToken": "0x23ab9d4f992688468d026e7c5a6e88c1cacf3b7f", "vToken": "0x014ff401e25ebdf12faa6725f69b18535ccec51e" },
+      "0x80137510979822322193fc997d400d5a6c747bf7": { "aToken": "0xacff2a153ba2110dbb04033984b1c2922e1b18fd", "sToken": "0x16f5c14751f39de4b9b367908074a721b107dbb4", "vToken": "0x9592d7287fc33b8592f089ad291e05976b4fba0c" },
+      "0x2416092f143378750bb29b79ed961ab195cceea5": { "aToken": "0xb64085ebf44048515be0a3c85413d28920bf3e55", "sToken": "0x073c94559ff3cb672a03035217ee75f3c2109742", "vToken": "0xcba6a705b8fdd9a35d08f99de10c99e9fa99517b" },
+      "0x59889b7021243db5b1e065385f918316cd90d46c": { "aToken": "0x8973514e70062e348add6f7a85a335210519fd34", "sToken": "0xddb68ec5499865cb744e8fd0a0aa439b18b5c7bc", "vToken": "0x33136412e7612407d6cece1d7a6db5cfd0f217e2" },
+      "0xdfc7c877a950e49d2610114102175a06c2e3167a": { "aToken": "0x7f75dd85d8a9121f19071e36d01b5f919f03582f", "sToken": "0x527c247d12b5c109e5479250696efdd4b4bc4d56", "vToken": "0xeaa47ab1d0dca209795804f95105227c9ace6223" }
+    }
+  },
+  "SEISMIC": {
+    "81457": {
+      "0x4300000000000000000000000000000000000003": { "aToken": "0xd7484a50390a28f20e0b6c704a5b2ceb7a872d19", "sToken": "0xf2d657952b244c97da26d724bda4373b0c1e742b", "vToken": "0x87bac0208a2e354f0f0412a49faba6b64632c988" },
+      "0x4300000000000000000000000000000000000004": { "aToken": "0xe355ef5252493971ab5a75e4d214dc324fbfaf5b", "sToken": "0x92c355289d34557eb79a0ec7e449f539290000ee", "vToken": "0x2d0d369c56bc0472330ff3bdda781f14b5548377" },
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a": { "aToken": "0x46a573f9b5b6a3495488bc455deecd3421fa2de3", "sToken": "0x44626d114873553ee56832ac8950c5cda78deca8", "vToken": "0xe650d6862697cf69eda87c025c58e54840407469" },
+      "0xb1a5700fa2358173fe465e6ea4ff52e36e88e2ad": { "aToken": "0x0beadc7fa57bc8477c2b4a629c4e7f40a78bfd9b", "sToken": "0x3588d82d4de95ce85ca112342d15dd81331d9ce9", "vToken": "0x19ff6e9bad46d4fe735a45b61edf1a0c5d83533e" },
+      "0xe7903b1f75c534dd8159b313d92cdcfbc62cb3cd": { "aToken": "0x9ca33f4a9f85e6bfc3f9ccd46b09ed37e1046c7c", "sToken": "0x9aeea06995e97a47e05a0f24de06c59372b0b9f3", "vToken": "0x3e9135c7014ff740271f8c89a549eed4ba62bcaa" },
+      "0x1a49351bdb4be48c0009b661765d01ed58e8c2d8": { "aToken": "0x2cfeb8f6cb68c35d13257418eb7657575969341f", "sToken": "0x3afa4a8176cb594a6592853401cca9666f8de04c", "vToken": "0x84dfc8c090355b4dd507a5402681f2115299018c" }
+    }
+  },
+  "POLTER": {
+    "146": {
+      "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38": { "aToken": "0x81fae0ef10f391450f9b59e21c8115485b9f73cf", "sToken": "0x557035151bb7066873a5c2b2615fc0b01b0da441", "vToken": "0x1c5cb5c66e1e78577457893fb4df2a83f02647c2" },
+      "0x50c42deacd8fc9773493ed674b675be577f2634b": { "aToken": "0x07fe600220712d758f785f40474ecbeb81943cd6", "sToken": "0xd96d3209df12640c870d4cd83be543fdf6c94263", "vToken": "0xf1c6b54f5e550451be6ec72b097453fa5108c966" },
+      "0x29219dd400f2bf60e5a23d13be72b486d4038894": { "aToken": "0x3e43aa6281c8341b06f502c4f204d3242f67599f", "sToken": "0x15971487c0b7355b165dd155565103713e98135a", "vToken": "0xe8a00008369866c2ace7b481c6e7ca34714d3248" },
+      "0x6047828dc181963ba44974801ff68e538da5eaf9": { "aToken": "0x4227c901ca6af2afb772db7e93bb9ab25dd8adc5", "sToken": "0x73b8a8e2cb22052bcf3122398d791f5156257f99", "vToken": "0x1d93b8cf0361886ef50f49695b076c415ccfa5f1" }
+    },
+    "8453": {
+      "0x4200000000000000000000000000000000000006": { "aToken": "0xca4e076c6d8a84a990986a3c405093087991a8fe", "sToken": "0xc5ec7903cb7d79ae8195fe544999be5eeafd0a55", "vToken": "0xad5ba690d8996ff73b4d4d7242122618034d0667" },
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913": { "aToken": "0x1ddaeebbd69dccc92f5cf76593104976b9c62434", "sToken": "0xa6941f33420b77d12526fc07a35e46468d59f64f", "vToken": "0xef18f2eecd07143114d97d428bf5a7406e57c472" },
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": { "aToken": "0x2a96e27e204ef366671232df28f147fa30e735ce", "sToken": "0x9973aab27022aef2de1aa6ce8200bb15a82c039b", "vToken": "0x7c89dbd6ac932142813ede9907eb345542c41a1a" },
+      "0x940181a94a35a4569e4529a3cdfb74e38fd98631": { "aToken": "0x6f78d5d203ee7f4f3821ea7ae507e3e20b0930ef", "sToken": "0x475d0048a366d46f3baa17175451e0a811c46609", "vToken": "0xf14cd6ec231944f6e2111ca9f96f38ac7888f025" }
+    }
+  },
+  "MAGSIN": {
+    "146": {
+      "0x29219dd400f2bf60e5a23d13be72b486d4038894": { "aToken": "0xef39dd51db95c5a05d6d29c4694fdd8f0ef260a1", "sToken": "0x9045844b77a83ffc73123fcf4904500478319c8d", "vToken": "0x367aa8850a5662c5ef707dcd2910d2306f9e66d1" },
+      "0x50c42deacd8fc9773493ed674b675be577f2634b": { "aToken": "0x3d4b22c91e535b0edcbba1b98e0c93844b7e379e", "sToken": "0x3e25fca694059a1f4f34a3f4e1d5fd7ffd854365", "vToken": "0xa4caac829762c9d59e03ff9c6585214dd9f7233b" },
+      "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38": { "aToken": "0x27c6abdd0b26ecb106ac4bd6a367a5983817527a", "sToken": "0x0221fe85f46dfeac7ba559e35385d80ed1b157d6", "vToken": "0x3ad4b747f61d8e1e603aea0700596973aeb7e71e" },
+      "0xe5da20f15420ad15de0fa650600afc998bbe3955": { "aToken": "0xdc9b24006bdb858c2542df929dd45e6701a09cd4", "sToken": "0xaa9a1434ffd92db5c42ca4697a67deb729d24d7a", "vToken": "0x2364868684858817cc06a1cd3169331b217c16e8" },
+      "0x0525cb0064efff807fd0cd231544b9208fc215a9": { "aToken": "0x08d786d81bbced378780ffd0fb689fa8d4844238", "sToken": "0x251f022a700f35c295ddb6c860cd3b34f47cb80a", "vToken": "0xeb1c31fd7e9016e6779fd49eda3529c60294a868" },
+      "0x5ba1d96907b075c490f641bd30551e1af9c40721": { "aToken": "0xac985a2e3ae8128f79a89c5580d126f1e231f376", "sToken": "0x57d44438ab63538cfef7b6d7fe9c8ecec89ebe30", "vToken": "0x25b5924b03bd27362b17b13ed33cd014e9710e28" }
+    }
+  },
+  "AGAVE": {
+    "100": {
+      "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83": { "aToken": "0x291b5957c9cbe9ca6f0b98281594b4eb495f4ec1", "sToken": "0x05c43e14d38bc5123f6408a57be03714ab689f6e", "vToken": "0xa728c8f1cf7fc4d8c6d5195945c3760c87532724" },
+      "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d": { "aToken": "0xd4e420bbf00b0f409188b338c5d87df761d6c894", "sToken": "0xf4401355b41c867edbf09c821fa7b4fffbed5c82", "vToken": "0xec72de30c3084023f7908002a2252a606cce0b2c" },
+      "0xe2e73a1c69ecf83f464efce6a5be353a37ca09b2": { "aToken": "0xa286ce70fb3a6269676c8d99bd9860de212252ef", "sToken": "0x4f9401fb52fe53de977dcbf05a0f6237aadc7eb1", "vToken": "0x5b0568531322759eab69269a86448b39b47e2ae8" },
+      "0x9c58bacc331c9aa871afd802db6379a98e80cedb": { "aToken": "0xa26783ead6c1f4744685c14079950622674ae8a8", "sToken": "0x0dfd401903ba960b2eed32a10f8aeb601cd9a7a5", "vToken": "0x99272c6e2baa601cea8212b8fbaa7920a9f916f0" },
+      "0x8e5bbbb09ed1ebde8674cda39a0c169401db4252": { "aToken": "0x4863cfaf3392f20531aa72ce19e5783f489817d6", "sToken": "0xca0f3b157165fe11692a047ea14963ffadfb31fd", "vToken": "0x110c5a1494f0ab6c851abb72aa2efa3da738ab72" },
+      "0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1": { "aToken": "0x44932e3b1e662adde2f7bac6d5081c5adab908c6", "sToken": "0x43ae4a9474ea23b0bc04c99f9ff2a9b4c2d5554c", "vToken": "0x73ada33d706085d6b93350b5e6aed6178905fb8a" },
+      "0x21a42669643f45bc0e086b8fc2ed70c23d67509d": { "aToken": "0xa916a4891d80494c6cb0b49b11fd68238aaaf617", "sToken": "0x6ca958336e7a1bdcdf7762aeb81613eaddcc3110", "vToken": "0x7388cbdeb284902e1e07be616f92adb3660ed3a4" },
+      "0x4ecaba5870353805a9f068101a40e0f32ed605c6": { "aToken": "0x5b4ef67c63d091083ec4d30cfc4ac685ef051046", "sToken": "0xb067fad853d099edd9c86483682e7d947b7983e5", "vToken": "0x474f83d77150bddc6a6f34eee4f5574eafd05938" },
+      "0xcb444e90d8198415266c6a2724b7900fb12fc56e": { "aToken": "0xeb20b07a9abe765252e6b45e8292b12cb553cca6", "sToken": "0x78a69afc50e7705ad4588cb57cf8d27b29161e51", "vToken": "0xa4a45b550897dd5d8a44c68dbd245c5934ebacd9" },
+      "0x6c76971f98945ae98dd7d4dfca8711ebea946ea6": { "aToken": "0x606b2689ba4a9f798f449fa6495186021486dd9f", "sToken": "0xec7f91f26e7fd42e90ffa53ca0b0b02095a6b450", "vToken": "0xd0b168fd6a4e220f1a8fa99de97f8f428587e178" },
+      "0xaf204776c7245bf4147c2612bf6e5972ee483701": { "aToken": "0xe1cf0d5a56c993c3c2a0442dd645386aeff1fc9a", "sToken": "0x6927a7cda946910126008af78eba50db6415284f", "vToken": "0xad15fec0026e28dfb10588fa35a383b07014e0c6" }
+    }
+  },
+  "MOOLA": {
+    "42220": {
+      "0x471ece3750da237f93b8e339c536989b8978a438": { "aToken": "0x7d00cd74ff385c955ea3d79e47bf06bd7386387d", "sToken": "0x02661dd90c6243fe5cdf88de3e8cb74bcc3bd25e", "vToken": "0xaf451d23d6f0fa680113ce2d27a891aa3587f0c3" },
+      "0x765de816845861e75a25fca122bb6898b8b1282a": { "aToken": "0x918146359264c492bd6934071c6bd31c854edbc3", "sToken": "0xa9f50d9f7c03e8b48b2415218008822ea3334adb", "vToken": "0xf602d9617564c07f1e128687798d8c699ced3961" },
+      "0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73": { "aToken": "0xe273ad7ee11dcfaa87383ad5977ee1504ac07568", "sToken": "0x612599d8421f36b7da4ddba201a3854ff55e3d03", "vToken": "0xfb6c830c13d8322b31b282ef1fe85cbb669d9ae8" },
+      "0xe8537a3d056da446677b9e9d6c5db704eaab4787": { "aToken": "0x9802d866fde4563d088a6619f7cef82c0b991a55", "sToken": "0x0d00d9a02b85e9274f60a082609f44f7c57f373d", "vToken": "0xbd408042909351b649dc50353532deef6de9faa9" },
+      "0x17700282592d6917f6a73d0bf8accf4d578c131e": { "aToken": "0x3a5024e3aab31a1d3184127b52b0e4b4e9adcc34", "sToken": "0x0bb14e95a4ff117f7f536d605e2b506e937619c4", "vToken": "0x3d6d8a1562ff973ad89887c0a5c001f42ad66cb8" }
+    }
+  },
+  "XLEND": {
+    "10": {
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1": { "aToken": "0x80f7084272d861f5c5f5f60648c085b1f7a2fe41", "sToken": "0xb29e1dab375a2247c2972707884149a78f956f43", "vToken": "0x01b7435e33844fbbaf948a8c88fbfb8c67a4e663" },
+      "0x0b2c639c533813f4aa9d7837caf62653d097ff85": { "aToken": "0xba2111f1498627e66f930cc539b7fbbdd5044f6d", "sToken": "0x445e23254d207a9eb9e4d8b1c67e6418fc95b745", "vToken": "0x60c85491232e553b5d8121d41ecd41cefdb034b9" },
+      "0x4200000000000000000000000000000000000006": { "aToken": "0xf58bec4c57f8a459db9840236613082ae17eb23f", "sToken": "0x767b87ac92612ec7f26dfdab82c4c99e92efea53", "vToken": "0x3663d302ce1294d182bafec89b4b28345fa99db3" },
+      "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58": { "aToken": "0xea299346c31a13f85ccf70ca337d83e93ea6bdf3", "sToken": "0xaa790dc3d7a83d53b5673e63f0550285f587c5fa", "vToken": "0x49c7b5dd887e4ff60416b420e110a6f09f5a9702" },
+      "0x1f32b1c2345538c0c6f582fcb022739c4a194ebb": { "aToken": "0xe40ec46c8554edaf61829ac68c0ae8183b0b23b5", "sToken": "0x860d4ac5dbd3e4bd1201f008821d8a5d01967ed3", "vToken": "0xc71dc31bf7989e78f9e6cc167ede9141b83535d7" },
+      "0x4200000000000000000000000000000000000042": { "aToken": "0xb4f8a17e9917a7dd45c3726041bcd3848c5c2e94", "sToken": "0x9197f86e017a631204643ba22057ee241151248e", "vToken": "0x7c47c84c57a9237ed8164e30db7e7b7f4bba5d59" },
+      "0x68f180fcce6836688e9084f035309e29bf0a2095": { "aToken": "0x920f4a7510f138b1fcd90a8a7ddedb7b4cb0a04f", "sToken": "0x7e20eb4c24c2cbd200a01141cc59d6a998a35617", "vToken": "0x2f48c271a55c3cbd3514c51d343e72d681284326" },
+      "0x9bcef72be871e61ed4fbbc7630889bee758eb81d": { "aToken": "0x15e24124e93892edcdbb835fe82c00ff2eb0e766", "sToken": "0x051fd6cc4ae259bb8bc8555d218d52d6a5a094a4", "vToken": "0x856a83d43243871924b9214201cb1e2bc250bf9c" }
+    },
+    "8453": {
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913": { "aToken": "0xf17182f6f28ded63b77a2bb774c58ade44612be4", "sToken": "0xed72525251946b960494a07217b36091fe242f7c", "vToken": "0x26ced5493511cab401c64a58a5f29d55dbe494c5" },
+      "0x4200000000000000000000000000000000000006": { "aToken": "0x9ef15597b0b900bfcee4a77204f72bd20c85d7c8", "sToken": "0x14124fc9f01978bc64a82abf72d22430f6b1ee16", "vToken": "0xe99ec9b8ea5322d8b5bdc66dad3d2294dc61b740" },
+      "0xc1cba3fcea344f92d9239c08c0568f6f2f0ee452": { "aToken": "0x749fc8d298a41a55ab305164602a185db29f8f2b", "sToken": "0xe58e662c2cfcad5947c913bc35faf75b2d14d064", "vToken": "0x28bbf6ca0762e9ba99d0745f079f71bfd8a7d0d6" },
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22": { "aToken": "0x2308fc7785597cc40ab53f302b491294b8d8d8be", "sToken": "0x6adda94f5576b8490ba58f0046021162353426cd", "vToken": "0x3d54e017e1902c055a1fdcee85b0117a52dfcff1" },
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": { "aToken": "0xdf2730830c77780a11248945c342c002db73a8be", "sToken": "0xf01e3b5653fccb1ecf1344bc739c39b0fee5d043", "vToken": "0x2af3a2518d0a33907b0647e0654b75939dca4d8a" },
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a": { "aToken": "0x951092b1ed953d0879e3840489be6fbfc4ad363d", "sToken": "0x96d1b6cf9c825edb3abc852a26176e94b8530bf0", "vToken": "0xa47f8e51df05131a9330795c2f67f555710b1b97" },
+      "0xb6fe221fe9eef5aba221c348ba20a1bf5e73624c": { "aToken": "0x2bc746dca46776b34a065a5b2f675104368a491e", "sToken": "0x0f51ae264c08f67f031372bbb700587db077ffa7", "vToken": "0x36d7ad88cd411300cfa0fbb2114f8ef803e26e3c" },
+      "0x940181a94a35a4569e4529a3cdfb74e38fd98631": { "aToken": "0x227545f1d9cdf944f0badfcf91c5efe90e7c068f", "sToken": "0x09fb5be9e15161be6ad72353854ce79d0ab5c56f", "vToken": "0xc3ab85875af5ba1eb38f33feaee3758521cdbcf8" },
+      "0x60a3e35cc302bfa44cb288bc5a4f316fdb1adb42": { "aToken": "0x43488361941170d3470a0be38df85a1f5c5d7229", "sToken": "0xe5e37f4e199425c73e4f37781c5aaf648dc6d687", "vToken": "0x3f2ddb6c5e99afcf00bacb4544caa12c87cbf356" },
+      "0xecac9c5f704e954931349da37f60e39f515c11c1": { "aToken": "0x2e326563bac9a17b3e12db45d2a2a86f9f734f6f", "sToken": "0x12e0563befc020088c1f695c37127dd981d2faeb", "vToken": "0x628194170111b7dea9b4f8da882cd9797d6a865f" },
+      "0x820c137fa70c8691f0e44dc420a5e53c168921dc": { "aToken": "0x08809a8073b2f3baa24faaf1bf52b812c4bb4920", "sToken": "0x02cb15b49eec8a7a0dcd06a059b72a8d7ef11545", "vToken": "0x739a059864d13b5b6c056907346db15837256e5f" },
+      "0xedfa23602d0ec14714057867a78d01e94176bea0": { "aToken": "0xa6d1c5419ac814240a75935d094131a37b8616d2", "sToken": "0x89c71ede3033ea0b6914f8f2c7d3b245e9f59904", "vToken": "0x8bafc99f2bf1dbd85b447d8d291e4c63ae9defe8" },
+      "0x5875eee11cf8398102fdad704c9e96607675467a": { "aToken": "0x1647d5950dee7332f748b5d02ff4abe7ddcaff6b", "sToken": "0x2eaaa3d1cb6b744c701534858f2cca5baa004567", "vToken": "0x1a8cb4f5b3cda4dfb070708f9aa26b729d1ac839" },
+      "0x35e5db674d8e93a03d814fa0ada70731efe8a4b9": { "aToken": "0x30beadaff3780ea468bfae86703801dc20de3aeb", "sToken": "0xb24848a13461e9c588027998d7bcb404d16234be", "vToken": "0x279a58f518b90d610428637c6455e0f57af8eced" },
+      "0x236aa50979d5f3de3bd1eeb40e81137f22ab794b": { "aToken": "0x45d1255d1d35edd2ae964503b69b2f65c7ebd25c", "sToken": "0xb24ebabe7595619d82468d209678d00f49f96d35", "vToken": "0xf51bdaba60b61dab625f1bf756c3fb804e3eb91d" },
+      "0xa6f0a4d18b6f6ddd408936e81b7b3a8befa18e77": { "aToken": "0x51269f9bd237a2d84ee89a4a458ff42f2b68a812", "sToken": "0x95d202a5c90383879b0403028de2c98a5bdd412d", "vToken": "0x0f34d091375772d1dd624f9242fe24c6a51d1501" }
+    }
+  },
+  "KLAYBANK": {
+    "8217": {
+      "0xcee8faf64bb97a73bb51e115aa89c17ffa8dd167": { "aToken": "0x241758b187714f6763787d01e365b2ef9aa71370", "sToken": "0xa66d1f342bdf4178a999eed4c83208b7bf37e4b3", "vToken": "0x38738669d04c676789a3543be05a55386141b3b6" },
+      "0x754288077d0ff82af7a5317c7cb8c444d421d103": { "aToken": "0xa01612922312bb88c4da63821f1ecca933e7d01d", "sToken": "0x52ed398830be89a2e5ccf00eadb4dcfae1c0b489", "vToken": "0x756c71a4684cdce82faafce957a1f8b45bed3932" },
+      "0x34d21b1e550d73cee41151c77f3c73359527a396": { "aToken": "0x3d0950e0d1afe341e6c99b60ea4041e2e4e99409", "sToken": "0x835c57163ad0a4d700600ea1bc692aaea21d2040", "vToken": "0x5f4d46a30445cf75f3cd8df1a2fd1f3044629a48" },
+      "0x16d0e1fbd024c600ca0380a4c5d57ee7a2ecbf9c": { "aToken": "0xfa281a109c495964855e4d9f5a11ec18e99c1d43", "sToken": "0x78aaee24cef190b25499dfe5279fc847313a2fc5", "vToken": "0xc2fc9dc198136b10fae757aae0189741a71958ab" },
+      "0x5c74070fdea071359b86082bd9f9b3deaafbe32b": { "aToken": "0x744dd1b4e3744db00c50d06edc7f171d08bf25b5", "sToken": "0x9f2b70ed02eae67f71d829beff743b38f686aae5", "vToken": "0x3800cd0547e3cfa66ed8d7ff818c8b1c3f5d6ec5" },
+      "0xe4f05a66ec68b54a58b17c22107b02e0232cc817": { "aToken": "0x2f72278d8f8c4840a4d9e20d609fb0b6ef622904", "sToken": "0x790a35517b11d04b25f40a01ba92c4dffb3ee5f5", "vToken": "0xc477949fe177070e12a4cfab7875d9e7a2ee7539" },
+      "0x4fa62f1f404188ce860c8f0041d6ac3765a72e67": { "aToken": "0xc5a99c150fd125933a626d08e9b8e165143d0ec7", "sToken": "0xf7372297058097246b552f4f8df7a1d8e8999683", "vToken": "0x00efc7ba96f924a0a0136e3d5bc56c38c15e3e2f" },
+      "0x5096db80b21ef45230c9e423c373f1fc9c0198dd": { "aToken": "0xc71d18628e5afe942912f5fa794c6175a94b2443", "sToken": "0xe6d6a57b6a762e30911c557b7cd8ad013ffa6662", "vToken": "0x3e2a75d621482fffde985ae1ff14f29346ad8bcf" }
+    }
+  }
+};
+var AAVE_STYLE_RESERVE_ASSETS = {
+  "AAVE_V3": {
+    "1": [
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0x6b175474e89094c44da98b954eedeac495271d0f",
+      "0x514910771af9ca656af840dff83e8264ecf986ca",
+      "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+      "0xbe9895146f7af43049ca1c1ae358b0541ea49704",
+      "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "0xae78736cd615f374d3085123a210448e74fc6393",
+      "0x5f98805a4e8be255a32880fdec7f6728c6568ba0",
+      "0xd533a949740bb3306d119cc777fa900ba034cd52",
+      "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
+      "0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f",
+      "0xba100000625a3754423978a60c9317c58a424e3d",
+      "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "0x5a98fcbea516cf06857215779fd812ca3bef1b32",
+      "0xc18360217d8f7ab5e7c516566761ea12ce7f9d72",
+      "0x111111111117dc0aa78b770fa6a738034120c302",
+      "0x853d955acef822db058eb8505911ed77f175b99e",
+      "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
+      "0xd33526068d116ce69f19a9ee46f0bd304f21a51f",
+      "0x83f20f44975d03b1b09e64809b757c47f942beea",
+      "0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6",
+      "0xdefa4e8a7bcba345f687a2f1456f5edd9ce97202",
+      "0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0",
+      "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e",
+      "0x6c3ea9036406852006290770bedfcaba0e23a0e8",
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
+      "0xf1c9acdc66974dfb6decb12aa385b9cd01190e38",
+      "0x4c9edd5852cd905f086c759e8383e09bff1e68b3",
+      "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
+      "0x9d39a5de30e57443bff2a8307a4256c8797a3497",
+      "0x18084fba666a33d37592fa2633fd49a74dd93a88",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0xdc035d45d973e3ec169d2276ddab16f1e407384f",
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7",
+      "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642",
+      "0x8292bb45bf1ee4d140127049757c2e0ff06317ed",
+      "0x50d2c7992b802eef16c04feadab310f31866a545",
+      "0x3b3fb9c57858ef816833dc91565efcd85d96f634",
+      "0xc139190f447e929f090edeb554d95abb8b18ac1c",
+      "0x917459337caac939d41d7493b3999f571d20d667",
+      "0x14bdc3a3ae09f5518b923b69489cbcafb238e617",
+      "0x90d2af7d622ca3141efa4d8f1f24d86e5974cc8f",
+      "0xc96de26018a54d51c097160568752c4e3bd6c364"
+    ],
+    "10": [
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+      "0x350a791bfc2c21f9ed5d10980dad2e2638ffa7f6",
+      "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
+      "0x68f180fcce6836688e9084f035309e29bf0a2095",
+      "0x4200000000000000000000000000000000000006",
+      "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+      "0x76fb31fb4af56892a25e32cfc43de717950c9278",
+      "0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9",
+      "0x4200000000000000000000000000000000000042",
+      "0x1f32b1c2345538c0c6f582fcb022739c4a194ebb",
+      "0xc40f949f8a4e094d1b49a23ea9241d289b7b2819",
+      "0xdfa46478f9e5ea86d57387849598dbfb2e964b02",
+      "0x9bcef72be871e61ed4fbbc7630889bee758eb81d",
+      "0x0b2c639c533813f4aa9d7837caf62653d097ff85"
+    ],
+    "56": [
+      "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+      "0x55d398326f99059ff775485246999027b3197955",
+      "0xc5f0f7b66764f6ec8c8dff7ba683102295e16409",
+      "0x26c5e01524d2e6280a48f2c50ff6de7e52e9611c"
+    ],
+    "100": [
+      "0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1",
+      "0x6c76971f98945ae98dd7d4dfca8711ebea946ea6",
+      "0x9c58bacc331c9aa871afd802db6379a98e80cedb",
+      "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83",
+      "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+      "0xcb444e90d8198415266c6a2724b7900fb12fc56e",
+      "0xaf204776c7245bf4147c2612bf6e5972ee483701",
+      "0x2a22f9c3b484c3629090feed35f17ff8f88f76f0"
+    ],
+    "137": [
+      "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+      "0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39",
+      "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+      "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+      "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+      "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+      "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+      "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+      "0x172370d5cd63279efa6d502dab29171933a610af",
+      "0x0b3f868e0be5597d5db7feb59e1cadbb0fdda50a",
+      "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7",
+      "0x9a71012b13ca4d3d0cdc72a177df3ef03b0e76a3",
+      "0x85955046df4668e1dd369d2de9f3aeb98dd2a369",
+      "0xe111178a87a3bff0c8d18decba5798827539ae99",
+      "0x4e3decbb3645551b8a19f0ea1678079fcb33fb4c",
+      "0xe0b52e49357fd4daf2c15e02058dce6bc0057db4",
+      "0xa3fa99a148fa48d14ed51d610c367c61876997f1",
+      "0x3a58a54c066fdc0f2d55fc9c89f0415c92ebf3c4",
+      "0xfa68fb4628dff1028cfec22b4162fccd0d45efb6",
+      "0x03b54a6e9a984069379fae1a4fc4dbae93b3bccd",
+      "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359"
+    ],
+    "146": [
+      "0x50c42deacd8fc9773493ed674b675be577f2634b",
+      "0x29219dd400f2bf60e5a23d13be72b486d4038894",
+      "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38",
+      "0xe5da20f15420ad15de0fa650600afc998bbe3955"
+    ],
+    "324": [
+      "0x1d17cbcf0d6d143135ae902365d2e5e2a16538d4",
+      "0x493257fd37edb34451f62edf8d2a0c418852ba4c",
+      "0x5aea5775959fbc2557cc8789bc1bf90a239d9a91",
+      "0x703b52f2b28febcb60e1372858af5b18849fe867",
+      "0x5a7d6b2f92c77fad6ccabd7ee0624e64907eaf3e",
+      "0xc1fa6e2e8667d9be0ca938a54c7e0285e9df924a",
+      "0xad17da2f6ac76746ef261e835c50b2651ce36da8"
+    ],
+    "1088": [
+      "0x4c078361fc9bbb78df910800a991c7c3dd2f6ce0",
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000",
+      "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+      "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+      "0x420000000000000000000000000000000000000a"
+    ],
+    "1868": [
+      "0x4200000000000000000000000000000000000006",
+      "0xba9986d2381edf1da03b0b9c1f8b00dc4aacc369",
+      "0x3a337a6ada9d885b6ad95ec48f9b75f197b5ae35"
+    ],
+    "8453": [
+      "0x4200000000000000000000000000000000000006",
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22",
+      "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",
+      "0xc1cba3fcea344f92d9239c08c0568f6f2f0ee452",
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x6bb7a212910682dcfdbd5bcbb3e28fb4e8da10ee",
+      "0xedfa23602d0ec14714057867a78d01e94176bea0",
+      "0xecac9c5f704e954931349da37f60e39f515c11c1",
+      "0x60a3e35cc302bfa44cb288bc5a4f316fdb1adb42",
+      "0x63706e401c06ac8513145b7687a14804d17f814b"
+    ],
+    "42161": [
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+      "0xf97f4df75117a78c1a5a0dbb814af92458539fb4",
+      "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+      "0xba5ddd1f9d7f570dc94a51479a000e3bce967196",
+      "0xd22a58f79e9481d1a88e00c343885a588b34b68b",
+      "0x5979d7b546e38e414f7e9822514be443a4800529",
+      "0x3f56e0c36d275367b8c502090edf38289b3dea0d",
+      "0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8",
+      "0x93b346b6bc2548da6a1e7d98e9a421b42541425b",
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "0x17fc002b466eec40dae837fc4be5c67993ddbd6f",
+      "0x912ce59144191c1204e64559fe8253a0e49e6548",
+      "0x35751007a407ca6feffe80b3cb397736d2cf4dbe",
+      "0x7dff72693f6a4149b17e7c6314655f6a9f7c8b33",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x4186bfc76e2e237523cbc30fd220fe055156b41f"
+    ],
+    "42220": [
+      "0xceba9300f2b948710d2653dd7b07f33a8b32118c",
+      "0x48065fbbe25f71c9282ddf5e1cd6d6a887483d5e",
+      "0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73",
+      "0x765de816845861e75a25fca122bb6898b8b1282a",
+      "0x471ece3750da237f93b8e339c536989b8978a438",
+      "0xd221812de1bd094f35587ee8e174b07b6167d9af"
+    ],
+    "43114": [
+      "0xd586e7f844cea2f87f50152665bcbc2c279d8d70",
+      "0x5947bb275c521040051d82396192181b413227a3",
+      "0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e",
+      "0x50b7545627a5162f82a992c33b87adc75187b218",
+      "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab",
+      "0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7",
+      "0x63a72806098bd3d9520cc43356dd78afe5d386d9",
+      "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+      "0x2b2c81e08f1af8835a78bb2a90ae924ace0ea4be",
+      "0xd24c2ad096400b6fbcd2ad8b24e7acbc21a1da64",
+      "0x5c49b268c9841aff1cc3b0a418ff5c3442ee3f3b",
+      "0x152b9d0fdc40c096757f570a51e494bd4b943e50",
+      "0x00000000efe302beaa2b3e6e1b18d08d69a9012a"
+    ],
+    "59144": [
+      "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f",
+      "0x3aab2285ddcddad8edf438c1bab47e1a9d05a9b4",
+      "0x176211869ca2b568f2a7d4ee941e073a821ee1ff",
+      "0xa219439258ca9da29e9cc4ce5596924745e12b93",
+      "0xb5bedd42000b71fdde22d3ee8a79bd49a568fc8f",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x1bf74c010e6320bab11e2e5a532b5ac15e0b8aa6"
+    ],
+    "534352": [
+      "0x5300000000000000000000000000000000000004",
+      "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4",
+      "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+      "0x01f0a31698c4d065659b9bdc21b3610292a1c506",
+      "0xd29687c813d741e2f938f4ac377128810e217b1b"
+    ],
+    "1666600000": [
+      "0xef977d2f931c1978db5f6747666fa1eacb0d0339",
+      "0x218532a12a389a4a92fc0c5fb22901d1c19198aa",
+      "0x985458e523db3d53125813ed68c274899e9dfab4",
+      "0x3095c7557bcb296ccc6e363de01b760ba031f2d9",
+      "0x6983d1e6def3690c4d616b13597a09e6193ea013",
+      "0x3c2b8be99c50593081eaa2a724f0b8285f5aba8f",
+      "0xcf323aad9e522b93f11c352caa519ad0e14eb40f",
+      "0xcf664087a5bb0237a0bad6742852ec6c8d69a27a"
+    ]
+  },
+  "AAVE_V3_PRIME": {
+    "1": [
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "0xdc035d45d973e3ec169d2276ddab16f1e407384f",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110",
+      "0x9d39a5de30e57443bff2a8307a4256c8797a3497",
+      "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7"
+    ]
+  },
+  "AAVE_V3_ETHER_FI": {
+    "1": [
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0x6c3ea9036406852006290770bedfcaba0e23a0e8",
+      "0x853d955acef822db058eb8505911ed77f175b99e"
+    ]
+  },
+  "AAVE_V2": {
+    "137": [
+      "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+      "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+      "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+      "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+      "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+      "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+      "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+      "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7",
+      "0x9a71012b13ca4d3d0cdc72a177df3ef03b0e76a3",
+      "0x85955046df4668e1dd369d2de9f3aeb98dd2a369",
+      "0x172370d5cd63279efa6d502dab29171933a610af",
+      "0x0b3f868e0be5597d5db7feb59e1cadbb0fdda50a",
+      "0x53e0bca35ec356bd5dddfebbd1fc0fd03fabad39"
+    ]
+  },
+  "LENDLE": {
+    "5000": [
+      "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+      "0x201eba5cc46d216ce6dc03f6a759e8e766e956ae",
+      "0xcabae6f6ea1ecab08ad02fe02ce9a44f09aebfa2",
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111",
+      "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8",
+      "0xcda86a272531e8640cd7f1a92c01839911b90bb0",
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+      "0xc96de26018a54d51c097160568752c4e3bd6c364",
+      "0xe6829d9a7ee3040e1276fa75293bde931859e8fa",
+      "0x00000000efe302beaa2b3e6e1b18d08d69a9012a",
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2"
+    ]
+  },
+  "HANA": {
+    "167000": [
+      "0x07d83526730c7438048d55a4fc0b850e2aab6f0b",
+      "0xa51894664a773981c6c112c43ce576f315d5b1b6",
+      "0xa9d23408b9ba935c230493c40c73824df71a0975",
+      "0x19e26b0638bf63aa9fa4d14c6baf8d52ebe86c5c"
+    ]
+  },
+  "AURELIUS": {
+    "5000": [
+      "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+      "0x201eba5cc46d216ce6dc03f6a759e8e766e956ae",
+      "0xcabae6f6ea1ecab08ad02fe02ce9a44f09aebfa2",
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111",
+      "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8",
+      "0xcda86a272531e8640cd7f1a92c01839911b90bb0",
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+      "0x5be26527e817998a7206475496fde1e68957c5a6",
+      "0xc96de26018a54d51c097160568752c4e3bd6c364",
+      "0xe6829d9a7ee3040e1276fa75293bde931859e8fa",
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2"
+    ]
+  },
+  "TAKOTAKO": {
+    "167000": [
+      "0x07d83526730c7438048d55a4fc0b850e2aab6f0b",
+      "0x9c2dc7377717603eb92b2655c5f2e7997a4945bd",
+      "0xa51894664a773981c6c112c43ce576f315d5b1b6",
+      "0xa9d23408b9ba935c230493c40c73824df71a0975",
+      "0x2def195713cf4a606b49d07e520e22c17899a736",
+      "0xf7fb2df9280eb0a76427dc3b34761db8b1441a49"
+    ]
+  },
+  "TAKOTAKO_ETH": {
+    "167000": [
+      "0xa51894664a773981c6c112c43ce576f315d5b1b6",
+      "0x756b6574b3162077a630895995b443aa68cd2015"
+    ]
+  },
+  "MERIDIAN": {
+    "167000": [
+      "0xa51894664a773981c6c112c43ce576f315d5b1b6",
+      "0xa9d23408b9ba935c230493c40c73824df71a0975",
+      "0x07d83526730c7438048d55a4fc0b850e2aab6f0b",
+      "0x19e26b0638bf63aa9fa4d14c6baf8d52ebe86c5c",
+      "0x9c2dc7377717603eb92b2655c5f2e7997a4945bd"
+    ]
+  },
+  "SPARK": {
+    "1": [
+      "0x6b175474e89094c44da98b954eedeac495271d0f",
+      "0x83f20f44975d03b1b09e64809b757c47f942beea",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "0x6810e776880c02933d47db1b9fc05908e5386b96",
+      "0xae78736cd615f374d3085123a210448e74fc6393",
+      "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0xa3931d71877c0e7a3148cb7eb4463524fec27fbd",
+      "0xdc035d45d973e3ec169d2276ddab16f1e407384f",
+      "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "0x18084fba666a33d37592fa2633fd49a74dd93a88",
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110",
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7"
+    ],
+    "100": [
+      "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+      "0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1",
+      "0x6c76971f98945ae98dd7d4dfca8711ebea946ea6",
+      "0x9c58bacc331c9aa871afd802db6379a98e80cedb",
+      "0xaf204776c7245bf4147c2612bf6e5972ee483701",
+      "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83",
+      "0x4ecaba5870353805a9f068101a40e0f32ed605c6",
+      "0xcb444e90d8198415266c6a2724b7900fb12fc56e",
+      "0x2a22f9c3b484c3629090feed35f17ff8f88f76f0"
+    ]
+  },
+  "RHOMBUS": {
+    "8217": [
+      "0x19aac5f612f524b754ca7e7c41cbfa2e981a4432",
+      "0x5c13e303a62fc5dedf5b52d66873f2e59fedadc2",
+      "0x608792deb376cce1c9fa4d0e6b7b44f507cffa6a",
+      "0x98a8345bb9d3dda9d808ca1c9142a28f6b0430e1",
+      "0x42952b873ed6f7f0a7e4992e2a9818e3a9001995",
+      "0xa9999999c3d05fb75ce7230e0d22f5625527d583",
+      "0x84f8c3c8d6ee30a559d73ec570d574f671e82647",
+      "0x9bcb2efc545f89986cf70d3adc39079a1b730d63",
+      "0x7fc692699f2216647a0e06225d8bdf8cdee40e7f",
+      "0x02cbe46fb8a1f579254a9b485788f2d86cad51aa"
+    ]
+  },
+  "KLAP": {
+    "8217": [
+      "0x078db7827a5531359f6cb63f62cfa20183c4f10c",
+      "0x6270b58be569a7c0b8f47594f191631ae5b2c86c",
+      "0xd6dab4cff47df175349e6e7ee2bf7c40bb8c05a3",
+      "0xdcbacf3f7a069922e677912998c8d57423c37dfa",
+      "0xcd6f29dc9ca217d0973d3d21bf58edd3ca871a86",
+      "0xe4f05a66ec68b54a58b17c22107b02e0232cc817",
+      "0x98a8345bb9d3dda9d808ca1c9142a28f6b0430e1",
+      "0x981846be8d2d697f4dfef6689a161a25ffbab8f9",
+      "0x608792deb376cce1c9fa4d0e6b7b44f507cffa6a",
+      "0x5c13e303a62fc5dedf5b52d66873f2e59fedadc2",
+      "0xcb2c7998696ef7a582dfd0aafadcd008d03e791a",
+      "0xac9c1e4787139af4c751b1c0fadfb513c44ed833",
+      "0xe2765f3721dab5f080cf14ace661529e1ab9ade7",
+      "0x45830b92443a8f750247da2a76c85c70d0f1ebf3",
+      "0xfaa03a2ac2d1b8481ec3ff44a0152ea818340e6d",
+      "0xcee8faf64bb97a73bb51e115aa89c17ffa8dd167",
+      "0x4fa62f1f404188ce860c8f0041d6ac3765a72e67"
+    ]
+  },
+  "RMM": {
+    "100": [
+      "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+      "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83",
+      "0xd3dff217818b4f33eb38a243158fbed2bbb029d3"
+    ]
+  },
+  "SAKE": {
+    "1868": [
+      "0x4200000000000000000000000000000000000006",
+      "0x2cae934a1e84f693fbb78ca5ed3b0a6893259441",
+      "0xba9986d2381edf1da03b0b9c1f8b00dc4aacc369",
+      "0xf24e57b1cb00d98c31f04f86328e22e8fca457fb",
+      "0x3a337a6ada9d885b6ad95ec48f9b75f197b5ae35",
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77",
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c",
+      "0x6c460b2c6d6719562d5da43e5152b375e79b9a8b",
+      "0x102d758f688a4c1c5a80b116bd945d4455460282",
+      "0xaffeb8576b927050f5a3b6fba43f360d2883a118"
+    ]
+  },
+  "SAKE_ASTAR": {
+    "1868": [
+      "0x2cae934a1e84f693fbb78ca5ed3b0a6893259441",
+      "0xc67476893c166c537afd9bc6bc87b3f228b44337",
+      "0x3b0dc2dac9498a024003609031d973b1171de09e"
+    ]
+  },
+  "LAYERBANK_V3": {
+    "43111": [
+      "0xf9775085d726e782e83585033b58606f7731ab18",
+      "0xbb0d083fb1be0a9f6157ec484b6c79e0a4e31c2e",
+      "0x7a06c4aef988e7925575c50261297a946ad204a8",
+      "0xad11a8beb98bbf61dbb1aa0f6d6f2ecd87b35afa",
+      "0x4200000000000000000000000000000000000006",
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3",
+      "0x93919784c523f39cacaa98ee0a9d96c3f32b593e",
+      "0x78e26e8b953c7c78a58d69d8b9a91745c2bbb258",
+      "0x8154aaf094c2f03ad550b6890e1d4264b5ddad9a",
+      "0x9bfa177621119e64cecbeabe184ab9993e2ef727",
+      "0x6a9a65b84843f5fd4ac9a0471c4fc11afffbce4a",
+      "0xaa40c0c7644e0b2b224509571e10ad20d9c4ef28"
+    ]
+  },
+  "AVALON_SOLV_BTC": {
+    "1": [
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642",
+      "0x332a8ee60edff0a11cf3994b1b846bbc27d3dcd6",
+      "0xb997b3418935a1df0f914ee901ec83927c1509a0",
+      "0xec5a52c685cc3ad79a6a347abace330d69e0b1ed",
+      "0x8236a87084f8b84306f72007f36f2618a5634494"
+    ],
+    "56": [
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+      "0x55d398326f99059ff775485246999027b3197955",
+      "0x4aae823a6a0b376de6a78e74ecc5b079d38cbcf7",
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "0x53e63a31fd1077f949204b94f431bcab98f72bce",
+      "0x1346b618dc92810ec74163e4c27004c921d446a5",
+      "0x541b5eeac7d4434c8f87e2d32019d67611179606"
+    ],
+    "34443": [
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77",
+      "0x59889b7021243db5b1e065385f918316cd90d46c"
+    ],
+    "167000": [
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77",
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c",
+      "0xf7fb2df9280eb0a76427dc3b34761db8b1441a49"
+    ],
+    "21000000": [
+      "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2",
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c",
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77"
+    ]
+  },
+  "AVALON_PUMP_BTC": {
+    "1": [
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e",
+      "0xc96de26018a54d51c097160568752c4e3bd6c364",
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599"
+    ],
+    "56": [
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "0xf9c4ff105803a77ecb5dae300871ad76c2794fa4"
+    ],
+    "7000": [
+      "0x1fcca65fb6ae3b2758b9b2b394cb227eae404e1e",
+      "0x13a0c5930c028511dc02665e7285134b6d11a5f4"
+    ],
+    "42161": [
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e",
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f"
+    ],
+    "21000000": [
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e",
+      "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2"
+    ]
+  },
+  "AVALON_SWELL_BTC": {
+    "1": [
+      "0x8db2350d78abc13f5673a411d4700bcf87864dde",
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599"
+    ]
+  },
+  "AVALON_EBTC_LBTC": {
+    "1": [
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642",
+      "0x332a8ee60edff0a11cf3994b1b846bbc27d3dcd6",
+      "0xb997b3418935a1df0f914ee901ec83927c1509a0",
+      "0xec5a52c685cc3ad79a6a347abace330d69e0b1ed",
+      "0x8236a87084f8b84306f72007f36f2618a5634494"
+    ]
+  },
+  "AVALON_UNIBTC": {
+    "56": [
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "0x6b2a01a5f79deb4c2f3c0eda7b01df456fbd726a"
+    ],
+    "4200": [
+      "0xf6d226f9dc15d9bb51182815b320d3fbe324e1ba",
+      "0xb880fd278198bd590252621d4cd071b1842e9bcd",
+      "0x93919784c523f39cacaa98ee0a9d96c3f32b593e"
+    ],
+    "4689": [
+      "0x93919784c523f39cacaa98ee0a9d96c3f32b593e",
+      "0x6fbcdc1169b5130c59e72e51ed68a84841c98cd1"
+    ],
+    "34443": [
+      "0x6b2a01a5f79deb4c2f3c0eda7b01df456fbd726a",
+      "0x59889b7021243db5b1e065385f918316cd90d46c"
+    ],
+    "42161": [
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e",
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f"
+    ],
+    "60808": [
+      "0x236f8c0a61da474db21b693fb2ea7aab0c803894",
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3"
+    ],
+    "200901": [
+      "0xff204e2681a6fa0e2c3fade68a1b28fb90e4fc5f",
+      "0x93919784c523f39cacaa98ee0a9d96c3f32b593e"
+    ]
+  },
+  "AVALON": {
+    "146": [
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77",
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c"
+    ],
+    "223": [
+      "0x796e4d53067ff374b89b2ac101ce0c1f72ccaac2",
+      "0xf6718b2701d4a6498ef77d7c152b2137ab28b8a3"
+    ],
+    "1116": [
+      "0x40375c92d9faf44d2f9db9bd9ba41a3317a2404f",
+      "0x8034ab88c3512246bf7894f57c834dddbd1de01f",
+      "0xa4151b2b3e269645181dccf2d426ce75fcbdeca9",
+      "0x900101d06a7426441ae63e9ab3b9b0f63be145f1",
+      "0x5b1fb849f1f76217246b8aaac053b5c7b15b7dc3",
+      "0xe04d21d999faedf1e72ade6629e20a11a1ed14fa"
+    ],
+    "1329": [
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77",
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c"
+    ],
+    "2345": [
+      "0xe1ad845d93853fff44990ae0dcecd8575293681e",
+      "0x3022b87ac063de95b1570f46f5e470f8b53112d8",
+      "0xbc10000000000000000000000000000000000000",
+      "0xfe41e7e5cb3460c483ab2a38eb605cda9e2d248e",
+      "0x1e0d0303a8c4ad428953f5acb1477db42bb838cf",
+      "0x3a1293bdb83bbbdd5ebf4fac96605ad2021bbc0f"
+    ],
+    "4200": [
+      "0xf6d226f9dc15d9bb51182815b320d3fbe324e1ba",
+      "0xb880fd278198bd590252621d4cd071b1842e9bcd",
+      "0x967aec3276b63c5e2262da9641db9dbebb07dc0d",
+      "0x6b4ecada640f1b30dbdb68f77821a03a5f282ebe",
+      "0x41d9036454be47d3745a823c4aacd0e29cfb0f71",
+      "0x0726523eba12edad467c55a962842ef358865559",
+      "0x5c46bff4b38dc1eae09c5bac65872a1d8bc87378",
+      "0xb5d8b1e73c79483d7750c5b8df8db45a0d24e2cf",
+      "0x7dcb50b2180bc896da1200d2726a88af5d2cbb5a",
+      "0x88c618b2396c1a11a6aabd1bf89228a08462f2d2",
+      "0x1760900aca15b90fa2eca70ce4b4ec441c2cf6c5"
+    ],
+    "4689": [
+      "0xa00744882684c3e4747faefd68d283ea44099d03",
+      "0x6fbcdc1169b5130c59e72e51ed68a84841c98cd1",
+      "0x3b2bf2b523f54c4e454f08aa286d03115aff326c",
+      "0xcdf79194c6c285077a58da47641d4dbe51f63542"
+    ],
+    "7000": [
+      "0x5f0b1a82749cb4e2278ec87f8bf6b618dc71a8bf",
+      "0x7c8dda80bbbe1254a7aacf3219ebe1481c6e01d7",
+      "0xd97b1de3619ed2c6beb3860147e30ca8a7dc9891",
+      "0x91d4f0d54090df2d81e834c3c8ce71c6c865e79f",
+      "0x05ba149a7bd6dc1f937fa9046a9e05c05f3b18b0",
+      "0x0cbe0df132a6c6b4a2974fa1b7fb953cf0cc798a",
+      "0x13a0c5930c028511dc02665e7285134b6d11a5f4",
+      "0x48f80608b672dc30dc7e3dbbd0343c5f02c738eb"
+    ],
+    "8217": [
+      "0x19aac5f612f524b754ca7e7c41cbfa2e981a4432",
+      "0x98a8345bb9d3dda9d808ca1c9142a28f6b0430e1",
+      "0x15d9f3ab1982b0e5a415451259994ff40369f584",
+      "0x5c13e303a62fc5dedf5b52d66873f2e59fedadc2",
+      "0x608792deb376cce1c9fa4d0e6b7b44f507cffa6a",
+      "0x585e26627c3b630b3c45b4f0e007db5d90fae9b2",
+      "0xd077a400968890eacc75cdc901f0356c943e4fdb"
+    ],
+    "8453": [
+      "0x3b86ad95859b6ab773f55f8d94b4b9d443ee931f",
+      "0xc26c9099bd3789107888c35bb41178079b282561",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf"
+    ],
+    "42161": [
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+      "0x3647c54c4c2c65bc7a2d63c0da2809b399dbbdc0",
+      "0xafafd68afe3fe65d376eec9eab1802616cfaccb8",
+      "0x346c574c56e1a4aaa8dc88cda8f7eb12b39947ab"
+    ],
+    "167000": [
+      "0x2def195713cf4a606b49d07e520e22c17899a736",
+      "0x07d83526730c7438048d55a4fc0b850e2aab6f0b",
+      "0xa9d23408b9ba935c230493c40c73824df71a0975"
+    ],
+    "200901": [
+      "0xff204e2681a6fa0e2c3fade68a1b28fb90e4fc5f",
+      "0xef63d4e178b3180beec9b0e143e0f37f4c93f4c2",
+      "0x9827431e8b77e87c9894bd50b055d6be56be0030",
+      "0xfe9f969faf8ad72a83b761138bf25de87eff9dd2",
+      "0x07373d112edc4570b46996ad1187bc4ac9fb5ed0",
+      "0xf6718b2701d4a6498ef77d7c152b2137ab28b8a3",
+      "0xe04d21d999faedf1e72ade6629e20a11a1ed14fa",
+      "0xb88a54ebbda8edbc1c2816ace1dc2b7c6715972d",
+      "0xb750f79cf4768597f4d05d8009fcc7cee2704824",
+      "0xf8c374ce88a3be3d374e8888349c7768b607c755"
+    ],
+    "534352": [
+      "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+      "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4"
+    ],
+    "21000000": [
+      "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2",
+      "0xdf0b24095e15044538866576754f3c964e902ee6"
+    ]
+  },
+  "AVALON_USDA": {
+    "146": [
+      "0x2840f9d9f96321435ab0f977e7fdbf32ea8b304f",
+      "0xff12470a969dd362eb6595ffb44c82c959fe9acc",
+      "0x29219dd400f2bf60e5a23d13be72b486d4038894"
+    ],
+    "1329": [
+      "0x6ab5d5e96ac59f66bab57450275cc16961219796",
+      "0xff12470a969dd362eb6595ffb44c82c959fe9acc",
+      "0x3894085ef7ff0f0aedf52e2a2704928d1ec074f1",
+      "0xb75d0b03c06a926e488e2659df1a861f860bd3d1"
+    ],
+    "4689": [
+      "0xa00744882684c3e4747faefd68d283ea44099d03",
+      "0x2d9526e2cabd30c6e8f89ea60d230503c59c6603"
+    ],
+    "8217": [
+      "0x585e26627c3b630b3c45b4f0e007db5d90fae9b2",
+      "0xdc3cf1961b08da169b078f7df6f26676bf6a4ff6",
+      "0x5c13e303a62fc5dedf5b52d66873f2e59fedadc2",
+      "0x608792deb376cce1c9fa4d0e6b7b44f507cffa6a"
+    ],
+    "167000": [
+      "0x5d5c8aec46661f029a5136a4411c73647a5714a7",
+      "0xff12470a969dd362eb6595ffb44c82c959fe9acc",
+      "0x2def195713cf4a606b49d07e520e22c17899a736",
+      "0x07d83526730c7438048d55a4fc0b850e2aab6f0b"
+    ],
+    "200901": [
+      "0xe8cfc9f5c3ad6eeeced88534aa641355451db326",
+      "0x91bd7f5e328aecd1024e4118ade0ccb786f55db1",
+      "0xfe9f969faf8ad72a83b761138bf25de87eff9dd2",
+      "0x9827431e8b77e87c9894bd50b055d6be56be0030"
+    ],
+    "21000000": [
+      "0x2840f9d9f96321435ab0f977e7fdbf32ea8b304f",
+      "0xff12470a969dd362eb6595ffb44c82c959fe9acc",
+      "0xdf0b24095e15044538866576754f3c964e902ee6"
+    ]
+  },
+  "AVALON_SKAIA": {
+    "8217": [
+      "0x19aac5f612f524b754ca7e7c41cbfa2e981a4432",
+      "0x42952b873ed6f7f0a7e4992e2a9818e3a9001995"
+    ]
+  },
+  "AVALON_USDX": {
+    "56": [
+      "0x7788a3538c5fc7f9c7c8a74eac4c898fc8d87d92",
+      "0xf3527ef8de265eaa3716fb312c12847bfba66cef",
+      "0x55d398326f99059ff775485246999027b3197955",
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d"
+    ]
+  },
+  "AVALON_XAUM": {
+    "56": [
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+      "0x55d398326f99059ff775485246999027b3197955",
+      "0x23ae4fd8e7844cdbc97775496ebd0e8248656028"
+    ]
+  },
+  "AVALON_LBTC": {
+    "56": [
+      "0xecac9c5f704e954931349da37f60e39f515c11c1",
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c"
+    ],
+    "21000000": [
+      "0xecac9c5f704e954931349da37f60e39f515c11c1",
+      "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2",
+      "0xdf0b24095e15044538866576754f3c964e902ee6"
+    ]
+  },
+  "AVALON_WBTC": {
+    "56": [
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+      "0x55d398326f99059ff775485246999027b3197955",
+      "0x0555e30da8f98308edb960aa94c0db47230d2b9c"
+    ]
+  },
+  "AVALON_LISTA": {
+    "56": [
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+      "0x55d398326f99059ff775485246999027b3197955",
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "0xfceb31a79f71ac9cbdcf853519c1b12d379edc46",
+      "0xc5f0f7b66764f6ec8c8dff7ba683102295e16409",
+      "0xb0b84d294e0c75a6abe60171b70edeb2efd14a1b",
+      "0x0782b6d8c4551b9760e74c0545a9bcd90bdc41e5"
+    ]
+  },
+  "AVALON_STBTC": {
+    "56": [
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "0xf6718b2701d4a6498ef77d7c152b2137ab28b8a3"
+    ]
+  },
+  "AVALON_UNILOTX": {
+    "4689": [
+      "0xa00744882684c3e4747faefd68d283ea44099d03",
+      "0x236f8c0a61da474db21b693fb2ea7aab0c803894"
+    ]
+  },
+  "AVALON_BOB": {
+    "60808": [
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3",
+      "0xbba2ef945d523c4e2608c9e1214c2cc64d4fc2e2",
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77",
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c"
+    ]
+  },
+  "AVALON_OBTC": {
+    "1116": [
+      "0x5832f53d147b3d6cd4578b9cbd62425c7ea9d0bd",
+      "0x000734cf9e469bad78c8ec1b0deed83d0a03c1f8"
+    ]
+  },
+  "AVALON_UBTC": {
+    "1116": [
+      "0x5832f53d147b3d6cd4578b9cbd62425c7ea9d0bd",
+      "0xbb4a26a053b217bb28766a4ed4b062c3b4de58ce"
+    ]
+  },
+  "AVALON_LORENZO": {
+    "200901": [
+      "0xff204e2681a6fa0e2c3fade68a1b28fb90e4fc5f",
+      "0xf6718b2701d4a6498ef77d7c152b2137ab28b8a3"
+    ]
+  },
+  "AVALON_BEETS": {
+    "146": [
+      "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38",
+      "0xe5da20f15420ad15de0fa650600afc998bbe3955"
+    ]
+  },
+  "AVALON_INNOVATION": {
+    "4200": [
+      "0xb880fd278198bd590252621d4cd071b1842e9bcd",
+      "0x480e158395cc5b41e5584347c495584ca2caf78d",
+      "0x7a677e59dc2c8a42d6af3a62748c5595034a008b",
+      "0x4dcb91cc19aadfe5a6672781eb09abad00c19e4c",
+      "0x69181a1f082ea83a152621e4fa527c936abfa501",
+      "0xbd40c74cb5cf9f9252b3298230cb916d80430bba",
+      "0x7126bd63713a7212792b08fa2c39d39190a4cf5b",
+      "0x27622b326ff3ffa7dc10ae291800c3073b55aa39",
+      "0x33c70a08d0d427ee916576a7594b50d7f8f3fbe1",
+      "0x09401c470a76ec07512eeddef5477be74bac2338",
+      "0x4920fb03f3ea1c189dd216751f8d073dd680a136",
+      "0xb00db5faae7682d80ca3ce5019e710ca08bfbd66",
+      "0xa41a8c64a324cd00cb70c2448697e248ea0b1ff2",
+      "0x32a4b8b10222f85301874837f27f4c416117b811",
+      "0x5c46bff4b38dc1eae09c5bac65872a1d8bc87378"
+    ]
+  },
+  "NEREUS": {
+    "43114": [
+      "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab",
+      "0xd586e7f844cea2f87f50152665bcbc2c279d8d70",
+      "0xc7198437980c041c805a1edcba50c1ce5db95118",
+      "0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664",
+      "0x50b7545627a5162f82a992c33b87adc75187b218",
+      "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+      "0x249848beca43ac405b8102ec90dd5f22ca513c06",
+      "0x6e84a6216ea6dacc71ee8e6b0a5b7322eebc0fdd",
+      "0xb599c3590f42f8f995ecfa0f85d2980b76862fc1",
+      "0x47536f17f4ff30e64a96a7555826b8f9e66ec468",
+      "0xfcde4a87b8b6fa58326bb462882f1778158b02f1"
+    ]
+  },
+  "KINZA": {
+    "1": [
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110",
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7",
+      "0xd9a442856c234a39a81a089c06451ebaa4306a72",
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
+      "0xae78736cd615f374d3085123a210448e74fc6393",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0x6b175474e89094c44da98b954eedeac495271d0f",
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f",
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642",
+      "0x73a15fed60bf67631dc6cd7bc5b6e8da8190acf5"
+    ],
+    "56": [
+      "0xe9e7cea3dedca5984780bafc599bd69add087d56",
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+      "0x55d398326f99059ff775485246999027b3197955",
+      "0x40af3827f39d0eacbf4a168f8d4ee67c121d11c9",
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+      "0xa2e3356610840701bdf5611a53974510ae27e2e1",
+      "0x0782b6d8c4551b9760e74c0545a9bcd90bdc41e5",
+      "0xb0b84d294e0c75a6abe60171b70edeb2efd14a1b",
+      "0xeeaa03ed0aa69fcb6e340d47ffa91a0b3426e1cd",
+      "0x45b817b36cadba2c3b6c2427db5b22e2e65400dd",
+      "0xcee8c9ccd07ac0981ef42f80fb63df3cc36f196e",
+      "0x2dd73dcc565761b684c56908fa01ac270a03f70f",
+      "0xf0daf89f387d9d4ac5e3326eadb20e7bec0ffc7c",
+      "0xc5f0f7b66764f6ec8c8dff7ba683102295e16409",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x80137510979822322193fc997d400d5a6c747bf7",
+      "0x64274835d88f5c0215da8aadd9a5f2d2a2569381",
+      "0x4aae823a6a0b376de6a78e74ecc5b079d38cbcf7",
+      "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+      "0x1346b618dc92810ec74163e4c27004c921d446a5",
+      "0xf6718b2701d4a6498ef77d7c152b2137ab28b8a3",
+      "0x23ae4fd8e7844cdbc97775496ebd0e8248656028",
+      "0x8d0d000ee44948fc98c9b98a4fa4921476f08b0d"
+    ],
+    "204": [
+      "0x4200000000000000000000000000000000000006",
+      "0x9e5aac1ba1a2e6aed6b32689dfcf62a509ca96f3"
+    ],
+    "5000": [
+      "0x5be26527e817998a7206475496fde1e68957c5a6",
+      "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+      "0x201eba5cc46d216ce6dc03f6a759e8e766e956ae",
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111",
+      "0xcda86a272531e8640cd7f1a92c01839911b90bb0",
+      "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8",
+      "0xc96de26018a54d51c097160568752c4e3bd6c364"
+    ]
+  },
+  "ZEROLEND_STABLECOINS_RWA": {
+    "1": [
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "0xdc035d45d973e3ec169d2276ddab16f1e407384f",
+      "0x69000405f9dce69bd4cbf4f2865b79144a69bfe0",
+      "0x939778d83b46b456224a33fb59630b11dec56663",
+      "0x73a15fed60bf67631dc6cd7bc5b6e8da8190acf5",
+      "0x35d8949372d46b7a3d5a56006ae77b215fc69bc0",
+      "0x270d664d2fc7d962012a787aec8661ca83df24eb",
+      "0x0022228a2cc5e7ef0274a7baa600d44da5ab5776",
+      "0x5bae9a5d67d1ca5b09b14c91935f635cfbf3b685",
+      "0x9d39a5de30e57443bff2a8307a4256c8797a3497",
+      "0x4c9edd5852cd905f086c759e8383e09bff1e68b3",
+      "0x80ac24aa929eaf5013f6436cda2a7ba190f5cc0b",
+      "0x1a88df1cfe15af22b3c4c783d4e6f7f9e0c1885d",
+      "0xe00bd3df25fb187d6abbb620b3dfd19839947b81",
+      "0x8a47b431a7d947c6a3ed6e42d501803615a97eaa",
+      "0x69000dfd5025e82f48eb28325a2b88a241182ced",
+      "0x69000195d5e3201cf73c9ae4a1559244df38d47c",
+      "0x4f8e1426a9d10bddc11d26042ad270f16ccb95f2",
+      "0x1ce7d9942ff78c328a4181b9f3826fee6d845a97"
+    ]
+  },
+  "ZEROLEND_ETH_LRTS": {
+    "1": [
+      "0x6b175474e89094c44da98b954eedeac495271d0f",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110",
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7",
+      "0xd9a442856c234a39a81a089c06451ebaa4306a72",
+      "0xf951e335afb289353dc249e82926178eac7ded78",
+      "0x8c9532a60e0e7c6bbd2b2c1303f63ace1c3e9811",
+      "0x7baf258049cc8b9a78097723dc19a8b103d4098f",
+      "0xf7906f274c174a52d444175729e3fa98f9bde285"
+    ]
+  },
+  "ZEROLEND_BTC_LRTS": {
+    "1": [
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642",
+      "0xb997b3418935a1df0f914ee901ec83927c1509a0",
+      "0x8236a87084f8b84306f72007f36f2618a5634494",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x332a8ee60edff0a11cf3994b1b846bbc27d3dcd6",
+      "0xd9d920aa40f578ab794426f5c90f6c731d159def",
+      "0x2f913c820ed3beb3a67391a6eff64e70c4b20b19",
+      "0xec5a52c685cc3ad79a6a347abace330d69e0b1ed",
+      "0x44a7876ca99460ef3218bf08b5f52e2dbe199566",
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e",
+      "0x18084fba666a33d37592fa2633fd49a74dd93a88"
+    ]
+  },
+  "ZEROLEND": {
+    "169": [
+      "0x6fae4d9935e2fcb11fc79a64e917fb2bf14dafaa",
+      "0xec901da9c68e90798bbbb74c11406a32a70652c3",
+      "0xb73603c5d87fa094b7314c74ace2e64d165016fb",
+      "0xf417f5a458ec102b90352f697d6e2ac3a3d2851f",
+      "0x305e88d809c9dc03179554bfbf85ac05ce8f18d6",
+      "0x0dc808adce2099a9f62aa87d9670745aba741746",
+      "0x2fe3ad97a60eb7c79a976fc18bb5ffd07dd94ba5",
+      "0xbdad407f77f44f7da6684b416b1951eca461fb07",
+      "0x95cef13441be50d20ca4558cc0a27b601ac544e5"
+    ],
+    "196": [
+      "0xc5015b9d9161dca7e18e32f6f25c4ad850731fd4",
+      "0x74b7f16337b8972027f6196a17a631ac6de26d22",
+      "0x1e4a5963abfd975d8c9021ce480b42188849d41d",
+      "0xea034fb02eb1808c2cc3adbc15f447b93cbe08e1",
+      "0x5a77f1443d16ee5761d310e38b62f77f726bc71c",
+      "0xe538905cf8410324e03a5a23c1c177a474d59b2b",
+      "0xd077abe1663166c0920d41fd37ea2d9a00fabd40",
+      "0x5a7a183b6b44dc4ec2e3d2ef43f98c5152b1d76d",
+      "0x80137510979822322193fc997d400d5a6c747bf7",
+      "0x5a71f5888ee05b36ded9149e6d32ee93812ee5e9"
+    ],
+    "324": [
+      "0x3355df6d4c9c3035724fd0e3914de96a5a83aaf4",
+      "0x5aea5775959fbc2557cc8789bc1bf90a239d9a91",
+      "0x493257fd37edb34451f62edf8d2a0c418852ba4c",
+      "0x90059c32eeeb1a2aa1351a58860d98855f3655ad",
+      "0x503234f203fc7eb888eec8513210612a43cf6115",
+      "0xbbeb516fb02a01611cbbe0453fe3c580d7281011",
+      "0xfd282f16a64c6d304ac05d1a58da15bed0467c71",
+      "0x2039bb4116b4efc145ec4f0e2ea75012d6c0f181",
+      "0x4d321cd88c5680ce4f85bb58c578dfe9c2cc1ef6",
+      "0x240f765af2273b0cab6caff2880d6d8f8b285fa4",
+      "0x99bbe51be7cce6c8b84883148fd3d12ace5787f2",
+      "0x0e97c7a0f8b2c9885c8ac9fc6136e829cbc21d42",
+      "0x4b9eb6c0b6ea15176bbf62841c6b2a8a398cb656",
+      "0x3a287a06c66f9e95a56327185ca2bdf5f031cecd",
+      "0x703b52f2b28febcb60e1372858af5b18849fe867",
+      "0x5a7d6b2f92c77fad6ccabd7ee0624e64907eaf3e",
+      "0xe757355edba7ced7b8c0271bba4efda184ad75ab",
+      "0x1d17cbcf0d6d143135ae902365d2e5e2a16538d4",
+      "0xa900cbe7739c96d2b153a273953620a701d5442b",
+      "0xc1fa6e2e8667d9be0ca938a54c7e0285e9df924a",
+      "0x0469d9d1de0ee58fa1153ef00836b9bbcb84c0b6"
+    ],
+    "2741": [],
+    "8453": [
+      "0x4200000000000000000000000000000000000006",
+      "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "0x0a27e060c0406f8ab7b64e3bee036a37e5a62853",
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x6cdcb1c4a4d1c3c6d054b27ac5b77e89eafb971d",
+      "0x1097dfe9539350cb466df9ca89a5e61195a520b0",
+      "0x04d5ddf5f3a8939889f11e97f8c4bb48317f1938",
+      "0xe31ee12bdfdd0573d634124611e85338e2cbf0cf",
+      "0xdbfefd2e8460a6ee4955a68582f85708baea60a3",
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e",
+      "0x7fcd174e80f264448ebee8c88a7c4476aaf58ea6",
+      "0xecac9c5f704e954931349da37f60e39f515c11c1",
+      "0xe46c8ba948f8071b425a1f7ba45c0a65cbacea2e",
+      "0x5d746848005507da0b1717c137a10c30ad9ee307",
+      "0x69000dfd5025e82f48eb28325a2b88a241182ced",
+      "0x35e5db674d8e93a03d814fa0ada70731efe8a4b9"
+    ],
+    "43111": [
+      "0xaa40c0c7644e0b2b224509571e10ad20d9c4ef28",
+      "0x9bfa177621119e64cecbeabe184ab9993e2ef727",
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e",
+      "0xc3eacf0612346366db554c991d7858716db09f58",
+      "0xad11a8beb98bbf61dbb1aa0f6d6f2ecd87b35afa",
+      "0xbb0d083fb1be0a9f6157ec484b6c79e0a4e31c2e",
+      "0x7a06c4aef988e7925575c50261297a946ad204a8",
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3",
+      "0x4200000000000000000000000000000000000006",
+      "0x93919784c523f39cacaa98ee0a9d96c3f32b593e",
+      "0xf9775085d726e782e83585033b58606f7731ab18"
+    ],
+    "48900": [
+      "0x4200000000000000000000000000000000000006",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x3535df6e1d776631d0cba53fe9efd34bcbdceed4",
+      "0x4b03831043082e3e5191218ad5331e99aaac4a81",
+      "0x1c1fb35334290b5ff1bf7b4c09130885b10fc0f4",
+      "0x4bcc7c793534246bc18acd3737aa4897ff23b458",
+      "0x4186bfc76e2e237523cbc30fd220fe055156b41f",
+      "0x46dda6a5a559d861c06ec9a95fb395f5c3db0742",
+      "0x3b952c8c9c44e8fe201e2b26f6b2200203214cff",
+      "0x19df5689cfce64bc2a55f7220b0cd522659955ef",
+      "0xfd418e42783382e86ae91e445406600ba144d162"
+    ],
+    "59144": [
+      "0x176211869ca2b568f2a7d4ee941e073a821ee1ff",
+      "0xa219439258ca9da29e9cc4ce5596924745e12b93",
+      "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f",
+      "0xf3b001d64c656e30a62fbaaca003b1336b4ce12a",
+      "0x894134a25a5fac1c2c26f1d8fbf05111a3cb9487",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x3aab2285ddcddad8edf438c1bab47e1a9d05a9b4",
+      "0xd2671165570f41bbb3b0097893300b6eb6101e6c",
+      "0x1bf74c010e6320bab11e2e5a532b5ac15e0b8aa6",
+      "0x15eefe5b297136b8712291b632404b66a8ef4d25",
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2",
+      "0xb5bedd42000b71fdde22d3ee8a79bd49a568fc8f",
+      "0x93f4d0ab6a8b4271f4a28db399b5e30612d21116",
+      "0xecc68d0451e20292406967fe7c04280e5238ac7d",
+      "0x4af15ec2a0bd43db75dd04e62faa3b8ef36b00d5",
+      "0x5a7a183b6b44dc4ec2e3d2ef43f98c5152b1d76d",
+      "0xb20116ee399f15647bb1eef9a74f6ef3b58bc951",
+      "0x5ffce65a40f6d3de5332766fff6a28bf491c868c",
+      "0xe4d584ae9b753e549cae66200a6475d2f00705f7"
+    ],
+    "80094": [
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642",
+      "0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590",
+      "0xfcbd14dc51f0a4d49d5e53c2e0950e0bc26d0dce",
+      "0xac03caba51e17c86c921e1f6cbfbdc91f8bb2e6b",
+      "0xecac9c5f704e954931349da37f60e39f515c11c1",
+      "0x1ce0a25d13ce4d52071ae7e02cf1f6606f4c79d3",
+      "0x4186bfc76e2e237523cbc30fd220fe055156b41f",
+      "0x850cdf416668210ed0c36bfff5d21921c7ada3b8",
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2",
+      "0x549943e04f40284185054145c6e4e9568c1d3241",
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+      "0x779ded0c9e1022225f8e0630b35a9b54be713736",
+      "0x6969696969696969696969696969696969696969",
+      "0x7dcc39b4d1c53cb31e1abc0e358b43987fef80f7"
+    ],
+    "81457": [
+      "0x4300000000000000000000000000000000000003",
+      "0x4300000000000000000000000000000000000004",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a"
+    ],
+    "21000000": [
+      "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2",
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642",
+      "0xecac9c5f704e954931349da37f60e39f515c11c1",
+      "0xf469fbd2abcd6b9de8e169d128226c0fc90a012e"
+    ]
+  },
+  "ZEROLEND_CROAK": {
+    "59144": [
+      "0x176211869ca2b568f2a7d4ee941e073a821ee1ff",
+      "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f",
+      "0xacb54d07ca167934f57f829bee2cc665e1a5ebef"
+    ]
+  },
+  "ZEROLEND_FOXY": {
+    "59144": [
+      "0x176211869ca2b568f2a7d4ee941e073a821ee1ff",
+      "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f",
+      "0x5fbdf89403270a1846f5ae7d113a989f850d1566"
+    ]
+  },
+  "GRANARY": {
+    "1": [
+      "0x6b175474e89094c44da98b954eedeac495271d0f",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+    ],
+    "10": [
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+      "0x7f5c764cbc14f9669b88837ca1490cca17c31607",
+      "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+      "0x68f180fcce6836688e9084f035309e29bf0a2095",
+      "0x4200000000000000000000000000000000000006",
+      "0x4200000000000000000000000000000000000042",
+      "0x8c6f28f2f1a3c87f0f938b96d27520d9751ec8d9",
+      "0xfe8b128ba8c78aabc59d4c64cee7ff28e9379921",
+      "0x8700daec35af8ff88c16bdf0418774cb3d7599b4",
+      "0x1f32b1c2345538c0c6f582fcb022739c4a194ebb",
+      "0xaddb6a0412de1ba0f936dcaeb8aaa24578dcf3b2"
+    ],
+    "56": [
+      "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3",
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d",
+      "0x55d398326f99059ff775485246999027b3197955",
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c",
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+    ],
+    "250": [
+      "0x91a40c733c97a6e1bf876eaf9ed8c08102eb491f",
+      "0x28a92dde19d9989f39a49905d7c9c2fac7799bdf",
+      "0xcc1b99ddac1a33c201a742a1851662e87bc7f22c",
+      "0xf1648c50d2863f780c57849d812b4b7686031a3d",
+      "0x695921034f0387eac4e11620ee91b1b15a6a09fe",
+      "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83"
+    ],
+    "1088": [
+      "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+      "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+      "0xa5b55ab1daf0f8e1efc0eb1931a957fd89b918f4",
+      "0x420000000000000000000000000000000000000a",
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000",
+      "0x433e43047b95cb83517abd7c9978bdf7005e9938"
+    ],
+    "8453": [
+      "0x50c5725949a6f0c72e6c4a641f24049a917db0cb",
+      "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",
+      "0x4200000000000000000000000000000000000006",
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913"
+    ],
+    "42161": [
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+      "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      "0x912ce59144191c1204e64559fe8253a0e49e6548",
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "0x5979d7b546e38e414f7e9822514be443a4800529",
+      "0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8"
+    ],
+    "43114": [
+      "0xd586e7f844cea2f87f50152665bcbc2c279d8d70",
+      "0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664",
+      "0xc7198437980c041c805a1edcba50c1ce5db95118",
+      "0x50b7545627a5162f82a992c33b87adc75187b218",
+      "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab",
+      "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+      "0xd1c3f94de7e5b45fa4edbba472491a9f4b166fc4"
+    ],
+    "59144": [
+      "0x4af15ec2a0bd43db75dd04e62faa3b8ef36b00d5",
+      "0x176211869ca2b568f2a7d4ee941e073a821ee1ff",
+      "0xa219439258ca9da29e9cc4ce5596924745e12b93",
+      "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f",
+      "0x3aab2285ddcddad8edf438c1bab47e1a9d05a9b4"
+    ]
+  },
+  "LORE": {
+    "534352": [
+      "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4",
+      "0xf55bec9cafdbe8730f096aa55dad6d22d44099df",
+      "0x5300000000000000000000000000000000000004",
+      "0x80137510979822322193fc997d400d5a6c747bf7",
+      "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32",
+      "0x01f0a31698c4d065659b9bdc21b3610292a1c506",
+      "0xa25b25548b4c98b0c7d3d27dca5d5ca743d68b7f",
+      "0xd29687c813d741e2f938f4ac377128810e217b1b"
+    ]
+  },
+  "LENDOS": {
+    "43111": [
+      "0x4200000000000000000000000000000000000006",
+      "0xad11a8beb98bbf61dbb1aa0f6d6f2ecd87b35afa",
+      "0xbb0d083fb1be0a9f6157ec484b6c79e0a4e31c2e",
+      "0xaa40c0c7644e0b2b224509571e10ad20d9c4ef28",
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3",
+      "0x7a06c4aef988e7925575c50261297a946ad204a8",
+      "0xaf6ed58980b5a0732423469dd9f3f69d9dc6dab5",
+      "0x0ffb62483517309afd039b117d795521e8320a1b",
+      "0xf23eec60263de9b0c8472c58be10feba28d9eb53"
+    ],
+    "245022934": [
+      "0x202c35e517fa803b537565c40f0a6965d7204609",
+      "0x5f38248f339bf4e84a2caf4e4c0552862dc9f82a",
+      "0xea6b04272f9f62f997f666f07d3a974134f7ffb9",
+      "0xcffd84d468220c11be64dc9df64eafe02af60e8a",
+      "0xfa8fb7e3bd299b2a9693b1bfdcf5dd13ab57007e",
+      "0x5f0155d08ef4aae2b500aefb64a3419da8bb611a"
+    ]
+  },
+  "YLDR": {
+    "1": [
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "0xbe9895146f7af43049ca1c1ae358b0541ea49704",
+      "0xae78736cd615f374d3085123a210448e74fc6393"
+    ],
+    "137": [
+      "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+      "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+      "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+      "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+      "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+      "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+      "0x7b99506c8e89d5ba835e00e2bc48e118264d44ff",
+      "0x3974fbdc22741a1632e024192111107b202f214f"
+    ],
+    "8453": [
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",
+      "0x4200000000000000000000000000000000000006",
+      "0xc1cba3fcea344f92d9239c08c0568f6f2f0ee452"
+    ],
+    "42161": [
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+      "0x5979d7b546e38e414f7e9822514be443a4800529",
+      "0x912ce59144191c1204e64559fe8253a0e49e6548",
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1"
+    ]
+  },
+  "IRONCLAD_FINANCE": {
+    "34443": [
+      "0xd988097fb8612cc24eec14542bc03424c656005f",
+      "0xf0f161fda2712db8b566946122a5af183995e2ed",
+      "0x4200000000000000000000000000000000000006",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x028227c4dd1e5419d11bb6fa6e661920c519d4f5",
+      "0xe7903b1f75c534dd8159b313d92cdcfbc62cb3cd",
+      "0x59889b7021243db5b1e065385f918316cd90d46c",
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a",
+      "0xdfc7c877a950e49d2610114102175a06c2e3167a",
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2",
+      "0x6b2a01a5f79deb4c2f3c0eda7b01df456fbd726a"
+    ]
+  },
+  "MOLEND": {
+    "34443": [
+      "0xd988097fb8612cc24eec14542bc03424c656005f",
+      "0xf0f161fda2712db8b566946122a5af183995e2ed",
+      "0x4200000000000000000000000000000000000006",
+      "0x80137510979822322193fc997d400d5a6c747bf7",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x59889b7021243db5b1e065385f918316cd90d46c",
+      "0xdfc7c877a950e49d2610114102175a06c2e3167a"
+    ]
+  },
+  "SEISMIC": {
+    "81457": [
+      "0x4300000000000000000000000000000000000003",
+      "0x4300000000000000000000000000000000000004",
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a",
+      "0xb1a5700fa2358173fe465e6ea4ff52e36e88e2ad",
+      "0xe7903b1f75c534dd8159b313d92cdcfbc62cb3cd",
+      "0x1a49351bdb4be48c0009b661765d01ed58e8c2d8"
+    ]
+  },
+  "POLTER": {
+    "146": [
+      "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38",
+      "0x50c42deacd8fc9773493ed674b675be577f2634b",
+      "0x29219dd400f2bf60e5a23d13be72b486d4038894",
+      "0x6047828dc181963ba44974801ff68e538da5eaf9"
+    ],
+    "8453": [
+      "0x4200000000000000000000000000000000000006",
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x940181a94a35a4569e4529a3cdfb74e38fd98631"
+    ]
+  },
+  "MAGSIN": {
+    "146": [
+      "0x29219dd400f2bf60e5a23d13be72b486d4038894",
+      "0x50c42deacd8fc9773493ed674b675be577f2634b",
+      "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38",
+      "0xe5da20f15420ad15de0fa650600afc998bbe3955",
+      "0x0525cb0064efff807fd0cd231544b9208fc215a9",
+      "0x5ba1d96907b075c490f641bd30551e1af9c40721"
+    ]
+  },
+  "AGAVE": {
+    "100": [
+      "0xddafbb505ad214d7b80b1f830fccc89b60fb7a83",
+      "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+      "0xe2e73a1c69ecf83f464efce6a5be353a37ca09b2",
+      "0x9c58bacc331c9aa871afd802db6379a98e80cedb",
+      "0x8e5bbbb09ed1ebde8674cda39a0c169401db4252",
+      "0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1",
+      "0x21a42669643f45bc0e086b8fc2ed70c23d67509d",
+      "0x4ecaba5870353805a9f068101a40e0f32ed605c6",
+      "0xcb444e90d8198415266c6a2724b7900fb12fc56e",
+      "0x6c76971f98945ae98dd7d4dfca8711ebea946ea6",
+      "0xaf204776c7245bf4147c2612bf6e5972ee483701"
+    ]
+  },
+  "MOOLA": {
+    "42220": [
+      "0x471ece3750da237f93b8e339c536989b8978a438",
+      "0x765de816845861e75a25fca122bb6898b8b1282a",
+      "0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73",
+      "0xe8537a3d056da446677b9e9d6c5db704eaab4787",
+      "0x17700282592d6917f6a73d0bf8accf4d578c131e"
+    ]
+  },
+  "XLEND": {
+    "10": [
+      "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+      "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+      "0x4200000000000000000000000000000000000006",
+      "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+      "0x1f32b1c2345538c0c6f582fcb022739c4a194ebb",
+      "0x4200000000000000000000000000000000000042",
+      "0x68f180fcce6836688e9084f035309e29bf0a2095",
+      "0x9bcef72be871e61ed4fbbc7630889bee758eb81d"
+    ],
+    "8453": [
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "0x4200000000000000000000000000000000000006",
+      "0xc1cba3fcea344f92d9239c08c0568f6f2f0ee452",
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a",
+      "0xb6fe221fe9eef5aba221c348ba20a1bf5e73624c",
+      "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+      "0x60a3e35cc302bfa44cb288bc5a4f316fdb1adb42",
+      "0xecac9c5f704e954931349da37f60e39f515c11c1",
+      "0x820c137fa70c8691f0e44dc420a5e53c168921dc",
+      "0xedfa23602d0ec14714057867a78d01e94176bea0",
+      "0x5875eee11cf8398102fdad704c9e96607675467a",
+      "0x35e5db674d8e93a03d814fa0ada70731efe8a4b9",
+      "0x236aa50979d5f3de3bd1eeb40e81137f22ab794b",
+      "0xa6f0a4d18b6f6ddd408936e81b7b3a8befa18e77"
+    ]
+  },
+  "KLAYBANK": {
+    "8217": [
+      "0xcee8faf64bb97a73bb51e115aa89c17ffa8dd167",
+      "0x754288077d0ff82af7a5317c7cb8c444d421d103",
+      "0x34d21b1e550d73cee41151c77f3c73359527a396",
+      "0x16d0e1fbd024c600ca0380a4c5d57ee7a2ecbf9c",
+      "0x5c74070fdea071359b86082bd9f9b3deaafbe32b",
+      "0xe4f05a66ec68b54a58b17c22107b02e0232cc817",
+      "0x4fa62f1f404188ce860c8f0041d6ac3765a72e67",
+      "0x5096db80b21ef45230c9e423c373f1fc9c0198dd"
+    ]
+  }
+};
+var Lender = /* @__PURE__ */ ((Lender2) => {
+  Lender2["AAVE_V3"] = "AAVE_V3";
+  Lender2["AAVE_V3_PRIME"] = "AAVE_V3_PRIME";
+  Lender2["AAVE_V3_ETHER_FI"] = "AAVE_V3_ETHER_FI";
+  Lender2["AAVE_V2"] = "AAVE_V2";
+  Lender2["AURELIUS"] = "AURELIUS";
+  Lender2["LENDLE"] = "LENDLE";
+  Lender2["MERIDIAN"] = "MERIDIAN";
+  Lender2["TAKOTAKO"] = "TAKOTAKO";
+  Lender2["TAKOTAKO_ETH"] = "TAKOTAKO_ETH";
+  Lender2["HANA"] = "HANA";
+  Lender2["YLDR"] = "YLDR";
+  Lender2["MAGSIN"] = "MAGSIN";
+  Lender2["SPARK"] = "SPARK";
+  Lender2["NEREUS"] = "NEREUS";
+  Lender2["KINZA"] = "KINZA";
+  Lender2["GRANARY"] = "GRANARY";
+  Lender2["LORE"] = "LORE";
+  Lender2["LENDOS"] = "LENDOS";
+  Lender2["IRONCLAD_FINANCE"] = "IRONCLAD_FINANCE";
+  Lender2["MOLEND"] = "MOLEND";
+  Lender2["SEISMIC"] = "SEISMIC";
+  Lender2["POLTER"] = "POLTER";
+  Lender2["AGAVE"] = "AGAVE";
+  Lender2["MOOLA"] = "MOOLA";
+  Lender2["XLEND"] = "XLEND";
+  Lender2["KLAP"] = "KLAP";
+  Lender2["RHOMBUS"] = "RHOMBUS";
+  Lender2["RMM"] = "RMM";
+  Lender2["KLAYBANK"] = "KLAYBANK";
+  Lender2["SAKE"] = "SAKE";
+  Lender2["SAKE_ASTAR"] = "SAKE_ASTAR";
+  Lender2["LAYERBANK_V3"] = "LAYERBANK_V3";
+  Lender2["ZEROLEND"] = "ZEROLEND";
+  Lender2["ZEROLEND_STABLECOINS_RWA"] = "ZEROLEND_STABLECOINS_RWA";
+  Lender2["ZEROLEND_ETH_LRTS"] = "ZEROLEND_ETH_LRTS";
+  Lender2["ZEROLEND_BTC_LRTS"] = "ZEROLEND_BTC_LRTS";
+  Lender2["ZEROLEND_CROAK"] = "ZEROLEND_CROAK";
+  Lender2["ZEROLEND_FOXY"] = "ZEROLEND_FOXY";
+  Lender2["AVALON"] = "AVALON";
+  Lender2["AVALON_SOLV_BTC"] = "AVALON_SOLV_BTC";
+  Lender2["AVALON_SWELL_BTC"] = "AVALON_SWELL_BTC";
+  Lender2["AVALON_PUMP_BTC"] = "AVALON_PUMP_BTC";
+  Lender2["AVALON_UNIBTC"] = "AVALON_UNIBTC";
+  Lender2["AVALON_EBTC_LBTC"] = "AVALON_EBTC_LBTC";
+  Lender2["AVALON_USDA"] = "AVALON_USDA";
+  Lender2["AVALON_SKAIA"] = "AVALON_SKAIA";
+  Lender2["AVALON_LORENZO"] = "AVALON_LORENZO";
+  Lender2["AVALON_INNOVATION"] = "AVALON_INNOVATION";
+  Lender2["AVALON_UBTC"] = "AVALON_UBTC";
+  Lender2["AVALON_OBTC"] = "AVALON_OBTC";
+  Lender2["AVALON_BEETS"] = "AVALON_BEETS";
+  Lender2["AVALON_UNILOTX"] = "AVALON_UNILOTX";
+  Lender2["AVALON_BOB"] = "AVALON_BOB";
+  Lender2["AVALON_STBTC"] = "AVALON_STBTC";
+  Lender2["AVALON_WBTC"] = "AVALON_WBTC";
+  Lender2["AVALON_LBTC"] = "AVALON_LBTC";
+  Lender2["AVALON_XAUM"] = "AVALON_XAUM";
+  Lender2["AVALON_LISTA"] = "AVALON_LISTA";
+  Lender2["AVALON_USDX"] = "AVALON_USDX";
+  Lender2["COMPOUND_V2"] = "COMPOUND_V2";
+  Lender2["OVIX"] = "OVIX";
+  Lender2["VENUS"] = "VENUS";
+  Lender2["VENUS_ETH"] = "VENUS_ETH";
+  Lender2["VENUS_BNB"] = "VENUS_BNB";
+  Lender2["VENUS_BTC"] = "VENUS_BTC";
+  Lender2["VENUS_MEME"] = "VENUS_MEME";
+  Lender2["VENUS_DEFI"] = "VENUS_DEFI";
+  Lender2["VENUS_GAMEFI"] = "VENUS_GAMEFI";
+  Lender2["VENUS_STABLE"] = "VENUS_STABLE";
+  Lender2["VENUS_TRON"] = "VENUS_TRON";
+  Lender2["VENUS_ETHENA"] = "VENUS_ETHENA";
+  Lender2["VENUS_CURVE"] = "VENUS_CURVE";
+  Lender2["SEGMENT"] = "SEGMENT";
+  Lender2["ENCLABS"] = "ENCLABS";
+  Lender2["ENCLABS_LST"] = "ENCLABS_LST";
+  Lender2["ENCLABS_PT_USD"] = "ENCLABS_PT_USD";
+  Lender2["ENCLABS_PT_ETH"] = "ENCLABS_PT_ETH";
+  Lender2["BENQI"] = "BENQI";
+  Lender2["BENQI_AVALANCE_ECOSYSTEM"] = "BENQI_AVALANCE_ECOSYSTEM";
+  Lender2["COMPOUND_V3_USDC"] = "COMPOUND_V3_USDC";
+  Lender2["COMPOUND_V3_USDT"] = "COMPOUND_V3_USDT";
+  Lender2["COMPOUND_V3_USDE"] = "COMPOUND_V3_USDE";
+  Lender2["COMPOUND_V3_USDBC"] = "COMPOUND_V3_USDBC";
+  Lender2["COMPOUND_V3_USDC_E"] = "COMPOUND_V3_USDC_E";
+  Lender2["COMPOUND_V3_USDS"] = "COMPOUND_V3_USDS";
+  Lender2["COMPOUND_V3_WETH"] = "COMPOUND_V3_WETH";
+  Lender2["COMPOUND_V3_AERO"] = "COMPOUND_V3_AERO";
+  Lender2["COMPOUND_V3_WSTETH"] = "COMPOUND_V3_WSTETH";
+  Lender2["INIT"] = "INIT";
+  Lender2["MORPHO_BLUE"] = "MORPHO_BLUE";
+  Lender2["SWAYLEND_USDC"] = "SWAYLEND_USDC";
+  return Lender2;
+})(Lender || {});
+var AAVE_V2_LENDERS = [
+  "AAVE_V2",
+  "AURELIUS",
+  "LENDLE",
+  "MERIDIAN",
+  "TAKOTAKO",
+  "TAKOTAKO_ETH",
+  "NEREUS",
+  "GRANARY",
+  "LORE",
+  "IRONCLAD_FINANCE",
+  "MOLEND",
+  "POLTER",
+  "SEISMIC",
+  "AGAVE",
+  "MOOLA",
+  "KLAP",
+  "KLAYBANK"
+  /* KLAYBANK */
+];
+var AAVE_V3_LENDERS = [
+  "AAVE_V3",
+  "AAVE_V3_PRIME",
+  "AAVE_V3_ETHER_FI",
+  "HANA",
+  "YLDR",
+  "SPARK",
+  "KINZA",
+  "LENDOS",
+  "MAGSIN",
+  "XLEND",
+  "RHOMBUS",
+  "RMM",
+  "SAKE",
+  "SAKE_ASTAR",
+  "LAYERBANK_V3",
+  // zerolends
+  "ZEROLEND",
+  "ZEROLEND_STABLECOINS_RWA",
+  "ZEROLEND_ETH_LRTS",
+  "ZEROLEND_BTC_LRTS",
+  "ZEROLEND_CROAK",
+  "ZEROLEND_FOXY",
+  // avalons
+  "AVALON",
+  "AVALON_SOLV_BTC",
+  "AVALON_SWELL_BTC",
+  "AVALON_PUMP_BTC",
+  "AVALON_UNIBTC",
+  "AVALON_EBTC_LBTC",
+  "AVALON_USDA",
+  "AVALON_SKAIA",
+  "AVALON_LORENZO",
+  "AVALON_INNOVATION",
+  "AVALON_UBTC",
+  "AVALON_OBTC",
+  "AVALON_BEETS",
+  "AVALON_UNILOTX",
+  "AVALON_BOB",
+  "AVALON_STBTC",
+  "AVALON_WBTC",
+  "AVALON_LBTC",
+  "AVALON_XAUM",
+  "AVALON_LISTA",
+  "AVALON_USDX"
+  /* AVALON_USDX */
+];
+var AAVE_LENDERS = [
+  ...AAVE_V3_LENDERS,
+  ...AAVE_V2_LENDERS
+];
+var AAVE_CORE_ADRESSES = {
+  [
+    "42161"
+    /* ARBITRUM_ONE */
+  ]: {
+    pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
+    protocolDataProvider: "0x7F23D86Ee20D869112572136221e173428DD740B"
+  },
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2",
+    protocolDataProvider: "0x41393e5e337606dc3821075Af65AeE84D7688CBD"
+  },
+  [
+    "43114"
+    /* AVALANCHE_C_CHAIN */
+  ]: {
+    pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
+    protocolDataProvider: "0x7F23D86Ee20D869112572136221e173428DD740B"
+  },
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0x6807dc923806fE8Fd134338EABCA509979a7e0cB",
+    protocolDataProvider: "0x23dF2a19384231aFD114b036C14b6b03324D79BC"
+  },
+  [
+    "137"
+    /* POLYGON_MAINNET */
+  ]: {
+    pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
+    protocolDataProvider: "0x7F23D86Ee20D869112572136221e173428DD740B"
+  },
+  [
+    "1088"
+    /* METIS_ANDROMEDA_MAINNET */
+  ]: {
+    pool: "0x90df02551bB792286e8D4f13E0e357b4Bf1D6a57",
+    protocolDataProvider: "0xC01372469A17b6716A38F00c277533917B6859c0"
+  },
+  [
+    "10"
+    /* OP_MAINNET */
+  ]: {
+    pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
+    protocolDataProvider: "0x7F23D86Ee20D869112572136221e173428DD740B"
+  },
+  [
+    "534352"
+    /* SCROLL */
+  ]: {
+    pool: "0x11fCfe756c05AD438e312a7fd934381537D3cFfe",
+    protocolDataProvider: "0xe2108b60623C6Dcf7bBd535bD15a451fd0811f7b"
+  },
+  [
+    "324"
+    /* ZKSYNC_MAINNET */
+  ]: {
+    pool: "0x78e30497a3c7527d953c6B1E3541b021A98Ac43c",
+    protocolDataProvider: "0x5F2A704cE47B373c908fE8A29514249469b52b99"
+  },
+  [
+    "8453"
+    /* BASE */
+  ]: {
+    pool: "0xA238Dd80C259a72e81d7e4664a9801593F98d1c5",
+    protocolDataProvider: "0xd82a47fdebB5bf5329b09441C3DaB4b5df2153Ad"
+  },
+  [
+    "100"
+    /* GNOSIS */
+  ]: {
+    pool: "0xb50201558B00496A145fE76f7424749556E326D8",
+    protocolDataProvider: "0x57038C3e3Fe0a170BB72DE2fD56E98e4d1a69717"
+  },
+  [
+    "146"
+    /* SONIC_MAINNET */
+  ]: {
+    pool: "0x5362dBb1e601abF3a4c14c22ffEdA64042E5eAA3",
+    protocolDataProvider: "0x306c124fFba5f2Bc0BcAf40D249cf19D492440b9"
+  },
+  [
+    "59144"
+    /* LINEA */
+  ]: {
+    pool: "0xc47b8C00b0f69a36fa203Ffeac0334874574a8Ac",
+    protocolDataProvider: "0x9eEBf28397D8bECC999472fC8838CBbeF54aebf6"
+  },
+  [
+    "1666600000"
+    /* HARMONY_MAINNET_SHARD_0 */
+  ]: {
+    pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
+    protocolDataProvider: "0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654"
+  },
+  [
+    "42220"
+    /* CELO_MAINNET */
+  ]: {
+    pool: "0x3E59A31363E2ad014dcbc521c4a0d5757d9f3402",
+    protocolDataProvider: "0x33b7d355613110b4E842f5f7057Ccd36fb4cee28"
+  },
+  [
+    "1868"
+    /* SONEIUM */
+  ]: {
+    pool: "0xDd3d7A7d03D9fD9ef45f3E587287922eF65CA38B",
+    protocolDataProvider: "0xa0208CE8356ad6C5EC6dFb8996c9A6B828212022"
+  }
+};
+var LENDLE_CORE_ADRESSES = {
+  [
+    "5000"
+    /* MANTLE */
+  ]: {
+    pool: "0xCFa5aE7c2CE8Fadc6426C1ff872cA45378Fb7cF3",
+    protocolDataProvider: "0x552b9e4bae485C4B7F540777d7D25614CdB84773"
+  }
+};
+var HANA_CORE_ADRESSES = {
+  [
+    "167000"
+    /* TAIKO_ALETHIA */
+  ]: {
+    pool: "0x4aB85Bf9EA548410023b25a13031E91B4c4f3b91",
+    protocolDataProvider: "0x9E3D95b518f68349464da1b6dbd0B94DB59addc1"
+  }
+};
+var MERIDIAN_CORE_ADRESSES = {
+  [
+    "167000"
+    /* TAIKO_ALETHIA */
+  ]: {
+    pool: "0x1697A950a67d9040464287b88fCa6cb5FbEC09BA",
+    protocolDataProvider: "0xef6881676d7fC7bd6E09927f833a9ACAAab0bA07"
+  }
+};
+var TAKOTAKO_CORE_ADRESSES = {
+  [
+    "167000"
+    /* TAIKO_ALETHIA */
+  ]: {
+    pool: "0x3A2Fd8a16030fFa8D66E47C3f1C0507c673C841e",
+    protocolDataProvider: "0x3bD0baC54f4Ca268Fc03a4DdcF9d292cbF8D2AF0"
+  }
+};
+var TAKOTAKO_ETH_ADRESSES = {
+  [
+    "167000"
+    /* TAIKO_ALETHIA */
+  ]: {
+    pool: "0xe882a56b8c0C1a5561Febf846614B88718Dc5D9E",
+    protocolDataProvider: "0x0604a6157A4480d9267B13BB615DF32a40d9f57e"
+  }
+};
+var AURELIUS_CORE_ADRESSES = {
+  [
+    "5000"
+    /* MANTLE */
+  ]: {
+    pool: "0x7c9C6F5BEd9Cfe5B9070C7D3322CF39eAD2F9492",
+    protocolDataProvider: "0xedB4f24e4b74a6B1e20e2EAf70806EAC19E1FA54"
+  }
+};
+var AAVE_V2_CORE_ADRESSES = {
+  [
+    "137"
+    /* POLYGON_MAINNET */
+  ]: {
+    pool: "0x8dff5e27ea6b7ac08ebfdf9eb090f32ee9a30fcf",
+    protocolDataProvider: "0x7551b5D2763519d4e37e8B81929D336De671d46d"
+  }
+};
+var AAVE_V3_PRIME_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0x4e033931ad43597d96D6bcc25c280717730B58B1",
+    protocolDataProvider: "0x08795CFE08C7a81dCDFf482BbAAF474B240f31cD"
+  }
+};
+var AAVE_V3_ETHER_FI_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0x0AA97c284e98396202b6A04024F5E2c65026F3c0",
+    protocolDataProvider: "0xE7d490885A68f00d9886508DF281D67263ed5758"
+  }
+};
+var SPARK_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0xC13e21B648A5Ee794902342038FF3aDAB66BE987",
+    protocolDataProvider: "0xFc21d6d146E6086B8359705C8b28512a983db0cb"
+  },
+  [
+    "100"
+    /* GNOSIS */
+  ]: {
+    pool: "0x2Dae5307c5E3FD1CF5A72Cb6F698f915860607e0",
+    protocolDataProvider: "0x2a002054A06546bB5a264D57A81347e23Af91D18"
+  }
+};
+var IRONCLAD_FINANCE_ADDRESSES = {
+  [
+    "34443"
+    /* MODE */
+  ]: {
+    pool: "0xB702cE183b4E1Faa574834715E5D4a6378D0eEd3",
+    protocolDataProvider: "0x29563f73De731Ae555093deb795ba4D1E584e42E"
+  }
+};
+var MOLEND_ADDRESSES = {
+  [
+    "34443"
+    /* MODE */
+  ]: {
+    pool: "0x04c3F4C9B12b1041b2fD2e481452E7c861Fe1FF8",
+    protocolDataProvider: "0xf18146EB3C9DE2d88E60464f9648EeE901B58b79"
+  }
+};
+var SAKE_ADDRESSES = {
+  [
+    "1868"
+    /* SONEIUM */
+  ]: {
+    pool: "0x3C3987A310ee13F7B8cBBe21D97D4436ba5E4B5f",
+    protocolDataProvider: "0x2BECa16DAa6Decf9C6F85eBA8F0B35696A3200b3"
+  }
+};
+var SAKE_ASTAR_ADDRESSES = {
+  [
+    "1868"
+    /* SONEIUM */
+  ]: {
+    pool: "0x0Bd12d3C4E794cf9919618E2bC71Bdd0C4FF1cF6",
+    protocolDataProvider: "0x3b5FDb25672A0ea560E66905B97d0c818a00f5eb"
+  }
+};
+var AVALON_MAIN_ADRESSES = {
+  [
+    "167000"
+    /* TAIKO_ALETHIA */
+  ]: {
+    pool: "0xA7f1c55530B1651665C15d8104663B3f03E3386f",
+    protocolDataProvider: "0x43248dF19B9B55f7b488CF68A1224308Af2D81eC"
+  },
+  [
+    "42161"
+    /* ARBITRUM_ONE */
+  ]: {
+    pool: "0xe1ee45DB12ac98d16F1342a03c93673d74527b55",
+    protocolDataProvider: "0xEc579d2cE07401258710199Ff12a5bb56e086a6F"
+  },
+  [
+    "8453"
+    /* BASE */
+  ]: {
+    pool: "0x6374a1F384737bcCCcD8fAE13064C18F7C8392e5",
+    protocolDataProvider: "0xA9D15C669940a757Ab76C6604f2f8f1e198f7D50"
+  },
+  [
+    "8217"
+    /* KAIA_MAINNET */
+  ]: {
+    pool: "0xCf1af042f2A071DF60a64ed4BdC9c7deE40780Be",
+    protocolDataProvider: "0xddD3D480521bc027596e078BCd1b838d50Daa076"
+  },
+  [
+    "21000000"
+    /* CORN */
+  ]: {
+    pool: "0xd412D77A4920317ffb3F5deBAD29B1662FBA53DF",
+    protocolDataProvider: "0x56552f4407113894Bfce34b5b88C57b941AFc519"
+  },
+  [
+    "200901"
+    /* BITLAYER_MAINNET */
+  ]: {
+    pool: "0xEA5c99A3cca5f95Ef6870A1B989755f67B6B1939",
+    protocolDataProvider: "0x5F314b36412765f3E1016632fD1Ad528929536CA"
+  },
+  [
+    "4200"
+    /* MERLIN_MAINNET */
+  ]: {
+    pool: "0xEA5c99A3cca5f95Ef6870A1B989755f67B6B1939",
+    protocolDataProvider: "0x5F314b36412765f3E1016632fD1Ad528929536CA"
+  },
+  [
+    "1116"
+    /* CORE_BLOCKCHAIN_MAINNET */
+  ]: {
+    pool: "0x67197DE79B2a8Fc301bAB591C78aE5430b9704fd",
+    protocolDataProvider: "0x802CB61844325dc9A161bC3A498E3BE1B7b6FE00"
+  },
+  [
+    "223"
+    /* B2_MAINNET */
+  ]: {
+    pool: "0xC0843a5A8527FD7221256893D4a4305145937E8c",
+    protocolDataProvider: "0x4Ea93E846b8C6E7b3D5a5BEDF4fe6B8AED58FCEe"
+  },
+  [
+    "146"
+    /* SONIC_MAINNET */
+  ]: {
+    pool: "0x974E2B16ddbF0ae6F78b4534353c2871213f2Dc9",
+    protocolDataProvider: "0x23f02C2eeFe2010298Ab74059393326d3df59a02"
+  },
+  [
+    "4689"
+    /* IOTEX_NETWORK_MAINNET */
+  ]: {
+    pool: "0x29ee512B76F58FF4d281c49c7D1B6B248c79f009",
+    protocolDataProvider: "0xBa77520d38953BF6a8395D118CfF714Ed672533f"
+  },
+  [
+    "7000"
+    /* ZETACHAIN_MAINNET */
+  ]: {
+    pool: "0x6935B1196426586b527c8D13Ce42ff12eEc2A5fC",
+    protocolDataProvider: "0xA34F1a928024E3609C8968fEA90C747e8D1fA20f"
+  },
+  [
+    "1329"
+    /* SEI_NETWORK */
+  ]: {
+    pool: "0xE5eB6aBbA365A49C8624532acaed54A47cc36D3C",
+    protocolDataProvider: "0x16b9b88B773C1a1aBA6D305e0560171405d45121"
+  },
+  [
+    "2345"
+    /* GOAT_NETWORK */
+  ]: {
+    pool: "0x4B801fb6f0830D070f40aff9ADFC8f6939Cc1F8D",
+    protocolDataProvider: "0x2c4aEB7C9f0D196a51136B3c7bec49cB2DBD1966"
+  },
+  [
+    "534352"
+    /* SCROLL */
+  ]: {
+    pool: "0xA90FB5234A659b7e5738775F8B48f8f833b3451C",
+    protocolDataProvider: "0x18cbe70602Ee17f79D56971F685E9EaF49DA53F2"
+  }
+};
+var AVALON_SOLV_BTC_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0xCfe357D2dE5aa5dAB5fEf255c911D150d0246423",
+    protocolDataProvider: "0x934AD5Bd415CBB128cB288749593877cF3B54CD3"
+  },
+  [
+    "167000"
+    /* TAIKO_ALETHIA */
+  ]: {
+    pool: "0x9dd29AA2BD662E6b569524ba00C55be39e7B00fB",
+    protocolDataProvider: "0xF6Aa54a5b60c324602C9359E8221423793e5205d"
+  },
+  [
+    "34443"
+    /* MODE */
+  ]: {
+    pool: "0x7454E4ACC4B7294F740e33B81224f50C28C29301",
+    protocolDataProvider: "0xC5b05b7092257Ee3eEAf013198d30F1E8179B6C9"
+  },
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0xf9278C7c4AEfAC4dDfd0D496f7a1C39cA6BCA6d4",
+    protocolDataProvider: "0x672b19DdA450120C505214D149Ee7F7B6DEd8C39"
+  },
+  [
+    "21000000"
+    /* CORN */
+  ]: {
+    pool: "0xd63C731c8fBC672B69257f70C47BD8e82C9efBb8",
+    protocolDataProvider: "0xf0d077728D424Ee6C6Eba82d23ce56C2e91E57Ea"
+  }
+};
+var AVALON_SWELL_BTC_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0xE0E468687703dD02BEFfB0BE13cFB109529F38e0",
+    protocolDataProvider: "0x87Ed94868f6fbaA834Db81a1C5854c445caCaB67"
+  }
+};
+var AVALON_LORENZO_ADRESSES = {
+  [
+    "200901"
+    /* BITLAYER_MAINNET */
+  ]: {
+    pool: "0xeD6d6d18F20f8b419B5442C43D3e48EE568dEc14",
+    protocolDataProvider: "0x4c25c261Fe47bC216113D140BaF72B05E151bcE4"
+  }
+};
+var AVALON_BEETS_ADRESSES = {
+  [
+    "146"
+    /* SONIC_MAINNET */
+  ]: {
+    pool: "0x6CCE1BC3fe54C9B1915e5f01ee076E4c4C3Cdd19",
+    protocolDataProvider: "0x28350E38f241d7F24106CE5eaB1684D6ebEB4700"
+  }
+};
+var AVALON_UBTC_ADRESSES = {
+  [
+    "1116"
+    /* CORE_BLOCKCHAIN_MAINNET */
+  ]: {
+    pool: "0x7f6f0e50dB09C49027314103aa5a8F6Db862dBd0",
+    protocolDataProvider: "0x2752237ccC6aB5e4B9e9BFca57D7a6956aF4FE3d"
+  }
+};
+var AVALON_BOB_ADRESSES = {
+  [
+    "60808"
+    /* BOB */
+  ]: {
+    pool: "0x35B3F1BFe7cbE1e95A3DC2Ad054eB6f0D4c879b6",
+    protocolDataProvider: "0xfabb0fDca4348d5A40EB1BB74AEa86A1C4eAd7E2"
+  }
+};
+var AVALON_OBTC_ADRESSES = {
+  [
+    "1116"
+    /* CORE_BLOCKCHAIN_MAINNET */
+  ]: {
+    pool: "0x2f3552CE2F071B642Deeae5c84eD2EEe3Ed08D43",
+    protocolDataProvider: "0x5c78EbB34cC5b52146D107365A66E37a677Fcf50"
+  }
+};
+var AVALON_UNILOTX_ADRESSES = {
+  [
+    "4689"
+    /* IOTEX_NETWORK_MAINNET */
+  ]: {
+    pool: "0x4B801fb6f0830D070f40aff9ADFC8f6939Cc1F8D",
+    protocolDataProvider: "0x2c4aEB7C9f0D196a51136B3c7bec49cB2DBD1966"
+  }
+};
+var AVALON_EBTC_LBTC_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0xCfe357D2dE5aa5dAB5fEf255c911D150d0246423",
+    protocolDataProvider: "0x934AD5Bd415CBB128cB288749593877cF3B54CD3"
+  }
+};
+var AVALON_PUMP_BTC_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0x1c8091b280650aFc454939450699ECAA67C902d9",
+    protocolDataProvider: "0x2eE0438BCC1876cEA2c6fc43dD21417cF3D1c2eF"
+  },
+  [
+    "42161"
+    /* ARBITRUM_ONE */
+  ]: {
+    pool: "0x4B801fb6f0830D070f40aff9ADFC8f6939Cc1F8D",
+    protocolDataProvider: "0x2c4aEB7C9f0D196a51136B3c7bec49cB2DBD1966"
+  },
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0xeCaC6332e2De19e8c8e6Cd905cb134E980F18cC4",
+    protocolDataProvider: "0x58c937fa2D147117dB43d187f9411151edfFf03c"
+  },
+  [
+    "21000000"
+    /* CORN */
+  ]: {
+    pool: "0xdef0EB584700Fc81C73ACcd555cB6cea5FB85C3e",
+    protocolDataProvider: "0x867885c1dB3020E25A86Db7e20E35dC7b81d76A2"
+  },
+  [
+    "7000"
+    /* ZETACHAIN_MAINNET */
+  ]: {
+    pool: "0x7454E4ACC4B7294F740e33B81224f50C28C29301",
+    protocolDataProvider: "0xC5b05b7092257Ee3eEAf013198d30F1E8179B6C9"
+  }
+};
+var AVALON_INNOVATION_ADRESSES = {
+  [
+    "4200"
+    /* MERLIN_MAINNET */
+  ]: {
+    pool: "0xdCB0FAA822B99B87E630BF47399C5a0bF3C642cf",
+    protocolDataProvider: "0x883cb2E2d9c5D4D9aF5b0d37fc39Fa2284405682"
+  }
+};
+var AVALON_STBTC_ADRESSES = {
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0x05C194eE95370ED803B1526f26EFd98C79078ab5",
+    protocolDataProvider: "0x56F817eF5D1945E0772496020ff0F72c3984B351"
+  }
+};
+var AVALON_LISTA_ADRESSES = {
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0x54925C6dDeB73A962B3C3A21B10732eD5548e43a",
+    protocolDataProvider: "0x5157f63bE7808DEB090Eee7762e917745896A09E"
+  }
+};
+var AVALON_USDX_ADRESSES = {
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0x77fF9B0cdbb6039b9D42d92d7289110E6CCD3890",
+    protocolDataProvider: "0x9515dC23bBE46f9C9885D24Fa276745A11b7f9D8"
+  }
+};
+var AVALON_XAUM_ADRESSES = {
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0x4B801fb6f0830D070f40aff9ADFC8f6939Cc1F8D",
+    protocolDataProvider: "0x2c4aEB7C9f0D196a51136B3c7bec49cB2DBD1966"
+  }
+};
+var AVALON_LBTC_ADRESSES = {
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0x390166389f5D30281B9bDE086805eb3c9A10F46F",
+    protocolDataProvider: "0x5b9b3C211B81627Cc6b46824CB26829F31A587dc"
+  },
+  [
+    "21000000"
+    /* CORN */
+  ]: {
+    pool: "0xC1bFbF4E0AdCA79790bfa0A557E4080F05e2B438",
+    protocolDataProvider: "0x5EcDC2432ED77cD8E2cE6183712c5cc712c40ec0"
+  }
+};
+var AVALON_WBTC_ADRESSES = {
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0xF8718Fc27eF04633B7EB372F778348dE02642207",
+    protocolDataProvider: "0x0226930497e39CD40d76EDCBE7DbaE6062C0b7c0"
+  }
+};
+var AVALON_UNIBTC_ADRESSES = {
+  [
+    "34443"
+    /* MODE */
+  ]: {
+    pool: "0x2c373aAB54b547Be9b182e795bed34cF9955dc34",
+    protocolDataProvider: "0x8F016F5dac399F20B34E35CBaF1dFf12eeE2dE74"
+  },
+  [
+    "42161"
+    /* ARBITRUM_ONE */
+  ]: {
+    pool: "0x4B801fb6f0830D070f40aff9ADFC8f6939Cc1F8D",
+    protocolDataProvider: "0x2c4aEB7C9f0D196a51136B3c7bec49cB2DBD1966"
+  },
+  [
+    "4200"
+    /* MERLIN_MAINNET */
+  ]: {
+    pool: "0x155d50D9c1D589631eA4E2eaD744CE82622AD9D3",
+    protocolDataProvider: "0x623700Fee1dF64088f258e2c4DAB4D6aEac4dDA6"
+  },
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0x795Ae4Bd3B63aA8657a7CC2b3e45Fb0F7c9ED9Cc",
+    protocolDataProvider: "0xF828A73cB00072843241C6294ed778F26854fe5C"
+  },
+  [
+    "200901"
+    /* BITLAYER_MAINNET */
+  ]: {
+    pool: "0xC486115C7db399F0e080A3713BF01B65CC8A5b64",
+    protocolDataProvider: "0x898D0EF6E20B7597728AEB41169c22608Fe4b234"
+  },
+  [
+    "60808"
+    /* BOB */
+  ]: {
+    pool: "0x6d8fE6EAa893860aA1B877A8cA4f0A6cbd4249f7",
+    protocolDataProvider: "0x100AC26ad2c253B18375f1dC4BC0EeeB66DEBc88"
+  },
+  [
+    "4689"
+    /* IOTEX_NETWORK_MAINNET */
+  ]: {
+    pool: "0x99a05a9210B2861ccED5db7696eED3f4D73EB70c",
+    protocolDataProvider: "0x28292e1ca36e400FB7d0B66AaA99EB808E3Cb8cB"
+  }
+};
+var AVALON_SKAIA_ADRESSES = {
+  [
+    "8217"
+    /* KAIA_MAINNET */
+  ]: {
+    pool: "0x4659F938458afB37F3340270FC9CdFe665809c1b",
+    protocolDataProvider: "0x276c5119f63119921667842dA3B71EE10Ac486eA"
+  }
+};
+var AGAVE_ADDRESSES = {
+  [
+    "100"
+    /* GNOSIS */
+  ]: {
+    pool: "0x5E15d5E33d318dCEd84Bfe3F4EACe07909bE6d9c",
+    protocolDataProvider: "0x24dCbd376Db23e4771375092344f5CbEA3541FC0"
+  }
+};
+var AVALON_USDA_ADRESSES = {
+  [
+    "167000"
+    /* TAIKO_ALETHIA */
+  ]: {
+    pool: "0xC1bFbF4E0AdCA79790bfa0A557E4080F05e2B438",
+    protocolDataProvider: "0x5EcDC2432ED77cD8E2cE6183712c5cc712c40ec0"
+  },
+  [
+    "8217"
+    /* KAIA_MAINNET */
+  ]: {
+    pool: "0x65bB26fa8D2774313202029619767A3727C98B1b",
+    protocolDataProvider: "0x2884F533E9f8102FD05D903968213502294CC273"
+  },
+  [
+    "21000000"
+    /* CORN */
+  ]: {
+    pool: "0xf659a3fa012f5847067239a6009309323011815d",
+    protocolDataProvider: "0xa15c0c3D6Ad3FeE623BEd68391923c9Ff79a50c3"
+  },
+  [
+    "200901"
+    /* BITLAYER_MAINNET */
+  ]: {
+    pool: "0xA51d264A033cD0D3205CD4C6D51310dA841D15DE",
+    protocolDataProvider: "0x7FaDb6f954E19476E18790Dc0178056A2E3c1454"
+  },
+  [
+    "146"
+    /* SONIC_MAINNET */
+  ]: {
+    pool: "0xD33Ee43551167cdd15Ef9CF87ceecC0fF69Cc922",
+    protocolDataProvider: "0x1C6E9510055B71429022B997E6602FbaEEb0481F"
+  },
+  [
+    "1329"
+    /* SEI_NETWORK */
+  ]: {
+    pool: "0xC1bFbF4E0AdCA79790bfa0A557E4080F05e2B438",
+    protocolDataProvider: "0x5EcDC2432ED77cD8E2cE6183712c5cc712c40ec0"
+  },
+  [
+    "4689"
+    /* IOTEX_NETWORK_MAINNET */
+  ]: {
+    pool: "0xaB82814E4c5bC2Ede88DB334276dFe01a4BcCFd0",
+    protocolDataProvider: "0xDB52DD393e3a5e95d3B7C7e1C42cC06bb807A369"
+  }
+};
+var NEREUS_ADRESSES = {
+  [
+    "43114"
+    /* AVALANCHE_C_CHAIN */
+  ]: {
+    pool: "0xB9257597EDdfA0eCaff04FF216939FBc31AAC026",
+    protocolDataProvider: "0xec090929fBc1B285fc9b3c8EBB92fbc62F01D804"
+  }
+};
+var KINZA_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0xeA14474946C59Dee1F103aD517132B3F19Cef1bE",
+    protocolDataProvider: "0xE44990a8a732605Eddc0870597d2Cf4A2637F038"
+  },
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0xcB0620b181140e57D1C0D8b724cde623cA963c8C",
+    protocolDataProvider: "0x09Ddc4AE826601b0F9671b9edffDf75e7E6f5D61"
+  },
+  [
+    "204"
+    /* OPBNB_MAINNET */
+  ]: {
+    pool: "0x3Aadc38eBAbD6919Fbd00C118Ae6808CBfE441CB",
+    protocolDataProvider: "0xBb5f2d30c0fC9B0f71f7B19DaF19e7Cf3D23eb5E"
+  },
+  [
+    "5000"
+    /* MANTLE */
+  ]: {
+    pool: "0x5757b15f60331eF3eDb11b16ab0ae72aE678Ed51",
+    protocolDataProvider: "0x18cc2c55b429EE08748951bBD33FF2e68c95ec38"
+  }
+};
+var ZEROLEND_STABLECOINS_RWA_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0xD3a4DA66EC15a001466F324FA08037f3272BDbE8",
+    protocolDataProvider: "0x298ECDcb0369Aef75cBbdA3e46a224Cfe622E287"
+  }
+};
+var ZEROLEND_BTC_LRTS_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0xCD2b31071119D7eA449a9D211AC8eBF7Ee97F987",
+    protocolDataProvider: "0x31063F7CA8ef4089Db0dEdf8D6e35690B468A611"
+  }
+};
+var ZEROLEND_ETH_LRTS_ADRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0x3BC3D34C32cc98bf098D832364Df8A222bBaB4c0",
+    protocolDataProvider: "0x47223D4eA966a93b2cC96FFB4D42c22651FADFcf"
+  }
+};
+var ZEROLEND_ADDRESSES = {
+  [
+    "8453"
+    /* BASE */
+  ]: {
+    pool: "0x766f21277087E18967c1b10bF602d8Fe56d0c671",
+    protocolDataProvider: "0xA754b2f1535287957933db6e2AEE2b2FE6f38588"
+  },
+  [
+    "59144"
+    /* LINEA */
+  ]: {
+    pool: "0x2f9bB73a8e98793e26Cb2F6C4ad037BDf1C6B269",
+    protocolDataProvider: "0x67f93d36792c49a4493652B91ad4bD59f428AD15"
+  },
+  [
+    "43111"
+    /* HEMI_NETWORK */
+  ]: {
+    pool: "0xdB7e029394a7cdbE27aBdAAf4D15e78baC34d6E8",
+    protocolDataProvider: "0x9698FdF843cbe4531610aC231B0047d9FFc13bC6"
+  },
+  [
+    "324"
+    /* ZKSYNC_MAINNET */
+  ]: {
+    pool: "0x4d9429246EA989C9CeE203B43F6d1C7D83e3B8F8",
+    protocolDataProvider: "0xB73550bC1393207960A385fC8b34790e5133175E"
+  },
+  [
+    "81457"
+    /* BLAST */
+  ]: {
+    pool: "0xa70B0F3C2470AbBE104BdB3F3aaa9C7C54BEA7A8",
+    protocolDataProvider: "0xc6DF4ddDBFaCb866e78Dcc01b813A41C15A08C10"
+  },
+  [
+    "169"
+    /* MANTA_PACIFIC_MAINNET */
+  ]: {
+    pool: "0x2f9bB73a8e98793e26Cb2F6C4ad037BDf1C6B269",
+    protocolDataProvider: "0x67f93d36792c49a4493652B91ad4bD59f428AD15"
+  },
+  [
+    "21000000"
+    /* CORN */
+  ]: {
+    pool: "0x927b3A8e5068840C9758b0b88207b28aeeb7a3fd",
+    protocolDataProvider: "0x2f7e54ff5d45f77bFfa11f2aee67bD7621Eb8a93"
+  },
+  [
+    "80094"
+    /* BERACHAIN */
+  ]: {
+    pool: "0xE96Feed449e1E5442937812f97dB63874Cd7aB84",
+    protocolDataProvider: "0x26416E170aDb35B0d23800602cf98853dBDeB74F"
+  },
+  [
+    "2741"
+    /* ABSTRACT */
+  ]: {
+    pool: "0xFC1ef22b9458F112Ef4EB6BF1c537776f0341185",
+    protocolDataProvider: "0x8EEAE4dD40EBee7Bb6471c47d4d867539CF53ccF"
+  },
+  [
+    "196"
+    /* X_LAYER_MAINNET */
+  ]: {
+    pool: "0xfFd79D05D5dc37E221ed7d3971E75ed5930c6580",
+    protocolDataProvider: "0x97e59722318F1324008484ACA9C343863792cBf6"
+  },
+  [
+    "48900"
+    /* ZIRCUIT_MAINNET */
+  ]: {
+    pool: "0x2774C8B95CaB474D0d21943d83b9322Fb1cE9cF5",
+    protocolDataProvider: "0xA754b2f1535287957933db6e2AEE2b2FE6f38588"
+  }
+};
+var ZEROLEND_CROAK_ADDRESSES = {
+  [
+    "59144"
+    /* LINEA */
+  ]: {
+    pool: "0xc6ff96AefD1cC757d56e1E8Dcc4633dD7AA5222D",
+    protocolDataProvider: "0x9aFB91a3cfB9aBc8Cbc8429aB57b6593FE36E173"
+  }
+};
+var ZEROLEND_FOXY_ADDRESSES = {
+  [
+    "59144"
+    /* LINEA */
+  ]: {
+    pool: "0xbDAa004A456E7f2dAff00FfcDCbEaD5da27B7966",
+    protocolDataProvider: "0xEe9ec60657B714E3FAC5255a5443AC5EC7Ba5bB0"
+  }
+};
+var GRANARY_ADDRESSES = {
+  [
+    "8453"
+    /* BASE */
+  ]: {
+    pool: "0xB702cE183b4E1Faa574834715E5D4a6378D0eEd3",
+    protocolDataProvider: "0xed984A0E9c12Ee27602314191Fc4487A702bB83f"
+  },
+  [
+    "10"
+    /* OP_MAINNET */
+  ]: {
+    pool: "0x8FD4aF47E4E63d1D2D45582c3286b4BD9Bb95DfE",
+    protocolDataProvider: "0x9546F673eF71Ff666ae66d01Fd6E7C6Dae5a9995"
+  },
+  [
+    "42161"
+    /* ARBITRUM_ONE */
+  ]: {
+    pool: "0x102442A3BA1e441043154Bc0B8A2e2FB5E0F94A7",
+    protocolDataProvider: "0x96bCFB86F1bFf315c13e00D850e2FAeA93CcD3e7"
+  },
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0xB702cE183b4E1Faa574834715E5D4a6378D0eEd3",
+    protocolDataProvider: "0x33c62BC416309F010c4941163aBEa3725e4645BF"
+  },
+  [
+    "250"
+    /* FANTOM_OPERA */
+  ]: {
+    pool: "0x65FA36Fe0a7C0d346Dd02b7217Fdd6E6C5aaA269",
+    protocolDataProvider: "0x9D9f273373aa5759820ea4e59b90AC74c34EA79c"
+  },
+  [
+    "43114"
+    /* AVALANCHE_C_CHAIN */
+  ]: {
+    pool: "0xB702cE183b4E1Faa574834715E5D4a6378D0eEd3",
+    protocolDataProvider: "0xed984A0E9c12Ee27602314191Fc4487A702bB83f"
+  },
+  [
+    "1088"
+    /* METIS_ANDROMEDA_MAINNET */
+  ]: {
+    pool: "0x65dEc665ea1e96Ee5203DB321b5Cd413b81B2bd2",
+    protocolDataProvider: "0x10615D451a5b91C92ce8538703E7AABA5d5cCC4D"
+  },
+  [
+    "56"
+    /* BNB_SMART_CHAIN_MAINNET */
+  ]: {
+    pool: "0x7171054f8d148Fe1097948923C91A6596fC29032",
+    protocolDataProvider: "0x7Fb479624ca336bA8f2dc66439F8683330eE2880"
+  },
+  [
+    "59144"
+    /* LINEA */
+  ]: {
+    pool: "0x871AfF0013bE6218B61b28b274a6F53DB131795F",
+    protocolDataProvider: "0xd2abC5d7841d49C40Fd35A1Ec832ee1daCC8D339"
+  }
+};
+var LORE_ADDRESSES = {
+  [
+    "534352"
+    /* SCROLL */
+  ]: {
+    pool: "0x4cE1A1eC13DBd9084B1A741b036c061b2d58dABf",
+    protocolDataProvider: "0xb17844F6E50f4eE8f8FeC7d9BA200B0E034b8236"
+  }
+};
+var SEISMIC_ADDRESSES = {
+  [
+    "81457"
+    /* BLAST */
+  ]: {
+    pool: "0x83d55e27b8033b6D5874CBb3c9252c4Bfdb2bC75",
+    protocolDataProvider: "0xe74564807d6cE2e5F256b45737C861ec52c48FB4"
+  }
+};
+var MAGSIN_ADDRESSES = {
+  [
+    "146"
+    /* SONIC_MAINNET */
+  ]: {
+    pool: "0x73B635843352aF89278bDe2213866C457C94b271",
+    protocolDataProvider: "0x90f187d91d53324e69215A6a1B9a506A9022AD1b"
+  }
+};
+var POLTER_ADDRESSES = {
+  [
+    "146"
+    /* SONIC_MAINNET */
+  ]: {
+    pool: "0x4dE3E7E8bE48D6094cFA34323e6cC22308D56b52",
+    protocolDataProvider: "0x60E790911F35226ADA3B80dC7DeAF5D8A6502131"
+  },
+  [
+    "8453"
+    /* BASE */
+  ]: {
+    pool: "0x33CA62504cebAB919f0FCa94562413ee121A9798",
+    protocolDataProvider: "0x11b518f695a2A1236803B2976a1Ec3FBAe783A78"
+  }
+};
+var LENDOS_ADDRESSES = {
+  [
+    "43111"
+    /* HEMI_NETWORK */
+  ]: {
+    pool: "0xaA397b29510a7219A0f3f7cE3eb53A09bc2A924c",
+    protocolDataProvider: "0xfBF6Aab10f696F3BA098BBE4EA9CF2503FC0f358"
+  },
+  [
+    "245022934"
+    /* NEON_EVM_MAINNET */
+  ]: {
+    pool: "0x3b2f6889bfac2b984754969116cd1d04447d012d",
+    protocolDataProvider: "0x3a1ca459f21d8facf9a30bc4773f5dbf07c1191d"
+  }
+};
+var MOOLA_ADDRESSES = {
+  [
+    "42220"
+    /* CELO_MAINNET */
+  ]: {
+    pool: "0x970b12522CA9b4054807a2c5B736149a5BE6f670",
+    protocolDataProvider: "0x43d067ed784D9DD2ffEda73775e2CC4c560103A1"
+  }
+};
+var YLDR_ADDRESSES = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    pool: "0x6447c4390457CaD03Ec1BaA4254CEe1A3D9e1Bbd",
+    protocolDataProvider: "0x2a61760f0413C7FC9e3120E3d51c961f6bb17452"
+  },
+  [
+    "8453"
+    /* BASE */
+  ]: {
+    pool: "0x5425afd90bd1aad68d5badcb80390101a2750bc5",
+    protocolDataProvider: "0x4b17E8DA6A9138Ff0B0CcD2eB2E1279646e3dFc8"
+  },
+  [
+    "42161"
+    /* ARBITRUM_ONE */
+  ]: {
+    pool: "0x54aD657851b6Ae95bA3380704996CAAd4b7751A3",
+    protocolDataProvider: "0x6b69CB817AFa481FF80cb954feAA3be0835b36f9"
+  },
+  [
+    "137"
+    /* POLYGON_MAINNET */
+  ]: {
+    pool: "0x8183D4e0561cBdc6acC0Bdb963c352606A2Fa76F",
+    protocolDataProvider: "0xb9d350537A63B7e5cb02B44e230e093C0abB2707"
+  }
+};
+var XLEND_ADDRESSES = {
+  [
+    "10"
+    /* OP_MAINNET */
+  ]: {
+    pool: "0x345D2827f36621b02B783f7D5004B4a2fec00186",
+    protocolDataProvider: "0xCC61E9470B5f0CE21a3F6255c73032B47AaeA9C0"
+  },
+  [
+    "8453"
+    /* BASE */
+  ]: {
+    pool: "0x09b11746DFD1b5a8325e30943F8B3D5000922E03",
+    protocolDataProvider: "0x1566DA4640b6a0b32fF309b07b8df6Ade40fd98D"
+  }
+};
+var RHOMBUS_ADDRESSES = {
+  [
+    "8217"
+    /* KAIA_MAINNET */
+  ]: {
+    pool: "0xc17bDf95aBD73B851917B6233090E025427e1e84",
+    protocolDataProvider: "0x3eFC37753ec2501b406F3443cFD8D406B52abEa6"
+  }
+};
+var KLAP_ADDRESSES = {
+  [
+    "8217"
+    /* KAIA_MAINNET */
+  ]: {
+    pool: "0x1b9c074111ec65E1342Ea844f7273D5449D2194B",
+    protocolDataProvider: "0x1C08Af0455A4D90667172D87D23E60669f90eA4E"
+  }
+};
+var KLAYBANK_ADDRESSES = {
+  [
+    "8217"
+    /* KAIA_MAINNET */
+  ]: {
+    pool: "0x4B6Ece52D0EF60aE054f45c45D6bA4F7a0C2cC67",
+    protocolDataProvider: "0xf9438f2b1c63d8dac24311256f5483d7f7575863"
+  }
+};
+var RMM_ADDRESSES = {
+  [
+    "100"
+    /* GNOSIS */
+  ]: {
+    pool: "0xFb9b496519fCa8473fba1af0850B6B8F476BFdB3",
+    protocolDataProvider: "0x11B45acC19656c6C52f93d8034912083AC7Dd756"
+  }
+};
+var LAYERBANK_V3_ADDRESSES = {
+  [
+    "43111"
+    /* HEMI_NETWORK */
+  ]: {
+    pool: "0xfeAce246DC83Ba5E4E95A67b1357D6Fd7C3C088f",
+    protocolDataProvider: "0x8D45801736F3504BEfA35ABEf8bc7a1C4d610651"
+  }
+};
+var AAVE_FORK_POOL_DATA = {
+  [
+    "AAVE_V3"
+    /* AAVE_V3 */
+  ]: AAVE_CORE_ADRESSES,
+  [
+    "AAVE_V3_PRIME"
+    /* AAVE_V3_PRIME */
+  ]: AAVE_V3_PRIME_ADRESSES,
+  [
+    "AAVE_V3_ETHER_FI"
+    /* AAVE_V3_ETHER_FI */
+  ]: AAVE_V3_ETHER_FI_ADRESSES,
+  [
+    "AAVE_V2"
+    /* AAVE_V2 */
+  ]: AAVE_V2_CORE_ADRESSES,
+  [
+    "LENDLE"
+    /* LENDLE */
+  ]: LENDLE_CORE_ADRESSES,
+  [
+    "HANA"
+    /* HANA */
+  ]: HANA_CORE_ADRESSES,
+  [
+    "AURELIUS"
+    /* AURELIUS */
+  ]: AURELIUS_CORE_ADRESSES,
+  [
+    "TAKOTAKO"
+    /* TAKOTAKO */
+  ]: TAKOTAKO_CORE_ADRESSES,
+  [
+    "TAKOTAKO_ETH"
+    /* TAKOTAKO_ETH */
+  ]: TAKOTAKO_ETH_ADRESSES,
+  [
+    "MERIDIAN"
+    /* MERIDIAN */
+  ]: MERIDIAN_CORE_ADRESSES,
+  [
+    "SPARK"
+    /* SPARK */
+  ]: SPARK_ADRESSES,
+  [
+    "RHOMBUS"
+    /* RHOMBUS */
+  ]: RHOMBUS_ADDRESSES,
+  [
+    "KLAP"
+    /* KLAP */
+  ]: KLAP_ADDRESSES,
+  [
+    "RMM"
+    /* RMM */
+  ]: RMM_ADDRESSES,
+  [
+    "SAKE"
+    /* SAKE */
+  ]: SAKE_ADDRESSES,
+  [
+    "SAKE_ASTAR"
+    /* SAKE_ASTAR */
+  ]: SAKE_ASTAR_ADDRESSES,
+  [
+    "LAYERBANK_V3"
+    /* LAYERBANK_V3 */
+  ]: LAYERBANK_V3_ADDRESSES,
+  [
+    "AVALON_SOLV_BTC"
+    /* AVALON_SOLV_BTC */
+  ]: AVALON_SOLV_BTC_ADRESSES,
+  [
+    "AVALON_PUMP_BTC"
+    /* AVALON_PUMP_BTC */
+  ]: AVALON_PUMP_BTC_ADRESSES,
+  [
+    "AVALON_SWELL_BTC"
+    /* AVALON_SWELL_BTC */
+  ]: AVALON_SWELL_BTC_ADRESSES,
+  [
+    "AVALON_EBTC_LBTC"
+    /* AVALON_EBTC_LBTC */
+  ]: AVALON_EBTC_LBTC_ADRESSES,
+  [
+    "AVALON_UNIBTC"
+    /* AVALON_UNIBTC */
+  ]: AVALON_UNIBTC_ADRESSES,
+  [
+    "AVALON"
+    /* AVALON */
+  ]: AVALON_MAIN_ADRESSES,
+  [
+    "AVALON_USDA"
+    /* AVALON_USDA */
+  ]: AVALON_USDA_ADRESSES,
+  [
+    "AVALON_SKAIA"
+    /* AVALON_SKAIA */
+  ]: AVALON_SKAIA_ADRESSES,
+  [
+    "AVALON_USDX"
+    /* AVALON_USDX */
+  ]: AVALON_USDX_ADRESSES,
+  [
+    "AVALON_XAUM"
+    /* AVALON_XAUM */
+  ]: AVALON_XAUM_ADRESSES,
+  [
+    "AVALON_LBTC"
+    /* AVALON_LBTC */
+  ]: AVALON_LBTC_ADRESSES,
+  [
+    "AVALON_WBTC"
+    /* AVALON_WBTC */
+  ]: AVALON_WBTC_ADRESSES,
+  [
+    "AVALON_LISTA"
+    /* AVALON_LISTA */
+  ]: AVALON_LISTA_ADRESSES,
+  [
+    "AVALON_STBTC"
+    /* AVALON_STBTC */
+  ]: AVALON_STBTC_ADRESSES,
+  [
+    "AVALON_UNILOTX"
+    /* AVALON_UNILOTX */
+  ]: AVALON_UNILOTX_ADRESSES,
+  [
+    "AVALON_BOB"
+    /* AVALON_BOB */
+  ]: AVALON_BOB_ADRESSES,
+  [
+    "AVALON_OBTC"
+    /* AVALON_OBTC */
+  ]: AVALON_OBTC_ADRESSES,
+  [
+    "AVALON_UBTC"
+    /* AVALON_UBTC */
+  ]: AVALON_UBTC_ADRESSES,
+  [
+    "AVALON_LORENZO"
+    /* AVALON_LORENZO */
+  ]: AVALON_LORENZO_ADRESSES,
+  [
+    "AVALON_BEETS"
+    /* AVALON_BEETS */
+  ]: AVALON_BEETS_ADRESSES,
+  [
+    "AVALON_INNOVATION"
+    /* AVALON_INNOVATION */
+  ]: AVALON_INNOVATION_ADRESSES,
+  [
+    "NEREUS"
+    /* NEREUS */
+  ]: NEREUS_ADRESSES,
+  [
+    "KINZA"
+    /* KINZA */
+  ]: KINZA_ADRESSES,
+  [
+    "ZEROLEND_STABLECOINS_RWA"
+    /* ZEROLEND_STABLECOINS_RWA */
+  ]: ZEROLEND_STABLECOINS_RWA_ADRESSES,
+  [
+    "ZEROLEND_ETH_LRTS"
+    /* ZEROLEND_ETH_LRTS */
+  ]: ZEROLEND_ETH_LRTS_ADRESSES,
+  [
+    "ZEROLEND_BTC_LRTS"
+    /* ZEROLEND_BTC_LRTS */
+  ]: ZEROLEND_BTC_LRTS_ADRESSES,
+  [
+    "ZEROLEND"
+    /* ZEROLEND */
+  ]: ZEROLEND_ADDRESSES,
+  [
+    "ZEROLEND_CROAK"
+    /* ZEROLEND_CROAK */
+  ]: ZEROLEND_CROAK_ADDRESSES,
+  [
+    "ZEROLEND_FOXY"
+    /* ZEROLEND_FOXY */
+  ]: ZEROLEND_FOXY_ADDRESSES,
+  [
+    "GRANARY"
+    /* GRANARY */
+  ]: GRANARY_ADDRESSES,
+  [
+    "LORE"
+    /* LORE */
+  ]: LORE_ADDRESSES,
+  [
+    "LENDOS"
+    /* LENDOS */
+  ]: LENDOS_ADDRESSES,
+  [
+    "YLDR"
+    /* YLDR */
+  ]: YLDR_ADDRESSES,
+  [
+    "IRONCLAD_FINANCE"
+    /* IRONCLAD_FINANCE */
+  ]: IRONCLAD_FINANCE_ADDRESSES,
+  [
+    "MOLEND"
+    /* MOLEND */
+  ]: MOLEND_ADDRESSES,
+  [
+    "SEISMIC"
+    /* SEISMIC */
+  ]: SEISMIC_ADDRESSES,
+  [
+    "POLTER"
+    /* POLTER */
+  ]: POLTER_ADDRESSES,
+  [
+    "MAGSIN"
+    /* MAGSIN */
+  ]: MAGSIN_ADDRESSES,
+  [
+    "AGAVE"
+    /* AGAVE */
+  ]: AGAVE_ADDRESSES,
+  [
+    "MOOLA"
+    /* MOOLA */
+  ]: MOOLA_ADDRESSES,
+  [
+    "XLEND"
+    /* XLEND */
+  ]: XLEND_ADDRESSES,
+  [
+    "KLAYBANK"
+    /* KLAYBANK */
+  ]: KLAYBANK_ADDRESSES
+};
+var COMPOUND_BASE_TOKENS = {
+  "COMPOUND_V3_USDC": {
+    1: {
+      baseAsset: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      baseBorrowMin: 100000000n
+    },
+    10: {
+      baseAsset: "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+      baseBorrowMin: 100000n
+    },
+    130: {
+      baseAsset: "0x078d782b760474a361dda0af3839290b0ef57ad6",
+      baseBorrowMin: 1000000n
+    },
+    8453: {
+      baseAsset: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      baseBorrowMin: 1n
+    },
+    42161: {
+      baseAsset: "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      baseBorrowMin: 1n
+    },
+    534352: {
+      baseAsset: "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4",
+      baseBorrowMin: 1000n
+    }
+  },
+  "COMPOUND_V3_WETH": {
+    1: {
+      baseAsset: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      baseBorrowMin: 100000000000000000n
+    },
+    10: {
+      baseAsset: "0x4200000000000000000000000000000000000006",
+      baseBorrowMin: 1000000000000n
+    },
+    2020: {
+      baseAsset: "0xc99a6a985ed2cac1ef41640596c5a5f9f4e19ef5",
+      baseBorrowMin: 1000000000000000n
+    },
+    8453: {
+      baseAsset: "0x4200000000000000000000000000000000000006",
+      baseBorrowMin: 1000000000000n
+    },
+    42161: {
+      baseAsset: "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      baseBorrowMin: 1000000000000n
+    }
+  },
+  "COMPOUND_V3_USDT": {
+    1: {
+      baseAsset: "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      baseBorrowMin: 100000000n
+    },
+    10: {
+      baseAsset: "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+      baseBorrowMin: 100000n
+    },
+    137: {
+      baseAsset: "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+      baseBorrowMin: 1000000n
+    },
+    42161: {
+      baseAsset: "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+      baseBorrowMin: 1000000n
+    }
+  },
+  "COMPOUND_V3_WSTETH": {
+    1: {
+      baseAsset: "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      baseBorrowMin: 100000000000000000n
+    }
+  },
+  "COMPOUND_V3_USDS": {
+    1: {
+      baseAsset: "0xdc035d45d973e3ec169d2276ddab16f1e407384f",
+      baseBorrowMin: 10000000000000000000n
+    }
+  },
+  "COMPOUND_V3_USDC_E": {
+    137: {
+      baseAsset: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+      baseBorrowMin: 100000000n
+    },
+    42161: {
+      baseAsset: "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+      baseBorrowMin: 100000000n
+    }
+  },
+  "COMPOUND_V3_USDE": {
+    5e3: {
+      baseAsset: "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+      baseBorrowMin: 100000000000000000000n
+    }
+  },
+  "COMPOUND_V3_USDBC": {
+    8453: {
+      baseAsset: "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",
+      baseBorrowMin: 1n
+    }
+  },
+  "COMPOUND_V3_AERO": {
+    8453: {
+      baseAsset: "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+      baseBorrowMin: 1000000000000000000n
+    }
+  }
+};
+var COMPOUND_STYLE_RESERVE_ASSETS = {
+  "COMPOUND_V3_USDC": {
+    1: [
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "0xc00e94cb662c3520282e6f5717214004a7f26888",
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "0x514910771af9ca656af840dff83e8264ecf986ca",
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x18084fba666a33d37592fa2633fd49a74dd93a88",
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee"
+    ],
+    10: [
+      "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+      "0x4200000000000000000000000000000000000042",
+      "0x4200000000000000000000000000000000000006",
+      "0x68f180fcce6836688e9084f035309e29bf0a2095",
+      "0x1f32b1c2345538c0c6f582fcb022739c4a194ebb",
+      "0x57f5e098cad7a3d1eed53991d4d66c45c9af7812"
+    ],
+    130: [
+      "0x078d782b760474a361dda0af3839290b0ef57ad6",
+      "0x8f187aa05619a017077f5308904739877ce9ea21",
+      "0x4200000000000000000000000000000000000006"
+    ],
+    8453: [
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22",
+      "0x4200000000000000000000000000000000000006",
+      "0xc1cba3fcea344f92d9239c08c0568f6f2f0ee452",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf"
+    ],
+    42161: [
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "0x912ce59144191c1204e64559fe8253a0e49e6548",
+      "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+      "0x5979d7b546e38e414f7e9822514be443a4800529",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x57f5e098cad7a3d1eed53991d4d66c45c9af7812"
+    ],
+    534352: [
+      "0x06efdbff2a14a7c8e15944d1f4a48f9f95f663a4",
+      "0x5300000000000000000000000000000000000004",
+      "0xf610a9dfb7c89644979b4a0f27063e9e7d7cda32"
+    ]
+  },
+  "COMPOUND_V3_WETH": {
+    1: [
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "0xbe9895146f7af43049ca1c1ae358b0541ea49704",
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "0xae78736cd615f374d3085123a210448e74fc6393",
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7",
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
+      "0xf1c9acdc66974dfb6decb12aa385b9cd01190e38",
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0xfae103dc9cf190ed75350761e95403b7b8afa6c0",
+      "0x18084fba666a33d37592fa2633fd49a74dd93a88",
+      "0xa35b1b31ce002fbf2058d22f30f95d405200a15b",
+      "0xd11c452fc99cf405034ee446803b6f6c1f6d5ed8"
+    ],
+    10: [
+      "0x4200000000000000000000000000000000000006",
+      "0x1f32b1c2345538c0c6f582fcb022739c4a194ebb",
+      "0x9bcef72be871e61ed4fbbc7630889bee758eb81d",
+      "0x68f180fcce6836688e9084f035309e29bf0a2095",
+      "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+      "0x0b2c639c533813f4aa9d7837caf62653d097ff85",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0x5a7facb970d094b6c7ff1df0ea68d99e6e73cbff",
+      "0x87eee96d50fb761ad85b1c982d28a042169d61b1"
+    ],
+    2020: [
+      "0xc99a6a985ed2cac1ef41640596c5a5f9f4e19ef5",
+      "0xe514d9deb7966c8be0ca922de8a064264ea6bcd4",
+      "0x0b7007c13325c48911f73a2dad5fa5dcbf808adc",
+      "0x97a9107c1793bc407d6f527b77e7fff4d812bece"
+    ],
+    8453: [
+      "0x4200000000000000000000000000000000000006",
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0xc1cba3fcea344f92d9239c08c0568f6f2f0ee452",
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a",
+      "0xedfa23602d0ec14714057867a78d01e94176bea0",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x7fcd174e80f264448ebee8c88a7c4476aaf58ea6"
+    ],
+    42161: [
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      "0x35751007a407ca6feffe80b3cb397736d2cf4dbe",
+      "0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8",
+      "0x5979d7b546e38e414f7e9822514be443a4800529",
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+      "0x4186bfc76e2e237523cbc30fd220fe055156b41f",
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "0x2416092f143378750bb29b79ed961ab195cceea5"
+    ]
+  },
+  "COMPOUND_V3_USDT": {
+    1: [
+      "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "0xc00e94cb662c3520282e6f5717214004a7f26888",
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "0x514910771af9ca656af840dff83e8264ecf986ca",
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x18084fba666a33d37592fa2633fd49a74dd93a88",
+      "0x57f5e098cad7a3d1eed53991d4d66c45c9af7812",
+      "0xa663b02cf0a4b149d2ad41910cb81e23e1c41c32",
+      "0xd5f7838f5c461feff7fe49ea5ebaf7728bb0adfa",
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee"
+    ],
+    10: [
+      "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
+      "0x4200000000000000000000000000000000000042",
+      "0x4200000000000000000000000000000000000006",
+      "0x68f180fcce6836688e9084f035309e29bf0a2095",
+      "0x1f32b1c2345538c0c6f582fcb022739c4a194ebb",
+      "0x57f5e098cad7a3d1eed53991d4d66c45c9af7812"
+    ],
+    137: [
+      "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+      "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+      "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+      "0xfa68fb4628dff1028cfec22b4162fccd0d45efb6",
+      "0x3a58a54c066fdc0f2d55fc9c89f0415c92ebf3c4",
+      "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6"
+    ],
+    42161: [
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+      "0x912ce59144191c1204e64559fe8253a0e49e6548",
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      "0x5979d7b546e38e414f7e9822514be443a4800529",
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+      "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a"
+    ]
+  },
+  "COMPOUND_V3_WSTETH": {
+    1: [
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7",
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110",
+      "0xd11c452fc99cf405034ee446803b6f6c1f6d5ed8"
+    ]
+  },
+  "COMPOUND_V3_USDS": {
+    1: [
+      "0xdc035d45d973e3ec169d2276ddab16f1e407384f",
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+      "0x4c9edd5852cd905f086c759e8383e09bff1e68b3",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+      "0x18084fba666a33d37592fa2633fd49a74dd93a88",
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "0xa3931d71877c0e7a3148cb7eb4463524fec27fbd",
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee",
+      "0x56072c95faa701256059aa122697b133aded9279"
+    ]
+  },
+  "COMPOUND_V3_USDC_E": {
+    137: [
+      "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+      "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+      "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+      "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+      "0xfa68fb4628dff1028cfec22b4162fccd0d45efb6",
+      "0x3a58a54c066fdc0f2d55fc9c89f0415c92ebf3c4"
+    ],
+    42161: [
+      "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+      "0x912ce59144191c1204e64559fe8253a0e49e6548",
+      "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f"
+    ]
+  },
+  "COMPOUND_V3_USDE": {
+    5e3: [
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+      "0xcda86a272531e8640cd7f1a92c01839911b90bb0",
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111",
+      "0xc96de26018a54d51c097160568752c4e3bd6c364"
+    ]
+  },
+  "COMPOUND_V3_USDBC": {
+    8453: [
+      "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",
+      "0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22",
+      "0x4200000000000000000000000000000000000006"
+    ]
+  },
+  "COMPOUND_V3_AERO": {
+    8453: [
+      "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+      "0x4200000000000000000000000000000000000006",
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+      "0xc1cba3fcea344f92d9239c08c0568f6f2f0ee452",
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf"
+    ]
+  }
+};
+var COMETS_PER_CHAIN_MAP = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: {
+    [
+      "COMPOUND_V3_USDC"
+      /* COMPOUND_V3_USDC */
+    ]: "0xc3d688B66703497DAA19211EEdff47f25384cdc3",
+    [
+      "COMPOUND_V3_WETH"
+      /* COMPOUND_V3_WETH */
+    ]: "0xA17581A9E3356d9A858b789D68B4d866e593aE94",
+    [
+      "COMPOUND_V3_USDT"
+      /* COMPOUND_V3_USDT */
+    ]: "0x3Afdc9BCA9213A35503b077a6072F3D0d5AB0840",
+    [
+      "COMPOUND_V3_WSTETH"
+      /* COMPOUND_V3_WSTETH */
+    ]: "0x3D0bb1ccaB520A66e607822fC55BC921738fAFE3",
+    [
+      "COMPOUND_V3_USDS"
+      /* COMPOUND_V3_USDS */
+    ]: "0x5D409e56D886231aDAf00c8775665AD0f9897b56"
+  },
+  [
+    "137"
+    /* POLYGON_MAINNET */
+  ]: {
+    [
+      "COMPOUND_V3_USDC_E"
+      /* COMPOUND_V3_USDC_E */
+    ]: "0xF25212E676D1F7F89Cd72fFEe66158f541246445",
+    [
+      "COMPOUND_V3_USDT"
+      /* COMPOUND_V3_USDT */
+    ]: "0xaeB318360f27748Acb200CE616E389A6C9409a07"
+  },
+  [
+    "42161"
+    /* ARBITRUM_ONE */
+  ]: {
+    [
+      "COMPOUND_V3_USDC_E"
+      /* COMPOUND_V3_USDC_E */
+    ]: "0xA5EDBDD9646f8dFF606d7448e414884C7d905dCA",
+    [
+      "COMPOUND_V3_USDC"
+      /* COMPOUND_V3_USDC */
+    ]: "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+    [
+      "COMPOUND_V3_WETH"
+      /* COMPOUND_V3_WETH */
+    ]: "0x6f7D514bbD4aFf3BcD1140B7344b32f063dEe486",
+    [
+      "COMPOUND_V3_USDT"
+      /* COMPOUND_V3_USDT */
+    ]: "0xd98Be00b5D27fc98112BdE293e487f8D4cA57d07"
+  },
+  [
+    "8453"
+    /* BASE */
+  ]: {
+    [
+      "COMPOUND_V3_USDC"
+      /* COMPOUND_V3_USDC */
+    ]: "0xb125E6687d4313864e53df431d5425969c15Eb2F",
+    [
+      "COMPOUND_V3_USDBC"
+      /* COMPOUND_V3_USDBC */
+    ]: "0x9c4ec768c28520B50860ea7a15bd7213a9fF58bf",
+    [
+      "COMPOUND_V3_WETH"
+      /* COMPOUND_V3_WETH */
+    ]: "0x46e6b214b524310239732D51387075E0e70970bf",
+    [
+      "COMPOUND_V3_AERO"
+      /* COMPOUND_V3_AERO */
+    ]: "0x784efeB622244d2348d4F2522f8860B96fbEcE89"
+  },
+  [
+    "534352"
+    /* SCROLL */
+  ]: {
+    [
+      "COMPOUND_V3_USDC"
+      /* COMPOUND_V3_USDC */
+    ]: "0xB2f97c1Bd3bf02f5e74d13f02E3e26F93D77CE44"
+  },
+  [
+    "10"
+    /* OP_MAINNET */
+  ]: {
+    [
+      "COMPOUND_V3_USDC"
+      /* COMPOUND_V3_USDC */
+    ]: "0x2e44e174f7D53F0212823acC11C01A11d58c5bCB",
+    [
+      "COMPOUND_V3_USDT"
+      /* COMPOUND_V3_USDT */
+    ]: "0x995E394b8B2437aC8Ce61Ee0bC610D617962B214",
+    [
+      "COMPOUND_V3_WETH"
+      /* COMPOUND_V3_WETH */
+    ]: "0xE36A30D249f7761327fd973001A32010b521b6Fd"
+  },
+  [
+    "5000"
+    /* MANTLE */
+  ]: {
+    [
+      "COMPOUND_V3_USDE"
+      /* COMPOUND_V3_USDE */
+    ]: "0x606174f62cd968d8e684c645080fa694c1D7786E"
+  },
+  [
+    "2020"
+    /* RONIN_MAINNET */
+  ]: {
+    [
+      "COMPOUND_V3_WETH"
+      /* COMPOUND_V3_WETH */
+    ]: "0x4006eD4097Ee51c09A04c3B0951D28CCf19e6DFE"
+  },
+  [
+    "130"
+    /* UNICHAIN */
+  ]: {
+    [
+      "COMPOUND_V3_USDC"
+      /* COMPOUND_V3_USDC */
+    ]: "0x2c7118c4C88B9841FCF839074c26Ae8f035f2921"
+  }
+};
+var COMPOUND_V2_STYLE_TOKENS = {
+  "VENUS": {
+    "1": {
+      "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": "0x8716554364f20bca783cb2baa744d39361fd1d8d",
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": "0x7c8ff7d2a1372433726f879bd945ffb250b94c65",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": "0x17c07e0c232f2f80dfdbd7a95b942d893a4c5acb",
+      "0xdac17f958d2ee523a2206206994597c13d831ec7": "0x8c3e3821259b82ffb32b2450a95d2dcbf161c24e",
+      "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e": "0x672208c10aaaa2f9a6719f449c4c8227bc0bc202",
+      "0x6b175474e89094c44da98b954eedeac495271d0f": "0xd8add9b41d4e1cd64edad8722ab0ba8d35536657",
+      "0x0000000000085d4780b73119b644ae5ecd22b376": "0x13eb80fdbe5c5f4a7039728e258a6f05fb3b912b",
+      "0x853d955acef822db058eb8505911ed77f175b99e": "0x4fafbdc4f2a9876bd1764827b26fb8dc4fd1db95",
+      "0xa663b02cf0a4b149d2ad41910cb81e23e1c41c32": "0x17142a05fe678e9584fa1d88efac1bf181bf7abe",
+      "0xec53bf9167f50cdeb3ae105f56099aaab9061f83": "0x256addbe0a387c98f487e44b85c29eb983413c5e",
+      "0x657e8c867d8b37dcc18fa4caead9c45eb088c642": "0x325ceb02fe1c2ff816a83a5770ea0e88e2faecf2",
+      "0x8236a87084f8b84306f72007f36f2618a5634494": "0x25c20e6e110a1ce3febacc8b7e48368c7b2f0c91",
+      "0xdc035d45d973e3ec169d2276ddab16f1e407384f": "0x0c6b19287999f1e31a5c0a44393b24b62d2c0468",
+      "0xa3931d71877c0e7a3148cb7eb4463524fec27fbd": "0xe36ae842dbbd7ae372eba02c8239cd431cc063d6",
+      "0xba100000625a3754423978a60c9317c58a424e3d": "0x0ec5488e4f8f319213a14cab188e01fb8517faa8",
+      "0xbe53a109b494e5c9f97b9cd39fe969be68bf6204": "0xf87c0a64dc3a8622d6c63265fa29137788163879",
+      "0x310b7ea7475a0b449cfd73be81522f1b88efafaa": "0x475d0c68a8cd275c15d1f01f4f291804e445f677",
+      "0x182863131f9a4630ff9e27830d945b1413e347e8": "0x520d67226bc904ac122dce66ed2f8f61aa1ed764",
+      "0xc56413869c6cdf96496f2b1ef801fedbdfa7ddb0": "0xba3916302cba4abcb51a01e706fc6051aaf272a0",
+      "0x917cee801a67f933f2e6b33fc0cd1ed2d5909d88": "0xc42e4bfb996ed35235bda505430cbe404eb49f77"
+    },
+    "10": {
+      "0x68f180fcce6836688e9084f035309e29bf0a2095": "0x9efdcfc2373f81d3df24647b1c46e15268884c46",
+      "0x4200000000000000000000000000000000000006": "0x66d5ae25731ce99d46770745385e662c8e0b4025",
+      "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58": "0x37ac9731b0b02df54975cd0c7240e0977a051721",
+      "0x4200000000000000000000000000000000000042": "0x6b846e3418455804c1920fa4cc7a31a51c659a2d",
+      "0x0b2c639c533813f4aa9d7837caf62653d097ff85": "0x1c9406ee95b7af55f005996947b19f91b6d55b15"
+    },
+    "56": {
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": "0xeca88125a5adbe82614ffc12d0db554e2e2867c8",
+      "0x55d398326f99059ff775485246999027b3197955": "0xfd5840cd36d94d7229439859c0112a4185bc0255",
+      "0xe9e7cea3dedca5984780bafc599bd69add087d56": "0x95c78222b3d6e262426483d42cfa53685a67ab9d",
+      "0x47bead2563dcbf3bf2c9407fea4dc236faba485a": "0x2ff3d0f6990a40261c66e1ff2017acbc282eb6d0",
+      "0xcf6bb5389c92bdda8a3747ddb454cb7a64626c63": "0x151b1e2635a717bcdc836ecd6fbb62b674fe3e1d",
+      "0x0000000000000000000000000000000000000000": "0xa07c5b74c9b40447a954e1466938b865b6bbea36",
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": "0x882c173bc7ff3b7786ca16dfed3dfffb9ee7847b",
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8": "0xf508fcd89b8bd15579dc79a6827cb4686a3592c8",
+      "0x4338665cbb7b2485a8855a139b75d5e34ab0db94": "0x57a5297f2cb2c0aac9d554660acd6d385ab50c6b",
+      "0x1d2f0da169ceb9fc7b3144628db156f3f6c60dbe": "0xb248a295732e0225acd3337607cc01068e3b9c10",
+      "0x8ff795a6f4d97e7887c79bea79aba5cc76444adf": "0x5f0388ebc2b94fa8e123f404b79ccf5f40b29176",
+      "0x7083609fce4d1d8dc0c979aab8c869ea2c873402": "0x1610bc33319e9398de5f57b33a5b184c806ad217",
+      "0xf8a0bf9cf54bb92f17374d9e9a321e6a111a51bd": "0x650b940a1033b8a1b1873f78730fcfc73ec11f1f",
+      "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3": "0x334b3ecb4dca3593bccc3c7ebd1a1c1d1780fbf1",
+      "0x0d8ce2a99bb6e3b7db580ed848240e4a0f9ae153": "0xf91d58b5ae142dacc749f58a49fcbac340cb0343",
+      "0x250632378e573c6be1ac2f97fcdf00515d0aa91b": "0x972207a639cc1b374b893cc33fa251b55ceb7c07",
+      "0x20bff4bbeda07536ff00e073bd8359e5d80d733d": "0xebd0070237a0713e8d94fef1b728d3d993d290ef",
+      "0x3ee2200efb3400fabb9aacf31297cbdd1d435d47": "0x9a0af7fdb2065ce470d72664de73cae409da28ec",
+      "0xba2ae424d960c26247dd6c32edc70b295c744c43": "0xec3422ef92b2fb59e84c8b02ba73f1fe84ed8d71",
+      "0xcc42724c6683b7e57334c4e856f4c9965ed682bd": "0x5c9476fcd6a4f9a3654139721c949c2233bbbbc8",
+      "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82": "0x86ac3974e2bd0d60825230fa6f355ff11409df5c",
+      "0xfb6115445bff7b52feb98650c87f44907e58f802": "0x26da28954763b92139ed49283625cecaf52c6f94",
+      "0x14016e85a25aeb13065688cafb43044c2ef86784": "0x08ceb3f4a7ed3500ca0982bcd0fc7816688084c3",
+      "0x85eac5ac2f758618dfa09bdbe0cf174e7d574d5b": "0x61edcfe8dd6ba3c891cb9bec2dc7657b3b422e93",
+      "0x3d4350cd54aef9f9b2c29435e0fa809957b3f30a": "0x78366446547d062f45b4c0f320cdaa6d710d87bb",
+      "0x156ab3346823b651294766e23e6cf87254d68962": "0xb91a659e88b51474767cd97ef3196a3e7cedd2c8",
+      "0xce7de646e7208a4ef112cb6ed5038fa6cc6b12e3": "0xc5d3466aa484b040ee977073fcf337f2c00071c1",
+      "0xa2e3356610840701bdf5611a53974510ae27e2e1": "0x6cfdec747f37daf3b87a35a1d9c8ad3063a1a8a0",
+      "0x40af3827f39d0eacbf4a168f8d4ee67c121d11c9": "0xbf762cd5991ca1dcddac9ae5c638f5b5dc3bee6e",
+      "0xbf5140a22578168fd562dccf235e5d43a02ce9b1": "0x27ff564707786720c71a2e5c1490a63266683612",
+      "0xc5f0f7b66764f6ec8c8dff7ba683102295e16409": "0xc4ef4229fec74ccfe17b2bdef7715fac740ba0ba",
+      "0x4b0f1812e5df2a09796481ff14017e6005508003": "0x4d41a36d04d97785bcea57b057c412b278e6edcc",
+      "0x4aae823a6a0b376de6a78e74ecc5b079d38cbcf7": "0xf841cb62c19fcd4ff5cd0aab5939f3140baac3ea",
+      "0xf4c8e32eadec4bfe97e0f595add0f4450a863a11": "0x86e06eafa6a1ea631eab51de500e3d474933739f",
+      "0x570a5d26f7765ecb712c0924e4de545b89fd43df": "0xbf515ba4d1b52ffdceabf20d31d705ce789f2cec",
+      "0x0782b6d8c4551b9760e74c0545a9bcd90bdc41e5": "0x689e0dab47ab16bcae87ec18491692bf621dc6ab",
+      "0xdd809435ba6c9d6903730f923038801781ca66ce": "0x9e4e5fed5ac5b9f732d0d850a615206330bf1866",
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2": "0x699658323d58ee25c69f1a29d476946ab011bd18",
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34": "0x74ca6930108f775cc667894eea33843e691680d7"
+    },
+    "130": {
+      "0x4200000000000000000000000000000000000006": "0xc219bc179c7cdb37eacb03f993f9fdc2495e3374",
+      "0x078d782b760474a361dda0af3839290b0ef57ad6": "0xb953f92b9f759d97d2f2dec10a8a3cf75fce3a95",
+      "0x8f187aa05619a017077f5308904739877ce9ea21": "0x67716d6bf76170af816f5735e14c4d44d0b05ed2"
+    },
+    "204": {
+      "0x7c6b91d9be155a6db01f749217d76ff02a7227f2": "0xed827b80bd838192ea95002c01b5c6da8354219a",
+      "0xe7798f023fc62146e8aa1b36da45fb70855a77ea": "0x509e81ef638d489936fa85bc58f52df01190d26c",
+      "0x9e5aac1ba1a2e6aed6b32689dfcf62a509ca96f3": "0xb7a01ba126830692238521a1aa7e7a7509410b8e",
+      "0x4200000000000000000000000000000000000006": "0x53d11cb8a0e5320cd7229c3acc80d1a0707f2672",
+      "0x50c5725949a6f0c72e6c4a641f24049a917db0cb": "0x13b492b8a03d072bab5c54ac91dba5b830a50917"
+    },
+    "324": {
+      "0xbbeb516fb02a01611cbbe0453fe3c580d7281011": "0xaf8fd83cfcbe963211faaf1847f0f217f80b4719",
+      "0x5aea5775959fbc2557cc8789bc1bf90a239d9a91": "0x1fa916c27c7c2c4602124a14c77dbb40a5ff1be8",
+      "0x3355df6d4c9c3035724fd0e3914de96a5a83aaf4": "0x1af23bd57c62a99c59ad48236553d0dd11e49d2d",
+      "0x493257fd37edb34451f62edf8d2a0c418852ba4c": "0x69cda960e3b20dfd480866fffd377ebe40bd0a46",
+      "0x5a7d6b2f92c77fad6ccabd7ee0624e64907eaf3e": "0x697a70779c1a03ba2bd28b7627a902bff831b616",
+      "0x1d17cbcf0d6d143135ae902365d2e5e2a16538d4": "0x84064c058f2efea4ab648bb6bd7e40f83ffde39a",
+      "0xa900cbe7739c96d2b153a273953620a701d5442b": "0x183de3c349fcf546aae925e1c7f364ea6fb4033c",
+      "0x703b52f2b28febcb60e1372858af5b18849fe867": "0x03cad66259f7f34ee075f8b62d133563d249eda4",
+      "0xb72207e1fb50f341415999732a20b6d25d8127aa": "0xceb7da150d16ace58f090754fef2775c23c8b631"
+    },
+    "8453": {
+      "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf": "0x7bbd1005bb24ec84705b04e1f2dfccad533b6d72",
+      "0x4200000000000000000000000000000000000006": "0xeb8a79bd44cf4500943bf94a2b4434c95c008599",
+      "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913": "0x3cb752d175740043ec463673094e06acda2f9a2e",
+      "0x7fcd174e80f264448ebee8c88a7c4476aaf58ea6": "0x75201d81b3b0b9d17b179118837be37f64fc4930",
+      "0xc1cba3fcea344f92d9239c08c0568f6f2f0ee452": "0x133d3bcd77158d125b75a17cb517ffd4b4be64c5"
+    },
+    "42161": {
+      "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f": "0xada57840b372d4c28623e87fc175de8490792811",
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1": "0x68a34332983f4bf866768dd6d6e638b02ef5e1f0",
+      "0xaf88d065e77c8cc2239327c5edb3a432268e5831": "0x7d8609f8da70ff9027e9bc5229af4f6727662707",
+      "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9": "0xb9f9117d4200dc296f9acd1e8be1937df834a2fd",
+      "0x912ce59144191c1204e64559fe8253a0e49e6548": "0xaeb0fed69354f34831fe1d16475d9a83ddacada6",
+      "0x70d95587d40a2caf56bd97485ab3eec10bee6336": "0x9bb8cec9c0d46f53b4f2173bb2a0221f66c353cc",
+      "0x47c031236e19d024b42f8ae6780e44a573170703": "0x4f3a73f318c5ea67a86eaace24309f29f89900df"
+    }
+  },
+  "VENUS_ETH": {
+    "1": {
+      "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0": "0x4a240f0ee138697726c8a3e43efe6ac3593432cb",
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": "0xc82780db1257c788f262fbbda960b3706dfdcaf2",
+      "0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee": "0xb4933af59868986316ed37fa865c829eba2df0c7",
+      "0x6ee2b5e19ecba773a352e5b21415dc419a700d1d": "0x76697f8eaea4be01c678376aab97498ee8f80d5c",
+      "0xa1290d69c65a6fe4df752f95823fae25cb99e5a7": "0xdb6c345f864883a8f4cae87852ac342589e76d1b",
+      "0xac3e018457b222d93114458476f3e3416abbe38f": "0xf9e9fe17c00a8b96a8ac20c4e344c8688d7b947e",
+      "0xbf5495efe5db9ce00f80364c8b423567e58d2110": "0xa854d35664c658280fff27b6edc6c4195c3229b3",
+      "0x917cee801a67f933f2e6b33fc0cd1ed2d5909d88": "0xef26c64bc06a8de4ca5d31f119835f9a1d9433b9",
+      "0xd9a442856c234a39a81a089c06451ebaa4306a72": "0xe0ee5ddebfe0abe0a4af50299d68b74cec31668e"
+    },
+    "42161": {
+      "0x5979d7b546e38e414f7e9822514be443a4800529": "0x9df6b5132135f14719696bbae3c54bab272fdb16",
+      "0x35751007a407ca6feffe80b3cb397736d2cf4dbe": "0x246a35e79a3a0618535a469adaf5091caa9f7e88",
+      "0x82af49447d8a07e3bd95bd0d56f35241523fbab1": "0x39d6d13ea59548637104e40e729e4aabe27fe106"
+    }
+  },
+  "VENUS_BTC": {
+    "56": {
+      "0x541b5eeac7d4434c8f87e2d32019d67611179606": "0x02243f036897e3be1cce1e540fa362fd58749149",
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": "0x8f2ae20b25c327714248c95dfd3b02815cc82302"
+    }
+  },
+  "VENUS_BNB": {
+    "56": {
+      "0x52f24a5e03aee338da5fd9df68d2b6fae1178827": "0xbfe25459ba784e70e2d7a718be99a1f3521ca17f",
+      "0x1bdd3cf7f79cfb8edbb955f20ad99211551ba275": "0x5e21bf67a6af41c74c1773e4b473ca5ce8fd3791",
+      "0xc2e9d07f66a89c44062459a47a0d2dc038e4fb16": "0xcc5d9e502574cda17215e70bc0b4546663785227",
+      "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c": "0xe10e80b7fd3a29fe46e16c30cc8f4dd938b742e2",
+      "0xb0b84d294e0c75a6abe60171b70edeb2efd14a1b": "0xd3cc9d8f3689b83c91b7b59cab4946b063eb894a",
+      "0xe8f1c9804770e11ab73395be54686ad656601e9e": "0xa537acf381b12bbb91c58398b66d1d220f1c77c8",
+      "0x77734e70b6e88b4d82fe632a168edf6e700912b6": "0x4a50a0a1c832190362e1491d5bb464b1bc2bd288"
+    }
+  },
+  "VENUS_GAMEFI": {
+    "56": {
+      "0x12bb890508c125661e03b09ec06e404bc9289040": "0xe5fe5527a5b76c75eede77fdfa6b80d52444a465",
+      "0xfb5b838b6cfeedc2873ab27866079ac55363d37e": "0xc353b7a1e13ddba393b5e120d4169da7185aa2cb",
+      "0x55d398326f99059ff775485246999027b3197955": "0x4978591f17670a846137d9d613e333c38dc68a37",
+      "0xd17479997f34dd9156deef8f95a52d81d265be9c": "0x9f2fd23bd0a5e08c5f2b9dd6cf9c96bfb5fa515c"
+    }
+  },
+  "VENUS_MEME": {
+    "56": {
+      "0xc748673057861a797275cd8a068abb95a902e8de": "0x52ed99cd0a56d60451dd4314058854bc0845bbb5",
+      "0x55d398326f99059ff775485246999027b3197955": "0x4a9613d06a241b76b81d3777fce3ddd1f61d4bd0"
+    }
+  },
+  "VENUS_STABLE": {
+    "56": {
+      "0x0782b6d8c4551b9760e74c0545a9bcd90bdc41e5": "0xca2d81aa7c09a1a025de797600a7081146dceed9",
+      "0x55d398326f99059ff775485246999027b3197955": "0x5e3072305f9cae1c7a82f6fe9e38811c74922c3b",
+      "0xd17479997f34dd9156deef8f95a52d81d265be9c": "0xc3a45ad8812189cab659ad99e64b1376f6acd035",
+      "0x12f31b73d812c6bb0d735a218c086d44d5fe5f89": "0x795de779be00ea46ea97a28bdd38d9ed570bcf0f"
+    }
+  },
+  "VENUS_TRON": {
+    "56": {
+      "0x352cb5e19b12fc216548a2677bd0fce83bae434b": "0x49c26e12959345472e2fd95e5f79f8381058d3ee",
+      "0xaef0d72a118ce24fee3cd1d43d383897d05b4e99": "0xb114cfa615c828d88021a41bfc524b800e64a9d5",
+      "0xce7de646e7208a4ef112cb6ed5038fa6cc6b12e3": "0x836beb2cb723c498136e1119248436a645845f4e",
+      "0x55d398326f99059ff775485246999027b3197955": "0x281e5378f99a4bc55b295abc0a3e7ed32deba059",
+      "0xd17479997f34dd9156deef8f95a52d81d265be9c": "0xf1da185cce5bed1bebbb3007ef738ea4224025f7"
+    }
+  },
+  "VENUS_ETHENA": {
+    "1": {
+      "0x8a47b431a7d947c6a3ed6e42d501803615a97eaa": "0x62d9e2010cff87bae05b91d5e04605ef864abc3b",
+      "0xe00bd3df25fb187d6abbb620b3dfd19839947b81": "0xcca202a95e8096315e3f19e46e19e1b326634889",
+      "0x9d39a5de30e57443bff2a8307a4256c8797a3497": "0x0792b9c60c728c1d2fd6665b3d7a08762a9b28e0",
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": "0xa8e7f9473635a5cb79646f14356a9fc394ca111a"
+    }
+  },
+  "VENUS_DEFI": {
+    "56": {
+      "0x52f24a5e03aee338da5fd9df68d2b6fae1178827": "0x53728fd51060a85ac41974c6c3eb1dae42776723",
+      "0x965f527d9159dce6288a2219db51fc6eef120dd1": "0x8f657dfd3a1354deb4545765fe6840cc54afd379",
+      "0x8f0528ce5ef7b51152a59745befdd91d97091d2f": "0x02c5fb0f26761093d297165e902e96d08576d344",
+      "0x55d398326f99059ff775485246999027b3197955": "0x1d8bbde12b6b34140604e18e9f9c6e14dec16854",
+      "0xd17479997f34dd9156deef8f95a52d81d265be9c": "0xa615467cae6b9e0bb98bc04b4411d9296fd1dfa0",
+      "0xf307910a4c7bbc79691fd374889b36d8531b08e3": "0x19ce11c8817a1828d1d357dfbf62dcf5b0b2a362",
+      "0x4b0f1812e5df2a09796481ff14017e6005508003": "0x736bf1d21a28b5dc19a1ac8ca71fc2856c23c03f",
+      "0xca6d678e74f553f0e59cccc03ae644a3c2c5ee7d": "0xff1112ba7f88a53d4d23ed4e14a117a2ae17c6be"
+    }
+  },
+  "VENUS_CURVE": {
+    "1": {
+      "0xf939e0a03fb07f59a73314e73794be0e57ac1b4e": "0x2d499800239c4cd3012473cb1eae33562f0a6933",
+      "0xd533a949740bb3306d119cc777fa900ba034cd52": "0x30ad10bd5be62cab37863c2bfcc6e8fb4fd85bda"
+    }
+  },
+  "ENCLABS": {
+    "146": {
+      "0x50c42deacd8fc9773493ed674b675be577f2634b": "0x52260ad4cb690c6b22629166f4d181477a9c157c",
+      "0x29219dd400f2bf60e5a23d13be72b486d4038894": "0x87c69a8fb7f04b7890f48a1577a83788683a2036",
+      "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38": "0xc96a4cd13c8fcb9886de0cdf7152b9f930d67e96",
+      "0xe5da20f15420ad15de0fa650600afc998bbe3955": "0xe544e51bf20ab186b6b7b1a9095c8bc1e3f203f5",
+      "0xd3dce716f3ef535c5ff8d041c1a41c3bd89b97ae": "0x6770af27fc5233a70b85bff631061400a09d2e1c",
+      "0x3bce5cb273f0f148010bbea2470e7b5df84c7812": "0x04568db12221d60c93e1db9cb7933ad6b7c4280c",
+      "0xbe27993204ec64238f71a527b4c4d5f4949034c3": "0x2df4dc7cf362e56e128816be0f1f4ceb07904bb0",
+      "0xd2901d474b351bc6ee7b119f9c920863b0f781b2": "0xab1fbee94d9ba79269b3e479ce5d78c60f148716"
+    }
+  },
+  "ENCLABS_LST": {
+    "146": {
+      "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38": "0x876e062420fb9a4861968ec2e0ff91be88142343",
+      "0x29219dd400f2bf60e5a23d13be72b486d4038894": "0xb64b8585cece0e314d344c7f6437d97bf1eb0fe7",
+      "0x9f0df7799f6fdad409300080cff680f5a23df4b1": "0x7fd79432cc704582235df11b92b783f07ed40e13"
+    }
+  },
+  "ENCLABS_PT_ETH": {
+    "146": {
+      "0xd3dce716f3ef535c5ff8d041c1a41c3bd89b97ae": "0x7d47cbf5fe9ccf2f99d0c2e8a3c59fb3498bc21b",
+      "0x7002383d2305b8f3b2b7786f50c13d132a22076d": "0xd1e8ec6eaed325006731f816f41fd5483373a8f2"
+    }
+  },
+  "ENCLABS_PT_USD": {
+    "146": {
+      "0x3bce5cb273f0f148010bbea2470e7b5df84c7812": "0x8bc35aee955e2d05c13e4ff503294676508668b5",
+      "0x3a7ba84bbe869ed318e654dd9b6ff3cf6d531e91": "0xbff8cf17b04a057d9a8ce5796a85c60d1f614eab"
+    }
+  },
+  "SEGMENT": {
+    "56": {
+      "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d": "0x8969b89d5f38359fbe95bbe392f5ad82dd93e226",
+      "0x55d398326f99059ff775485246999027b3197955": "0x44b1e0f4533fd155b9859a9db292c90e5b300119",
+      "0x2170ed0880ac9a755fd29b2688956bd959f933f8": "0x3821175e59cd0acda6c5fd3ebb618b204e5d7eed",
+      "0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c": "0x12cd46b96fe0d86e396248a623b81fd84dd0f61d",
+      "0x0000000000000000000000000000000000000000": "0x5fcea94b96858048433359bb5278a402363328c3",
+      "0x80137510979822322193fc997d400d5a6c747bf7": "0x24a8117bf6f4a5be6759918f7c111f279a999ef3"
+    },
+    "204": {
+      "0x50c5725949a6f0c72e6c4a641f24049a917db0cb": "0xfe62ba7400d902a9773da9f7469da457cf54a565",
+      "0x9e5aac1ba1a2e6aed6b32689dfcf62a509ca96f3": "0x7add376cf7b33b7d09b0f0f4ef0a741c3cb95102",
+      "0xe7798f023fc62146e8aa1b36da45fb70855a77ea": "0x81b98b2896f1f262714f12be36264aa8e02a08d2",
+      "0x7c6b91d9be155a6db01f749217d76ff02a7227f2": "0x567558167f102bb45c0437f1fd5a527c5c534c3c",
+      "0x0000000000000000000000000000000000000000": "0x7e844423510a5081de839e600f7960c7ce84eb82"
+    },
+    "60808": {
+      "0x0000000000000000000000000000000000000000": "0xd7c6cc5aef7396182c5d7ebdac66ff674f3ddcf4",
+      "0x05d032ac25d322df992303dca074ee7392c117b9": "0x7414f14497be308e30ee345a0dcfc43623c179c2",
+      "0x03c7054bcb39f7b2e5b2c7acb37583e32d70cfa3": "0x6265c05158f672016b771d6fb7422823ed2cbcdd",
+      "0xe75d0fb2c24a55ca1e3f96781a2bcc7bdba058f0": "0xc344000a28f00e879c566f1ec259da24d6279592",
+      "0xbba2ef945d523c4e2608c9e1214c2cc64d4fc2e2": "0xd30288ea9873f376016a0250433b7ea375676077",
+      "0xba20a5e63eeefffa6fd365e7e540628f8fc61474": "0x2136ebc7be1e65fdb4a407ac2874b3d6850a64c2",
+      "0x96147a9ae9a42d7da551fd2322ca15b71032f342": "0xfb71992ed470632105f16c331a0c9365c8a4f613",
+      "0x85008ae6198bc91ac0735cb5497cf125ddaac528": "0xfdc94f6018c5764dd6bfcd003ee910d7f3907a1d",
+      "0xb5686c4f60904ec2bda6277d6fe1f7caa8d1b41a": "0xa005eb8730db1e26650c84fe31e95a8aa3accf93",
+      "0x6c851f501a3f24e29a8e39a29591cddf09369080": "0x83493ae23cec5dfec03052ff5cded648defc3336",
+      "0x59889b7021243db5b1e065385f918316cd90d46c": "0x0997f9c07dbda641ddcc9713d3e63aa6649abd98",
+      "0x78fea795cbfcc5ffd6fb5b845a4f53d25c283bdb": "0x4a98bf3bcdb5324223fb7ac2f22a460e70ef2046",
+      "0x541fd749419ca806a8bc7da8ac23d346f2df8b77": "0x26e68188d7c6ed30e194652aad1cc1e65434288c",
+      "0xcc0966d8418d412c599a6421b760a847eb169a8c": "0x5ef2b8fbcc8aea2a9dbe2729f0acf33e073fa43e",
+      "0x236f8c0a61da474db21b693fb2ea7aab0c803894": "0x7848f0775eebabbf55cb74490ce6d3673e68773a",
+      "0xc96de26018a54d51c097160568752c4e3bd6c364": "0x049a96cb83f77bd4165d8a9a033b9d4c41eff0f4",
+      "0xf7ef136751d7496021858c048ffa4f978c27831a": "0xc2808727f0c8366dab63f83074d890dea60c5d99",
+      "0xa45d4121b3d47719ff57a947a9d961539ba33204": "0xac431aca682aea40da9954568ea779b43acc6a39",
+      "0x1fcca65fb6ae3b2758b9b2b394cb227eae404e1e": "0x811bb0cc1800e35770495ffe1a6acb5650a6e83c",
+      "0x2fece49b79292c2cf6218b2bc657fddfd2941e18": "0x740bc032f9c2f7850d4490a6ed34c5c1bbfaf8fa",
+      "0xecf21b335b41f9d5a89f6186a99c19a3c467871f": "0x39e5946da0afd4ee792273e68935c0c9510307a5"
+    }
+  },
+  "BENQI": {
+    "43114": {
+      "0x0000000000000000000000000000000000000000": "0x5c0401e81bc07ca70fad469b451682c0d747ef1c",
+      "0x50b7545627a5162f82a992c33b87adc75187b218": "0xe194c4c5ac32a3c9ffdb358d9bfd523a0b6d1568",
+      "0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab": "0x334ad834cd4481bb02d09615e7c11a00579a7909",
+      "0xc7198437980c041c805a1edcba50c1ce5db95118": "0xc9e5999b8e75c3feb117f6f73e664b9f3c8ca65c",
+      "0x5947bb275c521040051d82396192181b413227a3": "0x4e9f683a27a6bdad3fc2764003759277e93696e6",
+      "0xd586e7f844cea2f87f50152665bcbc2c279d8d70": "0x835866d37afb8cb8f8334dccdaf66cf01832ff5d",
+      "0xa7d7079b0fead91f3e65f86e8915cb59c1a4c664": "0xbeb5d47a3f720ec0a390d04b4d41ed7d9688bc7f",
+      "0x8729438eb15e2c8b576fcc6aecda6a148776c0f5": "0x35bd6aeda81a7e5fc7a7832490e71f757b0cd9ce",
+      "0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e": "0xb715808a78f6041e46d61cb123c9b4a27056ae9c",
+      "0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7": "0xd8fcda6ec4bdc547c0827b8804e89acd817d56ef",
+      "0x2b2c81e08f1af8835a78bb2a90ae924ace0ea4be": "0xf362fea9659cf036792c9cb02f8ff8198e21b4cb",
+      "0x152b9d0fdc40c096757f570a51e494bd4b943e50": "0x89a415b3d20098e6a6c8f7a59001c67bd3129821",
+      "0x9c9e5fd8bbc25984b178fdce6117defa39d2db39": "0x872670ccae8c19557cc9443eff587d7086b8043a",
+      "0x00000000efe302beaa2b3e6e1b18d08d69a9012a": "0x190d94613a09ad7931fcd17cd6a8f9b6b47ad414"
+    }
+  },
+  "BENQI_AVALANCE_ECOSYSTEM": {
+    "43114": {
+      "0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e": "0x6b35eb18bca06bd7d66a428eeb45ac7d200c1e4e",
+      "0x420fca0121dc28039145009570975747295f2329": "0x0ebfebd41e1ea83be5e911cdcd2730a0ccee344d",
+      "0x6e84a6216ea6dacc71ee8e6b0a5b7322eebc0fdd": "0x4036cb0d6bf6b5f17aa4e05191f86d4b1655b0d9",
+      "0x8729438eb15e2c8b576fcc6aecda6a148776c0f5": "0x545356e396350d40cdea888ad73534517399bf96",
+      "0x00000000efe302beaa2b3e6e1b18d08d69a9012a": "0xb7cfb8ae67e20059021a0d20fc30311a6c67c734",
+      "0xbc78d84ba0c46dfe32cf2895a19939c86b81a777": "0x0ffac5aae14e28e79c5ccc7a335d8c70ee458a3a"
+    }
+  }
+};
+var INIT_STYLE_RESERVE_ASSETS = {
+  "INIT": {
+    "5000": [
+      "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+      "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8",
+      "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111",
+      "0xcabae6f6ea1ecab08ad02fe02ce9a44f09aebfa2",
+      "0x201eba5cc46d216ce6dc03f6a759e8e766e956ae",
+      "0xcda86a272531e8640cd7f1a92c01839911b90bb0",
+      "0x5be26527e817998a7206475496fde1e68957c5a6",
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+      "0xc96de26018a54d51c097160568752c4e3bd6c364",
+      "0xe6829d9a7ee3040e1276fa75293bde931859e8fa"
+    ],
+    "81457": [
+      "0x4b246c4c41c4e5ec1d4a8453c313cbc57bf0993a",
+      "0xf683ce59521aa464066783d78e40cd9412f33d21",
+      "0x2416092f143378750bb29b79ed961ab195cceea5",
+      "0xe7903b1f75c534dd8159b313d92cdcfbc62cb3cd",
+      "0x04c0599ae5a44757c0af6f9ec3b93da8976c150a",
+      "0xb1a5700fa2358173fe465e6ea4ff52e36e88e2ad",
+      "0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2",
+      "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+      "0xbb4e01b8940e8e2b3a95ced7941969d033786ff7"
+    ]
+  }
+};
+var MORPHO_BLUE = {
+  [
+    "1"
+    /* ETHEREUM_MAINNET */
+  ]: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb",
+  [
+    "8453"
+    /* BASE */
+  ]: "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb",
+  [
+    "42161"
+    /* ARBITRUM_ONE */
+  ]: "0x6c247b1F6182318877311737BaC0844bAa518F5e",
+  [
+    "10"
+    /* OP_MAINNET */
+  ]: "0xce95AfbB8EA029495c66020883F87aaE8864AF92",
+  [
+    "534352"
+    /* SCROLL */
+  ]: "0x2d012EdbAdc37eDc2BC62791B666f9193FDF5a55",
+  [
+    "137"
+    /* POLYGON_MAINNET */
+  ]: "0x1bF0c2541F820E775182832f06c0B7Fc27A25f67",
+  [
+    "21000000"
+    /* CORN */
+  ]: "0xc2B1E031540e3F3271C5F3819F0cC7479a8DdD90",
+  [
+    "252"
+    /* FRAXTAL */
+  ]: "0xa6030627d724bA78a59aCf43Be7550b4C5a0653b",
+  [
+    "43111"
+    /* HEMI_NETWORK */
+  ]: "0xa4Ca2c2e25b97DA19879201bA49422bc6f181f42",
+  [
+    "57073"
+    /* INK */
+  ]: "0x857f3EefE8cbda3Bc49367C996cd664A880d3042",
+  [
+    "34443"
+    /* MODE */
+  ]: "0xd85cE6BD68487E0AaFb0858FDE1Cd18c76840564",
+  [
+    "146"
+    /* SONIC_MAINNET */
+  ]: "0xd6c916eB7542D0Ad3f18AEd0FCBD50C582cfa95f",
+  [
+    "130"
+    /* UNICHAIN */
+  ]: "0x8f5ae9cddb9f68de460c77730b018ae7e04a140a",
+  [
+    "480"
+    /* WORLD_CHAIN */
+  ]: "0xE741BC7c34758b4caE05062794E8Ae24978AF432",
+  [
+    "253368190"
+    /* FLAME */
+  ]: "0x63971484590b054b6Abc4FEe9F31BC6F68CfeC04",
+  [
+    "98866"
+    /* PLUME_MAINNET */
+  ]: "0x42b18785CE0Aed7BF7Ca43a39471ED4C0A3e0bB5",
+  [
+    "999"
+    /* HYPEREVM */
+  ]: "0x68e37dE8d93d3496ae143F2E900490f6280C57cD",
+  [
+    "123420001114"
+    /* BASECAMP */
+  ]: "0xc7CAd9B1377Eb8103397Cb07Cb5c4f03eb2eBEa8",
+  [
+    "2390"
+    /* TAC_EVM */
+  ]: "0xF0453e7368Ea01d6d6d6a222C26B5a06F1d816e9"
+};
+var MORPHO_BLUE_POOL_DATA = {
+  [
+    "MORPHO_BLUE"
+    /* MORPHO_BLUE */
+  ]: MORPHO_BLUE
+};
+var WRAPPED_NATIVE_INFO = {
+  "1": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    decimals: 18
+  },
+  "10": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "25": {
+    name: "Wrapped CRO",
+    symbol: "WCRO",
+    address: "0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23",
+    decimals: 18
+  },
+  "30": {
+    name: "Wrapped RBTC",
+    symbol: "WRBTC",
+    address: "0x542fda317318ebf1d3deaf76e0b632741a7e677d",
+    decimals: 18
+  },
+  "40": {
+    name: "Wrapped TLOS",
+    symbol: "WTLOS",
+    address: "0xd102ce6a4db07d247fcc28f366a623df0938ca9e",
+    decimals: 18
+  },
+  "50": {
+    name: "Wrapped XDC",
+    symbol: "WXDC",
+    address: "0x951857744785e80e2de051c32ee7b25f9c458c42",
+    decimals: 18
+  },
+  "56": {
+    name: "Wrapped BNB",
+    symbol: "WBNB",
+    address: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
+    decimals: 18
+  },
+  "61": {
+    name: "Wrapped ETC",
+    symbol: "WETC",
+    address: "0x82a618305706b14e7bcf2592d4b9324a366b6dad",
+    decimals: 18
+  },
+  "66": {
+    name: "Wrapped OKT",
+    symbol: "WOKT",
+    address: "0x8f8526dbfd6e38e3d8307702ca8469bae6c56c15",
+    decimals: 18
+  },
+  "100": {
+    name: "Wrapped xDAI",
+    symbol: "WXDAI",
+    address: "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+    decimals: 18
+  },
+  "108": {
+    name: "Wrapped TT",
+    symbol: "WTT",
+    address: "0x413cefea29f2d07b8f2acfa69d92466b9535f717",
+    decimals: 18
+  },
+  "122": {
+    name: "Wrapped FUSE",
+    symbol: "WFUSE",
+    address: "0x0be9e53fd7edac9f859882afdda116645287c629",
+    decimals: 18
+  },
+  "128": {
+    name: "Wrapped HT",
+    symbol: "WHT",
+    address: "0x5545153ccfca01fbd7dd11c0b23ba694d9509a6f",
+    decimals: 18
+  },
+  "130": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "137": {
+    name: "Wrapped POL",
+    symbol: "WPOL",
+    address: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+    decimals: 18
+  },
+  "146": {
+    name: "Wrapped Sonic",
+    symbol: "WS",
+    address: "0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38",
+    decimals: 18
+  },
+  "185": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "196": {
+    name: "Wrapped OKB",
+    symbol: "WOKB",
+    address: "0xe538905cf8410324e03a5a23c1c177a474d59b2b",
+    decimals: 18
+  },
+  "199": {
+    name: "Wrapped BitTorrent",
+    symbol: "WBTT",
+    address: "0x23181f21dea5936e24163ffaba4ea3b316b57f3c",
+    decimals: 18
+  },
+  "204": {
+    name: "Wrapped BNB",
+    symbol: "WBNB",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "223": {
+    name: "Wrapped BTC",
+    symbol: "WBTC",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "250": {
+    name: "Wrapped FTM",
+    symbol: "WFTM",
+    address: "0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83",
+    decimals: 18
+  },
+  "255": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000001",
+    decimals: 18
+  },
+  "288": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000",
+    decimals: 18
+  },
+  "314": {
+    name: "Wrapped Filecoin",
+    symbol: "WFIL",
+    address: "0x60e1773636cf5e4a227d9ac24f20feca034ee25a",
+    decimals: 18
+  },
+  "360": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x09bf29b44130e88f113c1fb0487bcb97b6920c31",
+    decimals: 18
+  },
+  "480": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "592": {
+    name: "Wrapped ASTR",
+    symbol: "WASTR",
+    address: "0xaeaaf0e2c81af264101b9129c00f4440ccf0f720",
+    decimals: 18
+  },
+  "747": {
+    name: "Wrapped Flow",
+    symbol: "WFLOW",
+    address: "0xd3bf53dac106a0290b0483ecbc89d40fcc961f3e",
+    decimals: 18
+  },
+  "813": {
+    name: "Wrapped MEER",
+    symbol: "WMEER",
+    address: "0x470cbfb236860eb5257bbf78715fb5bd77119c2f",
+    decimals: 18
+  },
+  "999": {
+    name: "Wrapped HYPE",
+    symbol: "WHYPE",
+    address: "0x5555555555555555555555555555555555555555",
+    decimals: 18
+  },
+  "1088": {
+    name: "Wrapped Metis",
+    symbol: "WMETIS",
+    address: "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+    decimals: 18
+  },
+  "1101": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4f9a0e7fd2bf6067db6994cf12e4495df938e6e9",
+    decimals: 18
+  },
+  "1116": {
+    name: "Wrapped CORE",
+    symbol: "WCORE",
+    address: "0xb0788b601c0d712702bc829b52771199ad8e33ff",
+    decimals: 18
+  },
+  "1284": {
+    name: "Wrapped Glimmer",
+    symbol: "WGLMR",
+    address: "0xacc15dc74880c9944775448304b263d191c6077f",
+    decimals: 18
+  },
+  "1285": {
+    name: "Wrapped MOVR",
+    symbol: "WMOVR",
+    address: "0x98878b06940ae243284ca214f92bb71a2b032b8a",
+    decimals: 18
+  },
+  "1329": {
+    name: "Wrapped SEI",
+    symbol: "WSEI",
+    address: "0xe30fedd158a2e3b13e9badaeabafc5516e95e8c7",
+    decimals: 18
+  },
+  "1514": {
+    name: "Wrapped IP",
+    symbol: "WIP",
+    address: "0x1514000000000000000000000000000000000000",
+    decimals: 18
+  },
+  "1625": {
+    name: "Wrapped G",
+    symbol: "WG",
+    address: "0xbb859e225ac8fb6be1c7e38d87b767e95fef0ebd",
+    decimals: 18
+  },
+  "1729": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x6b48c2e6a32077ec17e8ba0d98ffc676dfab1a30",
+    decimals: 18
+  },
+  "1868": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "1923": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "1996": {
+    name: "Wrapped DMT",
+    symbol: "WDMT",
+    address: "0x754cdad6f5821077d6915004be2ce05f93d176f8",
+    decimals: 18
+  },
+  "2000": {
+    name: "Wrapped DOGE",
+    symbol: "WDOGE",
+    address: "0xb7ddc6414bf4f5515b52d8bdd69973ae205ff101",
+    decimals: 18
+  },
+  "2222": {
+    name: "Wrapped Kava",
+    symbol: "WKAVA",
+    address: "0xc86c7c0efbd6a49b35e8714c5f59d99de09a225b",
+    decimals: 18
+  },
+  "2415": {
+    name: "Wrapped XODEX",
+    symbol: "WXODEX",
+    address: "0x2f3ad0cdc8ad20337eb02bd6411b808ee30c7896",
+    decimals: 18
+  },
+  "2525": {
+    name: "Wrapped Injective",
+    symbol: "WINJ",
+    address: "0x69011706b3f6c6eaed7d2bc13801558b4fd94cbf",
+    decimals: 18
+  },
+  "2818": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x5300000000000000000000000000000000000011",
+    decimals: 18
+  },
+  "4158": {
+    name: "Wrapped XFI",
+    symbol: "WXFI",
+    address: "0xc537d12bd626b135b251cca43283eff69ec109c4",
+    decimals: 18
+  },
+  "4200": {
+    name: "Wrapped BTC",
+    symbol: "WBTC",
+    address: "0xf6d226f9dc15d9bb51182815b320d3fbe324e1ba",
+    decimals: 18
+  },
+  "4689": {
+    name: "Wrapped IoTex",
+    symbol: "WIOTX",
+    address: "0xa00744882684c3e4747faefd68d283ea44099d03",
+    decimals: 18
+  },
+  "5000": {
+    name: "Wrapped Mantle",
+    symbol: "WMNT",
+    address: "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8",
+    decimals: 18
+  },
+  "5165": {
+    name: "Wrapped FTN",
+    symbol: "WFTN",
+    address: "0x4084ab20f8ffca76c19aaf854fb5fe9de6217fbb",
+    decimals: 18
+  },
+  "7000": {
+    name: "Wrapped ZETA",
+    symbol: "WZETA",
+    address: "0x5f0b1a82749cb4e2278ec87f8bf6b618dc71a8bf",
+    decimals: 18
+  },
+  "8082": {
+    name: "Wrapped SHM",
+    symbol: "WSHM",
+    address: "0x5eb65c6fec23d4eb36bc9966aa110fe13fbd7c7f",
+    decimals: 18
+  },
+  "8217": {
+    name: "Wrapped KAIA",
+    symbol: "WKAIA",
+    address: "0xfd844c2fca5e595004b17615f891620d1cb9bbb2",
+    decimals: 18
+  },
+  "8453": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "8822": {
+    name: "Wrapped IOTA",
+    symbol: "WIOTA",
+    address: "0x6e47f8d48a01b44df3fff35d258a10a3aedc114c",
+    decimals: 18
+  },
+  "11235": {
+    name: "Wrapped Islamic Coin",
+    symbol: "WISLM",
+    address: "0xec8cc083787c6e5218d86f9ff5f28d4cc377ac54",
+    decimals: 18
+  },
+  "33139": {
+    name: "Wrapped ApeCoin",
+    symbol: "WAPE",
+    address: "0x48b62137edfa95a428d35c09e44256a739f6b557",
+    decimals: 18
+  },
+  "34443": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "41455": {
+    name: "Wrapped Aleph Zero",
+    symbol: "WAZERO",
+    address: "0xb7da55d7040ef9c887e20374d76a88f93a59119e",
+    decimals: 18
+  },
+  "41923": {
+    name: "Wrapped EDU",
+    symbol: "WEDU",
+    address: "0xd02e8c38a8e3db71f8b2ae30b8186d7874934e12",
+    decimals: 18
+  },
+  "42161": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+    decimals: 18
+  },
+  "42170": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x722e8bdd2ce80a4422e880164f2079488e115365",
+    decimals: 18
+  },
+  "42220": {
+    name: "Celo",
+    symbol: "CELO",
+    address: "0x471ece3750da237f93b8e339c536989b8978a438",
+    decimals: 18
+  },
+  "42262": {
+    name: "Wrapped ROSE",
+    symbol: "WROSE",
+    address: "0x21c718c22d52d0f3a789b752d4c2fd5908a8a733",
+    decimals: 18
+  },
+  "42793": {
+    name: "Wrapped XTZ",
+    symbol: "WXTZ",
+    address: "0xc9b53ab2679f573e480d01e0f49e2b5cfb7a3eab",
+    decimals: 18
+  },
+  "43111": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "43114": {
+    name: "Wrapped AVAX",
+    symbol: "WAVAX",
+    address: "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
+    decimals: 18
+  },
+  "50104": {
+    name: "Wrapped Sophon",
+    symbol: "WSOPH",
+    address: "0x2b1a859de6a55c553520d7780bc5805712b128f9",
+    decimals: 18
+  },
+  "57073": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "59144": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0xe5d7c2a44ffddf6b295a15c148167daaaf5cf34f",
+    decimals: 18
+  },
+  "60808": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4200000000000000000000000000000000000006",
+    decimals: 18
+  },
+  "63157": {
+    name: "Wrapped GHST",
+    symbol: "WGHST",
+    address: "0x74e2051a9cd994f83f2d789448dca4a3e879964c",
+    decimals: 18
+  },
+  "70700": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x77684a04145a5924efce0d92a7c4a2a2e8c359de",
+    decimals: 18
+  },
+  "80094": {
+    name: "Wrapped Bera",
+    symbol: "WBERA",
+    address: "0x6969696969696969696969696969696969696969",
+    decimals: 18
+  },
+  "81457": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x4300000000000000000000000000000000000004",
+    decimals: 18
+  },
+  "98866": {
+    name: "Wrapped Plume",
+    symbol: "WPLUME",
+    address: "0xea237441c92cae6fc17caaf9a7acb3f953be4bd1",
+    decimals: 18
+  },
+  "167000": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0xa51894664a773981c6c112c43ce576f315d5b1b6",
+    decimals: 18
+  },
+  "534352": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0x5300000000000000000000000000000000000004",
+    decimals: 18
+  },
+  "660279": {
+    name: "Wrapped XAI",
+    symbol: "WXAI",
+    address: "0x3fb787101dc6be47cfe18aeee15404dcc842e6af",
+    decimals: 18
+  },
+  "777777": {
+    name: "Wrapped WINR",
+    symbol: "WWINR",
+    address: "0xbf6fa9d2bf9f681e7b6521b49cf8eccf9ad8d31d",
+    decimals: 18
+  },
+  "21000000": {
+    name: "Wrapped Bitcorn",
+    symbol: "WBTCN",
+    address: "0xda5ddd7270381a7c2717ad10d1c0ecb19e3cdfb2",
+    decimals: 18
+  },
+  "245022934": {
+    name: "Wrapped Neon",
+    symbol: "WNEON",
+    address: "0x202c35e517fa803b537565c40f0a6965d7204609",
+    decimals: 18
+  },
+  "666666666": {
+    name: "Wrapped DEGEN",
+    symbol: "WDEGEN",
+    address: "0xeb54dacb4c2ccb64f8074eceea33b5ebb38e5387",
+    decimals: 18
+  },
+  "1313161554": {
+    name: "Wrapped Ether",
+    symbol: "WETH",
+    address: "0xc9bdeed33cd01541e1eed10f90519d2c06fe3feb",
+    decimals: 18
+  },
+  "1666600000": {
+    name: "Wrapped ONE",
+    symbol: "WONE",
+    address: "0xcf664087a5bb0237a0bad6742852ec6c8d69a27a",
+    decimals: 18
+  },
+  "11297108109": {
+    name: "Wrapped Palm",
+    symbol: "WPALM",
+    address: "0xf98cabf0a963452c5536330408b2590567611a71",
+    decimals: 18
+  },
+  "fuel": {
+    name: "Ethereum",
+    symbol: "ETH",
+    address: "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07",
+    decimals: 9
+  }
+};
+
+// ../../node_modules/.pnpm/@1delta+dex-registry@0.0.53/node_modules/@1delta/dex-registry/dist/index.mjs
+var DexProtocol = /* @__PURE__ */ ((DexProtocol2) => {
+  DexProtocol2["BALANCER_V3"] = "BALANCER_V3";
+  DexProtocol2["UNISWAP_V4"] = "UNISWAP_V4";
+  DexProtocol2["UNISWAP_V2"] = "UNISWAP_V2";
+  DexProtocol2["PANCAKESWAP_V2"] = "PANCAKESWAP_V2";
+  DexProtocol2["BISWAP_V2"] = "BISWAP_V2";
+  DexProtocol2["UBESWAP_V2"] = "UBESWAP_V2";
+  DexProtocol2["FUSIONX_V2"] = "FUSIONX_V2";
+  DexProtocol2["SUSHISWAP_V2"] = "SUSHISWAP_V2";
+  DexProtocol2["METROPOLIS_V2"] = "METROPOLIS_V2";
+  DexProtocol2["QUICKSWAP_V2"] = "QUICKSWAP_V2";
+  DexProtocol2["SQUADSWAP_V2"] = "SQUADSWAP_V2";
+  DexProtocol2["DFYN"] = "DFYN";
+  DexProtocol2["BUTTER"] = "BUTTER";
+  DexProtocol2["MERCHANT_MOE"] = "MERCHANT_MOE";
+  DexProtocol2["TRADER_JOE_V1"] = "TRADER_JOE_V1";
+  DexProtocol2["POLYCAT"] = "POLYCAT";
+  DexProtocol2["APESWAP"] = "APESWAP";
+  DexProtocol2["WAULTSWAP"] = "WAULTSWAP";
+  DexProtocol2["COMETH"] = "COMETH";
+  DexProtocol2["TROPICAL_SWAP"] = "TROPICAL_SWAP";
+  DexProtocol2["MANTLESWAP"] = "MANTLESWAP";
+  DexProtocol2["DTX_V1"] = "DTX_V1";
+  DexProtocol2["TAIKOSWAP"] = "TAIKOSWAP";
+  DexProtocol2["PASS"] = "PASS";
+  DexProtocol2["NETSWAP"] = "NETSWAP";
+  DexProtocol2["HERCULES_V2"] = "HERCULES_V2";
+  DexProtocol2["HERMES"] = "HERMES";
+  DexProtocol2["SPACEFI"] = "SPACEFI";
+  DexProtocol2["ZKSWAP_V2"] = "ZKSWAP_V2";
+  DexProtocol2["SWAPR_V1"] = "SWAPR_V1";
+  DexProtocol2["HONEYSWAP"] = "HONEYSWAP";
+  DexProtocol2["AXION_V2"] = "AXION_V2";
+  DexProtocol2["DODO_V1"] = "DODO_V1";
+  DexProtocol2["DODO_V2"] = "DODO_V2";
+  DexProtocol2["WOO_FI"] = "WOO_FI";
+  DexProtocol2["PANCAKE_STABLE"] = "PANCAKE_STABLE";
+  DexProtocol2["FUSIONX_STABLE"] = "FUSIONX_STABLE";
+  DexProtocol2["VELOCIMETER_VOLATILE"] = "VELOCIMETER_VOLATILE";
+  DexProtocol2["VELOCIMETER_STABLE"] = "VELOCIMETER_STABLE";
+  DexProtocol2["CLEOPATRA_V1_VOLATILE"] = "CLEOPATRA_V1_VOLATILE";
+  DexProtocol2["CLEOPATRA_V1_STABLE"] = "CLEOPATRA_V1_STABLE";
+  DexProtocol2["PHARAOH_V1_VOLATILE"] = "PHARAOH_V1_VOLATILE";
+  DexProtocol2["PHARAOH_V1_STABLE"] = "PHARAOH_V1_STABLE";
+  DexProtocol2["NILE_VOLATILE"] = "NILE_VOLATILE";
+  DexProtocol2["NILE_STABLE"] = "NILE_STABLE";
+  DexProtocol2["LYNEX_V1_VOLATILE"] = "LYNEX_V1_VOLATILE";
+  DexProtocol2["LYNEX_V1_STABLE"] = "LYNEX_V1_STABLE";
+  DexProtocol2["STRATUM_VOLATILE"] = "STRATUM_VOLATILE";
+  DexProtocol2["STRATUM_STABLE"] = "STRATUM_STABLE";
+  DexProtocol2["DYSTOPIA_VOLATILE"] = "DYSTOPIA_VOLATILE";
+  DexProtocol2["DYSTOPIA_STABLE"] = "DYSTOPIA_STABLE";
+  DexProtocol2["KODO_VOLATILE"] = "KODO_VOLATILE";
+  DexProtocol2["KODO_STABLE"] = "KODO_STABLE";
+  DexProtocol2["CRUST_V1_VOLATILE"] = "CRUST_V1_VOLATILE";
+  DexProtocol2["CRUST_V1_STABLE"] = "CRUST_V1_STABLE";
+  DexProtocol2["RAMSES_V1_VOLATILE"] = "RAMSES_V1_VOLATILE";
+  DexProtocol2["RAMSES_V1_STABLE"] = "RAMSES_V1_STABLE";
+  DexProtocol2["HERMES_VOLATILE"] = "HERMES_VOLATILE";
+  DexProtocol2["HERMES_STABLE"] = "HERMES_STABLE";
+  DexProtocol2["VELODROME_V1_VOLATILE"] = "VELODROME_V1_VOLATILE";
+  DexProtocol2["VELODROME_V1_STABLE"] = "VELODROME_V1_STABLE";
+  DexProtocol2["VELODROME_V2_VOLATILE"] = "VELODROME_V2_VOLATILE";
+  DexProtocol2["VELODROME_V2_STABLE"] = "VELODROME_V2_STABLE";
+  DexProtocol2["KOI_VOLATILE"] = "KOI_VOLATILE";
+  DexProtocol2["KOI_STABLE"] = "KOI_STABLE";
+  DexProtocol2["CAMELOT_V2_VOLATILE"] = "CAMELOT_V2_VOLATILE";
+  DexProtocol2["CAMELOT_V2_STABLE"] = "CAMELOT_V2_STABLE";
+  DexProtocol2["HERCULES_V2_VOLATILE"] = "HERCULES_V2_VOLATILE";
+  DexProtocol2["HERCULES_V2_STABLE"] = "HERCULES_V2_STABLE";
+  DexProtocol2["UNISWAP_V3"] = "UNISWAP_V3";
+  DexProtocol2["SQUADSWAP_V3"] = "SQUADSWAP_V3";
+  DexProtocol2["DACKIESWAP_V3"] = "DACKIESWAP_V3";
+  DexProtocol2["WAGMI"] = "WAGMI";
+  DexProtocol2["MAIA_V3"] = "MAIA_V3";
+  DexProtocol2["ALIENBASE_V3"] = "ALIENBASE_V3";
+  DexProtocol2["BASEX_V3"] = "BASEX_V3";
+  DexProtocol2["KINETIX_V3"] = "KINETIX_V3";
+  DexProtocol2["AERODROME_SLIPSTREAM"] = "AERODROME_SLIPSTREAM";
+  DexProtocol2["PANCAKESWAP_V3"] = "PANCAKESWAP_V3";
+  DexProtocol2["BISWAP_V3"] = "BISWAP_V3";
+  DexProtocol2["FUSIONX_V3"] = "FUSIONX_V3";
+  DexProtocol2["QUICKSWAP_V3"] = "QUICKSWAP_V3";
+  DexProtocol2["SUSHISWAP_V3"] = "SUSHISWAP_V3";
+  DexProtocol2["SOLIDLY_V3"] = "SOLIDLY_V3";
+  DexProtocol2["IZUMI"] = "IZUMI";
+  DexProtocol2["AGNI"] = "AGNI";
+  DexProtocol2["SWAPSICLE"] = "SWAPSICLE";
+  DexProtocol2["RETRO"] = "RETRO";
+  DexProtocol2["METHLAB"] = "METHLAB";
+  DexProtocol2["HENJIN"] = "HENJIN";
+  DexProtocol2["CAMELOT"] = "CAMELOT";
+  DexProtocol2["DTX"] = "DTX";
+  DexProtocol2["CRUST"] = "CRUST";
+  DexProtocol2["PANKO"] = "PANKO";
+  DexProtocol2["SHADOW_CL"] = "SHADOW_CL";
+  DexProtocol2["KOI_CL"] = "KOI_CL";
+  DexProtocol2["ZKSWAP_V3"] = "ZKSWAP_V3";
+  DexProtocol2["PHARAOH_CL"] = "PHARAOH_CL";
+  DexProtocol2["UNAGI_V3"] = "UNAGI_V3";
+  DexProtocol2["AXION_V3"] = "AXION_V3";
+  DexProtocol2["CLEOPATRA"] = "CLEOPATRA";
+  DexProtocol2["RAMSES_V2"] = "RAMSES_V2";
+  DexProtocol2["NILE_CL"] = "NILE_CL";
+  DexProtocol2["VELODROME_V3"] = "VELODROME_V3";
+  DexProtocol2["CURVE_V1_CLASSIC"] = "CURVE_V1_CLASSIC";
+  DexProtocol2["CURVE_NG"] = "CURVE_NG";
+  DexProtocol2["CURVE_CRYPTO"] = "CURVE_CRYPTO";
+  DexProtocol2["CURVE_STANDARD"] = "CURVE_STANDARD";
+  DexProtocol2["CURVE_RECEIVE"] = "CURVE_RECEIVE";
+  DexProtocol2["STRATUM_CURVE_STABLE"] = "STRATUM_CURVE_STABLE";
+  DexProtocol2["STRATUM_CURVE"] = "STRATUM_CURVE";
+  DexProtocol2["PANKO_STABLE"] = "PANKO_STABLE";
+  DexProtocol2["KTX"] = "KTX";
+  DexProtocol2["GMX"] = "GMX";
+  DexProtocol2["TETHYS"] = "TETHYS";
+  DexProtocol2["MERCHANT_MOE_LB"] = "MERCHANT_MOE_LB";
+  DexProtocol2["TRADER_JOE_LB_V2"] = "TRADER_JOE_LB_V2";
+  DexProtocol2["TRADER_JOE_LB_V21"] = "TRADER_JOE_LB_V21";
+  DexProtocol2["TRADER_JOE_LB_V22"] = "TRADER_JOE_LB_V22";
+  DexProtocol2["SYNC_BASE"] = "SYNC_BASE";
+  DexProtocol2["SYNC_RYTHM"] = "SYNC_RYTHM";
+  DexProtocol2["SYNC_STABLE"] = "SYNC_STABLE";
+  DexProtocol2["RITSU_BASE"] = "RITSU_BASE";
+  DexProtocol2["RITSU_RYTHM"] = "RITSU_RYTHM";
+  DexProtocol2["RITSU_STABLE"] = "RITSU_STABLE";
+  DexProtocol2["BALANCER_V2"] = "BALANCER_V2";
+  DexProtocol2["SYMMETRIC"] = "SYMMETRIC";
+  DexProtocol2["SWAAP"] = "SWAAP";
+  DexProtocol2["MAVERICK_V2"] = "MAVERICK_V2";
+  DexProtocol2["MIRA_VOLATILE"] = "MIRA_VOLATILE";
+  DexProtocol2["MIRA_STABLE"] = "MIRA_STABLE";
+  DexProtocol2["DIESEL_VOLATILE"] = "DIESEL_VOLATILE";
+  DexProtocol2["DIESEL_STABLE"] = "DIESEL_STABLE";
+  DexProtocol2["SHADOW_V2_VOLATILE"] = "SHADOW_V2_VOLATILE";
+  DexProtocol2["SHADOW_V2_STABLE"] = "SHADOW_V2_STABLE";
+  DexProtocol2["SWAPX_V2_VOLATILE"] = "SWAPX_V2_VOLATILE";
+  DexProtocol2["SWAPX_V2_STABLE"] = "SWAPX_V2_STABLE";
+  DexProtocol2["ZYBERSWAP"] = "ZYBERSWAP";
+  DexProtocol2["SKULLSWAP"] = "SKULLSWAP";
+  DexProtocol2["UBESWAP"] = "UBESWAP";
+  DexProtocol2["LITX"] = "LITX";
+  DexProtocol2["STELLASWAP"] = "STELLASWAP";
+  DexProtocol2["LYNEX"] = "LYNEX";
+  DexProtocol2["SWAP_BASED"] = "SWAP_BASED";
+  DexProtocol2["SYNTHSWAP"] = "SYNTHSWAP";
+  DexProtocol2["HERCULES"] = "HERCULES";
+  DexProtocol2["KIM"] = "KIM";
+  DexProtocol2["FENIX"] = "FENIX";
+  DexProtocol2["BLADE"] = "BLADE";
+  DexProtocol2["SILVER_SWAP"] = "SILVER_SWAP";
+  DexProtocol2["HORIZON"] = "HORIZON";
+  DexProtocol2["GLYPH"] = "GLYPH";
+  DexProtocol2["SWAPX"] = "SWAPX";
+  DexProtocol2["BULLA"] = "BULLA";
+  DexProtocol2["SCRIBE"] = "SCRIBE";
+  DexProtocol2["FIBONACCI"] = "FIBONACCI";
+  DexProtocol2["VOLTAGE"] = "VOLTAGE";
+  DexProtocol2["WASABEE"] = "WASABEE";
+  DexProtocol2["HOLIVERSE"] = "HOLIVERSE";
+  DexProtocol2["MOR_FI"] = "MOR_FI";
+  DexProtocol2["ATLAS"] = "ATLAS";
+  DexProtocol2["THENA"] = "THENA";
+  DexProtocol2["VELOCIMETER"] = "VELOCIMETER";
+  DexProtocol2["CLEOPATRA_V1"] = "CLEOPATRA_V1";
+  DexProtocol2["STRATUM"] = "STRATUM";
+  DexProtocol2["DYSTOPIA"] = "DYSTOPIA";
+  DexProtocol2["KODO"] = "KODO";
+  DexProtocol2["CRUST_V1"] = "CRUST_V1";
+  DexProtocol2["RAMSES_V1"] = "RAMSES_V1";
+  DexProtocol2["CAMELOT_V2"] = "CAMELOT_V2";
+  DexProtocol2["MIRA"] = "MIRA";
+  DexProtocol2["DIESEL"] = "DIESEL";
+  DexProtocol2["SHADOW_V2"] = "SHADOW_V2";
+  DexProtocol2["SWAPX_V2"] = "SWAPX_V2";
+  DexProtocol2["VELODROME_V1"] = "VELODROME_V1";
+  DexProtocol2["VELODROME_V2"] = "VELODROME_V2";
+  DexProtocol2["LYNEX_V1"] = "LYNEX_V1";
+  DexProtocol2["NILE"] = "NILE";
+  DexProtocol2["PHARAOH_V1"] = "PHARAOH_V1";
+  DexProtocol2["KOI"] = "KOI";
+  return DexProtocol2;
+})(DexProtocol || {});
+var UniV2ForkType = /* @__PURE__ */ ((UniV2ForkType2) => {
+  UniV2ForkType2["Classic"] = "Classic";
+  UniV2ForkType2["Solidly"] = "Solidly";
+  UniV2ForkType2["RamsesV1"] = "RamsesV1";
+  UniV2ForkType2["Camelot"] = "Camelot";
+  UniV2ForkType2["Moe"] = "Moe";
+  return UniV2ForkType2;
+})(UniV2ForkType || {});
+var BALANCER_V2 = {
+  vault: {
+    [Chain.ETHEREUM_MAINNET]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.POLYGON_MAINNET]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.ARBITRUM_ONE]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.AVALANCHE_C_CHAIN]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.SONIC_MAINNET]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.GNOSIS]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.BASE]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.MODE]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.POLYGON_ZKEVM]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.OP_MAINNET]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.FRAXTAL]: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+    [Chain.FANTOM_OPERA]: "0x20dd72Ed959b6147912C2e529F0a0C651c33c9ce"
+  },
+  forkId: "0"
+};
+var SWAAP = {
+  vault: {
+    [Chain.ETHEREUM_MAINNET]: "0xd315a9c38ec871068fec378e4ce78af528c76293",
+    [Chain.BASE]: "0x03C01Acae3D0173a93d819efDc832C7C4F153B06",
+    [Chain.OP_MAINNET]: "0xd315a9c38ec871068fec378e4ce78af528c76293",
+    [Chain.ARBITRUM_ONE]: "0xd315a9c38ec871068fec378e4ce78af528c76293",
+    [Chain.POLYGON_MAINNET]: "0xd315a9c38ec871068fec378e4ce78af528c76293",
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x03C01Acae3D0173a93d819efDc832C7C4F153B06",
+    [Chain.SCROLL]: "0xd315a9c38ec871068fec378e4ce78af528c76293",
+    [Chain.AVALANCHE_C_CHAIN]: "0xd315a9c38ec871068fec378e4ce78af528c76293",
+    [Chain.LINEA]: "0xd315a9c38ec871068fec378e4ce78af528c76293",
+    [Chain.MANTLE]: "0xd315a9c38ec871068fec378e4ce78af528c76293",
+    [Chain.MODE]: "0xd315a9c38ec871068fec378e4ce78af528c76293"
+  },
+  forkId: "1"
+};
+var SYMMETRIC = {
+  vault: {
+    [Chain.TAIKO_ALETHIA]: "0xbccc4b4c6530F82FE309c5E845E50b5E9C89f2AD",
+    [Chain.TELOS_EVM_MAINNET]: "0xbccc4b4c6530F82FE309c5E845E50b5E9C89f2AD",
+    [Chain.METER_MAINNET]: "0x913f21E596790aFC6AA45229E9ff8b7d0A473D5A"
+  },
+  forkId: "2"
+};
+var BALANCER_V2_FORKS = {
+  [
+    "BALANCER_V2"
+    /* BALANCER_V2 */
+  ]: BALANCER_V2,
+  [
+    "SYMMETRIC"
+    /* SYMMETRIC */
+  ]: SYMMETRIC,
+  [
+    "SWAAP"
+    /* SWAAP */
+  ]: SWAAP
+};
+var BALANCER_V3 = {
+  vault: {
+    [Chain.ETHEREUM_MAINNET]: "0xbA1333333333a1BA1108E8412f11850A5C319bA9",
+    [Chain.ARBITRUM_ONE]: "0xbA1333333333a1BA1108E8412f11850A5C319bA9",
+    [Chain.AVALANCHE_C_CHAIN]: "0xbA1333333333a1BA1108E8412f11850A5C319bA9",
+    [Chain.GNOSIS]: "0xbA1333333333a1BA1108E8412f11850A5C319bA9",
+    [Chain.BASE]: "0xbA1333333333a1BA1108E8412f11850A5C319bA9",
+    [Chain.SONIC_MAINNET]: "0xbA1333333333a1BA1108E8412f11850A5C319bA9",
+    [Chain.POLYGON_ZKEVM]: "0xbA1333333333a1BA1108E8412f11850A5C319bA9",
+    [Chain.OP_MAINNET]: "0xbA1333333333a1BA1108E8412f11850A5C319bA9"
+  },
+  forkId: "0"
+};
+var BALANCER_V3_FORKS = {
+  [
+    "BALANCER_V3"
+    /* BALANCER_V3 */
+  ]: BALANCER_V3
+};
+var uniswapV2InitHash = "0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f";
+var pancakeV2CodeHash = "0x00fb7f630766e6a796048ea87d01acd3068e8ff67d078148a3fa3f4a84f69bd5";
+var uniV2CallbackSelector = "0x10d1e85c00000000000000000000000000000000000000000000000000000000";
+var pancakeV2CallbackSelector = "0x8480081200000000000000000000000000000000000000000000000000000000";
+var solidlyV2CallbackSelector = "0x9a7bff7900000000000000000000000000000000000000000000000000000000";
+var UNISWAP_V2 = {
+  factories: {
+    [Chain.ETHEREUM_MAINNET]: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+    [Chain.ARBITRUM_ONE]: "0xf1D7CC64Fb4452F05c498126312eBE29f30Fbcf9",
+    [Chain.BASE]: "0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6",
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6",
+    [Chain.AVALANCHE_C_CHAIN]: "0x9e5A52f57b3038F1B8EeE45F28b3C1967e22799C",
+    [Chain.OP_MAINNET]: "0x0c3c1c532F1e39EdF36BE9Fe0bE1410313E074Bf",
+    [Chain.POLYGON_MAINNET]: "0x9e5A52f57b3038F1B8EeE45F28b3C1967e22799C",
+    [Chain.BLAST]: "0x5C346464d33F90bABaf70dB6388507CC889C1070",
+    [Chain.ZORA]: "0x0F797dC7efaEA995bB916f268D919d0a1950eE3C",
+    [Chain.WORLD_CHAIN]: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
+    // [Chain.SCROLL]: "",
+    // [Chain.LINEA]: "",
+    // [Chain.MANTLE]: "",
+    // [Chain.TAIKO_ALETHIA]: "",
+    // [Chain.GNOSIS]: "",
+    // [Chain.SONIC_MAINNET]: "",
+    // [Chain.INK]: "",
+    // [Chain.HEMI_NETWORK]: ""
+  },
+  codeHash: { default: uniswapV2InitHash },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "0",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var PANCAKE_V2 = {
+  factories: {
+    [Chain.ETHEREUM_MAINNET]: "0x1097053Fd2ea711dad45caCcc45EfF7548fCB362",
+    [Chain.ARBITRUM_ONE]: "0x02a84c1b3BBD7401a5f7fa98a384EBC70bB5749E",
+    [Chain.BASE]: "0x02a84c1b3BBD7401a5f7fa98a384EBC70bB5749E",
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73",
+    [Chain.LINEA]: "0x02a84c1b3BBD7401a5f7fa98a384EBC70bB5749E",
+    [Chain.OPBNB_MAINNET]: "0x02a84c1b3BBD7401a5f7fa98a384EBC70bB5749E",
+    [Chain.ZKSYNC_MAINNET]: "0xd03D8D566183F0086d8D09A84E1e30b58Dd5619d",
+    [Chain.POLYGON_ZKEVM]: "0x02a84c1b3BBD7401a5f7fa98a384EBC70bB5749E"
+    // [Chain.POLYGON_MAINNET]: "",
+    // [Chain.BLAST]: "",
+    // [Chain.ZORA]: "",
+    // [Chain.WORLD_CHAIN]: "",
+    // [Chain.SCROLL]: "",
+    // [Chain.LINEA]: "",
+    // [Chain.MANTLE]: "",
+    // [Chain.TAIKO_ALETHIA]: "",
+    // [Chain.GNOSIS]: "",
+    // [Chain.SONIC_MAINNET]: "",
+    // [Chain.INK]: "",
+    // [Chain.HEMI_NETWORK]: ""
+  },
+  codeHash: { default: pancakeV2CodeHash },
+  callbackSelector: pancakeV2CallbackSelector,
+  forkId: "0",
+  fee: 2500n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var SUSHI_V2 = {
+  factories: {
+    [Chain.ARBITRUM_ONE]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.ARBITRUM_NOVA]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.AVALANCHE_C_CHAIN]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.BASE]: "0x71524B4f93c58fcbF659783284E38825f0622859",
+    [Chain.BLAST]: "0x42Fa929fc636e657AC568C0b5Cf38E203b67aC2b",
+    [Chain.BOBA_NETWORK]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    // [Chain.BOBA_AVAX]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.BOBA_BNB_MAINNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    // [Chain.BSC_TESTNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.BITTORRENT_CHAIN_MAINNET]: "0xB45e53277a7e0F1D35f2a77160e91e25507f1763",
+    [Chain.CELO_MAINNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.CORE_BLOCKCHAIN_MAINNET]: "0xB45e53277a7e0F1D35f2a77160e91e25507f1763",
+    [Chain.ETHEREUM_MAINNET]: "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac",
+    [Chain.FANTOM_OPERA]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.FILECOIN_MAINNET]: "0x9B3336186a38E1b6c21955d112dbb0343Ee061eE",
+    // [Chain.FUJI]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.FUSE_MAINNET]: "0x43eA90e2b786728520e4f930d2A71a477BF2737C",
+    // [Chain.GOERLI]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.HAQQ_NETWORK]: "0xB45e53277a7e0F1D35f2a77160e91e25507f1763",
+    [Chain.HARMONY_MAINNET_SHARD_0]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    // [Chain.HARMONY_TESTNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.HUOBI_ECO_CHAIN_MAINNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    // [Chain.HECO_TESTNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.KAVA]: "0xD408a20f1213286fB3158a2bfBf5bFfAca8bF269",
+    // [Chain.KOVAN]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.LINEA]: "0xFbc12984689e5f15626Bad03Ad60160Fe98B303C",
+    // [Chain.LOCALHOST]: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    [Chain.POLYGON_MAINNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0x580ED43F3BBa06555785C81c2957efCCa71f7483",
+    [Chain.MOONBEAM]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.MOONRIVER]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    // [Chain.MUMBAI]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.OKXCHAIN_MAINNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    // [Chain.OKEX_TESTNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.OP_MAINNET]: "0xFbc12984689e5f15626Bad03Ad60160Fe98B303C",
+    [Chain.PALM]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.POLYGON_ZKEVM]: "0xB45e53277a7e0F1D35f2a77160e91e25507f1763",
+    // [Chain.RINKEBY]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.ROOTSTOCK_MAINNET]: "0xB45e53277a7e0F1D35f2a77160e91e25507f1763",
+    // [Chain.ROPSTEN]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.SCROLL]: "0xB45e53277a7e0F1D35f2a77160e91e25507f1763",
+    // [Chain.SEPOLIA]: "0x734583f62Bb6ACe3c9bA9bd5A53143CA2Ce8C55A",
+    [Chain.SKALE_EUROPA_HUB]: "0x1aaF6eB4F85F8775400C1B10E6BbbD98b2FF8483",
+    [Chain.TELOS_EVM_MAINNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.THUNDERCORE_MAINNET]: "0xB45e53277a7e0F1D35f2a77160e91e25507f1763",
+    [Chain.GNOSIS]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.ZETACHAIN_MAINNET]: "0x33d91116e0370970444B0281AB117e161fEbFcdD",
+    [Chain.HEMI_NETWORK]: "0x9B3336186a38E1b6c21955d112dbb0343Ee061eE"
+  },
+  codeHash: { default: uniswapV2InitHash },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "1",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var PASS = {
+  factories: {
+    [Chain.HEMI_NETWORK]: "0x242c913Ff5FE010430A709baab977e88435b7EBF"
+  },
+  codeHash: { default: "0xd040a901beef1fe03d5f83aff62cc341aa8fa949dcdaa516b1adcfae94ada0db" },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "50",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var UBESWAP = {
+  factories: {
+    [Chain.CELO_MAINNET]: "0x62d5b84bE28a183aBB507E125B384122D2C25fAE"
+  },
+  codeHash: { default: "0xb3b8ff62960acea3a88039ebcf80699f15786f1b17cebd82802f7375827a339c" },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "10",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var BISWAP_V2 = {
+  factories: {
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x858E3312ed3A876947EA49d572A7C42DE08af7EE"
+  },
+  codeHash: { default: "0xfea293c909d87cd4153593f077b76bb7e94340200f4ee84211ae8e4f9bd7ffdf" },
+  callbackSelector: "0x5b3bc4fe00000000000000000000000000000000000000000000000000000000",
+  // BiswapCall
+  forkId: "0",
+  fee: 2500n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var SHADOW_V2 = {
+  factories: {
+    [Chain.SONIC_MAINNET]: "0x2dA25E7446A70D7be65fd4c053948BEcAA6374c8"
+  },
+  codeHash: { default: "0x4ed7aeec7c0286cad1e282dee1c391719fc17fe923b04fb0775731e413ed3554" },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "131",
+  fee: 5000n,
+  feeStable: 500n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var KODO = {
+  factories: {
+    [Chain.TAIKO_ALETHIA]: "0x535E02960574d8155596a73c7Ad66e87e37Eb6Bc"
+  },
+  codeHash: { default: "0x24364b5d47cc9af524ff2ae89d98c1c10f4a388556279eecb00622b5d727c99a" },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "132",
+  fee: 2000n,
+  feeStable: 200n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var VELOCIMETER = {
+  factories: {
+    [Chain.MANTLE]: "0x99F9a4A96549342546f9DAE5B2738EDDcD43Bf4C"
+  },
+  codeHash: { default: "0x0ccd005ee58d5fb11632ef5c2e0866256b240965c62c8e990c0f84a97f311879" },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "133",
+  fee: 2500n,
+  feeStable: 300n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var DYSTOPIA = {
+  factories: {
+    [Chain.POLYGON_MAINNET]: "0x1d21Db6cde1b18c7E47B0F7F42f4b3F68b9beeC9"
+  },
+  codeHash: { default: "0x009bce6d7eb00d3d075e5bd9851068137f44bba159f1cde806a268e20baaf2e8" },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "134",
+  fee: 500n,
+  feeStable: 500n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var RAMSES_V1 = {
+  factories: {
+    [Chain.ARBITRUM_ONE]: "0xAAA20D08e59F6561f242b08513D36266C5A29415"
+  },
+  codeHash: {
+    [Chain.ARBITRUM_ONE]: "OVERRIDE"
+    /* OVERRIDE */
+  },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "135",
+  fee: 2500n,
+  feeStable: 500n,
+  forkType: {
+    default: "RamsesV1"
+    /* RamsesV1 */
+  }
+};
+var CLEOPATRA_V1 = {
+  factories: {
+    [Chain.MANTLE]: "0xAAA16c016BF556fcD620328f0759252E29b1AB57"
+  },
+  codeHash: {
+    [Chain.MANTLE]: "0xbf2404274de2b11f05e5aebd49e508de933034cb5fa2d0ac3de8cbd4bcef47dc"
+  },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "135",
+  fee: 2500n,
+  feeStable: 500n,
+  forkType: {
+    default: "RamsesV1"
+    /* RamsesV1 */
+  }
+};
+var PHARAOH_V1 = {
+  factories: {
+    [Chain.AVALANCHE_C_CHAIN]: "0xAAA16c016BF556fcD620328f0759252E29b1AB57"
+  },
+  codeHash: {
+    [Chain.AVALANCHE_C_CHAIN]: "0xbf2404274de2b11f05e5aebd49e508de933034cb5fa2d0ac3de8cbd4bcef47dc"
+  },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "135",
+  fee: 5000n,
+  feeStable: 500n,
+  forkType: {
+    default: "RamsesV1"
+    /* RamsesV1 */
+  }
+};
+var CAMELOT_V2 = {
+  factories: {
+    [Chain.ARBITRUM_ONE]: "0x6EcCab422D763aC031210895C81787E87B43A652"
+  },
+  codeHash: { default: "0xa856464ae65f7619087bc369daaf7e387dae1e5af69cfa7935850ebf754b04c1" },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "130",
+  fee: 3000n,
+  feeStable: 500n,
+  forkType: {
+    default: "Camelot"
+    /* Camelot */
+  }
+};
+var SWAPX_V2 = {
+  factories: {
+    [Chain.SONIC_MAINNET]: "0x05c1be79d3aC21Cc4B727eeD58C9B2fF757F5663"
+  },
+  codeHash: { default: "0x6c45999f36731ff6ab43e943fca4b5a700786bbb202116cf6633b32039161e05" },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "136",
+  fee: 10000n,
+  feeStable: 100n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var METROPOLIS_V2 = {
+  factories: {
+    [Chain.SONIC_MAINNET]: "0x1570300e9cFEC66c9Fb0C8bc14366C86EB170Ad0"
+  },
+  codeHash: { default: "0xb174fb9703cd825ac38ca3cf781a2750d5ee57f4268806e0bca9bcd3d74b67b5" },
+  callbackSelector: "0xd1f6317800000000000000000000000000000000000000000000000000000000",
+  // doCall
+  forkId: "11",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var APESWAP_V2 = {
+  factories: {
+    [Chain.POLYGON_MAINNET]: "0xCf083Be4164828f00cAE704EC15a36D711491284",
+    [Chain.ARBITRUM_ONE]: "0xCf083Be4164828f00cAE704EC15a36D711491284"
+  },
+  codeHash: {
+    [Chain.POLYGON_MAINNET]: "0x511f0f358fe530cda0859ec20becf391718fdf5a329be02f4c95361f3d6a42d8",
+    [Chain.ARBITRUM_ONE]: "0xae7373e804a043c4c08107a81def627eeb3792e211fb4711fcfe32f0e4c45fd5"
+  },
+  callbackSelector: "0xbecda36300000000000000000000000000000000000000000000000000000000",
+  // apeCall 
+  forkId: "12",
+  fee: 2000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var SWAPR_V1 = {
+  factories: {
+    [Chain.GNOSIS]: "0x5D48C95AdfFD4B40c1AAADc4e08fc44117E02179"
+  },
+  codeHash: {
+    [Chain.GNOSIS]: "0xd306a548755b9295ee49cc729e13ca4a45e00199bbd890fa146da43a50571776"
+  },
+  callbackSelector: "0xb527c5d000000000000000000000000000000000000000000000000000000000",
+  // DXswapCall 
+  forkId: "0",
+  fee: 2500n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var HONEYSWAP = {
+  factories: {
+    [Chain.GNOSIS]: "0xA818b4F111Ccac7AA31D0BCc0806d64F2E0737D7"
+  },
+  codeHash: {
+    [Chain.GNOSIS]: "0x3f88503e8580ab941773b59034fb4b2a63e86dbc031b3633a925533ad3ed2b93"
+  },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "19",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var WAULTSWAP_V2 = {
+  factories: {
+    [Chain.POLYGON_MAINNET]: "0xa98ea6356A316b44Bf710D5f9b6b4eA0081409Ef"
+  },
+  codeHash: {
+    [Chain.POLYGON_MAINNET]: "0x1cdc2246d318ab84d8bc7ae2a3d81c235f3db4e113f4c6fdc1e2211a9291be47"
+  },
+  callbackSelector: "0x485f399400000000000000000000000000000000000000000000000000000000",
+  // waultSwapCall 
+  forkId: "13",
+  fee: 2000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var DFYN = {
+  factories: {
+    [Chain.POLYGON_MAINNET]: "0xE7Fb3e833eFE5F9c441105EB65Ef8b261266423B"
+  },
+  codeHash: {
+    [Chain.POLYGON_MAINNET]: "0xf187ed688403aa4f7acfada758d8d53698753b998a3071b06f1b777f4330eaf3"
+  },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "14",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var POLYCAT = {
+  factories: {
+    [Chain.POLYGON_MAINNET]: "0x477Ce834Ae6b7aB003cCe4BC4d8697763FF456FA"
+  },
+  codeHash: {
+    [Chain.POLYGON_MAINNET]: "0x3cad6f9e70e13835b4f07e5dd475f25a109450b22811d0437da51e66c161255a"
+  },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "15",
+  fee: 2400n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var COMETH = {
+  factories: {
+    [Chain.POLYGON_MAINNET]: "0x800b052609c355cA8103E06F022aA30647eAd60a"
+  },
+  codeHash: {
+    [Chain.POLYGON_MAINNET]: "0x499154cad90a3563f914a25c3710ed01b9a43b8471a35ba8a66a056f37638542"
+  },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "16",
+  fee: 5000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var QUICKSWAP_V2 = {
+  factories: {
+    [Chain.POLYGON_MAINNET]: "0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32"
+  },
+  codeHash: {
+    [Chain.POLYGON_MAINNET]: "0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f"
+  },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "3",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var MERCHANT_MOE = {
+  factories: {
+    [Chain.MANTLE]: "0x5bEf015CA9424A7C07B68490616a4C1F094BEdEc"
+  },
+  codeHash: {
+    [Chain.MANTLE]: "OVERRIDE"
+    /* OVERRIDE */
+  },
+  implementation: {
+    [Chain.MANTLE]: "0x08477e01A19d44C31E4C11Dc2aC86E3BBE69c28B"
+  },
+  callbackSelector: "0xba85410f00000000000000000000000000000000000000000000000000000000",
+  // moeCall
+  forkId: "0",
+  fee: 3000n,
+  forkType: {
+    default: "Moe"
+    /* Moe */
+  }
+};
+var TAIKOSWAP = {
+  factories: {
+    [Chain.TAIKO_ALETHIA]: "0x7C43adAfc2337BaA16AA2876F9DE8Da5B3720FdB"
+  },
+  codeHash: {
+    [Chain.TAIKO_ALETHIA]: "0xf134c874b39e61378a3f19b6f15a0e83c6916c54524901806f3e1ca3da7b2243"
+  },
+  callbackSelector: "EXCLUDE",
+  forkId: "0",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var MANTLESWAP = {
+  factories: {
+    [Chain.TAIKO_ALETHIA]: "0x7C43adAfc2337BaA16AA2876F9DE8Da5B3720FdB"
+  },
+  codeHash: {
+    [Chain.TAIKO_ALETHIA]: "0x248aa3d53dff9c2e464d6feb0fae0ee52adebff933dd9c2ee6744356b46cf848"
+  },
+  callbackSelector: "EXCLUDE",
+  forkId: "0",
+  fee: 2500n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var TROPICAL_SWAP = {
+  factories: {
+    [Chain.MANTLE]: "0x5b54d3610ec3f7fb1d5b42ccf4df0fb4e136f249"
+  },
+  codeHash: {
+    [Chain.MANTLE]: "0x321aea434584ceee22f77514cbdc4c631d3feba4b643c492f852c922a409ed1e"
+  },
+  callbackSelector: "EXCLUDE",
+  forkId: "0",
+  fee: 2000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var CRUST_V1 = {
+  factories: {
+    [Chain.MANTLE]: "0x62DbCa39067f99C9D788a253cB325c6BA50e51cE"
+  },
+  codeHash: {
+    [Chain.MANTLE]: "0x7bc86d3461c6b25a75205e3bcd8e9815e8477f2af410ccbe931d784a528143fd"
+  },
+  callbackSelector: "EXCLUDE",
+  forkId: "0",
+  fee: 2000n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var STRATUM = {
+  factories: {
+    [Chain.MANTLE]: "0x061FFE84B0F9E1669A6bf24548E5390DBf1e03b2"
+  },
+  codeHash: {
+    [Chain.MANTLE]: "0xeb675862e19b0846fd47f7db0e8f2bf8f8da0dcd0c9aa75603248566f3faa805"
+  },
+  callbackSelector: "EXCLUDE",
+  forkId: "0",
+  fee: 2500n,
+  feeStable: 500n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var FUSIONX_V2 = {
+  factories: {
+    [Chain.MANTLE]: "0xE5020961fA51ffd3662CDf307dEf18F9a87Cce7c"
+  },
+  codeHash: {
+    [Chain.MANTLE]: "0x58c684aeb03fe49c8a3080db88e425fae262c5ef5bf0e8acffc0526c6e3c03a0"
+  },
+  callbackSelector: "EXCLUDE",
+  forkId: "0",
+  fee: 2000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var NETSWAP = {
+  factories: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0x70f51d68D16e8f9e418441280342BD43AC9Dff9f"
+  },
+  codeHash: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0x966d65068a6a30f10fd1fa814258637a34e059081d79daa94f3e2b6cec48e810"
+  },
+  callbackSelector: "0x924ba9cc00000000000000000000000000000000000000000000000000000000",
+  // netswapCall
+  forkId: "0",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var AXION_V2 = {
+  factories: {
+    [Chain.TAIKO_ALETHIA]: "0x8a8865fa5fB7C8360E5a6d8Aa27F7Ca1b9E55443"
+  },
+  codeHash: {
+    [Chain.TAIKO_ALETHIA]: "0x4c961aaf675d77e6066d0b33ea70d966866f9c0aa2a94c0696efa27ac84771d5"
+  },
+  callbackSelector: "0xda477ab500000000000000000000000000000000000000000000000000000000",
+  // AxionCall
+  forkId: "0",
+  fee: 2000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var HERCULES = {
+  factories: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0xF38E7c7f8eA779e8A193B61f9155E6650CbAE095"
+  },
+  codeHash: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0xa856464ae65f7619087bc369daaf7e387dae1e5af69cfa7935850ebf754b04c1"
+  },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "130",
+  fee: 3000n,
+  feeStable: 500n,
+  forkType: {
+    default: "Camelot"
+    /* Camelot */
+  }
+};
+var HERMES = {
+  factories: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0x633a093C9e94f64500FC8fCBB48e90dd52F6668F"
+  },
+  codeHash: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0x1206c53c96c9926d750268b77c1897f0b6035ff853c3ba6088623ed7df249367"
+  },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "136",
+  fee: 100n,
+  feeStable: 100n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var VELODROME_V2 = {
+  factories: {
+    [Chain.OP_MAINNET]: "0xF1046053aa5682b4F9a81b5481394DA16BE5FF5a",
+    [Chain.SWELLCHAIN]: "0x31832f2a97Fd20664D76Cc421207669b55CE4BC0",
+    [Chain.LISK]: "0x31832f2a97Fd20664D76Cc421207669b55CE4BC0",
+    [Chain.INK]: "0x31832f2a97Fd20664D76Cc421207669b55CE4BC0",
+    [Chain.FRAXTAL]: "0x31832f2a97Fd20664D76Cc421207669b55CE4BC0",
+    [Chain.BOB]: "0x31832f2a97Fd20664D76Cc421207669b55CE4BC0",
+    [Chain.SONEIUM]: "0x31832f2a97Fd20664D76Cc421207669b55CE4BC0",
+    [Chain.MODE]: "0x31832f2a97Fd20664D76Cc421207669b55CE4BC0",
+    [Chain.UNICHAIN]: "0x31832f2a97Fd20664D76Cc421207669b55CE4BC0"
+  },
+  codeHash: {
+    // keccak256(hex"363d3d373d3d3d363d73${implementation}5af43d82803e903d91602b57fd5bf3")
+    [Chain.OP_MAINNET]: "0xc0629f1c7daa09624e54d4f711ba99922a844907cce02997176399e4cc7e8fcf",
+    [Chain.SWELLCHAIN]: "0x558be7ee0c63546b31d0773eee1d90451bd76a0167bb89653722a2bd677c002d",
+    [Chain.LISK]: "0x558be7ee0c63546b31d0773eee1d90451bd76a0167bb89653722a2bd677c002d",
+    [Chain.INK]: "0x558be7ee0c63546b31d0773eee1d90451bd76a0167bb89653722a2bd677c002d",
+    [Chain.FRAXTAL]: "0x558be7ee0c63546b31d0773eee1d90451bd76a0167bb89653722a2bd677c002d",
+    [Chain.BOB]: "0x558be7ee0c63546b31d0773eee1d90451bd76a0167bb89653722a2bd677c002d",
+    [Chain.SONEIUM]: "0x558be7ee0c63546b31d0773eee1d90451bd76a0167bb89653722a2bd677c002d",
+    [Chain.MODE]: "0x558be7ee0c63546b31d0773eee1d90451bd76a0167bb89653722a2bd677c002d",
+    [Chain.UNICHAIN]: "0x558be7ee0c63546b31d0773eee1d90451bd76a0167bb89653722a2bd677c002d"
+  },
+  implementation: {
+    [Chain.OP_MAINNET]: "0x95885Af5492195F0754bE71AD1545Fe81364E531",
+    [Chain.SWELLCHAIN]: "0x10499d88Bd32AF443Fc936F67DE32bE1c8Bb374C",
+    [Chain.LISK]: "0x10499d88Bd32AF443Fc936F67DE32bE1c8Bb374C",
+    [Chain.INK]: "0x10499d88Bd32AF443Fc936F67DE32bE1c8Bb374C",
+    [Chain.FRAXTAL]: "0x10499d88Bd32AF443Fc936F67DE32bE1c8Bb374C",
+    [Chain.BOB]: "0x10499d88Bd32AF443Fc936F67DE32bE1c8Bb374C",
+    [Chain.SONEIUM]: "0x10499d88Bd32AF443Fc936F67DE32bE1c8Bb374C",
+    [Chain.UNICHAIN]: "0x10499d88Bd32AF443Fc936F67DE32bE1c8Bb374C",
+    [Chain.MODE]: "0x10499d88Bd32AF443Fc936F67DE32bE1c8Bb374C"
+  },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "138",
+  fee: 3000n,
+  feeStable: 500n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var VELODROME_V1 = {
+  factories: {
+    [Chain.OP_MAINNET]: "0x25CbdDb98b35ab1FF77413456B31EC81A6B6B746"
+  },
+  codeHash: {
+    [Chain.OP_MAINNET]: "0xc1ac28b1c4ebe53c0cff67bab5878c4eb68759bb1e9f73977cd266b247d149f0"
+  },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "137",
+  fee: 3000n,
+  feeStable: 500n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var LYNEX_V1 = {
+  factories: {
+    [Chain.LINEA]: "0xBc7695Fd00E3b32D08124b7a4287493aEE99f9ee"
+  },
+  codeHash: {
+    [Chain.LINEA]: "0xf40e8808230a29863f9f7f99beb90d28bca2c60094e78d93cca67f746dbfd142"
+  },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "139",
+  fee: 2500n,
+  feeStable: 100n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var NILE = {
+  factories: {
+    [Chain.LINEA]: "0xAAA16c016BF556fcD620328f0759252E29b1AB57"
+  },
+  codeHash: {
+    [Chain.LINEA]: "0xbf2404274de2b11f05e5aebd49e508de933034cb5fa2d0ac3de8cbd4bcef47dc"
+  },
+  callbackSelector: solidlyV2CallbackSelector,
+  forkId: "140",
+  fee: 5000n,
+  feeStable: 500n,
+  forkType: {
+    default: "RamsesV1"
+    /* RamsesV1 */
+  }
+};
+var KOI = {
+  factories: {
+    [Chain.ZKSYNC_MAINNET]: "0x40be1cBa6C5B47cDF9da7f963B6F761F4C60627D"
+  },
+  codeHash: {
+    [Chain.ZKSYNC_MAINNET]: "0x95d5c05820d58f1c8cc736b47fe10a29ddcd2cf73a0d842e8537b9fe510fc618"
+  },
+  callbackSelector: "0x5426813c00000000000000000000000000000000000000000000000000000000",
+  // muteswitchCall
+  forkId: "132",
+  fee: 8000n,
+  feeStable: 100n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var TRADER_JOE_V1 = {
+  factories: {
+    [Chain.AVALANCHE_C_CHAIN]: "0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10"
+  },
+  codeHash: {
+    [Chain.AVALANCHE_C_CHAIN]: "0x0bbca9af0511ad1a1da383135cf3a8d2ac620e549ef9f6ae3a4c33c2fed0af91"
+  },
+  callbackSelector: "0xee22dd8700000000000000000000000000000000000000000000000000000000",
+  // joe Call
+  forkId: "0",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var ZKSWAP_V2 = {
+  factories: {
+    [Chain.ZKSYNC_MAINNET]: "0x3a76e377ED58c8731F9DF3A36155942438744Ce3"
+  },
+  codeHash: {
+    [Chain.ZKSYNC_MAINNET]: "OVERRIDE"
+    /* OVERRIDE */
+  },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "17",
+  fee: 2500n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var SPACEFI = {
+  factories: {
+    [Chain.ZKSYNC_MAINNET]: "0x0700Fb51560CfC8F896B2c812499D17c5B0bF6A7"
+  },
+  codeHash: {
+    // probably needs manual checks
+    [Chain.ZKSYNC_MAINNET]: "0xf8d3c7145cbf55d3e34fcc9bdce8aa326ddf5f829c712119bb566bf56759e4dd"
+    // DexValidation.OVERRIDE,
+  },
+  callbackSelector: uniV2CallbackSelector,
+  forkId: "18",
+  fee: 3000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var SQUADSWAP_V2 = {
+  factories: {
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x918Adf1f2C03b244823Cd712E010B6e3CD653DbA",
+    [Chain.ARBITRUM_ONE]: "0xba34aA640b8Be02A439221BCbea1f48c1035EEF9",
+    [Chain.BASE]: "0xba34aA640b8Be02A439221BCbea1f48c1035EEF9",
+    [Chain.BLAST]: "0x4B599f3425D54AfBf94bFD41EA9931fF92AD6551",
+    [Chain.POLYGON_MAINNET]: "0xEE8F37D490CB7Ea1dae7d080c5738894731299f0",
+    [Chain.OP_MAINNET]: "0xba34aA640b8Be02A439221BCbea1f48c1035EEF9"
+  },
+  codeHash: {
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x666b17e0f0313ce8c608a4761ae7fd0e1c936c7c63eb833ac540370647c0efdb",
+    [Chain.ARBITRUM_ONE]: "0x98859e91a2d7077a5647fc52bfa56461f1be3991cfafdee3a968bf5d9a947f22",
+    [Chain.BASE]: "0x98859e91a2d7077a5647fc52bfa56461f1be3991cfafdee3a968bf5d9a947f22",
+    [Chain.BLAST]: "0x58c2c3390cddef0a17aed31cf6b51cc4b11e96866b8b16a613fc7999daefb24e",
+    [Chain.POLYGON_MAINNET]: "0x98859e91a2d7077a5647fc52bfa56461f1be3991cfafdee3a968bf5d9a947f22",
+    [Chain.OP_MAINNET]: "0x98859e91a2d7077a5647fc52bfa56461f1be3991cfafdee3a968bf5d9a947f22"
+  },
+  forkId: "0",
+  callbackSelector: "0xa691a9c900000000000000000000000000000000000000000000000000000000",
+  // squadswapCall
+  fee: 2000n,
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var MIRA_FUEL = {
+  factories: {
+    [Chain.FUEL]: "0x2e40f2b244b98ed6b8204b3de0156c6961f98525c8162f80162fcf53eebd90e7"
+  },
+  codeHash: {
+    [Chain.FUEL]: "EXCLUDE"
+    /* EXCLUDE */
+  },
+  callbackSelector: "EXCLUDE",
+  forkId: "0",
+  fee: 3000n,
+  feeStable: 500n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var DIESEL_FUEL = {
+  factories: {
+    [Chain.FUEL]: "0x7c293b054938bedca41354203be4c08aec2c3466412cac803f4ad62abf22e476"
+  },
+  codeHash: {
+    [Chain.FUEL]: "EXCLUDE"
+    /* EXCLUDE */
+  },
+  callbackSelector: "EXCLUDE",
+  forkId: "1",
+  fee: 3000n,
+  feeStable: 500n,
+  forkType: {
+    default: "Solidly"
+    /* Solidly */
+  }
+};
+var UNISWAP_V2_FORKS = {
+  [
+    "UNISWAP_V2"
+    /* UNISWAP_V2 */
+  ]: UNISWAP_V2,
+  [
+    "SUSHISWAP_V2"
+    /* SUSHISWAP_V2 */
+  ]: SUSHI_V2,
+  [
+    "PANCAKESWAP_V2"
+    /* PANCAKESWAP_V2 */
+  ]: PANCAKE_V2,
+  [
+    "PASS"
+    /* PASS */
+  ]: PASS,
+  [
+    "BISWAP_V2"
+    /* BISWAP_V2 */
+  ]: BISWAP_V2,
+  [
+    "UBESWAP_V2"
+    /* UBESWAP_V2 */
+  ]: UBESWAP,
+  [
+    "METROPOLIS_V2"
+    /* METROPOLIS_V2 */
+  ]: METROPOLIS_V2,
+  [
+    "APESWAP"
+    /* APESWAP */
+  ]: APESWAP_V2,
+  [
+    "WAULTSWAP"
+    /* WAULTSWAP */
+  ]: WAULTSWAP_V2,
+  [
+    "DFYN"
+    /* DFYN */
+  ]: DFYN,
+  [
+    "POLYCAT"
+    /* POLYCAT */
+  ]: POLYCAT,
+  [
+    "COMETH"
+    /* COMETH */
+  ]: COMETH,
+  [
+    "QUICKSWAP_V2"
+    /* QUICKSWAP_V2 */
+  ]: QUICKSWAP_V2,
+  [
+    "SQUADSWAP_V2"
+    /* SQUADSWAP_V2 */
+  ]: SQUADSWAP_V2,
+  [
+    "MERCHANT_MOE"
+    /* MERCHANT_MOE */
+  ]: MERCHANT_MOE,
+  [
+    "FUSIONX_V2"
+    /* FUSIONX_V2 */
+  ]: FUSIONX_V2,
+  [
+    "TAIKOSWAP"
+    /* TAIKOSWAP */
+  ]: TAIKOSWAP,
+  [
+    "TROPICAL_SWAP"
+    /* TROPICAL_SWAP */
+  ]: TROPICAL_SWAP,
+  [
+    "MANTLESWAP"
+    /* MANTLESWAP */
+  ]: MANTLESWAP,
+  [
+    "TRADER_JOE_V1"
+    /* TRADER_JOE_V1 */
+  ]: TRADER_JOE_V1,
+  [
+    "LYNEX_V1"
+    /* LYNEX_V1 */
+  ]: LYNEX_V1,
+  [
+    "NILE"
+    /* NILE */
+  ]: NILE,
+  [
+    "ZKSWAP_V2"
+    /* ZKSWAP_V2 */
+  ]: ZKSWAP_V2,
+  [
+    "SPACEFI"
+    /* SPACEFI */
+  ]: SPACEFI,
+  [
+    "SWAPR_V1"
+    /* SWAPR_V1 */
+  ]: SWAPR_V1,
+  [
+    "HONEYSWAP"
+    /* HONEYSWAP */
+  ]: HONEYSWAP,
+  [
+    "AXION_V2"
+    /* AXION_V2 */
+  ]: AXION_V2,
+  // solidlies go without the stable & volatile
+  [
+    "SHADOW_V2"
+    /* SHADOW_V2 */
+  ]: SHADOW_V2,
+  [
+    "CAMELOT_V2"
+    /* CAMELOT_V2 */
+  ]: CAMELOT_V2,
+  [
+    "VELOCIMETER"
+    /* VELOCIMETER */
+  ]: VELOCIMETER,
+  [
+    "DYSTOPIA"
+    /* DYSTOPIA */
+  ]: DYSTOPIA,
+  [
+    "RAMSES_V1"
+    /* RAMSES_V1 */
+  ]: RAMSES_V1,
+  [
+    "PHARAOH_V1"
+    /* PHARAOH_V1 */
+  ]: PHARAOH_V1,
+  [
+    "CLEOPATRA_V1"
+    /* CLEOPATRA_V1 */
+  ]: CLEOPATRA_V1,
+  [
+    "KODO"
+    /* KODO */
+  ]: KODO,
+  [
+    "STRATUM"
+    /* STRATUM */
+  ]: STRATUM,
+  [
+    "SWAPX_V2"
+    /* SWAPX_V2 */
+  ]: SWAPX_V2,
+  [
+    "CRUST_V1"
+    /* CRUST_V1 */
+  ]: CRUST_V1,
+  [
+    "HERMES"
+    /* HERMES */
+  ]: HERMES,
+  [
+    "HERCULES_V2"
+    /* HERCULES_V2 */
+  ]: HERCULES,
+  [
+    "NETSWAP"
+    /* NETSWAP */
+  ]: NETSWAP,
+  [
+    "VELODROME_V1"
+    /* VELODROME_V1 */
+  ]: VELODROME_V1,
+  [
+    "VELODROME_V2"
+    /* VELODROME_V2 */
+  ]: VELODROME_V2,
+  [
+    "KOI"
+    /* KOI */
+  ]: KOI,
+  // fuel
+  [
+    "MIRA"
+    /* MIRA */
+  ]: MIRA_FUEL,
+  [
+    "DIESEL"
+    /* DIESEL */
+  ]: DIESEL_FUEL
+};
+var uniswapV3InitHash = "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54";
+var uniswapV3CallbackSelector = "0xfa461e3300000000000000000000000000000000000000000000000000000000";
+var pancakeV3CallbackSelector = "0x23a69e7500000000000000000000000000000000000000000000000000000000";
+var algebraV3CallbackSelector = "0x2c8958f600000000000000000000000000000000000000000000000000000000";
+var ramsesV2CallbackSelector = "0x654b648700000000000000000000000000000000000000000000000000000000";
+var UNISWAP_V3 = {
+  factories: {
+    [Chain.ETHEREUM_MAINNET]: "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+    [Chain.BASE]: "0x33128a8fC17869897dcE68Ed026d694621f6FDfD",
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0xdB1d10011AD0Ff90774D0C6Bb92e5C5c8b4461F7",
+    [Chain.AVALANCHE_C_CHAIN]: "0x740b1c1de25031C31FF4fC9A62f554A55cdC1baD",
+    [Chain.BLAST]: "0x792edAdE80af5fC680d96a2eD80A44247D2Cf6Fd",
+    [Chain.SCROLL]: "0x70C62C8b8e801124A4Aa81ce07b637A3e83cb919",
+    [Chain.LINEA]: "0x31FAfd4889FA1269F7a13A66eE0fB458f27D72A9",
+    [Chain.MANTLE]: "0x0d922Fb1Bc191F64970ac40376643808b4B74Df9",
+    [Chain.TAIKO_ALETHIA]: "0x75FC67473A91335B5b8F8821277262a13B38c9b3",
+    [Chain.WORLD_CHAIN]: "0x7a5028BDa40e7B173C278C5342087826455ea25a",
+    [Chain.GNOSIS]: "0xe32F7dD7e3f098D518ff19A22d5f028e076489B1",
+    [Chain.SONIC_MAINNET]: "0xcb2436774C3e191c85056d248EF4260ce5f27A9D",
+    [Chain.INK]: "0x640887A9ba3A9C53Ed27D0F7e8246A4F933f3424",
+    [Chain.HEMI_NETWORK]: "0x346239972d1fa486FC4a521031BC81bFB7D6e8a4",
+    [Chain.OP_MAINNET]: "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+    [Chain.ARBITRUM_ONE]: "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+    [Chain.POLYGON_MAINNET]: "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+    [Chain.CELO_MAINNET]: "0xAfE208a311B21f13EF87E33A90049fC17A7acDEc",
+    [Chain.ZKSYNC_MAINNET]: "0x8FdA5a7a8dCA67BBcDd10F02Fa0649A937215422",
+    [Chain.BOBA_NETWORK]: "0xFFCd7Aed9C627E82A765c3247d562239507f6f1B",
+    [Chain.POLYGON_ZKEVM]: "0xff83c3c800Fec21de45C5Ec30B69ddd5Ee60DFC2",
+    [Chain.MOONBEAM]: "0x28f1158795A3585CaAA3cD6469CD65382b89BB70",
+    [Chain.FILECOIN_MAINNET]: "0xB4C47eD546Fc31E26470a186eC2C5F19eF09BA41",
+    [Chain.ROOTSTOCK_MAINNET]: "0xaF37EC98A00FD63689CF3060BF3B6784E00caD82",
+    [Chain.ZORA]: "0x7145F8aeef1f6510E92164038E1B6F8cB2c42Cbb",
+    [Chain.SEI_NETWORK]: "0x75FC67473A91335B5b8F8821277262a13B38c9b3",
+    [Chain.MANTA_PACIFIC_MAINNET]: "0x06D830e15081f65923674268121FF57Cc54e4e23",
+    [Chain.REDSTONE]: "0xece75613Aa9b1680f0421E5B2eF376DF68aa83Bb",
+    [Chain.LISK]: "0x0d922Fb1Bc191F64970ac40376643808b4B74Df9",
+    [Chain.BOB]: "0xcb2436774C3e191c85056d248EF4260ce5f27A9D",
+    // [Chain.ZERO]: "0xA1160e73B63F322ae88cC2d8E700833e71D0b2a1",
+    [Chain.METAL_L2]: "0xcb2436774C3e191c85056d248EF4260ce5f27A9D",
+    [Chain.CYBER_MAINNET]: "0x9701158fcF072c6852FD83B54D237e0cf5910C08",
+    [Chain.SAGA]: "0x454050C4c9190390981Ac4b8d5AFcd7aC65eEffa",
+    [Chain.CORN]: "0xcb2436774C3e191c85056d248EF4260ce5f27A9D",
+    [Chain.SHAPE]: "0xeCf9288395797Da137f663a7DD0F0CDF918776F8",
+    [Chain.ABSTRACT]: "0xA1160e73B63F322ae88cC2d8E700833e71D0b2a1",
+    [Chain.TELOS_EVM_MAINNET]: "0xcb2436774C3e191c85056d248EF4260ce5f27A9D",
+    [Chain.LIGHTLINK_PHOENIX_MAINNET]: "0xcb2436774C3e191c85056d248EF4260ce5f27A9D",
+    [Chain.GOAT_NETWORK]: "0xcb2436774C3e191c85056d248EF4260ce5f27A9D"
+  },
+  codeHash: { default: uniswapV3InitHash },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "0",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var SUSHISWAP_V3 = {
+  factories: {
+    [Chain.ARBITRUM_ONE]: "0x1af415a1EbA07a4986a52B6f2e7dE7003D82231e",
+    [Chain.ARBITRUM_NOVA]: "0xaa26771d497814E81D305c511Efbb3ceD90BF5bd",
+    [Chain.OP_MAINNET]: "0x9c6522117e2ed1fE5bdb72bb0eD5E3f2bdE7DBe0",
+    [Chain.AVALANCHE_C_CHAIN]: "0x3e603C14aF37EBdaD31709C4f848Fc6aD5BEc715",
+    [Chain.BASE]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.BLAST]: "0x7680D4B43f3d1d54d6cfEeB2169463bFa7a6cf0d",
+    [Chain.BOBA_NETWORK]: "0x0BE808376Ecb75a5CF9bB6D237d16cd37893d904",
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x126555dd55a39328F69400d6aE4F782Bd4C34ABb",
+    [Chain.BITTORRENT_CHAIN_MAINNET]: "0xBBDe1d67297329148Fe1ED5e6B00114842728e65",
+    [Chain.CELO_MAINNET]: "0x93395129bd3fcf49d95730D3C2737c17990fF328",
+    [Chain.CORE_BLOCKCHAIN_MAINNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.ETHEREUM_MAINNET]: "0xbACEB8eC6b9355Dfc0269C18bac9d6E2Bdc29C4F",
+    [Chain.FANTOM_OPERA]: "0x7770978eED668a3ba661d51a773d3a992Fc9DDCB",
+    [Chain.FILECOIN_MAINNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.FUSE_MAINNET]: "0x1b9d177CcdeA3c79B6c8F40761fc8Dc9d0500EAa",
+    [Chain.GNOSIS]: "0xf78031CBCA409F2FB6876BDFDBc1b2df24cF9bEf",
+    [Chain.HAQQ_NETWORK]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.KAVA]: "0x1e9B24073183d5c6B7aE5FB4b8f0b1dd83FDC77a",
+    [Chain.LINEA]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0x145d82bCa93cCa2AE057D1c6f26245d1b9522E6F",
+    [Chain.MOONBEAM]: "0x2ecd58F51819E8F8BA08A650BEA04Fc0DEa1d523",
+    [Chain.MOONRIVER]: "0x2F255d3f3C0A3726c6c99E74566c4b18E36E3ce6",
+    [Chain.OPBNB_MAINNET]: "0x9c6522117e2ed1fE5bdb72bb0eD5E3f2bdE7DBe0",
+    [Chain.POLYGON_MAINNET]: "0x917933899c6a5F8E37F31E19f92CdBFF7e8FF0e2",
+    [Chain.POLYGON_ZKEVM]: "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+    [Chain.ROOTSTOCK_MAINNET]: "0x46B3fDF7b5CDe91Ac049936bF0bDb12c5d22202e",
+    [Chain.SCROLL]: "0x46B3fDF7b5CDe91Ac049936bF0bDb12c5d22202e",
+    [Chain.SKALE_EUROPA_HUB]: "0x51d15889b66A2c919dBbD624d53B47a9E8feC4bB",
+    [Chain.THUNDERCORE_MAINNET]: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+    [Chain.ZETACHAIN_MAINNET]: "0xB45e53277a7e0F1D35f2a77160e91e25507f1763",
+    [Chain.HEMI_NETWORK]: "0xCdBCd51a5E8728E0AF4895ce5771b7d17fF71959"
+  },
+  codeHash: {
+    default: uniswapV3InitHash,
+    [Chain.BLAST]: "0x8e13daee7f5a62e37e71bf852bcd44e7d16b90617ed2b17c24c2ee62411c5bae"
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "1",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var solidlyV3Factory = "0x70Fe4a44EA505cFa3A57b95cF2862D4fd5F0f687";
+var solidlyV3InitHash = "0xe9b68c5f77858eecac2e651646e208175e9b1359d68d0e14fc69f8c54e5010bf";
+var SOLIDLY_V3 = {
+  factories: {
+    [Chain.ETHEREUM_MAINNET]: solidlyV3Factory,
+    [Chain.BASE]: solidlyV3Factory,
+    [Chain.SONIC_MAINNET]: "0x777fAca731b17E8847eBF175c94DbE9d81A8f630"
+  },
+  codeHash: {
+    default: solidlyV3InitHash
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "2",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var aerodromeInitHash = "0xffb9af9ea6d9e39da47392ecc7055277b9915b8bfc9f83f105821b7791a6ae30";
+var AERODROME_SLIPSTREAM = {
+  factories: {
+    [Chain.BASE]: "0x5e7BB104d84c7CB9B682AaC2F3d509f5F406809A"
+  },
+  codeHash: { default: aerodromeInitHash },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "5",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var ALIENBASE_V3 = {
+  factories: { [Chain.BASE]: "0x0Fd83557b2be93617c9C1C1B6fd549401C74558C" },
+  codeHash: {
+    default: uniswapV3InitHash
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "6",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var BASEX_V3 = {
+  factories: { [Chain.BASE]: "0x38015D05f4fEC8AFe15D7cc0386a126574e8077B" },
+  codeHash: {
+    default: uniswapV3InitHash
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "7",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var DACKIESWAP_V3 = {
+  factories: {
+    [Chain.BASE]: "0x4f205D69834f9B101b9289F7AFFAc9B77B3fF9b7",
+    [Chain.OP_MAINNET]: "0xa466ebCfa58848Feb6D8022081f1C21a884889bB",
+    [Chain.ARBITRUM_ONE]: "0xf79A36F6f440392C63AD61252a64d5d3C43F860D",
+    [Chain.BLAST_MAINNET]: "0x6510E68561F04C1d111e616750DaC2a063FF5055",
+    [Chain.WORLD_CHAIN]: "0xc6f3966E5D08Ced98aC30f8B65BeAB5882Be54C7"
+  },
+  codeHash: {
+    default: uniswapV3InitHash,
+    [Chain.BLAST]: "0x9173e4373ab542649f2f059b10eaab2181ad82cc2e70cf51cf9d9fa8a144a2af"
+  },
+  callbackSelector: pancakeV3CallbackSelector,
+  forkId: "1",
+  forkType: {
+    default: "Pancake"
+    /* Pancake */
+  }
+};
+var KINETIX_V3 = {
+  factories: {
+    [Chain.BASE]: "0xdDF5a3259a88Ab79D5530eB3eB14c1C92CD97FCf"
+  },
+  codeHash: {
+    default: uniswapV3InitHash
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "8",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var DTX = {
+  factories: {
+    [Chain.TAIKO_ALETHIA]: "0xfCA1AEf282A99390B62Ca8416a68F5747716260c"
+  },
+  codeHash: {
+    [Chain.TAIKO_ALETHIA]: uniswapV3InitHash
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "10",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var pancakeSwapV3InitHash = "0x6ce8eb472fa82df5469c6ab6d485f17c3ad13c8cd7af59b3d4a8026c5ce0f7e2";
+var PANCAKESWAP_V3 = {
+  factories: {
+    [Chain.ETHEREUM_MAINNET]: "0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9",
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9",
+    [Chain.BASE]: "0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9",
+    [Chain.ARBITRUM_ONE]: "0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9",
+    [Chain.POLYGON_ZKEVM]: "0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9",
+    [Chain.ZKSYNC_MAINNET]: "0x7f71382044A6a62595D5D357fE75CA8199123aD6",
+    [Chain.LINEA]: "0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9",
+    [Chain.OPBNB_MAINNET]: "0x41ff9AA7e16B8B1a8a8dc4f0eFacd93D02d071c9"
+  },
+  codeHash: {
+    default: pancakeSwapV3InitHash
+  },
+  callbackSelector: pancakeV3CallbackSelector,
+  forkId: "0",
+  forkType: {
+    default: "Pancake"
+    /* Pancake */
+  }
+};
+var PANKO_V3 = {
+  factories: {
+    [Chain.TAIKO_ALETHIA]: "0x7DD105453D0AEf177743F5461d7472cC779e63f7"
+  },
+  codeHash: {
+    default: pancakeSwapV3InitHash
+  },
+  callbackSelector: pancakeV3CallbackSelector,
+  forkId: "1",
+  forkType: {
+    default: "Pancake"
+    /* Pancake */
+  }
+};
+var FUSIONX_V3 = {
+  factories: {
+    [Chain.MANTLE]: "0x7DD105453D0AEf177743F5461d7472cC779e63f7"
+  },
+  codeHash: {
+    default: "0x1bce652aaa6528355d7a339037433a20cd28410e3967635ba8d2ddb037440dbf"
+  },
+  callbackSelector: "0xae067e0f00000000000000000000000000000000000000000000000000000000",
+  forkId: "2",
+  forkType: {
+    default: "Pancake"
+    /* Pancake */
+  }
+};
+var AGNI = {
+  factories: {
+    [Chain.MANTLE]: "0xe9827b4ebeb9ae41fc57efdddd79edddc2ea4d03"
+  },
+  codeHash: {
+    default: "0x1bce652aaa6528355d7a339037433a20cd28410e3967635ba8d2ddb037440dbf"
+  },
+  callbackSelector: "0x5bee97a300000000000000000000000000000000000000000000000000000000",
+  forkId: "0",
+  forkType: {
+    default: "Pancake"
+    /* Pancake */
+  }
+};
+var METHLAB = {
+  factories: {
+    [Chain.MANTLE]: "0x8f140fc3e9211b8dc2fc1d7ee3292f6817c5dd5d"
+  },
+  codeHash: {
+    default: "0xacd26fbb15704ae5e5fe7342ea8ebace020e4fa5ad4a03122ce1678278cf382b"
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "10",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var WAGMI = {
+  factories: {
+    [Chain.ETHEREUM_MAINNET]: "0xB9a14EE1cd3417f3AcC988F61650895151abde24",
+    [Chain.SONIC_MAINNET]: "0x56CFC796bC88C9c7e1b38C2b0aF9B7120B079aef",
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0xE3Dc1A5a7aB81F1cC1895FA55034725c24a5BD0e",
+    [Chain.AVALANCHE_C_CHAIN]: "0x08d6E1aE0f91423dDBD16f083ca39ccDd1D79cE8",
+    [Chain.POLYGON_MAINNET]: "0x8bb1Be7acD806BF6C9766486dC4c21284a472BaC",
+    [Chain.FANTOM_OPERA]: "0xaf20f5f19698f1D19351028cd7103B63D30DE7d7",
+    [Chain.ARBITRUM_ONE]: "0x7301350CC76D669ea384e77aF38a70C61661CA48",
+    [Chain.OP_MAINNET]: "0xC49c177736107fD8351ed6564136B9ADbE5B1eC3",
+    [Chain.KAVA]: "0x0e0Ce4D450c705F8a0B6Dd9d5123e3df2787D16B",
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0x8112E18a34b63964388a3B2984037d6a2EFE5B8A",
+    [Chain.BASE]: "0x576A1301B42942537d38FB147895fE83fB418fD4",
+    [Chain.IOTA_EVM]: "0x01Bd510B2eA106917e711f9a05a42fC162bee2Ac"
+  },
+  codeHash: {
+    default: "0x30146866f3a846fe3c636beb2756dbd24cf321bc52c9113c837c21f47470dfeb"
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "15",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var MAIA_V3 = {
+  factories: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0xf5fd18Cd5325904cC7141cB9Daca1F2F964B9927"
+  },
+  codeHash: {
+    default: uniswapV3InitHash
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "16",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var QUICKSWAP = {
+  factories: {
+    [Chain.POLYGON_MAINNET]: "0x2D98E2FA9da15aa6dC9581AB097Ced7af697CB92",
+    [Chain.DOGECHAIN_MAINNET]: "0x56c2162254b0E4417288786eE402c2B41d4e181e"
+  },
+  codeHash: {
+    default: "0x6ec6c9c8091d160c0aa74b2b14ba9c1717e95093bd3ac085cee99a49aab294a4"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "0",
+  forkType: {
+    default: "AlgebraV3"
+    /* AlgebraV3 */
+  }
+};
+var SWAPSICLE = {
+  factories: {
+    [Chain.MANTLE]: "0x9dE2dEA5c68898eb4cb2DeaFf357DFB26255a4aa",
+    [Chain.TAIKO_ALETHIA]: "0xb68b27a1c93A52d698EecA5a759E2E4469432C09",
+    [Chain.TELOS_EVM_MAINNET]: "0x061e47Ab9f31D293172efb88674782f80eCa88de"
+  },
+  codeHash: {
+    [Chain.MANTLE]: "0x177d5fbf994f4d130c008797563306f1a168dc689f81b2fa23b4396931014d91",
+    [Chain.TAIKO_ALETHIA]: "0xf96d2474815c32e070cd63233f06af5413efc5dcb430aee4ff18cc29007c562d",
+    [Chain.TELOS_EVM_MAINNET]: "0x177d5fbf994f4d130c008797563306f1a168dc689f81b2fa23b4396931014d91"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "1",
+  forkType: {
+    default: "AlgebraV4"
+    /* AlgebraV4 */
+  }
+};
+var HENJIN = {
+  factories: {
+    [Chain.TAIKO_ALETHIA]: "0x0d22b434E478386Cd3564956BFc722073B3508f6"
+  },
+  codeHash: {
+    [Chain.TAIKO_ALETHIA]: "0x4b9e4a8044ce5695e06fce9421a63b6f5c3db8a561eebb30ea4c775469e36eaf"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "2",
+  forkType: {
+    default: "AlgebraV4_2"
+    /* AlgebraV4_2 */
+  }
+};
+var CAMELOT = {
+  factories: {
+    [Chain.ARBITRUM_ONE]: "0x6Dd3FB9653B10e806650F107C3B5A0a6fF974F65"
+  },
+  codeHash: {
+    [Chain.ARBITRUM_ONE]: "0x6c1bebd370ba84753516bc1393c0d0a6c645856da55f5393ac8ab3d6dbc861d3"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "3",
+  forkType: {
+    default: "AlgebraV3_9"
+    /* AlgebraV3_9 */
+  }
+};
+var ATLAS = {
+  factories: {
+    [Chain.HEMI_NETWORK]: "0x6b46AE0e60E0E7a2F8614b3f1dCBf6D5a0102991"
+  },
+  codeHash: {
+    [Chain.HEMI_NETWORK]: "0xb3fc09be5eb433d99b1ec89fd8435aaf5ffea75c1879e19028aa2414a14b3c85"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "4",
+  forkType: {
+    default: "AlgebraV4"
+    /* AlgebraV4 */
+  }
+};
+var THENA = {
+  factories: {
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0xc89F69Baa3ff17a842AB2DE89E5Fc8a8e2cc7358"
+  },
+  codeHash: {
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0xd61302e7691f3169f5ebeca3a0a4ab8f7f998c01e55ec944e62cfb1109fd2736"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "5",
+  forkType: {
+    default: "AlgebraV3"
+    /* AlgebraV3 */
+  }
+};
+var ZYBERSWAP = {
+  factories: {
+    [Chain.ARBITRUM_ONE]: "0x24E85F5F94C6017d2d87b434394e87df4e4D56E3",
+    [Chain.OP_MAINNET]: "0xc0D4323426C709e8D04B5b130e7F059523464a91"
+  },
+  codeHash: {
+    [Chain.ARBITRUM_ONE]: "0x6ec6c9c8091d160c0aa74b2b14ba9c1717e95093bd3ac085cee99a49aab294a4",
+    [Chain.OP_MAINNET]: "0xbce37a54eab2fcd71913a0d40723e04238970e7fc1159bfd58ad5b79531697e7"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "7",
+  forkType: {
+    [Chain.ARBITRUM_ONE]: "AlgebraV3",
+    [Chain.OP_MAINNET]: "AlgebraV3_9"
+    /* AlgebraV3_9 */
+  }
+};
+var SKULLSWAP = {
+  factories: {
+    [Chain.FANTOM_OPERA]: "0x630BC1372F73bf779AF5593A5a2Da68ABB3c6E55"
+  },
+  codeHash: {
+    [Chain.FANTOM_OPERA]: "0x6ec6c9c8091d160c0aa74b2b14ba9c1717e95093bd3ac085cee99a49aab294a4"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "8",
+  forkType: {
+    default: "AlgebraV3"
+    /* AlgebraV3 */
+  }
+};
+var UBESWAP2 = {
+  factories: {
+    [Chain.CELO_MAINNET]: "0xcC980E18E3efa39e4dD98F057A432343D534314D"
+  },
+  codeHash: {
+    [Chain.CELO_MAINNET]: "0x6ec6c9c8091d160c0aa74b2b14ba9c1717e95093bd3ac085cee99a49aab294a4"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "10",
+  forkType: {
+    default: "AlgebraV3"
+    /* AlgebraV3 */
+  }
+};
+var LITX = {
+  factories: {
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x9cF85CaAC177Fb2296dcc68004e1C82A757F95ed"
+  },
+  codeHash: {
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x6ec6c9c8091d160c0aa74b2b14ba9c1717e95093bd3ac085cee99a49aab294a4"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "10",
+  forkType: {
+    default: "AlgebraV3"
+    /* AlgebraV3 */
+  }
+};
+var STELLASWAP = {
+  factories: {
+    [Chain.MOONBEAM]: "0x87a4F009f99E2F34A34A260bEa765877477c7EF9"
+  },
+  codeHash: {
+    [Chain.MOONBEAM]: "0xb3fc09be5eb433d99b1ec89fd8435aaf5ffea75c1879e19028aa2414a14b3c85"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "11",
+  forkType: {
+    default: "AlgebraV3"
+    /* AlgebraV3 */
+  }
+};
+var LYNEX = {
+  factories: {
+    [Chain.LINEA]: "0x9A89490F1056A7BC607EC53F93b921fE666A2C48"
+  },
+  codeHash: {
+    [Chain.LINEA]: "0xc65e01e65f37c1ec2735556a24a9c10e4c33b2613ad486dd8209d465524bc3f4"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "12",
+  forkType: {
+    default: "AlgebraV3_9"
+    /* AlgebraV3_9 */
+  }
+};
+var SWAP_BASED = {
+  factories: {
+    [Chain.BASE]: "0xe4DFd4ad723B5DB11aa41D53603dB03B117eC690"
+  },
+  codeHash: {
+    [Chain.BASE]: "0xbce37a54eab2fcd71913a0d40723e04238970e7fc1159bfd58ad5b79531697e7"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "13",
+  forkType: {
+    default: "AlgebraV3_9"
+    /* AlgebraV3_9 */
+  }
+};
+var SYNTHSWAP = {
+  factories: {
+    [Chain.BASE]: "0xBA97f8AEe67BaE3105fB4335760B103F24998a92"
+  },
+  codeHash: {
+    [Chain.BASE]: "0xbce37a54eab2fcd71913a0d40723e04238970e7fc1159bfd58ad5b79531697e7"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "14",
+  forkType: {
+    default: "AlgebraV3_9"
+    /* AlgebraV3_9 */
+  }
+};
+var HERCULES2 = {
+  factories: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0x43AA9b2eD25F972fD8D44fDfb77a4a514eAB4d71"
+  },
+  codeHash: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0x6c1bebd370ba84753516bc1393c0d0a6c645856da55f5393ac8ab3d6dbc861d3"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "30",
+  forkType: {
+    default: "AlgebraV3_9"
+    /* AlgebraV3_9 */
+  }
+};
+var KIM = {
+  factories: {
+    [Chain.MODE]: "0x6414A461B19726410E52488d9D5ff33682701635"
+  },
+  codeHash: {
+    [Chain.MODE]: "0xf96d2474815c32e070cd63233f06af5413efc5dcb430aee4ff18cc29007c562d"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "16",
+  forkType: {
+    default: "AlgebraV4"
+    /* AlgebraV4 */
+  }
+};
+var FENIX = {
+  factories: {
+    [Chain.BLAST_MAINNET]: "0x5aCCAc55f692Ae2F065CEdDF5924C8f6B53cDaa8"
+  },
+  codeHash: {
+    [Chain.BLAST_MAINNET]: "0xf45e886a0794c1d80aeae5ab5befecd4f0f2b77c0cf627f7c46ec92dc1fa00e4"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "17",
+  forkType: {
+    default: "AlgebraV4"
+    /* AlgebraV4 */
+  }
+};
+var BLADE = {
+  factories: {
+    [Chain.BLAST_MAINNET]: "0xfFeEcb1fe0EAaEFeE69d122F6B7a0368637cb593"
+  },
+  codeHash: {
+    [Chain.BLAST_MAINNET]: "0xa9df2657ce5872e94bdc9525588fd983b0aa5db2f3c7a83d7e6b6a99cd2003a1"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "18",
+  forkType: {
+    default: "AlgebraV4"
+    /* AlgebraV4 */
+  }
+};
+var SILVER_SWAP = {
+  factories: {
+    [Chain.FANTOM_OPERA]: "0x98AF00a67F5cC0b362Da34283D7d32817F6c9A29"
+  },
+  codeHash: {
+    [Chain.FANTOM_OPERA]: "0xf96d2474815c32e070cd63233f06af5413efc5dcb430aee4ff18cc29007c562d"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "19",
+  forkType: {
+    default: "AlgebraV4"
+    /* AlgebraV4 */
+  }
+};
+var HORIZON = {
+  factories: {
+    [Chain.LINEA]: "0xA76990a229961280200165c4e08c96Ea67304C3e"
+  },
+  codeHash: {
+    [Chain.LINEA]: "0xf96d2474815c32e070cd63233f06af5413efc5dcb430aee4ff18cc29007c562d"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "30",
+  forkType: {
+    default: "AlgebraV4"
+    /* AlgebraV4 */
+  }
+};
+var GLYPH = {
+  factories: {
+    [Chain.CORE_BLOCKCHAIN_MAINNET]: "0x24196b3f35E1B8313016b9f6641D605dCf48A76a"
+  },
+  codeHash: {
+    [Chain.CORE_BLOCKCHAIN_MAINNET]: "0xf96d2474815c32e070cd63233f06af5413efc5dcb430aee4ff18cc29007c562d"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "21",
+  forkType: {
+    default: "AlgebraV4"
+    /* AlgebraV4 */
+  }
+};
+var SWAPX = {
+  factories: {
+    [Chain.SONIC_MAINNET]: "0x885229E48987EA4c68F0aA1bCBff5184198A9188"
+  },
+  codeHash: {
+    [Chain.SONIC_MAINNET]: "0xf96d2474815c32e070cd63233f06af5413efc5dcb430aee4ff18cc29007c562d"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "22",
+  forkType: {
+    default: "AlgebraV4"
+    /* AlgebraV4 */
+  }
+};
+var BULLA = {
+  factories: {
+    [Chain.BERACHAIN]: "0x425EC3de5FEB62897dbe239Aa218B2DC035DCDF1"
+  },
+  codeHash: {
+    [Chain.BERACHAIN]: "0xf96d2474815c32e070cd63233f06af5413efc5dcb430aee4ff18cc29007c562d"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "23",
+  forkType: {
+    default: "AlgebraV4"
+    /* AlgebraV4 */
+  }
+};
+var SCRIBE = {
+  factories: {
+    [Chain.SCROLL]: "0xbAE27269D777D6fc0AefFa9DfAbA8960291E51eB"
+  },
+  codeHash: {
+    [Chain.SCROLL]: "0x4b9e4a8044ce5695e06fce9421a63b6f5c3db8a561eebb30ea4c775469e36eaf"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "24",
+  forkType: {
+    default: "AlgebraV4_1"
+    /* AlgebraV4_1 */
+  }
+};
+var FIBONACCI = {
+  factories: {
+    [Chain.FORM_NETWORK]: "0x1d204Ba9fceD9E5a228727Cd4Ce89620B4e4999a"
+  },
+  codeHash: {
+    [Chain.FORM_NETWORK]: "0xb3fc09be5eb433d99b1ec89fd8435aaf5ffea75c1879e19028aa2414a14b3c85"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "25",
+  forkType: {
+    default: "AlgebraV4_2"
+    /* AlgebraV4_2 */
+  }
+};
+var VOLTAGE = {
+  factories: {
+    [Chain.FUSE_MAINNET]: "0x9F02d3ddbC690bc65d81A98B93d449528AC4eB8C"
+  },
+  codeHash: {
+    [Chain.FUSE_MAINNET]: "0xb3fc09be5eb433d99b1ec89fd8435aaf5ffea75c1879e19028aa2414a14b3c85"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "26",
+  forkType: {
+    default: "AlgebraV4_2"
+    /* AlgebraV4_2 */
+  }
+};
+var WASABEE = {
+  factories: {
+    [Chain.BERACHAIN]: "0x598f320907c2FFDBC715D591ffEcC3082bA14660"
+  },
+  codeHash: {
+    [Chain.BERACHAIN]: "0xb3fc09be5eb433d99b1ec89fd8435aaf5ffea75c1879e19028aa2414a14b3c85"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "27",
+  forkType: {
+    default: "AlgebraV4_2"
+    /* AlgebraV4_2 */
+  }
+};
+var HOLIVERSE = {
+  factories: {
+    [Chain.POLYGON_MAINNET]: "0x0b643D3A5903ED89921b85c889797dd9887125Ad"
+  },
+  codeHash: {
+    [Chain.POLYGON_MAINNET]: "0xb3fc09be5eb433d99b1ec89fd8435aaf5ffea75c1879e19028aa2414a14b3c85"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "28",
+  forkType: {
+    default: "AlgebraV4_2"
+    /* AlgebraV4_2 */
+  }
+};
+var MOR_FI = {
+  factories: {
+    [Chain.MORPH]: "0xc1db2471ea7ea9227ea02f427543177d63afe44f"
+  },
+  codeHash: {
+    [Chain.MORPH]: "0xb3fc09be5eb433d99b1ec89fd8435aaf5ffea75c1879e19028aa2414a14b3c85"
+  },
+  callbackSelector: algebraV3CallbackSelector,
+  forkId: "29",
+  forkType: {
+    default: "AlgebraV4_2"
+    /* AlgebraV4_2 */
+  }
+};
+var SHADOW_CL = {
+  factories: {
+    [Chain.SONIC_MAINNET]: "0x8BBDc15759a8eCf99A92E004E0C64ea9A5142d59"
+  },
+  codeHash: {
+    [Chain.SONIC_MAINNET]: "0xc701ee63862761c31d620a4a083c61bdc1e81761e6b9c9267fd19afd22e0821d"
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "11",
+  forkType: {
+    default: "AlgebraV4_2"
+    /* AlgebraV4_2 */
+  }
+};
+var BUTTER = {
+  factories: {
+    [Chain.MANTLE]: "0xEECa0a86431A7B42ca2Ee5F479832c3D4a4c2644"
+  },
+  codeHash: {
+    [Chain.MANTLE]: "0xc7d06444331e4f63b0764bb53c88788882395aa31961eed3c2768cc9568323ee"
+  },
+  callbackSelector: "0xe5f6c0f800000000000000000000000000000000000000000000000000000000",
+  forkId: "0",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var CRUST = {
+  factories: {
+    [Chain.MANTLE]: "0xEaD128BDF9Cff441eF401Ec8D18a96b4A2d25252"
+  },
+  codeHash: {
+    [Chain.MANTLE]: "0x55664e1b1a13929bcf29e892daf029637225ec5c85a385091b8b31dcca255627"
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "12",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var RETRO = {
+  factories: {
+    [Chain.POLYGON_MAINNET]: "0x91e1B99072f238352f59e58de875691e20Dc19c1"
+  },
+  codeHash: {
+    [Chain.POLYGON_MAINNET]: "0x817e07951f93017a93327ac8cc31e946540203a19e1ecc37bc1761965c2d1090"
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "13",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var NILE_CL = {
+  factories: {
+    [Chain.LINEA]: "0xAAA32926fcE6bE95ea2c51cB4Fcb60836D320C42"
+  },
+  codeHash: {
+    [Chain.LINEA]: "0x1565b129f2d1790f12d45301b9b084335626f0c92410bc43130763b69971135d"
+  },
+  callbackSelector: ramsesV2CallbackSelector,
+  forkId: "2",
+  forkType: {
+    default: "Ramses"
+    /* Ramses */
+  }
+};
+var KOI_CL = {
+  factories: {
+    [Chain.ZKSYNC_MAINNET]: "0x488A92576DA475f7429BC9dec9247045156144D3"
+  },
+  codeHash: {
+    [Chain.ZKSYNC_MAINNET]: "0x0100128b709068f187cf0a565f39cd8d90baf51a12a5717aebcdf69a503234b9"
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "10",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var IZUMI = {
+  factories: {
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x93BB94a0d5269cb437A1F71FF3a77AB753844422",
+    [Chain.ETHEREUM_MAINNET]: "0x93BB94a0d5269cb437A1F71FF3a77AB753844422",
+    [Chain.MANTLE]: "0x45e5F26451CDB01B0fA1f8582E0aAD9A6F27C218",
+    [Chain.POLYGON_MAINNET]: "0xcA7e21764CD8f7c1Ec40e651E25Da68AeD096037",
+    [Chain.TAIKO_ALETHIA]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.ARBITRUM_ONE]: "0xCFD8A067e1fa03474e79Be646c5f6b6A27847399",
+    [Chain.HEMI_NETWORK]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.METER_MAINNET]: "0xed31C5a9C764761C3A699E2732183ba5d6EAcC35",
+    [Chain.ZKSYNC_MAINNET]: "0x575Bfc57B0D3eA0d31b132D622643e71735A6957",
+    [Chain.ONTOLOGY_MAINNET]: "0x032b241De86a8660f1Ae0691a4760B426EA246d7",
+    [Chain.LINEA]: "0x45e5F26451CDB01B0fA1f8582E0aAD9A6F27C218",
+    [Chain.ETHEREUM_CLASSIC]: "0x79D175eF5fBe31b5D84B3ee359fcbBB466153E39",
+    [Chain.BASE]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.OPBNB_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.KROMA]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.MANTA_PACIFIC_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.SCROLL]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.ZKFAIR_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.ZETACHAIN_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.MERLIN_MAINNET]: "0xE29a6620DAc789B8a76e9b9eC8fE9B7cf2B663D5",
+    [Chain.BLAST]: "0x5162f29E9626CF7186ec40ab97D92230B428ff2d",
+    [Chain.ZKLINK_NOVA_MAINNET]: "0x33D9936b7B7BC155493446B5E6dDC0350EB83AEC",
+    [Chain.MODE]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.MAP_PROTOCOL]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    // [Chain.ANVN]: '0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08',
+    [Chain.X_LAYER_MAINNET]: "0xBf8F8Ef2d2a534773c61682Ea7cF5323a324B188",
+    [Chain.BOB]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.KAIA_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.KAVA]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.ROOTSTOCK_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.CYBER_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.CORE_BLOCKCHAIN_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.NEON_EVM_MAINNET]: "0x3EF68D3f7664b2805D4E88381b64868a56f88bC4",
+    [Chain.GRAVITY_ALPHA_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.EVM_ON_FLOW]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.IOTEX_NETWORK_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.MORPH]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08",
+    [Chain.HASHKEY_CHAIN]: "0x110dE362cc436D7f54210f96b8C7652C2617887D",
+    [Chain.PLUME_MAINNET]: "0x8c7d3063579BdB0b90997e18A770eaE32E1eBb08"
+  },
+  codeHash: { default: "0xbe0bfe068cdd78cafa3ddd44e214cfa4e412c15d7148e932f8043fe883865e40" },
+  forkId: "0",
+  forkType: {
+    default: "Izumi"
+    /* Izumi */
+  }
+};
+var BISWAP_V3 = {
+  factories: {
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x7C3d53606f9c03e7f54abdDFFc3868E1C5466863"
+  },
+  codeHash: { default: "0x712a91d34948c3b3e0b473b519235f7d14dbf2472983bc5d3f7e67c501d7a348" },
+  forkId: "1",
+  forkType: {
+    default: "Izumi"
+    /* Izumi */
+  }
+};
+var SQUADSWAP_V3 = {
+  factories: {
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x127AA917Ace4a3880fa5E193947F2190829144A4",
+    [Chain.ARBITRUM_ONE]: "0xEa006904113a96995e51Cd9065CA6b9833da7fb1",
+    [Chain.BASE]: "0x53616b1BAA9e224092Bbaf64f2FB5dA2b11dd62a",
+    [Chain.BLAST]: "0xF99185C93274E5dE2DC8D52D3b9Fd917b1dD4A35",
+    [Chain.POLYGON_MAINNET]: "0x6d3A3aC01E7ADaD98480b5d4951a83b141c8Fd75",
+    [Chain.OP_MAINNET]: "0x53616b1BAA9e224092Bbaf64f2FB5dA2b11dd62a"
+  },
+  codeHash: {
+    default: "0xff132c7c84e5449c9d69fc8490aba7f25fe4033e8889a13556c416128e1308cf"
+  },
+  callbackSelector: "0xc4e21d8600000000000000000000000000000000000000000000000000000000",
+  // squadV3SwapCallback
+  forkId: "30",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var RAMSES_V2 = {
+  factories: {
+    [Chain.ARBITRUM_ONE]: "0xAA2cd7477c451E703f3B9Ba5663334914763edF8"
+  },
+  codeHash: { default: "0x1565b129f2d1790f12d45301b9b084335626f0c92410bc43130763b69971135d" },
+  callbackSelector: ramsesV2CallbackSelector,
+  forkId: "0",
+  forkType: {
+    default: "Ramses"
+    /* Ramses */
+  }
+};
+var CLEOPATRA = {
+  factories: {
+    [Chain.MANTLE]: "0xAAA32926fcE6bE95ea2c51cB4Fcb60836D320C42"
+  },
+  codeHash: { default: "0x1565b129f2d1790f12d45301b9b084335626f0c92410bc43130763b69971135d" },
+  callbackSelector: ramsesV2CallbackSelector,
+  forkId: "1",
+  forkType: {
+    default: "Ramses"
+    /* Ramses */
+  }
+};
+var PHARAOH_CL = {
+  factories: {
+    [Chain.AVALANCHE_C_CHAIN]: "0xAAA32926fcE6bE95ea2c51cB4Fcb60836D320C42"
+  },
+  codeHash: { default: "0x1565b129f2d1790f12d45301b9b084335626f0c92410bc43130763b69971135d" },
+  callbackSelector: ramsesV2CallbackSelector,
+  forkId: "1",
+  forkType: {
+    default: "Ramses"
+    /* Ramses */
+  }
+};
+var ZKSWAP_V3 = {
+  factories: {
+    [Chain.ZKSYNC_MAINNET]: "0x57d28Af38D126beFEbfDe996B7cDc34d58Ad4CFB"
+  },
+  codeHash: { [Chain.ZKSYNC_MAINNET]: "0x010012918CB9618AE4BA2ABC0113216D1639E06949000CAC6E32E7D7811E625D" },
+  callbackSelector: "0xb527c5d000000000000000000000000000000000000000000000000000000000",
+  forkId: "0",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var UNAGI_V3 = {
+  factories: {
+    [Chain.TAIKO_ALETHIA]: "0x78172691DD3B8ADa7aEbd9bFfB487FB11D735DB2"
+  },
+  codeHash: { [Chain.TAIKO_ALETHIA]: "0x5ccd5621c1bb9e44ce98cef8b90d31eb2423dec3793b6239232cefae976936ea" },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "20",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var AXION_V3 = {
+  factories: {
+    [Chain.TAIKO_ALETHIA]: "0x34a9F4a8F3A8d57Ec3B5ab823442572ae740C92f"
+  },
+  codeHash: { [Chain.TAIKO_ALETHIA]: "0x101e6602a77572eb84dbb680d0904690b023afbe1ba9323cc3cb2644c82ebd25" },
+  callbackSelector: "0x0102795e00000000000000000000000000000000000000000000000000000000",
+  // axionV3SwapCallback
+  forkId: "0",
+  forkType: {
+    default: "Pancake"
+    /* Pancake */
+  }
+};
+var VELODROME_V3 = {
+  factories: {
+    [Chain.OP_MAINNET]: "0xCc0bDDB707055e04e497aB22a59c2aF4391cd12F",
+    [Chain.CELO_MAINNET]: "0x04625B046C69577EfC40e6c0Bb83CDBAfab5a55F",
+    [Chain.SWELLCHAIN]: "0x04625B046C69577EfC40e6c0Bb83CDBAfab5a55F",
+    [Chain.SONEIUM]: "0x04625B046C69577EfC40e6c0Bb83CDBAfab5a55F",
+    [Chain.LISK]: "0x04625B046C69577EfC40e6c0Bb83CDBAfab5a55F",
+    [Chain.INK]: "0x04625B046C69577EfC40e6c0Bb83CDBAfab5a55F",
+    [Chain.MODE]: "0x04625B046C69577EfC40e6c0Bb83CDBAfab5a55F",
+    [Chain.FRAXTAL]: "0x04625B046C69577EfC40e6c0Bb83CDBAfab5a55F",
+    [Chain.UNICHAIN]: "0x04625B046C69577EfC40e6c0Bb83CDBAfab5a55F",
+    [Chain.BOB]: "0x04625B046C69577EfC40e6c0Bb83CDBAfab5a55F"
+  },
+  implementation: {
+    [Chain.OP_MAINNET]: "0xc28aD28853A547556780BEBF7847628501A3bCbb",
+    // remaining chains have consistent data
+    default: "0x321f7Dfb9B2eA9131B8C17691CF6e01E5c149cA8"
+    // [Chain.CELO_MAINNET]: "0x321f7Dfb9B2eA9131B8C17691CF6e01E5c149cA8",
+    // [Chain.SWELLCHAIN]: "0x321f7Dfb9B2eA9131B8C17691CF6e01E5c149cA8",
+    // [Chain.SONEIUM]: "0x321f7Dfb9B2eA9131B8C17691CF6e01E5c149cA8",
+    // [Chain.LISK]: "0x321f7Dfb9B2eA9131B8C17691CF6e01E5c149cA8",
+    // [Chain.INK]: "0x321f7Dfb9B2eA9131B8C17691CF6e01E5c149cA8",
+    // [Chain.MODE]: "0x321f7Dfb9B2eA9131B8C17691CF6e01E5c149cA8",
+    // [Chain.FRAXTAL]: "0x321f7Dfb9B2eA9131B8C17691CF6e01E5c149cA8",
+    // [Chain.UNICHAIN]: "0x321f7Dfb9B2eA9131B8C17691CF6e01E5c149cA8",
+    // [Chain.BOB]: "0x321f7Dfb9B2eA9131B8C17691CF6e01E5c149cA8",
+  },
+  codeHash: {
+    // keccak256(hex"363d3d373d3d3d363d73${implementation}5af43d82803e903d91602b57fd5bf3")
+    [Chain.OP_MAINNET]: "0x339492e30b7a68609e535da9b0773082bfe60230ca47639ee5566007d525f5a7",
+    // remaining chains have consistent data
+    default: "0x7b216153c50849f664871825fa6f22b3356cdce2436e4f48734ae2a926a4c7e5"
+    // [Chain.CELO_MAINNET]: "0x7b216153c50849f664871825fa6f22b3356cdce2436e4f48734ae2a926a4c7e5",
+    // [Chain.SWELLCHAIN]: "0x7b216153c50849f664871825fa6f22b3356cdce2436e4f48734ae2a926a4c7e5",
+    // [Chain.SONEIUM]: "0x7b216153c50849f664871825fa6f22b3356cdce2436e4f48734ae2a926a4c7e5",
+    // [Chain.LISK]: "0x7b216153c50849f664871825fa6f22b3356cdce2436e4f48734ae2a926a4c7e5",
+    // [Chain.INK]: "0x7b216153c50849f664871825fa6f22b3356cdce2436e4f48734ae2a926a4c7e5",
+    // [Chain.MODE]: "0x7b216153c50849f664871825fa6f22b3356cdce2436e4f48734ae2a926a4c7e5",
+    // [Chain.FRAXTAL]: "0x7b216153c50849f664871825fa6f22b3356cdce2436e4f48734ae2a926a4c7e5",
+    // [Chain.UNICHAIN]: "0x7b216153c50849f664871825fa6f22b3356cdce2436e4f48734ae2a926a4c7e5",
+    // [Chain.BOB]: "0x7b216153c50849f664871825fa6f22b3356cdce2436e4f48734ae2a926a4c7e5",
+  },
+  callbackSelector: uniswapV3CallbackSelector,
+  forkId: "19",
+  forkType: {
+    default: "Classic"
+    /* Classic */
+  }
+};
+var UNISWAP_V3_FORKS = {
+  [
+    "UNISWAP_V3"
+    /* UNISWAP_V3 */
+  ]: UNISWAP_V3,
+  [
+    "SUSHISWAP_V3"
+    /* SUSHISWAP_V3 */
+  ]: SUSHISWAP_V3,
+  [
+    "SOLIDLY_V3"
+    /* SOLIDLY_V3 */
+  ]: SOLIDLY_V3,
+  [
+    "PANCAKESWAP_V3"
+    /* PANCAKESWAP_V3 */
+  ]: PANCAKESWAP_V3,
+  [
+    "DACKIESWAP_V3"
+    /* DACKIESWAP_V3 */
+  ]: DACKIESWAP_V3,
+  [
+    "ALIENBASE_V3"
+    /* ALIENBASE_V3 */
+  ]: ALIENBASE_V3,
+  [
+    "BASEX_V3"
+    /* BASEX_V3 */
+  ]: BASEX_V3,
+  [
+    "KINETIX_V3"
+    /* KINETIX_V3 */
+  ]: KINETIX_V3,
+  [
+    "AERODROME_SLIPSTREAM"
+    /* AERODROME_SLIPSTREAM */
+  ]: AERODROME_SLIPSTREAM,
+  [
+    "QUICKSWAP_V3"
+    /* QUICKSWAP_V3 */
+  ]: QUICKSWAP,
+  [
+    "HENJIN"
+    /* HENJIN */
+  ]: HENJIN,
+  [
+    "SWAPSICLE"
+    /* SWAPSICLE */
+  ]: SWAPSICLE,
+  [
+    "AGNI"
+    /* AGNI */
+  ]: AGNI,
+  [
+    "FUSIONX_V3"
+    /* FUSIONX_V3 */
+  ]: FUSIONX_V3,
+  [
+    "METHLAB"
+    /* METHLAB */
+  ]: METHLAB,
+  [
+    "PANKO"
+    /* PANKO */
+  ]: PANKO_V3,
+  [
+    "CAMELOT"
+    /* CAMELOT */
+  ]: CAMELOT,
+  [
+    "DTX"
+    /* DTX */
+  ]: DTX,
+  [
+    "ATLAS"
+    /* ATLAS */
+  ]: ATLAS,
+  [
+    "THENA"
+    /* THENA */
+  ]: THENA,
+  [
+    "ZYBERSWAP"
+    /* ZYBERSWAP */
+  ]: ZYBERSWAP,
+  [
+    "SKULLSWAP"
+    /* SKULLSWAP */
+  ]: SKULLSWAP,
+  [
+    "UBESWAP"
+    /* UBESWAP */
+  ]: UBESWAP2,
+  [
+    "LITX"
+    /* LITX */
+  ]: LITX,
+  [
+    "STELLASWAP"
+    /* STELLASWAP */
+  ]: STELLASWAP,
+  [
+    "LYNEX"
+    /* LYNEX */
+  ]: LYNEX,
+  [
+    "SWAP_BASED"
+    /* SWAP_BASED */
+  ]: SWAP_BASED,
+  [
+    "SYNTHSWAP"
+    /* SYNTHSWAP */
+  ]: SYNTHSWAP,
+  [
+    "HERCULES"
+    /* HERCULES */
+  ]: HERCULES2,
+  [
+    "KIM"
+    /* KIM */
+  ]: KIM,
+  [
+    "FENIX"
+    /* FENIX */
+  ]: FENIX,
+  [
+    "BLADE"
+    /* BLADE */
+  ]: BLADE,
+  [
+    "SILVER_SWAP"
+    /* SILVER_SWAP */
+  ]: SILVER_SWAP,
+  [
+    "HORIZON"
+    /* HORIZON */
+  ]: HORIZON,
+  [
+    "GLYPH"
+    /* GLYPH */
+  ]: GLYPH,
+  [
+    "SWAPX"
+    /* SWAPX */
+  ]: SWAPX,
+  [
+    "BULLA"
+    /* BULLA */
+  ]: BULLA,
+  [
+    "SCRIBE"
+    /* SCRIBE */
+  ]: SCRIBE,
+  [
+    "FIBONACCI"
+    /* FIBONACCI */
+  ]: FIBONACCI,
+  [
+    "VOLTAGE"
+    /* VOLTAGE */
+  ]: VOLTAGE,
+  [
+    "WASABEE"
+    /* WASABEE */
+  ]: WASABEE,
+  [
+    "HOLIVERSE"
+    /* HOLIVERSE */
+  ]: HOLIVERSE,
+  [
+    "MOR_FI"
+    /* MOR_FI */
+  ]: MOR_FI,
+  [
+    "SHADOW_CL"
+    /* SHADOW_CL */
+  ]: SHADOW_CL,
+  [
+    "SQUADSWAP_V3"
+    /* SQUADSWAP_V3 */
+  ]: SQUADSWAP_V3,
+  [
+    "BUTTER"
+    /* BUTTER */
+  ]: BUTTER,
+  [
+    "CRUST"
+    /* CRUST */
+  ]: CRUST,
+  [
+    "RETRO"
+    /* RETRO */
+  ]: RETRO,
+  [
+    "WAGMI"
+    /* WAGMI */
+  ]: WAGMI,
+  [
+    "MAIA_V3"
+    /* MAIA_V3 */
+  ]: MAIA_V3,
+  [
+    "CLEOPATRA"
+    /* CLEOPATRA */
+  ]: CLEOPATRA,
+  [
+    "RAMSES_V2"
+    /* RAMSES_V2 */
+  ]: RAMSES_V2,
+  [
+    "PHARAOH_CL"
+    /* PHARAOH_CL */
+  ]: PHARAOH_CL,
+  [
+    "VELODROME_V3"
+    /* VELODROME_V3 */
+  ]: VELODROME_V3,
+  [
+    "NILE_CL"
+    /* NILE_CL */
+  ]: NILE_CL,
+  [
+    "KOI_CL"
+    /* KOI_CL */
+  ]: KOI_CL,
+  [
+    "ZKSWAP_V3"
+    /* ZKSWAP_V3 */
+  ]: ZKSWAP_V3,
+  [
+    "UNAGI_V3"
+    /* UNAGI_V3 */
+  ]: UNAGI_V3,
+  [
+    "AXION_V3"
+    /* AXION_V3 */
+  ]: AXION_V3
+};
+var IZUMI_FORKS = {
+  [
+    "IZUMI"
+    /* IZUMI */
+  ]: IZUMI,
+  [
+    "BISWAP_V3"
+    /* BISWAP_V3 */
+  ]: BISWAP_V3
+};
+var UNISWAP_V4 = {
+  pm: {
+    [Chain.ETHEREUM_MAINNET]: "0x000000000004444c5dc75cB358380D2e3dE08A90",
+    [Chain.ARBITRUM_ONE]: "0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32",
+    [Chain.AVALANCHE_C_CHAIN]: "0x06380C0e0912312B5150364B9DC4542BA0DbBc85",
+    [Chain.BASE]: "0x498581fF718922c3f8e6A244956aF099B2652b2b",
+    [Chain.BLAST]: "0x1631559198A9e474033433b2958daBC135ab6446",
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x28e2Ea090877bF75740558f6BFB36A5ffeE9e9dF",
+    [Chain.OP_MAINNET]: "0x9a13F98Cb987694C9F086b1F5eB990EeA8264Ec3",
+    [Chain.POLYGON_MAINNET]: "0x67366782805870060151383F4BbFF9daB53e5cD6",
+    [Chain.WORLD_CHAIN]: "0xb1860D529182ac3BC1F51Fa2ABd56662b7D13f33",
+    [Chain.ZORA]: "0x0575338e4c17006ae181b47900a84404247ca30f",
+    [Chain.INK]: "0x360e68faccca8ca495c1b759fd9eee466db9fb32",
+    [Chain.SONEIUM]: "0x360e68faccca8ca495c1b759fd9eee466db9fb32"
+  },
+  forkId: "0"
+};
+var UNISWAP_V4_FORKS = {
+  [
+    "UNISWAP_V4"
+    /* UNISWAP_V4 */
+  ]: UNISWAP_V4
+};
+({
+  // https://docs.mav.xyz/technical-reference/contract-addresses/v2-contract-addresses
+  // For chains: mainnet, base, bnb, arbitrum, scroll, sepolia
+  factories: {
+    [Chain.ETHEREUM_MAINNET]: "0x0A7e848Aca42d879EF06507Fca0E7b33A0a63c1e",
+    [Chain.BASE]: "0x0A7e848Aca42d879EF06507Fca0E7b33A0a63c1e",
+    [Chain.BNB_SMART_CHAIN_MAINNET]: "0x0A7e848Aca42d879EF06507Fca0E7b33A0a63c1e",
+    [Chain.ARBITRUM_ONE]: "0x0A7e848Aca42d879EF06507Fca0E7b33A0a63c1e",
+    [Chain.SCROLL]: "0x0A7e848Aca42d879EF06507Fca0E7b33A0a63c1e"
+  }
+});
+({
+  [Chain.HEMI_NETWORK]: {
+    },
+  [Chain.ARBITRUM_ONE]: {
+    },
+  [Chain.AURORA_MAINNET]: {
+    },
+  [Chain.AVALANCHE_C_CHAIN]: {
+    },
+  [Chain.BNB_SMART_CHAIN_MAINNET]: {
+    },
+  [Chain.BASE]: {
+    },
+  [Chain.BITLAYER_MAINNET]: {
+    },
+  [Chain.BOBA_NETWORK]: {
+    },
+  [Chain.CONFLUX_ESPACE]: {
+    },
+  [Chain.ETHEREUM_MAINNET]: {
+    },
+  [Chain.HASHKEY_CHAIN]: {
+    },
+  [Chain.LINEA]: {
+    },
+  [Chain.MANTA_PACIFIC_MAINNET]: {
+    },
+  [Chain.MANTLE]: {
+    },
+  [Chain.MOONRIVER]: {
+    },
+  [Chain.OKXCHAIN_MAINNET]: {
+    },
+  [Chain.OP_MAINNET]: {
+    },
+  [Chain.POLYGON_MAINNET]: {
+    },
+  [Chain.SCROLL]: {
+    },
+  [Chain.X_LAYER_MAINNET]: {
+    },
+  [Chain.ZIRCUIT_MAINNET]: {
+    }
+});
+({
+  vault: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0xD2032462fd8A45C4BE8F5b90DE25eE3631ec1c2C"
+  },
+  router: {
+    [Chain.METIS_ANDROMEDA_MAINNET]: "0x3931DB2254808F220e81e8e45666F709BA7BDebF"
+  }
+});
+({
+  vault: {
+    [Chain.ARBITRUM_ONE]: "0x489ee077994B6658eAfA855C308275EAd8097C4A",
+    [Chain.AVALANCHE_C_CHAIN]: "0x9ab2De34A33fB459b538c43f251eB825645e8595"
+  },
+  router: {
+    [Chain.ARBITRUM_ONE]: "0x22199a49A999c351eF7927602CFB187ec3cae489",
+    [Chain.AVALANCHE_C_CHAIN]: "0x5F719c2F1095F7B9fc68a68e35B51194f4b6abe8"
+  }
+});
+({
+  vault: {
+    [Chain.MANTLE]: "0xD2032462fd8A45C4BE8F5b90DE25eE3631ec1c2C",
+    [Chain.ARBITRUM_ONE]: "0xc657A1440d266dD21ec3c299A8B9098065f663Bb"
+  },
+  vaultUtils: {
+    [Chain.MANTLE]: "0xbde9c699e719bb44811252FDb3B37E6D3eDa5a28"
+  }
+});
+var FLASH_LOAN_IDS = {
+  /** Aave V3s */
+  [Lender.AAVE_V3]: 0,
+  [Lender.AAVE_V3_PRIME]: 1,
+  [Lender.AAVE_V3_ETHER_FI]: 2,
+  // reserve for more aave V3s
+  [Lender.SPARK]: 10,
+  // zerolends
+  [Lender.ZEROLEND]: 20,
+  [Lender.ZEROLEND_STABLECOINS_RWA]: 21,
+  [Lender.ZEROLEND_ETH_LRTS]: 22,
+  [Lender.ZEROLEND_BTC_LRTS]: 23,
+  [Lender.ZEROLEND_CROAK]: 24,
+  [Lender.ZEROLEND_FOXY]: 25,
+  // avalons
+  [Lender.AVALON]: 50,
+  [Lender.AVALON_SOLV_BTC]: 51,
+  [Lender.AVALON_SWELL_BTC]: 52,
+  [Lender.AVALON_PUMP_BTC]: 53,
+  [Lender.AVALON_EBTC_LBTC]: 54,
+  [Lender.AVALON_USDA]: 55,
+  [Lender.AVALON_SKAIA]: 56,
+  [Lender.AVALON_LORENZO]: 57,
+  [Lender.AVALON_INNOVATION]: 58,
+  [Lender.AVALON_UBTC]: 59,
+  [Lender.AVALON_OBTC]: 60,
+  [Lender.AVALON_BEETS]: 61,
+  [Lender.AVALON_UNILOTX]: 62,
+  [Lender.AVALON_BOB]: 63,
+  [Lender.AVALON_STBTC]: 64,
+  [Lender.AVALON_WBTC]: 65,
+  [Lender.AVALON_LBTC]: 66,
+  [Lender.AVALON_XAUM]: 67,
+  [Lender.AVALON_LISTA]: 68,
+  [Lender.AVALON_USDX]: 69,
+  [Lender.AVALON_UNIBTC]: 70,
+  // more exotics
+  [Lender.HANA]: 81,
+  [Lender.KINZA]: 82,
+  [Lender.LENDOS]: 83,
+  [Lender.MAGSIN]: 84,
+  [Lender.XLEND]: 85,
+  [Lender.RHOMBUS]: 86,
+  [Lender.SAKE]: 87,
+  [Lender.SAKE_ASTAR]: 88,
+  [Lender.RMM]: 90,
+  [Lender.LAYERBANK_V3]: 91,
+  // exotic
+  [Lender.YLDR]: 100,
+  /** Aave V2s */
+  [Lender.AAVE_V2]: 0,
+  [Lender.AURELIUS]: 2,
+  [Lender.LENDLE]: 1,
+  [Lender.MERIDIAN]: 3,
+  [Lender.TAKOTAKO]: 4,
+  [Lender.TAKOTAKO_ETH]: 5,
+  [Lender.NEREUS]: 6,
+  [Lender.GRANARY]: 7,
+  [Lender.LORE]: 8,
+  [Lender.IRONCLAD_FINANCE]: 9,
+  [Lender.MOLEND]: 10,
+  [Lender.POLTER]: 11,
+  [Lender.SEISMIC]: 12,
+  [Lender.AGAVE]: 13,
+  [Lender.MOOLA]: 14,
+  [Lender.KLAP]: 15,
+  [Lender.KLAYBANK]: 16,
+  // Morphos
+  [Lender.MORPHO_BLUE]: 0,
+  /** Balancer V2 */
+  [
+    "BALANCER_V2"
+    /* BALANCER_V2 */
+  ]: 0,
+  [
+    "SYMMETRIC"
+    /* SYMMETRIC */
+  ]: 1,
+  [
+    "SWAAP"
+    /* SWAAP */
+  ]: 2,
+  /** Singletons */
+  [
+    "BALANCER_V3"
+    /* BALANCER_V3 */
+  ]: 0,
+  [
+    "UNISWAP_V4"
+    /* UNISWAP_V4 */
+  ]: 0
+};
+({
+  ...Object.fromEntries(Object.entries(UNISWAP_V2_FORKS).map(([protocol, info]) => [protocol, info.forkId])),
+  ...Object.fromEntries(Object.entries(UNISWAP_V3_FORKS).map(([protocol, info]) => [protocol, info.forkId])),
+  ...Object.fromEntries(Object.entries(IZUMI_FORKS).map(([protocol, info]) => [protocol, info.forkId])),
+  ...Object.fromEntries(Object.entries(UNISWAP_V4_FORKS).map(([protocol, info]) => [protocol, info.forkId])),
+  ...Object.fromEntries(Object.entries(BALANCER_V2_FORKS).map(([protocol, info]) => [protocol, info.forkId])),
+  ...Object.fromEntries(Object.entries(BALANCER_V3_FORKS).map(([protocol, info]) => [protocol, info.forkId]))});
+
+// src/evm/consts/composer.ts
+var ONE_DELTA_COMPOSER = {
+  [Chain.MANTLE]: "0x9bc92bF848FaF2355c429c54d1edE3e767bDd790",
+  [Chain.POLYGON_MAINNET]: "0x6A6faa54B9238f0F079C8e6CBa08a7b9776C7fE4",
+  [Chain.TAIKO_ALETHIA]: "0x0bd7473CbBf81d9dD936c61117eD230d95006CA2",
+  [Chain.ARBITRUM_ONE]: "0x816EBC5cb8A5651C902Cb06659907A93E574Db0B",
+  [Chain.BASE]: "0x816EBC5cb8A5651C902Cb06659907A93E574Db0B",
+  [Chain.OP_MAINNET]: "0x816EBC5cb8A5651C902Cb06659907A93E574Db0B",
+  [Chain.HEMI_NETWORK]: "0x816EBC5cb8A5651C902Cb06659907A93E574Db0B"
+};
+var COMPOSER_PROXIES = {
+  [Chain.ARBITRUM_ONE]: "0x05f3f58716a88A52493Be45aA0871c55b3748f18",
+  [Chain.OP_MAINNET]: "0xCDef0A216fcEF809258aA4f341dB1A5aB296ea72",
+  [Chain.POLYGON_MAINNET]: "0xFd245e732b40b6BF2038e42b476bD06580585326",
+  [Chain.BASE]: "0xB7ea94340e65CC68d1274aE483dfBE593fD6f21e"
+};
+function getDeltaComposerAddress(chainId) {
+  if (!chainId) return void 0;
+  return ONE_DELTA_COMPOSER[chainId];
+}
+function getDeltaComposerProxyAddress(chainId) {
+  return COMPOSER_PROXIES[chainId];
+}
+
+// src/evm/consts/index.ts
+function createStableAndVol(f) {
+  return [f + "_VOLATILE", f + "_STABLE"];
+}
+var ALL_V2_FORKS_PER_CHAIN = Object.entries(UNISWAP_V2_FORKS).map(
+  (a) => [
+    UniV2ForkType.RamsesV1,
+    UniV2ForkType.Solidly,
+    UniV2ForkType.Camelot
+  ].includes(a[1].forkType.default) ? createStableAndVol(a[0]) : [a[0]]
+).reduce((acc, b) => [...acc, ...b], []);
+var PRE_FUNDABLE_DEXES = [
+  ...ALL_V2_FORKS_PER_CHAIN,
+  DexProtocol.WOO_FI,
+  DexProtocol.DODO_V2,
+  DexProtocol.GMX,
+  DexProtocol.KTX,
+  DexProtocol.MERCHANT_MOE_LB,
+  DexProtocol.TRADER_JOE_LB_V2,
+  DexProtocol.TRADER_JOE_LB_V21,
+  DexProtocol.TRADER_JOE_LB_V22,
+  DexProtocol.CURVE_NG
+];
+var NATIVE_SUPPORTING_PROTOCOLS = [DexProtocol.CURVE_STANDARD, DexProtocol.BALANCER_V3, DexProtocol.UNISWAP_V4];
+var BPS_BASE = 10000n;
+var CurrencyUtils;
+((CurrencyUtils2) => {
+  function getAmount(c) {
+    return BigInt(c.amount);
+  }
+  CurrencyUtils2.getAmount = getAmount;
+  function isNative(c) {
+    return c.address === zeroAddress;
+  }
+  CurrencyUtils2.isNative = isNative;
+  function isNativeAmount(c) {
+    return c.currency.address === zeroAddress;
+  }
+  CurrencyUtils2.isNativeAmount = isNativeAmount;
+  function fromRawAmount(currency, amount) {
+    return {
+      currency,
+      amount: String(amount)
+    };
+  }
+  CurrencyUtils2.fromRawAmount = fromRawAmount;
+})(CurrencyUtils || (CurrencyUtils = {}));
+
+// src/utils/tradeUtils.ts
+function getSplits(inputAmount, splitShares) {
+  if (splitShares.length === 1) return "0x";
+  const splitData = encodeAbiParameters(
+    Array(splitShares.length - 1).fill({ type: "uint16" }),
+    splitShares.slice(0, -1).map((share) => share * maxUint16 / inputAmount)
+  );
+  return shiftLeft(splitData, 32 - 2 * (splitShares.length - 1));
+}
+function shiftLeft(data, shift) {
+  return `0x${data.slice(2).slice(shift * 2)}`;
+}
+function isPreFundableDex(protocol) {
+  return PRE_FUNDABLE_DEXES.includes(protocol);
+}
+function minimumAmountOutFromTrade(trade, slippageToleranceBps, tradeType) {
+  if (tradeType !== 0 /* EXACT_INPUT */) {
+    throw new Error("Only exact input trades are supported");
+  }
+  const outputAmount = CurrencyUtils.getAmount(trade.outputAmount);
+  const slippageAdjustedAmountOut = outputAmount * (BPS_BASE - BigInt(slippageToleranceBps)) / BPS_BASE;
+  return CurrencyUtils.fromRawAmount(trade.outputAmount.currency, slippageAdjustedAmountOut);
+}
+function supportsNativeToken(protocol) {
+  return NATIVE_SUPPORTING_PROTOCOLS.includes(protocol);
+}
+function getWethAddress(chainId) {
+  const wrappedNativeInfo = WRAPPED_NATIVE_INFO[chainId];
+  if (!wrappedNativeInfo) {
+    throw new Error(`No wrapped native token info for chain ${chainId}`);
+  }
+  return wrappedNativeInfo.address;
+}
+function needsUnwrap(trade, chainId) {
+  const WETH_ADDRESS = getWethAddress(chainId);
+  const pathLength = trade.swaps[0].route.path.length;
+  const outputTokenFromSwaps = trade.swaps[0].route.path[pathLength - 1];
+  return CurrencyUtils.isNativeAmount(trade.outputAmount) && outputTokenFromSwaps.address === WETH_ADDRESS;
+}
+function needsWrap(trade, chainId) {
+  return CurrencyUtils.isNativeAmount(trade.inputAmount);
+}
+function getAdjustedHopCount(swap, numHops) {
+  const path = swap.route.path;
+  const pools = swap.route.pools;
+  let additionalHops = 0;
+  for (let i = 1; i < numHops; i++) {
+    const currentToken = path[i];
+    const pool = pools[i];
+    if (CurrencyUtils.isNative(currentToken) && !supportsNativeToken(pool.protocol)) {
+      additionalHops++;
+    }
+  }
+  return numHops + additionalHops;
+}
+function getAssetInFromTrade(trade) {
+  if (!trade) throw new Error("tried to get assetIn from undefined trade");
+  const { inputAmount } = trade;
+  return getAssetFromAmount(inputAmount);
+}
+function getAssetOutFromTrade(trade) {
+  if (!trade) throw new Error("tried to get assetIn from undefined trade");
+  const { outputAmount } = trade;
+  return getAssetFromAmount(outputAmount);
+}
+function getAssetFromAmount(amount) {
+  return amount.currency.address;
+}
+function getChainIdFromTrade(trade) {
+  if (!trade) throw new Error("tried to get ChainId from undefined trade");
+  const {
+    inputAmount: {
+      currency: { chainId }
+    }
+  } = trade;
+  return chainId;
+}
+function maximumAmountInFromTrade(trade, slippageToleranceBps, tradeType = 0 /* EXACT_INPUT */) {
+  const slippageToleranceBpsBigInt = BigInt(slippageToleranceBps);
+  if (slippageToleranceBpsBigInt < 0n) {
+    throw new Error("SLIPPAGE_TOLERANCE");
+  }
+  const tt = trade?.hasOwnProperty("tradeType") ? trade.tradeType : tradeType;
+  if (tt === 0 /* EXACT_INPUT */) {
+    return trade.inputAmount;
+  } else {
+    const inputAmount = CurrencyUtils.getAmount(trade.inputAmount);
+    const slippageAdjustedAmountIn = inputAmount * (BPS_BASE + slippageToleranceBpsBigInt) / BPS_BASE;
+    return CurrencyUtils.fromRawAmount(trade.inputAmount.currency, slippageAdjustedAmountIn);
+  }
+}
+function maximumAmountInFromAmount(amount, slippageToleranceBps, tradeType = 0 /* EXACT_INPUT */) {
+  if (!amount) return void 0;
+  if (tradeType === 0 /* EXACT_INPUT */) {
+    return CurrencyUtils.getAmount(amount);
+  } else {
+    const rawAmount = CurrencyUtils.getAmount(amount);
+    return rawAmount * (BPS_BASE + BigInt(slippageToleranceBps)) / BPS_BASE;
+  }
+}
+
+// src/utils/flashLoanProvider.ts
+var FlashLoanProvider = ((FlashLoanProvider3) => {
+  FlashLoanProvider3["NONE"] = "None";
+  FlashLoanProvider3[FlashLoanProvider3["LENDLE"] = Lender.LENDLE] = "LENDLE";
+  FlashLoanProvider3[FlashLoanProvider3["AAVE_V2"] = Lender.AAVE_V2] = "AAVE_V2";
+  FlashLoanProvider3[FlashLoanProvider3["AAVE_V3"] = Lender.AAVE_V3] = "AAVE_V3";
+  FlashLoanProvider3[FlashLoanProvider3["YLDR"] = Lender.YLDR] = "YLDR";
+  FlashLoanProvider3[FlashLoanProvider3["MORPHO"] = Lender.MORPHO_BLUE] = "MORPHO";
+  FlashLoanProvider3[FlashLoanProvider3["AURELIUS"] = Lender.AURELIUS] = "AURELIUS";
+  FlashLoanProvider3[FlashLoanProvider3["BALANCER_V2"] = DexProtocol.BALANCER_V2] = "BALANCER_V2";
+  FlashLoanProvider3[FlashLoanProvider3["BALANCER_V3"] = DexProtocol.BALANCER_V3] = "BALANCER_V3";
+  FlashLoanProvider3[FlashLoanProvider3["UNISWAP_V4"] = DexProtocol.UNISWAP_V4] = "UNISWAP_V4";
+  FlashLoanProvider3[FlashLoanProvider3["AVALON"] = Lender.AVALON] = "AVALON";
+  FlashLoanProvider3[FlashLoanProvider3["MERIDIAN"] = Lender.MERIDIAN] = "MERIDIAN";
+  FlashLoanProvider3[FlashLoanProvider3["TAKOTAKO"] = Lender.TAKOTAKO] = "TAKOTAKO";
+  FlashLoanProvider3[FlashLoanProvider3["GRANARY"] = Lender.GRANARY] = "GRANARY";
+  FlashLoanProvider3[FlashLoanProvider3["ZEROLEND"] = Lender.ZEROLEND] = "ZEROLEND";
+  FlashLoanProvider3[FlashLoanProvider3["LENDOS"] = Lender.LENDOS] = "LENDOS";
+  return FlashLoanProvider3;
+})(FlashLoanProvider || {});
+var SingletonTypeFlashLoanProvider = [FlashLoanProvider.BALANCER_V3, FlashLoanProvider.UNISWAP_V4];
+var FLASH_LOAN_PROVIDERS = {
+  [Chain.MANTLE]: {
+    [FlashLoanProvider.LENDLE]: { id: FLASH_LOAN_IDS[FlashLoanProvider.LENDLE], fee: 9n },
+    [FlashLoanProvider.AURELIUS]: { id: FLASH_LOAN_IDS[FlashLoanProvider.AURELIUS], fee: 9n }
+  },
+  [Chain.POLYGON_MAINNET]: {
+    [FlashLoanProvider.BALANCER_V2]: { id: FLASH_LOAN_IDS[FlashLoanProvider.BALANCER_V2], fee: 0n },
+    [FlashLoanProvider.AAVE_V3]: { id: FLASH_LOAN_IDS[FlashLoanProvider.AAVE_V3], fee: 5n },
+    [FlashLoanProvider.UNISWAP_V4]: { id: FLASH_LOAN_IDS[FlashLoanProvider.UNISWAP_V4], fee: 0n },
+    [FlashLoanProvider.YLDR]: { id: FLASH_LOAN_IDS[FlashLoanProvider.YLDR], fee: 5n }
+    // [FlashLoanProvider.AAVE_V2]: { id: FLASH_LOAN_IDS[FlashLoanProvider.AAVE_V2], fee: 9n }, // not useful since it is objectively worse than V3
+  },
+  [Chain.ARBITRUM_ONE]: {
+    [FlashLoanProvider.BALANCER_V2]: { id: FLASH_LOAN_IDS[FlashLoanProvider.BALANCER_V2], fee: 0n },
+    [FlashLoanProvider.BALANCER_V3]: { id: FLASH_LOAN_IDS[FlashLoanProvider.BALANCER_V3], fee: 0n },
+    [FlashLoanProvider.AAVE_V3]: { id: FLASH_LOAN_IDS[FlashLoanProvider.AAVE_V3], fee: 5n },
+    [FlashLoanProvider.UNISWAP_V4]: { id: FLASH_LOAN_IDS[FlashLoanProvider.UNISWAP_V4], fee: 0n }
+  },
+  [Chain.TAIKO_ALETHIA]: {
+    [FlashLoanProvider.MERIDIAN]: { id: FLASH_LOAN_IDS[FlashLoanProvider.MERIDIAN], fee: 9n },
+    [FlashLoanProvider.TAKOTAKO]: { id: FLASH_LOAN_IDS[FlashLoanProvider.TAKOTAKO], fee: 9n }
+  },
+  [Chain.BASE]: {
+    [FlashLoanProvider.BALANCER_V2]: { id: FLASH_LOAN_IDS[FlashLoanProvider.BALANCER_V2], fee: 0n },
+    [FlashLoanProvider.BALANCER_V3]: { id: FLASH_LOAN_IDS[FlashLoanProvider.BALANCER_V3], fee: 0n },
+    [FlashLoanProvider.AAVE_V3]: { id: FLASH_LOAN_IDS[FlashLoanProvider.AAVE_V3], fee: 5n },
+    [FlashLoanProvider.UNISWAP_V4]: { id: FLASH_LOAN_IDS[FlashLoanProvider.UNISWAP_V4], fee: 0n },
+    [FlashLoanProvider.GRANARY]: { id: FLASH_LOAN_IDS[FlashLoanProvider.GRANARY], fee: 9n },
+    [FlashLoanProvider.ZEROLEND]: { id: FLASH_LOAN_IDS[FlashLoanProvider.ZEROLEND], fee: 0n },
+    [FlashLoanProvider.AVALON]: { id: FLASH_LOAN_IDS[FlashLoanProvider.AVALON], fee: 5n },
+    [FlashLoanProvider.MORPHO]: { id: FLASH_LOAN_IDS[FlashLoanProvider.MORPHO], fee: 0n }
+  },
+  [Chain.OP_MAINNET]: {
+    [FlashLoanProvider.BALANCER_V2]: { id: FLASH_LOAN_IDS[FlashLoanProvider.BALANCER_V2], fee: 0n },
+    [FlashLoanProvider.BALANCER_V3]: { id: FLASH_LOAN_IDS[FlashLoanProvider.BALANCER_V3], fee: 0n },
+    [FlashLoanProvider.AAVE_V3]: { id: FLASH_LOAN_IDS[FlashLoanProvider.AAVE_V3], fee: 5n },
+    [FlashLoanProvider.UNISWAP_V4]: { id: FLASH_LOAN_IDS[FlashLoanProvider.UNISWAP_V4], fee: 0n },
+    [FlashLoanProvider.MORPHO]: { id: FLASH_LOAN_IDS[FlashLoanProvider.MORPHO], fee: 0n },
+    [FlashLoanProvider.GRANARY]: { id: FLASH_LOAN_IDS[FlashLoanProvider.GRANARY], fee: 9n }
+  },
+  [Chain.HEMI_NETWORK]: {
+    [FlashLoanProvider.LENDOS]: { id: FLASH_LOAN_IDS[FlashLoanProvider.LENDOS], fee: 5n },
+    [FlashLoanProvider.ZEROLEND]: { id: FLASH_LOAN_IDS[FlashLoanProvider.ZEROLEND], fee: 0n }
+  }
+};
+var DEFAULT_PROVIDER_PER_CHAIN = {
+  [Chain.MANTLE]: FlashLoanProvider.LENDLE,
+  [Chain.POLYGON_MAINNET]: FlashLoanProvider.BALANCER_V2,
+  [Chain.TAIKO_ALETHIA]: FlashLoanProvider.MERIDIAN,
+  [Chain.ARBITRUM_ONE]: FlashLoanProvider.BALANCER_V2,
+  [Chain.OP_MAINNET]: FlashLoanProvider.MORPHO,
+  [Chain.BASE]: FlashLoanProvider.MORPHO,
+  [Chain.HEMI_NETWORK]: FlashLoanProvider.ZEROLEND
+};
+var FLASH_PROVIDERS_WITHOUT_FEE = [
+  FlashLoanProvider.BALANCER_V2,
+  FlashLoanProvider.MORPHO,
+  FlashLoanProvider.BALANCER_V3,
+  FlashLoanProvider.UNISWAP_V4
+];
+var SwapEncoder;
+((SwapEncoder2) => {
+  function encodeSwapCall(swapParams, additionalData) {
+    switch (swapParams.dexId) {
+      case DexTypeMappings.UNISWAP_V3_ID:
+      case DexTypeMappings.IZI_ID:
+        return encodePacked(
+          ["uint8", "uint16", "uint16", "bytes"],
+          [
+            swapParams.forkId,
+            swapParams.fee,
+            ...mapConfigWithCallbackData(additionalData)
+          ]
+        );
+      case DexTypeMappings.UNISWAP_V2_ID:
+      case DexTypeMappings.UNISWAP_V2_FOT_ID:
+        return encodePacked(
+          ["uint16", "uint8", "uint16", "bytes"],
+          [
+            swapParams.feeDenom,
+            swapParams.forkId,
+            ...mapConfigWithCallbackData(additionalData)
+          ]
+        );
+      case DexTypeMappings.LB_ID:
+        return encodePacked(
+          ["uint8", "uint8"],
+          [
+            swapParams.swapForY ? 1 : 0,
+            additionalData.payConfig
+          ]
+        );
+      case DexTypeMappings.SYNC_SWAP_ID:
+      case DexTypeMappings.GMX_ID:
+      case DexTypeMappings.WOO_FI_ID:
+      case DexTypeMappings.KTX_ID:
+        return encodePacked(
+          ["uint8"],
+          [
+            additionalData.payConfig
+          ]
+        );
+      case DexTypeMappings.DODO_ID:
+        return encodePacked(
+          ["uint8", "uint16", "uint16", "bytes"],
+          [
+            swapParams.sellQuote,
+            swapParams.index,
+            ...mapConfigWithCallbackData(additionalData)
+          ]
+        );
+      case DexTypeMappings.CURVE_FORK_ID:
+      case DexTypeMappings.CURVE_RECEIVED_ID:
+      case DexTypeMappings.CURVE_V1_STANDARD_ID:
+        return encodePacked(
+          ["uint8", "uint8", "uint8", "uint16"],
+          [
+            swapParams.indexIn,
+            swapParams.indexOut,
+            swapParams.selectorId,
+            additionalData.payConfig
+          ]
+        );
+      case DexTypeMappings.UNISWAP_V4_ID:
+      case DexTypeMappings.BALANCER_V3_ID:
+      case DexTypeMappings.ERC4626_ID:
+      case DexTypeMappings.ASSET_WRAP_ID:
+      case DexTypeMappings.BALANCER_V2_ID:
+      default:
+        throw new Error("Not yet implemented");
+    }
+  }
+  SwapEncoder2.encodeSwapCall = encodeSwapCall;
+  function mapConfigWithCallbackData(additionalData) {
+    if (!additionalData.callbackData) return [additionalData.payConfig, "0x"];
+    if (additionalData.payConfig < 2 && additionalData.callbackData.length / 2 - 1 > 2) throw new Error("Invalid config for callback");
+    const { payConfig, callbackData } = additionalData;
+    return [
+      payConfig === DexPayConfig.FLASH ? callbackData.length / 2 - 1 : payConfig,
+      payConfig === DexPayConfig.FLASH ? callbackData : "0x"
+    ];
+  }
+})(SwapEncoder || (SwapEncoder = {}));
+
+// src/evm/spot/index.ts
+function encodeSwap(trade, pool, receiver, hopIndex, splitIndex, payConfig, fot = false, permit2 = false) {
+  const path = trade.swaps[splitIndex].route.path;
+  const tokenOut = path[hopIndex + 1] ? path[hopIndex + 1].address : trade.outputAmount.currency.address;
+  const poolSpecificData = SwapEncoder.encodeSwapCall(pool.swapParams, {
+    // for fot, we override the pay config when using permit2
+    payConfig: fot && permit2 ? 1 : payConfig
+  });
+  return encodePacked$1(
+    ["address", "address", "uint8", "address", "bytes"],
+    [
+      tokenOut,
+      receiver,
+      // override dex for FOT to Uniswap V2 type
+      fot ? DexTypeMappings.UNISWAP_V2_FOT_ID : pool.swapParams.dexId,
+      pool.address,
+      poolSpecificData
+    ]
+  );
+}
+function processTrade(trade, slippageTolerance, receiver, composerAddress, chainId, isWrapRequired = false, isUnwrapRequired = false, isFunded = false, fot = false, permit2 = false) {
+  if (!trade) throw new Error("No trade to process");
+  if (CurrencyUtils.isNativeAmount(trade.inputAmount) && CurrencyUtils.isNativeAmount(trade.outputAmount)) {
+    throw new Error("Native in and out");
+  }
+  const numSplits = trade.swaps.length;
+  const splitData = getSplits(
+    CurrencyUtils.getAmount(trade.inputAmount),
+    trade.swaps.map((swap) => BigInt(swap.inputAmount.amount))
+  );
+  let swapCalldata = swapHead(
+    CurrencyUtils.getAmount(trade.inputAmount),
+    CurrencyUtils.getAmount(minimumAmountOutFromTrade(trade, slippageTolerance, 0 /* EXACT_INPUT */)),
+    trade.inputAmount.currency.address
+    //
+  );
+  if (isWrapRequired) {
+    swapCalldata = attachBranch(swapCalldata, 1n, 0n, "0x");
+    swapCalldata = attachBranch(swapCalldata, 0n, 0n, "0x");
+    swapCalldata = encodeWrapperSwap(
+      swapCalldata,
+      getWethAddress(chainId),
+      composerAddress,
+      // receiver is self in this case
+      WrapOperation.NATIVE,
+      DexPayConfig.PRE_FUND
+      // this is ignored as native always needs to be in the contract
+    );
+  }
+  if (isUnwrapRequired) {
+    swapCalldata = attachBranch(swapCalldata, 1n, 0n, "0x");
+  }
+  if (numSplits > 1) {
+    swapCalldata = attachBranch(swapCalldata, 0n, BigInt(numSplits - 1), splitData);
+  }
+  for (let splitIndex = 0; splitIndex < numSplits; splitIndex++) {
+    const swap = trade.swaps[splitIndex];
+    const numHops = swap.route.pools.length;
+    const adjustedHops = getAdjustedHopCount(swap, numHops);
+    if (adjustedHops > 1) {
+      swapCalldata = attachBranch(swapCalldata, BigInt(adjustedHops - 1), 0n, "0x");
+    }
+    let lastReceiver = "0x";
+    for (let hopIndex = 0; hopIndex < numHops; hopIndex++) {
+      const pool = swap.route.pools[hopIndex];
+      const currentToken = swap.route.path[hopIndex];
+      const isFirstHop = hopIndex === 0;
+      const isLastHop = hopIndex === numHops - 1;
+      if (hopIndex > 0 && CurrencyUtils.isNative(currentToken) && !supportsNativeToken(pool.protocol)) {
+        const wrapReceiver = isPreFundableDex(pool.protocol) ? pool.address : composerAddress;
+        swapCalldata = attachBranch(swapCalldata, 0n, 0n, "0x");
+        swapCalldata = encodeWrapperSwap(
+          swapCalldata,
+          currentToken.address,
+          wrapReceiver,
+          WrapOperation.NATIVE,
+          isFirstHop && !isFunded ? DexPayConfig.CALLER_PAYS : DexPayConfig.CONTRACT_PAYS
+          // if it is the first hop then caller pays, otherwise contract pays
+        );
+      }
+      let hopReceiver;
+      if (!isLastHop && swap.route.pools[hopIndex + 1] && isPreFundableDex(swap.route.pools[hopIndex + 1].protocol)) {
+        hopReceiver = swap.route.pools[hopIndex + 1].address;
+      } else if (!isLastHop) {
+        hopReceiver = composerAddress;
+      } else if (CurrencyUtils.isNativeAmount(trade.outputAmount)) {
+        hopReceiver = composerAddress;
+      } else {
+        hopReceiver = receiver;
+      }
+      swapCalldata = attachBranch(swapCalldata, 0n, 0n, "0x");
+      swapCalldata += encodeSwap(
+        trade,
+        pool,
+        hopReceiver,
+        hopIndex,
+        splitIndex,
+        // the payer is based on
+        // 1) beginning -> caller pays if no wrap
+        // rest -> pre-fund based on last receiver, contract otherwise
+        isFirstHop && !isWrapRequired && !isFunded ? DexPayConfig.CALLER_PAYS : lastReceiver === pool.address ? DexPayConfig.PRE_FUND : DexPayConfig.CONTRACT_PAYS,
+        isFirstHop && fot,
+        permit2
+      ).slice(2);
+      lastReceiver = hopReceiver;
+    }
+  }
+  return swapCalldata;
+}
+var ComposerSpot;
+((ComposerSpot2) => {
+  function encodeExternalCallForCallForwarder(params, approvalData, postCalldata = "0x") {
+    const { target, calldata, value = "0", useSelfBalance = false, callForwarder } = params;
+    let additionalCalldata = "0x";
+    if (approvalData) {
+      additionalCalldata = encodeApprove(approvalData.token, approvalData.target);
+    }
+    return encodeExternalCall(
+      // call callForwarder
+      callForwarder,
+      value,
+      useSelfBalance,
+      packCommands([
+        additionalCalldata,
+        // approve if needed
+        encodeExternalCall(target, BigInt(value), useSelfBalance, calldata),
+        // call to aggregator
+        postCalldata
+        // whatever is needed afterwards on the forwarder level
+      ])
+    );
+  }
+  ComposerSpot2.encodeExternalCallForCallForwarder = encodeExternalCallForCallForwarder;
+  function createSweepCalldata(tokenAddress, receiver) {
+    return encodeSweep(tokenAddress, receiver, 0n, SweepType.VALIDATE);
+  }
+  ComposerSpot2.createSweepCalldata = createSweepCalldata;
+  function composeSpotCalldata(params) {
+    const { trade, slippageTolerance, receiver, skipFunding = false } = params;
+    const chainId = trade.inputAmount.currency.chainId;
+    const composerAddress = params.composer ?? getComposerAddress(chainId);
+    if (trade.interfaceTrade) {
+      let swapCalldata = "0x";
+      let permitCalldata = "0x";
+      let transferCalldata = "0x";
+      if (!skipFunding) {
+        const inAddress = trade.inputAmount.currency.address;
+        if (params.permitData) {
+          if (CurrencyUtils.isNativeAmount(trade.inputAmount)) throw new Error("Cannot permit native");
+          permitCalldata = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), inAddress, params.permitData.data);
+          if (params.permitData.isPermit2 && !params.fotInput) {
+            transferCalldata = encodePermit2TransferFrom(inAddress, composerAddress, BigInt(trade.inputAmount.amount));
+          }
+        }
+      }
+      let isUnwrapRequired = needsUnwrap(trade.interfaceTrade, chainId);
+      let isWrapRequired = needsWrap(trade.interfaceTrade);
+      swapCalldata = processTrade(
+        trade.interfaceTrade,
+        slippageTolerance,
+        receiver,
+        composerAddress,
+        chainId,
+        isWrapRequired,
+        isUnwrapRequired,
+        // we assume that the swap is funded in case we use permit2 or explicitly 
+        // parameterize it like that
+        params.permitData?.isPermit2 || skipFunding,
+        params.fotInput,
+        params.permitData?.isPermit2
+      );
+      if (isUnwrapRequired) {
+        swapCalldata = attachBranch(swapCalldata, 0n, 0n, "0x");
+        swapCalldata = encodeWrapperSwap(
+          swapCalldata,
+          trade.outputAmount.currency.address,
+          receiver,
+          WrapOperation.NATIVE,
+          DexPayConfig.CONTRACT_PAYS
+        );
+      }
+      return {
+        calldata: packCommands([permitCalldata, transferCalldata, swapCalldata]),
+        value: CurrencyUtils.isNativeAmount(trade.inputAmount) ? CurrencyUtils.getAmount(trade.inputAmount) : 0n
+      };
+    } else {
+      return handleExternalAggregator(params);
+    }
+  }
+  ComposerSpot2.composeSpotCalldata = composeSpotCalldata;
+  function handleExternalAggregator(params) {
+    if (!params.externalCall) throw new Error("External call data required");
+    const { trade, receiver, skipFunding = false } = params;
+    const { inputAmount } = trade;
+    let transferCalldata = "0x";
+    let permitCalldata = "0x";
+    if (!CurrencyUtils.isNativeAmount(inputAmount)) {
+      if (!skipFunding) {
+        if (params.permitData) {
+          permitCalldata = encodePermit(
+            BigInt(PermitIds.TOKEN_PERMIT),
+            inputAmount.currency.address,
+            params.permitData.data
+          );
+          if (params.permitData.isPermit2) {
+            transferCalldata = encodePermit2TransferFrom(
+              inputAmount.currency.address,
+              params.externalCall.callForwarder,
+              BigInt(inputAmount.amount)
+            );
+          } else {
+            transferCalldata = encodeTransferIn(
+              inputAmount.currency.address,
+              params.externalCall.callForwarder,
+              BigInt(inputAmount.amount)
+            );
+          }
+        } else {
+          transferCalldata = encodeTransferIn(
+            inputAmount.currency.address,
+            params.externalCall.callForwarder,
+            BigInt(inputAmount.amount)
+          );
+        }
+      }
+    } else {
+      if (params.permitData) throw new Error("Cannot permit native");
+    }
+    let approvalData = void 0;
+    if (trade.approvalTarget && !CurrencyUtils.isNative(trade.inputAmount.currency)) {
+      approvalData = {
+        token: trade.inputAmount.currency.address,
+        target: trade.approvalTarget
+      };
+    }
+    let sweepOutputCalldata = "0x";
+    if (trade.sweepToReceiver) {
+      sweepOutputCalldata = createSweepCalldata(trade.outputAmount.currency.address, receiver);
+    }
+    let externalCalldata = encodeExternalCallForCallForwarder(params.externalCall, approvalData, sweepOutputCalldata);
+    const sweepInputCalldata = createSweepCalldata(inputAmount.currency.address, receiver);
+    const combinedCalldata = packCommands([
+      permitCalldata,
+      transferCalldata,
+      externalCalldata,
+      sweepInputCalldata
+    ]);
+    return {
+      calldata: combinedCalldata,
+      value: CurrencyUtils.isNativeAmount(inputAmount) ? CurrencyUtils.getAmount(inputAmount) : 0n
+    };
+  }
+})(ComposerSpot || (ComposerSpot = {}));
+
+// src/evm/types/index.ts
+var TradeType = /* @__PURE__ */ ((TradeType2) => {
+  TradeType2[TradeType2["EXACT_INPUT"] = 0] = "EXACT_INPUT";
+  TradeType2[TradeType2["EXACT_OUTPUT"] = 1] = "EXACT_OUTPUT";
+  return TradeType2;
+})(TradeType || {});
+
+// src/evm/lending/types/index.ts
+var AaveInterestMode = /* @__PURE__ */ ((AaveInterestMode2) => {
+  AaveInterestMode2[AaveInterestMode2["NONE"] = 0] = "NONE";
+  AaveInterestMode2[AaveInterestMode2["STABLE"] = 1] = "STABLE";
+  AaveInterestMode2[AaveInterestMode2["VARIABLE"] = 2] = "VARIABLE";
+  return AaveInterestMode2;
+})(AaveInterestMode || {});
+var COMPOUND_V2_LENDERS = [
+  Lender.COMPOUND_V2,
+  Lender.OVIX,
+  Lender.VENUS,
+  Lender.VENUS_ETH,
+  Lender.VENUS_BNB,
+  Lender.VENUS_BTC,
+  Lender.VENUS_MEME,
+  Lender.VENUS_DEFI,
+  Lender.VENUS_GAMEFI,
+  Lender.VENUS_STABLE,
+  Lender.VENUS_TRON,
+  Lender.VENUS_ETHENA,
+  Lender.VENUS_CURVE,
+  Lender.SEGMENT,
+  Lender.ENCLABS,
+  Lender.ENCLABS_LST,
+  Lender.ENCLABS_PT_USD,
+  Lender.ENCLABS_PT_ETH,
+  Lender.BENQI,
+  Lender.BENQI_AVALANCE_ECOSYSTEM
+];
+var COMPOUND_V3_LENDERS = [
+  Lender.COMPOUND_V3_USDC,
+  Lender.COMPOUND_V3_USDT,
+  Lender.COMPOUND_V3_USDE,
+  Lender.COMPOUND_V3_USDBC,
+  Lender.COMPOUND_V3_USDC_E,
+  Lender.COMPOUND_V3_USDS,
+  Lender.COMPOUND_V3_WETH,
+  Lender.COMPOUND_V3_AERO,
+  Lender.COMPOUND_V3_WSTETH
+];
+var LenderGroups = /* @__PURE__ */ ((LenderGroups2) => {
+  LenderGroups2[LenderGroups2["AaveV2"] = 0] = "AaveV2";
+  LenderGroups2[LenderGroups2["AaveV3"] = 1] = "AaveV3";
+  LenderGroups2[LenderGroups2["CompoundV2"] = 2] = "CompoundV2";
+  LenderGroups2[LenderGroups2["CompoundV3"] = 3] = "CompoundV3";
+  LenderGroups2[LenderGroups2["MorphoBlue"] = 4] = "MorphoBlue";
+  return LenderGroups2;
+})(LenderGroups || {});
+var QuickActionType = /* @__PURE__ */ ((QuickActionType2) => {
+  QuickActionType2["Deposit"] = "Deposit";
+  QuickActionType2["Withdraw"] = "Withdraw";
+  QuickActionType2["Borrow"] = "Borrow";
+  QuickActionType2["Repay"] = "Repay";
+  return QuickActionType2;
+})(QuickActionType || {});
+var TransferToLenderType = /* @__PURE__ */ ((TransferToLenderType2) => {
+  TransferToLenderType2[TransferToLenderType2["Amount"] = 0] = "Amount";
+  TransferToLenderType2[TransferToLenderType2["UserBalance"] = 1] = "UserBalance";
+  TransferToLenderType2[TransferToLenderType2["ContractBalance"] = 2] = "ContractBalance";
+  return TransferToLenderType2;
+})(TransferToLenderType || {});
+
+// src/evm/flashloan/utils/lenderUtils.ts
+function isAaveV3Type(lender) {
+  return AAVE_V3_LENDERS.includes(lender);
+}
+function isAaveV2Type(lender) {
+  return AAVE_V2_LENDERS.includes(lender);
+}
+function isAave(lender) {
+  return AAVE_LENDERS.includes(lender);
+}
+function isCompoundV3(lender) {
+  return COMPOUND_V3_LENDERS.includes(lender);
+}
+function isCompoundV2(lender) {
+  return COMPOUND_V2_LENDERS.includes(lender);
+}
+var getLenderAssets = (chainId, lendingProtocol = Lender.AAVE_V3) => {
+  if (!chainId) return [];
+  if (isAave(lendingProtocol)) return AAVE_STYLE_RESERVE_ASSETS[lendingProtocol]?.[chainId] ?? [];
+  if (isCompoundV3(lendingProtocol)) return COMPOUND_STYLE_RESERVE_ASSETS[lendingProtocol]?.[chainId] ?? [];
+  if (lendingProtocol === Lender.INIT) return INIT_STYLE_RESERVE_ASSETS[lendingProtocol]?.[chainId] ?? [];
+  return [];
+};
+function flashLoanIsFree(provider) {
+  return provider && FLASH_PROVIDERS_WITHOUT_FEE.includes(provider);
+}
+function flashLoanIsFromLender(provider) {
+  return provider && Object.values(Lender).includes(provider);
+}
+function getFlashLoanProviderAndFeePerChain(chainId, preSelectedSource, lenderInQuestion, assetToFlash = void 0) {
+  const providers = FLASH_LOAN_PROVIDERS[chainId];
+  if (preSelectedSource && flashLoanIsFree(preSelectedSource)) {
+    return {
+      flashLoanData: providers[preSelectedSource],
+      flashLoanProvider: preSelectedSource
+    };
+  }
+  const defaultProvider = DEFAULT_PROVIDER_PER_CHAIN[chainId];
+  if (flashLoanIsFree(defaultProvider)) {
+    if (isAaveV3Type(lenderInQuestion) && providers[lenderInQuestion]) {
+      return {
+        flashLoanData: providers[lenderInQuestion],
+        flashLoanProvider: lenderInQuestion
+      };
+    }
+    const aaveAssets = getLenderAssets(chainId, Lender.AAVE_V3);
+    if (assetToFlash && aaveAssets.includes(assetToFlash)) {
+      return {
+        flashLoanData: providers[FlashLoanProvider.AAVE_V3],
+        flashLoanProvider: FlashLoanProvider.AAVE_V3
+      };
+    } else {
+      if (isAave(lenderInQuestion)) {
+        return {
+          flashLoanData: providers[lenderInQuestion],
+          flashLoanProvider: lenderInQuestion
+        };
+      }
+    }
+  }
+  return {
+    flashLoanData: providers[defaultProvider],
+    flashLoanProvider: defaultProvider
+  };
+}
+function adjustForFlashLoanFee(amount, fee) {
+  if (BigInt(fee) === 0n) return amount.toString();
+  return (BigInt(amount) * (BigInt(fee) + BPS) / BPS + 1n).toString();
+}
+var BALANCER_V2S = Object.keys(BALANCER_V2_FORKS);
+var MORPHOS = Object.keys(MORPHO_BLUE_POOL_DATA);
+function createFlashLoan(provider, data) {
+  if (provider === "None" /* NONE */) {
+    throw new Error("No flash loan provider selected");
+  }
+  if (SingletonTypeFlashLoanProvider.includes(provider) && data.type === "Singleton") {
+    switch (provider) {
+      case FlashLoanProvider.BALANCER_V3:
+        return encodeBalancerV3FlashLoan(
+          data.singleton,
+          data.poolId,
+          data.asset,
+          data.receiver,
+          BigInt(data.amount),
+          data.data
+        );
+      case FlashLoanProvider.UNISWAP_V4:
+        return encodeUniswapV4FlashLoan(
+          data.singleton,
+          data.poolId,
+          data.asset,
+          data.receiver,
+          BigInt(data.amount),
+          data.data
+        );
+      default:
+        throw new Error("Invalid singleton type flash loan provider");
+    }
+  }
+  if (data.type === "Pool") {
+    if (BALANCER_V2S.includes(provider)) {
+      return encodeBalancerV2FlashLoan(data.asset, BigInt(data.amount), data.flashloanId, data.data);
+    }
+    if (AAVE_LENDERS.includes(provider) && data.pool && data.poolType) {
+      return encodeFlashLoan(data.asset, BigInt(data.amount), data.pool, data.poolType, data.flashloanId, data.data);
+    }
+    if (MORPHOS.includes(provider) && data.pool && data.poolType !== void 0) {
+      return encodeFlashLoan(data.asset, BigInt(data.amount), data.pool, data.poolType, data.flashloanId, data.data);
+    }
+  }
+  throw new Error(`Invalid flash loan provider: ${provider}`);
+}
+function getFlashLoanType(provider) {
+  if (SingletonTypeFlashLoanProvider.includes(provider)) {
+    return "Singleton";
+  }
+  return "Pool";
+}
+function getProviderAddressForSingletonType(provider, chainId) {
+  switch (provider) {
+    case FlashLoanProvider.BALANCER_V3:
+      const b3 = BALANCER_V3_FORKS[DexProtocol.BALANCER_V3];
+      return {
+        singleton: b3.vault[chainId],
+        poolId: BigInt(b3.forkId)
+      };
+    case FlashLoanProvider.UNISWAP_V4:
+      const u4 = UNISWAP_V4_FORKS[DexProtocol.UNISWAP_V4];
+      return {
+        singleton: u4.pm[chainId],
+        poolId: BigInt(u4.forkId)
+      };
+    default:
+      throw new Error(`Invalid flash loan provider: ${provider}`);
+  }
+}
+
+// src/evm/flashloan/consts/flashLoanProvider.ts
+function needsFlashLoanAdjustment(provider) {
+  if (!provider) return false;
+  return !flashLoanIsFree(provider);
+}
+var BPS = 10000n;
+var NO_CONTEXT = {
+  callIn: "0x",
+  callOut: "0x",
+  manualFlashLoanRepayTransfer: "0x",
+  cleanup: "0x"
+};
+var DEBASED_NO_CONTEXT = {
+  callIn: [],
+  callOut: [],
+  manualFlashLoanRepayTransfer: "0x",
+  cleanup: "0x"
+};
+function handleRepay(params) {
+  const { isMaxOut, lender, account, repayAmount, marginData, tokenOut, context, morphoParams } = params;
+  const lenderData = getLenderData(lender, tokenOut.chainId, tokenOut.address);
+  if (isMaxOut) {
+    let amount = "0";
+    let transferToLenderType = 1 /* UserBalance */;
+    if (isAave(lender)) {
+      amount = adjustAmountForAll(repayAmount, true).toString();
+      transferToLenderType = 0 /* Amount */;
+    }
+    context.callIn = ComposerLendingActions.createRepay({
+      receiver: account,
+      amount: { asset: tokenOut.address, amount: BigInt(amount), chainId: tokenOut.chainId },
+      lender,
+      aaveInterestMode: marginData.irModeOut,
+      morphoParams,
+      transferType: transferToLenderType,
+      useOverride: {
+        pool: getPool(lenderData),
+        collateralToken: getCollateralToken(lenderData),
+        debtToken: getDebtToken(lenderData)
+      }
+    });
+    context.cleanup = encodeSweep(tokenOut.address, account, 0n, SweepType.VALIDATE);
+  } else {
+    context.callIn = ComposerLendingActions.createRepay({
+      receiver: account,
+      amount: { asset: tokenOut.address, amount: BigInt(repayAmount), chainId: tokenOut.chainId },
+      lender,
+      aaveInterestMode: marginData.irModeOut,
+      morphoParams,
+      transferType: 2 /* ContractBalance */,
+      useOverride: {
+        pool: getPool(lenderData),
+        collateralToken: getCollateralToken(lenderData),
+        debtToken: getDebtToken(lenderData)
+      }
+    });
+  }
+  return context;
+}
+function handleWithdraw(params) {
+  const {
+    isMaxIn,
+    lender,
+    account,
+    tokenIn,
+    intermediate,
+    flashRepayBalanceHolder,
+    flashLoanAmountWithFee,
+    context,
+    morphoParams,
+    permitData
+  } = params;
+  const lenderData = getLenderData(lender, tokenIn.chainId, tokenIn.address);
+  let permitCall = "0x";
+  if (permitData && permitData.data !== "0x") {
+    const permitAsset = getPermitAsset(lenderData.group, lenderData);
+    if (permitAsset) {
+      permitCall = encodePermit(
+        BigInt(isAaveType(lenderData.group) ? PermitIds.TOKEN_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
+        permitAsset,
+        permitData.data
+      );
+    }
+  }
+  const useOverride = morphoParams ? void 0 : {
+    pool: getPool(lenderData),
+    collateralToken: getCollateralToken(lenderData),
+    isBase: getIsBaseToken(lenderData, tokenIn.address)
+  };
+  if (isMaxIn) {
+    const withdrawCalldata = ComposerLendingActions.createWithdraw({
+      receiver: intermediate,
+      // intermediate receives funds
+      amount: { asset: tokenIn.address, amount: 0n, chainId: tokenIn.chainId },
+      // amount is ignored in this case
+      lender,
+      transferType: 1 /* UserBalance */,
+      morphoParams,
+      useOverride
+    });
+    context.callOut = packCommands([permitCall, withdrawCalldata]);
+    context.cleanup = encodeSweep(tokenIn.address, account, 0n, SweepType.VALIDATE);
+    if (flashRepayBalanceHolder !== intermediate) {
+      context.manualFlashLoanRepayTransfer = encodeSweep(
+        tokenIn.address,
+        flashRepayBalanceHolder,
+        BigInt(flashLoanAmountWithFee),
+        SweepType.AMOUNT
+      );
+    }
+  } else {
+    const withdrawCalldata = ComposerLendingActions.createWithdraw({
+      receiver: flashRepayBalanceHolder,
+      amount: { asset: tokenIn.address, amount: BigInt(flashLoanAmountWithFee), chainId: tokenIn.chainId },
+      lender,
+      transferType: 0 /* Amount */,
+      morphoParams,
+      useOverride
+    });
+    context.callOut = packCommands([permitCall, withdrawCalldata]);
+  }
+  return context;
+}
+function buildMarginInnerCall(trade, account, marginData, inLenderData, outLenderData, flashRepayBalanceHolder, intermediate, flashLoanAmountWithFee, isMaxIn, isMaxOut) {
+  const { lender, morphoParams, permitData } = marginData;
+  let context;
+  const tokenIn = getAssetInFromTrade(trade);
+  const tokenOut = getAssetOutFromTrade(trade);
+  switch (marginData.marginTradeType) {
+    case "Open" /* Open */: {
+      context = { ...NO_CONTEXT };
+      context.callIn = ComposerLendingActions.createDeposit({
+        receiver: account,
+        amount: { asset: tokenOut, amount: 0n, chainId: trade.outputAmount.currency.chainId },
+        lender,
+        morphoParams,
+        transferType: 2 /* ContractBalance */,
+        useOverride: morphoParams ? void 0 : {
+          pool: getPool(outLenderData)
+        }
+      });
+      let borrowPermitCall = "0x";
+      if (permitData && permitData.data !== "0x") {
+        const permitAsset = getPermitAsset(inLenderData.group, inLenderData, marginData.irModeIn);
+        if (permitAsset) {
+          borrowPermitCall = encodePermit(
+            BigInt(isAaveType(inLenderData.group) ? PermitIds.AAVE_V3_CREDIT_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
+            permitAsset,
+            permitData.data
+          );
+        }
+      }
+      const borrowCalldata = ComposerLendingActions.createBorrow({
+        receiver: flashRepayBalanceHolder,
+        amount: {
+          asset: tokenIn,
+          amount: BigInt(flashLoanAmountWithFee),
+          chainId: trade.inputAmount.currency.chainId
+        },
+        lender,
+        aaveInterestMode: marginData.irModeIn,
+        morphoParams,
+        useOverride: morphoParams ? void 0 : {
+          pool: getPool(inLenderData),
+          collateralToken: getCollateralToken(inLenderData)
+        }
+      });
+      context.callOut = packCommands([borrowPermitCall, borrowCalldata]);
+      break;
+    }
+    case "Close" /* Close */: {
+      context = { ...NO_CONTEXT };
+      let repayAmount = 0n;
+      context = handleRepay({
+        isMaxOut,
+        lender,
+        account,
+        repayAmount,
+        marginData,
+        tokenOut: trade.outputAmount.currency,
+        context,
+        morphoParams
+      });
+      context = handleWithdraw({
+        isMaxIn,
+        lender,
+        account,
+        tokenIn: trade.inputAmount.currency,
+        intermediate,
+        flashRepayBalanceHolder,
+        flashLoanAmountWithFee,
+        context,
+        morphoParams,
+        permitData
+      });
+      break;
+    }
+    case "CollateralSwap" /* CollateralSwap */: {
+      context = { ...NO_CONTEXT };
+      context.callIn = ComposerLendingActions.createDeposit({
+        receiver: account,
+        amount: { asset: tokenOut, amount: 0n, chainId: trade.outputAmount.currency.chainId },
+        lender,
+        morphoParams,
+        transferType: 2 /* ContractBalance */,
+        useOverride: morphoParams ? void 0 : {
+          pool: getPool(outLenderData)
+        }
+      });
+      context = handleWithdraw({
+        isMaxIn,
+        lender,
+        account,
+        tokenIn: trade.inputAmount.currency,
+        intermediate,
+        flashRepayBalanceHolder,
+        flashLoanAmountWithFee,
+        context,
+        morphoParams,
+        permitData
+      });
+      break;
+    }
+    case "DebtSwap" /* DebtSwap */: {
+      context = { ...NO_CONTEXT };
+      let repayAmount = 0n;
+      context = handleRepay({
+        isMaxOut,
+        lender,
+        account,
+        repayAmount,
+        marginData,
+        tokenOut: trade.outputAmount.currency,
+        context,
+        morphoParams
+      });
+      let borrowPermitCall = "0x";
+      if (permitData && permitData.data !== "0x") {
+        const permitAsset = getPermitAsset(inLenderData.group, inLenderData, marginData.irModeIn);
+        if (permitAsset) {
+          borrowPermitCall = encodePermit(
+            BigInt(isAaveType(inLenderData.group) ? PermitIds.AAVE_V3_CREDIT_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
+            permitAsset,
+            permitData.data
+          );
+        }
+      }
+      const borrowCalldata = ComposerLendingActions.createBorrow({
+        receiver: flashRepayBalanceHolder,
+        amount: {
+          asset: tokenIn,
+          amount: BigInt(flashLoanAmountWithFee),
+          chainId: trade.inputAmount.currency.chainId
+        },
+        lender,
+        aaveInterestMode: marginData.irModeIn,
+        morphoParams,
+        useOverride: morphoParams ? void 0 : {
+          pool: getPool(inLenderData),
+          collateralToken: getCollateralToken(inLenderData)
+        }
+      });
+      context.callOut = packCommands([borrowPermitCall, borrowCalldata]);
+      break;
+    }
+    default:
+      throw new Error("unexpected margin trade type");
+  }
+  let safetySweep = "0x";
+  if (marginData.marginTradeType === "Close" /* Close */ || marginData.marginTradeType === "DebtSwap" /* DebtSwap */) {
+    safetySweep = encodeSweep(
+      trade.outputAmount.currency.address,
+      account,
+      0n,
+      SweepType.VALIDATE
+    );
+  }
+  return {
+    context,
+    safetySweep
+  };
+}
+
+// src/evm/flashloan/margin/plain.ts
+var ComposerMargin;
+((ComposerMargin2) => {
+  function createMarginFlashLoan({
+    trade,
+    externalCall,
+    account,
+    marginData,
+    isMaxIn = false,
+    isMaxOut = false,
+    // these are poarameters that allow a UI to override details
+    composerOverride = void 0,
+    flashInfoOverride = void 0
+  }) {
+    if (!trade || !externalCall || !marginData || !account) return "0x";
+    const composerAddress = composerOverride ?? ONE_DELTA_COMPOSER[trade.inputAmount.currency.chainId];
+    if (isMaxIn && isMaxOut) throw new Error("Cannot be maxIn and maxOut at the same time");
+    const tokenIn = getAssetInFromTrade(trade);
+    const tokenOut = getAssetOutFromTrade(trade);
+    const chainId = getChainIdFromTrade(trade);
+    const { lender } = marginData;
+    const outLenderData = getLenderData(lender, chainId, tokenOut);
+    const inLenderData = getLenderData(lender, chainId, tokenIn);
+    const intermediate = composerAddress;
+    let flashLoanData;
+    let flashLoanProvider;
+    let flashRepayBalanceHolder;
+    let flashPoolType;
+    let flashPool;
+    if (flashInfoOverride) {
+      const { data, provider, balanceHolder, providerAddress, poolType } = flashInfoOverride;
+      flashLoanData = data;
+      flashLoanProvider = provider;
+      flashPoolType = poolType;
+      flashRepayBalanceHolder = balanceHolder ?? (poolType === FlashLoanIds.BALANCER_V2 ? providerAddress : composerAddress);
+      flashPool = providerAddress;
+    } else {
+      const data = getFlashLoanProviderAndFeePerChain(chainId, trade.flashLoanSource, lender, tokenIn.toLowerCase());
+      const flashInfo = getFlashInfo(data.flashLoanProvider, chainId, composerAddress);
+      flashPoolType = flashInfo.poolType;
+      flashLoanData = flashInfo.data;
+      flashLoanProvider = flashInfo.provider;
+      flashPool = flashInfo.providerAddress;
+      flashRepayBalanceHolder = flashInfo.balanceHolder;
+    }
+    const inputReference = trade.inputAmount.amount;
+    const flashLoanAmountWithFee = adjustForFlashLoanFee(inputReference, flashLoanData.fee);
+    const { context, safetySweep } = buildMarginInnerCall(
+      trade,
+      account,
+      marginData,
+      inLenderData,
+      outLenderData,
+      flashRepayBalanceHolder,
+      intermediate,
+      flashLoanAmountWithFee,
+      isMaxIn,
+      isMaxOut
+    );
+    let approvalData = void 0;
+    if (trade.approvalTarget && !CurrencyUtils.isNative(trade.inputAmount.currency)) {
+      approvalData = {
+        token: trade.inputAmount.currency.address,
+        target: trade.approvalTarget
+      };
+    }
+    let sweepOutputCalldata = "0x";
+    if (trade.sweepToReceiver) {
+      sweepOutputCalldata = ComposerSpot.createSweepCalldata(
+        trade.outputAmount.currency.address,
+        composerAddress
+      );
+    }
+    const swapCall = ComposerSpot.encodeExternalCallForCallForwarder(
+      externalCall,
+      approvalData,
+      sweepOutputCalldata
+    );
+    const flashFundsReceiver = externalCall.callForwarder;
+    const flashLoanType = getFlashLoanType(flashLoanProvider);
+    let flashData;
+    if (flashLoanType === "Singleton") {
+      flashData = {
+        type: "Singleton",
+        receiver: flashFundsReceiver,
+        ...getProviderAddressForSingletonType(flashLoanProvider, chainId)
+      };
+    } else {
+      flashData = {
+        type: "Pool",
+        pool: flashPool,
+        poolType: flashPoolType,
+        flashloanId: FLASH_LOAN_IDS[flashLoanProvider]
+      };
+    }
+    let transferToCallForwarder = "0x";
+    if (flashData.type === "Pool") {
+      transferToCallForwarder = encodeSweep(
+        tokenIn,
+        flashFundsReceiver,
+        BigInt(inputReference),
+        SweepType.AMOUNT
+      );
+    }
+    const flashloanData = packCommands([
+      transferToCallForwarder,
+      swapCall,
+      // receive funds in tokenIn and swap to tokenOut
+      context.callIn,
+      // handle tokenOut (repay/deposit)
+      context.callOut,
+      // pull tokenIn from lender (borrow/withdraw) and repay flash loan
+      context.manualFlashLoanRepayTransfer,
+      // can be 0x
+      safetySweep
+    ]);
+    const flashloanCalldata = createFlashLoan(flashLoanProvider, {
+      asset: tokenIn,
+      amount: inputReference.toString(),
+      data: flashloanData,
+      ...flashData
+    });
+    return packCommands([flashloanCalldata, context.cleanup]);
+  }
+  ComposerMargin2.createMarginFlashLoan = createMarginFlashLoan;
+})(ComposerMargin || (ComposerMargin = {}));
+function encodeSwap2(pool, receiver, additionalData) {
+  const tokenOut = pool.tokenOut.address;
+  const poolSpecificData = SwapEncoder.encodeSwapCall(pool.swapParams, additionalData);
+  return encodePacked$1(
+    ["address", "address", "uint8", "address", "bytes"],
+    [tokenOut, receiver, pool.swapParams.dexId, pool.address, poolSpecificData]
+  );
+}
+function nestFlashSwap(swaps, index, composerAddress, slippageTolerance, innerCall) {
+  if (swaps.length == index) return innerCall;
+  const { receiver, pool, remainingPath, preFunded, minimumOut } = getPoolReceiverData(swaps[index], composerAddress, slippageTolerance);
+  const pathCall = !!remainingPath ? processPathSlice(
+    preFunded,
+    remainingPath,
+    composerAddress,
+    CurrencyUtils.getAmount(minimumOut)
+  ) : "0x";
+  let calldata = attachBranch(
+    swapHead(
+      CurrencyUtils.getAmount(swaps[index].inputAmount),
+      // defined input
+      !!remainingPath ? 1n : CurrencyUtils.getAmount(minimumOut),
+      pool.tokenIn.address
+      //
+    ),
+    0n,
+    0n,
+    "0x"
+    // splits and hops are nested
+  );
+  calldata += encodeSwap2(
+    pool,
+    receiver,
+    {
+      // flash first pool
+      payConfig: DexPayConfig.FLASH,
+      callbackData: packCommands([pathCall, innerCall])
+    }
+  ).slice(2);
+  return nestFlashSwap(
+    swaps,
+    index + 1,
+    // increment to the next swap route
+    composerAddress,
+    slippageTolerance,
+    calldata
+    // we nest the current calldata within the next step
+  );
+}
+function produceInnerCall(trade, composer, account, marginData, isMaxIn, isMaxOut) {
+  const receivers = trade.swaps.map((s) => s.route.pools[0].address);
+  const isSplit = trade.swaps.length > 1;
+  let amount = trade.inputAmount.amount;
+  const tokenIn = getAssetInFromTrade(trade);
+  const tokenOut = getAssetOutFromTrade(trade);
+  const chainId = getChainIdFromTrade(trade);
+  const { lender } = marginData;
+  const outLenderData = getLenderData(lender, chainId, tokenOut);
+  const inLenderData = getLenderData(lender, chainId, tokenIn);
+  const { context, safetySweep } = buildMarginInnerCall(
+    trade,
+    account,
+    marginData,
+    inLenderData,
+    outLenderData,
+    // split or max in: composer receives
+    isSplit || isMaxIn ? composer : receivers[0],
+    composer,
+    // interdediate for max withdraw
+    amount.toString(),
+    // no flash fee
+    isMaxIn,
+    isMaxOut
+  );
+  let poolPayments = "0x";
+  if (isSplit || isMaxIn) {
+    const transfers = receivers.map(
+      (r, i) => {
+        return encodeSweep(tokenIn, r, CurrencyUtils.getAmount(trade.swaps[i].inputAmount), SweepType.AMOUNT);
+      }
+    );
+    poolPayments = packCommands(transfers);
+  }
+  return { context, safetySweep, poolPayments };
+}
+function sliceSwapStep(step) {
+  if (step.route.pools.length === 1) return void 0;
+  const path = step.route.path.slice(1);
+  const pools = step.route.pools.slice(1);
+  return {
+    inputAmount: CurrencyUtils.fromRawAmount(path[0], 0n),
+    outputAmount: step.outputAmount,
+    route: {
+      path,
+      pools
+    }
+  };
+}
+function getPoolReceiverData(step, composer, slippageTolerance) {
+  const preFunded = step.route.pools.length > 1 && isPreFundableDex(step.route.pools[1].protocol);
+  const receiver = preFunded ? step.route.pools[1].address : composer;
+  return {
+    // @ts-ignore
+    receiver,
+    pool: step.route.pools[0],
+    remainingPath: sliceSwapStep(step),
+    preFunded,
+    minimumOut: minimumAmountOutFromTrade(step, slippageTolerance, 0 /* EXACT_INPUT */)
+  };
+}
+function processPathSlice(funded, swap, composerAddress, minimumOut) {
+  const numHops = swap.route.pools.length;
+  const adjustedHops = getAdjustedHopCount(swap, numHops);
+  let swapCalldata = swapHead(
+    0n,
+    // always balanceOf(this)
+    minimumOut,
+    swap.inputAmount.currency.address
+    //
+  );
+  if (adjustedHops > 1) {
+    swapCalldata = attachBranch(swapCalldata, BigInt(adjustedHops - 1), 0n, "0x");
+  }
+  let lastReceiver = "0x";
+  for (let hopIndex = 0; hopIndex < numHops; hopIndex++) {
+    const pool = swap.route.pools[hopIndex];
+    const isFirstHop = hopIndex === 0;
+    const isLastHop = hopIndex === numHops - 1;
+    let hopReceiver;
+    if (!isLastHop && swap.route.pools[hopIndex + 1] && isPreFundableDex(swap.route.pools[hopIndex + 1].protocol)) {
+      hopReceiver = swap.route.pools[hopIndex + 1].address;
+    } else if (!isLastHop) {
+      hopReceiver = composerAddress;
+    } else {
+      hopReceiver = composerAddress;
+    }
+    swapCalldata = attachBranch(swapCalldata, 0n, 0n, "0x");
+    swapCalldata += encodeSwap2(
+      pool,
+      hopReceiver,
+      // the payer is based on
+      // 1) beginning -> caller pays if no wrap
+      // rest -> pre-fund based on last receiver, contract otherwise
+      {
+        payConfig: isFirstHop ? funded ? DexPayConfig.PRE_FUND : DexPayConfig.CONTRACT_PAYS : lastReceiver === pool.address ? DexPayConfig.PRE_FUND : DexPayConfig.CONTRACT_PAYS
+      }
+    ).slice(2);
+    lastReceiver = hopReceiver;
+  }
+  return swapCalldata;
+}
+function processTrade2(trade, slippageTolerance, composerAddress, flashCalldata) {
+  if (!trade) throw new Error("No trade to process");
+  if (CurrencyUtils.isNativeAmount(trade.inputAmount) && CurrencyUtils.isNativeAmount(trade.outputAmount)) {
+    throw new Error("Native in and out");
+  }
+  return nestFlashSwap(
+    trade.swaps,
+    0,
+    composerAddress,
+    slippageTolerance,
+    flashCalldata
+  );
+}
+var ComposerFlashSwap;
+((ComposerFlashSwap2) => {
+  function createSweepCalldata(tokenAddress, receiver) {
+    return encodeSweep(tokenAddress, receiver, 0n, SweepType.VALIDATE);
+  }
+  ComposerFlashSwap2.createSweepCalldata = createSweepCalldata;
+  function composeFlashSwapCalldata({
+    trade,
+    // externalCall,
+    account,
+    marginData,
+    isMaxIn = false,
+    isMaxOut = false,
+    slippageTolerance,
+    // these are poarameters that allow a UI to override details
+    composerOverride = void 0
+    // flashInfoOverride = undefined,
+  }) {
+    if (!trade?.interfaceTrade) throw new Error("Require interface trade!");
+    const chainId = trade?.inputAmount.currency.chainId;
+    const composerAddress = composerOverride ?? getComposerAddress(chainId);
+    const { context, safetySweep, poolPayments } = produceInnerCall(
+      trade.interfaceTrade,
+      composerAddress,
+      account,
+      marginData,
+      isMaxIn,
+      isMaxOut
+    );
+    const swapCalldata = processTrade2(
+      trade.interfaceTrade,
+      slippageTolerance,
+      composerAddress,
+      packCommands([
+        context.callIn,
+        // poll funds from lender (e.g. withdraw / borrow)
+        context.callOut,
+        // received handling (e.g. deposit)
+        poolPayments,
+        // distribute funds to pools
+        context.cleanup
+        // refund excess inputs
+      ])
+    );
+    return packCommands([swapCalldata, safetySweep]);
+  }
+  ComposerFlashSwap2.composeFlashSwapCalldata = composeFlashSwapCalldata;
+})(ComposerFlashSwap || (ComposerFlashSwap = {}));
+
+// src/evm/flashloan/types/margin.ts
+var MarginTradeType = /* @__PURE__ */ ((MarginTradeType2) => {
+  MarginTradeType2["Open"] = "Open";
+  MarginTradeType2["Close"] = "Close";
+  MarginTradeType2["CollateralSwap"] = "CollateralSwap";
+  MarginTradeType2["DebtSwap"] = "DebtSwap";
+  return MarginTradeType2;
+})(MarginTradeType || {});
+
+// src/evm/lending/utils/permit.ts
+function getPermitAsset(lender, lenderData, mode = 0 /* NONE */) {
+  if (isAaveType(lender)) {
+    if (mode === 2 /* VARIABLE */) {
+      return lenderData.lenderTokens?.debt;
+    }
+    if (mode === 1 /* STABLE */) {
+      return lenderData.lenderTokens?.stableDebt;
+    }
+    return lenderData.lenderTokens?.collateral;
+  }
+  if (lender === 3 /* CompoundV3 */ || lender === 4 /* MorphoBlue */) {
+    return lenderData.pool;
+  }
+  return void 0;
+}
+
+// src/evm/lending/utils/index.ts
+function getLenderData(lender, chainId, asset) {
+  if (AAVE_LENDERS.includes(lender)) {
+    const key = lender;
+    const { pool } = AAVE_FORK_POOL_DATA[key][chainId];
+    const aaveTokens = AAVE_STYLE_TOKENS[key];
+    const chainKey = chainId;
+    const _asset = asset === zeroAddress ? WRAPPED_NATIVE_INFO[chainId].address : asset;
+    const { aToken, sToken, vToken } = aaveTokens[chainKey][_asset.toLowerCase()];
+    const group = AAVE_V2_LENDERS.includes(lender) ? 0 /* AaveV2 */ : 1 /* AaveV3 */;
+    return {
+      lender,
+      pool,
+      lenderTokens: {
+        collateral: aToken,
+        debt: vToken,
+        stableDebt: sToken,
+        base: void 0
+      },
+      group
+    };
+  }
+  if (COMPOUND_V2_LENDERS.includes(lender)) {
+    const key = lender;
+    const normalizedAsset = asset.toLowerCase();
+    const cToken = COMPOUND_V2_STYLE_TOKENS[key][chainId][normalizedAsset];
+    return {
+      lender,
+      pool: void 0,
+      lenderTokens: {
+        collateral: cToken,
+        debt: void 0,
+        stableDebt: void 0,
+        base: void 0
+      },
+      group: 2 /* CompoundV2 */
+    };
+  }
+  if (COMPOUND_V3_LENDERS.includes(lender)) {
+    const comet = COMETS_PER_CHAIN_MAP[chainId][lender];
+    const base = COMPOUND_BASE_TOKENS[lender][chainId].baseAsset;
+    return {
+      lender,
+      pool: comet,
+      lenderTokens: {
+        collateral: void 0,
+        debt: void 0,
+        stableDebt: void 0,
+        base
+      },
+      group: 3 /* CompoundV3 */
+    };
+  }
+  if (lender === Lender.MORPHO_BLUE) {
+    if (Object.keys(MORPHO_BLUE_POOL_DATA).includes(lender.toString())) {
+      const lenderData = MORPHO_BLUE_POOL_DATA[lender];
+      if (Object.keys(lenderData).includes(chainId.toString())) {
+        const mb = lenderData[chainId];
+        return {
+          lender,
+          pool: mb,
+          lenderTokens: void 0,
+          group: 4 /* MorphoBlue */
+        };
+      }
+    }
+  }
+  throw new Error("Unsupported lender");
+}
+var BALANCER_FORKS = Object.keys(BALANCER_V2_FORKS);
+function getFlashInfo(provider, chainId, composer) {
+  if (AAVE_LENDERS.includes(provider)) {
+    const pool = AAVE_FORK_POOL_DATA?.[provider]?.[chainId].pool;
+    return {
+      data: FLASH_LOAN_PROVIDERS[chainId][provider],
+      // @ts-ignore
+      poolType: AAVE_V2_LENDERS.includes(provider) ? FlashLoanIds.AAVE_V2 : FlashLoanIds.AAVE_V3,
+      provider,
+      providerAddress: pool,
+      balanceHolder: composer
+    };
+  }
+  if (provider === FlashLoanProvider.MORPHO) {
+    const pool = MORPHO_BLUE_POOL_DATA?.[provider]?.[chainId];
+    return {
+      data: { id: 0, fee: 0n },
+      poolType: FlashLoanIds.MORPHO,
+      provider,
+      providerAddress: pool,
+      balanceHolder: composer
+    };
+  }
+  if (BALANCER_FORKS.includes(provider)) {
+    const pool = BALANCER_V2_FORKS?.[provider]?.vault?.[chainId];
+    return {
+      data: { id: 0, fee: 0n },
+      poolType: FlashLoanIds.BALANCER_V2,
+      provider,
+      providerAddress: pool,
+      balanceHolder: pool
+    };
+  }
+  throw new Error("Unsupported flash source");
+}
+function getAssetParamsFromAmount(amount) {
+  return {
+    asset: amount.currency.address,
+    rawAmount: amount.amount,
+    chainId: amount.currency.chainId
+  };
+}
+function getLenderIdFromLender(lender) {
+  if (isAaveV3Type(lender)) return LenderIds.UP_TO_AAVE_V3 - 1;
+  if (isAaveV2Type(lender)) return LenderIds.UP_TO_AAVE_V2 - 1;
+  if (isCompoundV3(lender)) return LenderIds.UP_TO_COMPOUND_V3 - 1;
+  if (isCompoundV2(lender)) return LenderIds.UP_TO_COMPOUND_V2 - 1;
+  return LenderIds.UP_TO_MORPHO - 1;
+}
+function getLenderId(lender) {
+  switch (lender) {
+    case 0 /* AaveV2 */:
+      return LenderIds.UP_TO_AAVE_V2 - 1;
+    case 1 /* AaveV3 */:
+      return LenderIds.UP_TO_AAVE_V3 - 1;
+    case 2 /* CompoundV2 */:
+      return LenderIds.UP_TO_COMPOUND_V2 - 1;
+    case 3 /* CompoundV3 */:
+      return LenderIds.UP_TO_COMPOUND_V3 - 1;
+    case 4 /* MorphoBlue */:
+      return LenderIds.UP_TO_MORPHO - 1;
+    default:
+      throw new Error("Unsupported lender");
+  }
+}
+function encodePermit4(asset, permitId, permitData) {
+  return encodePacked$1(
+    ["uint8", "uint8", "address", "uint16", "bytes"],
+    [ComposerCommands.PERMIT, permitId, asset, uint16(permitData.length / 2 - 1), permitData]
+  );
+}
+function packCommands(commands) {
+  if (commands.length === 0) throw new Error("cannot pack no commands");
+  if (commands.length === 1) return commands[0];
+  return encodePacked$1(new Array(commands.length).fill("bytes"), commands);
+}
+function adjustAmountForAll(amount, isAll) {
+  if (isAll) return BigInt(amount) * 100025n / 100000n;
+  return BigInt(amount);
+}
+function isAaveType(lender) {
+  return lender === 0 /* AaveV2 */ || lender === 1 /* AaveV3 */;
+}
+function getPool(lenderData) {
+  switch (lenderData.group) {
+    case 0 /* AaveV2 */:
+    case 1 /* AaveV3 */:
+    case 3 /* CompoundV3 */:
+      return lenderData.pool;
+    case 2 /* CompoundV2 */:
+      return lenderData.lenderTokens?.collateral;
+    default:
+      return void 0;
+  }
+}
+function getCollateralToken(lenderData) {
+  switch (lenderData.group) {
+    case 0 /* AaveV2 */:
+    case 1 /* AaveV3 */:
+    case 2 /* CompoundV2 */:
+      return lenderData.lenderTokens?.collateral;
+    default:
+      return void 0;
+  }
+}
+function getDebtToken(lenderData) {
+  switch (lenderData.group) {
+    case 0 /* AaveV2 */:
+    case 1 /* AaveV3 */:
+      return lenderData.lenderTokens?.debt;
+    default:
+      return void 0;
+  }
+}
+function getIsBaseToken(lenderData, asset) {
+  switch (lenderData.group) {
+    case 3 /* CompoundV3 */:
+      return asset === lenderData.lenderTokens?.base;
+    default:
+      return void 0;
+  }
+}
+function getLenderGroup(lender) {
+  if (isAaveV3Type(lender)) return 1 /* AaveV3 */;
+  if (isAaveV2Type(lender)) return 0 /* AaveV2 */;
+  if (isCompoundV3(lender)) return 3 /* CompoundV3 */;
+  if (isCompoundV2(lender)) return 2 /* CompoundV2 */;
+  return 4 /* MorphoBlue */;
+}
+
+// src/evm/lending/consts/index.ts
+var UINT112_MAX = BigInt("0xffffffffffffffffffffffffffff");
+var NO_VALUE = "0";
+
+// src/evm/lending/actions/index.ts
+var ComposerLendingActions;
+((ComposerLendingActions2) => {
+  function getAssetData(amount, lender) {
+    if (isOverrideAmount(amount)) {
+      return {
+        asset: amount.asset,
+        lenderData: getLenderData(lender, amount.chainId, amount.asset)
+      };
+    }
+    const { asset, chainId } = getAssetParamsFromAmount(amount);
+    return {
+      asset,
+      lenderData: getLenderData(lender, chainId, asset)
+    };
+  }
+  function isOverrideAmount(amount) {
+    return "asset" in amount && "amount" in amount && "chainId" in amount && !!amount.asset && !!amount.chainId;
+  }
+  function createDeposit(params) {
+    const { receiver, amount, lender, morphoParams, transferType = 0 /* Amount */, useOverride } = params;
+    const { asset, lenderData } = isOverrideAmount(amount) ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) } : getAssetData(amount, lender);
+    if (transferType === 1 /* UserBalance */) throw new Error("Cannot deposit user balance");
+    let amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount);
+    if (transferType === 2 /* ContractBalance */) amountUsed = 0n;
+    if (lender === Lender.MORPHO_BLUE) {
+      if (!morphoParams) {
+        throw new Error("Morpho params should be defined for MorphoBlue deposits");
+      }
+      return encodeMorphoDepositCollateral(
+        morphoParams.market,
+        amountUsed,
+        receiver,
+        morphoParams.data,
+        morphoParams.morphoB,
+        BigInt(morphoParams.pId)
+      );
+    }
+    const pool = useOverride?.pool ?? getPool(lenderData);
+    if (!pool) {
+      throw new Error("Pool should be defined for deposits");
+    }
+    return encodePacked$1(
+      ["bytes", "uint8", "uint8", "uint16", "address", "uint128", "address", "address"],
+      [
+        encodeApprove(asset, pool),
+        ComposerCommands.LENDING,
+        LenderOps.DEPOSIT,
+        getLenderId(lenderData.group),
+        asset,
+        amountUsed,
+        receiver,
+        pool
+      ]
+    );
+  }
+  ComposerLendingActions2.createDeposit = createDeposit;
+  function createWithdraw(params) {
+    const { receiver, amount, lender, transferType = 0 /* Amount */, morphoParams, useOverride } = params;
+    const { asset, lenderData } = isOverrideAmount(amount) ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) } : getAssetData(amount, lender);
+    let amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount);
+    if (transferType === 1 /* UserBalance */) amountUsed = UINT112_MAX;
+    if (transferType === 2 /* ContractBalance */) throw new Error("Cannot withdraw contract balance");
+    const pool = useOverride?.pool ?? getPool(lenderData);
+    const collateralToken = useOverride?.collateralToken ?? getCollateralToken(lenderData);
+    const genericPart = encodePacked$1(
+      ["uint8", "uint8", "uint16", "address", "uint128", "address"],
+      [
+        ComposerCommands.LENDING,
+        LenderOps.WITHDRAW,
+        getLenderId(lenderData.group),
+        asset,
+        BigInt(amountUsed),
+        receiver
+      ]
+    );
+    switch (lenderData.group) {
+      case 0 /* AaveV2 */:
+      case 1 /* AaveV3 */:
+        if (!pool || !collateralToken) {
+          throw new Error("Pool and collateralToken should be defined for AaveV2/V3 withdrawals");
+        }
+        return encodePacked$1(["bytes", "address", "address"], [genericPart, collateralToken, pool]);
+      case 2 /* CompoundV2 */:
+        if (!collateralToken) {
+          throw new Error("collateralToken should be defined for CompoundV2 withdrawals");
+        }
+        return encodePacked$1(["bytes", "address"], [genericPart, collateralToken]);
+      case 3 /* CompoundV3 */:
+        const isBase = getIsBaseToken(lenderData, asset);
+        if (!pool) {
+          throw new Error("Comet should be defined for CompoundV3 withdrawals");
+        }
+        return encodePacked$1(["bytes", "uint8", "address"], [genericPart, isBase ? 1 : 0, pool]);
+      case 4 /* MorphoBlue */:
+        if (!morphoParams) {
+          throw new Error("Morpho params should be defined for MorphoBlue withdrawals");
+        }
+        return encodeMorphoWithdrawCollateral(
+          morphoParams.market,
+          BigInt(amountUsed),
+          receiver,
+          morphoParams.morphoB
+        );
+      default:
+        throw new Error("Lender not supported");
+    }
+  }
+  ComposerLendingActions2.createWithdraw = createWithdraw;
+  function createBorrow(params) {
+    const { receiver, amount, lender, aaveInterestMode: mode, morphoParams, useOverride } = params;
+    const { asset, lenderData } = isOverrideAmount(amount) ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) } : getAssetData(amount, lender);
+    const amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount);
+    const pool = useOverride?.pool ?? getPool(lenderData);
+    const genericPart = encodePacked$1(
+      ["uint8", "uint8", "uint16", "address", "uint128", "address"],
+      [
+        ComposerCommands.LENDING,
+        LenderOps.BORROW,
+        getLenderId(lenderData.group),
+        asset,
+        amountUsed,
+        receiver
+      ]
+    );
+    switch (lenderData.group) {
+      case 0 /* AaveV2 */:
+      case 1 /* AaveV3 */:
+        if (!pool || !mode) {
+          throw new Error("Pool and mode should be defined for AaveV2/V3 borrows");
+        }
+        return encodePacked$1(["bytes", "uint8", "address"], [genericPart, mode, pool]);
+      case 2 /* CompoundV2 */:
+        const lendingToken = useOverride?.collateralToken ?? getCollateralToken(lenderData);
+        return encodePacked$1(["bytes", "address"], [genericPart, lendingToken]);
+      case 3 /* CompoundV3 */:
+        if (!pool) {
+          throw new Error("Comet should be defined for CompoundV3 borrows");
+        }
+        return encodePacked$1(["bytes", "address"], [genericPart, pool]);
+      case 4 /* MorphoBlue */:
+        if (!morphoParams) {
+          throw new Error("Morpho params should be defined for MorphoBlue borrows");
+        }
+        return encodeMorphoBorrow(
+          morphoParams.market,
+          morphoParams.isShares,
+          amountUsed,
+          receiver,
+          morphoParams.morphoB
+        );
+      default:
+        throw new Error("Lender not supported");
+    }
+  }
+  ComposerLendingActions2.createBorrow = createBorrow;
+  function createRepay(params) {
+    const {
+      receiver,
+      amount,
+      lender,
+      aaveInterestMode: mode,
+      morphoParams,
+      transferType = 0 /* Amount */,
+      useOverride
+    } = params;
+    let amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount);
+    const { asset, lenderData } = isOverrideAmount(amount) ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) } : getAssetData(amount, lender);
+    const pool = useOverride?.pool ?? getPool(lenderData);
+    const collateralToken = useOverride?.collateralToken ?? getCollateralToken(lenderData);
+    const debtToken = useOverride?.debtToken ?? getDebtToken(lenderData);
+    switch (transferType) {
+      case 2 /* ContractBalance */:
+        amountUsed = 0n;
+        break;
+      case 1 /* UserBalance */:
+        amountUsed = UINT112_MAX;
+        break;
+    }
+    let approveCall = "0x";
+    switch (lenderData.group) {
+      case 0 /* AaveV2 */:
+      case 1 /* AaveV3 */:
+      case 3 /* CompoundV3 */:
+        if (!pool) {
+          throw new Error("Pool/Comet should be defined for AaveV2/V3 and CompoundV3 repayments");
+        }
+        approveCall = encodeApprove(asset, pool);
+        break;
+      case 2 /* CompoundV2 */:
+        if (!collateralToken) {
+          throw new Error("cToken should be defined for CompoundV2 repayments");
+        }
+        approveCall = asset == zeroAddress ? "0x" : encodeApprove(asset, collateralToken);
+        break;
+      case 4 /* MorphoBlue */:
+        if (!morphoParams) {
+          throw new Error("Morpho params should be defined for MorphoBlue repayments");
+        }
+        approveCall = encodeApprove(getMorphoLoanAsset(morphoParams.market), morphoParams.morphoB);
+        break;
+    }
+    const genericPart = encodePacked$1(
+      ["bytes", "uint8", "uint8", "uint16"],
+      [approveCall, ComposerCommands.LENDING, LenderOps.REPAY, getLenderId(lenderData.group)]
+    );
+    switch (lenderData.group) {
+      case 0 /* AaveV2 */:
+      case 1 /* AaveV3 */:
+        if (!pool || !mode || !debtToken) {
+          throw new Error("Pool, mode and debtToken should be defined for AaveV2/V3 repayments");
+        }
+        return encodePacked$1(
+          ["bytes", "address", "uint128", "address", "uint8", "address", "address"],
+          [
+            genericPart,
+            asset,
+            BigInt(amountUsed),
+            receiver,
+            mode,
+            debtToken,
+            pool
+          ]
+        );
+      case 2 /* CompoundV2 */:
+        if (!collateralToken) {
+          throw new Error("collateralToken is required for compoundV2 repayment");
+        }
+        return encodePacked$1(
+          ["bytes", "address", "uint128", "address", "address"],
+          [genericPart, asset, amountUsed, receiver, collateralToken]
+        );
+      case 3 /* CompoundV3 */:
+        if (!pool) {
+          throw new Error("Comet should be defined for CompoundV3 withdrawals");
+        }
+        return encodePacked$1(
+          ["bytes", "address", "uint128", "address", "address"],
+          [genericPart, asset, BigInt(amountUsed), receiver, pool]
+        );
+      case 4 /* MorphoBlue */:
+        if (!morphoParams) {
+          throw new Error("Morpho params should be defined for MorphoBlue withdrawals");
+        }
+        return encodePacked$1(
+          ["bytes", "bytes", "address", "uint128", "address", "address", "uint16", "bytes"],
+          [
+            genericPart,
+            morphoParams.market,
+            asset,
+            generateAmountBitmap(
+              uint128(BigInt(amountUsed)),
+              morphoParams.isShares,
+              morphoParams.unsafeRepayment,
+              false
+            ),
+            receiver,
+            morphoParams.morphoB,
+            uint16(morphoParams.data.length > 0 ? morphoParams.data.length + 1 : 0),
+            morphoParams.data.length == 0 ? "0x" : encodeUint8AndBytes(uint8(morphoParams.pId), morphoParams.data)
+          ]
+        );
+      default:
+        throw new Error("Lender not supported");
+    }
+  }
+  ComposerLendingActions2.createRepay = createRepay;
+})(ComposerLendingActions || (ComposerLendingActions = {}));
+var ComposerDirectLending;
+((ComposerDirectLending2) => {
+  function composeDirectMoneyMarketAction(op) {
+    if (!op.params.amount) {
+      throw new Error("No amount is provided");
+    }
+    const {
+      params,
+      receiver,
+      isAll,
+      actionType,
+      inIsNative = false,
+      outIsNative = false,
+      composerAddress,
+      permitData,
+      morphoParams
+    } = op;
+    const isPermit2 = permitData?.isPermit2;
+    const { asset, rawAmount, chainId } = getAssetParamsFromAmount(params.amount);
+    const lenderData = getLenderData(params.lender, chainId, asset);
+    let value = void 0;
+    let permitCall = "0x";
+    const wrappedNative = WRAPPED_NATIVE_INFO[chainId].address;
+    switch (actionType) {
+      case "Deposit" /* Deposit */: {
+        const depo = ComposerLendingActions.createDeposit({
+          receiver,
+          amount: params.amount,
+          lender: params.lender,
+          morphoParams,
+          transferType: 0 /* Amount */
+        });
+        let transferCall;
+        if (!inIsNative) {
+          transferCall = isPermit2 ? encodePermit2TransferFrom(asset, composerAddress, BigInt(rawAmount)) : encodeTransferIn(asset, composerAddress, BigInt(rawAmount));
+          if (permitData && permitData.data !== "0x") {
+            permitCall = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), asset, permitData.data);
+          }
+        } else {
+          transferCall = encodeWrap(BigInt(rawAmount), wrappedNative);
+          value = rawAmount.toString();
+        }
+        return {
+          calldata: packCommands([permitCall, transferCall, depo]),
+          value
+        };
+      }
+      case "Withdraw" /* Withdraw */: {
+        const [amountToUse, withdrawType, sweepType] = isAll ? [NO_VALUE, 1 /* UserBalance */, SweepType.VALIDATE] : [rawAmount, 0 /* Amount */, SweepType.AMOUNT];
+        let intermediateReceiver = composerAddress;
+        const withdraw = ComposerLendingActions.createWithdraw({
+          receiver: intermediateReceiver,
+          amount: params.amount,
+          lender: params.lender,
+          transferType: withdrawType,
+          morphoParams
+        });
+        let transferCall;
+        if (!outIsNative) {
+          transferCall = encodeSweep(asset, receiver, BigInt(amountToUse), sweepType);
+        } else {
+          transferCall = encodeUnwrap(wrappedNative, receiver, BigInt(amountToUse), sweepType);
+        }
+        if (permitData && permitData.data !== "0x") {
+          const permitAsset = getPermitAsset(lenderData.group, lenderData, 0 /* NONE */);
+          if (permitAsset)
+            permitCall = encodePermit(
+              BigInt(isAaveType(lenderData.group) ? PermitIds.TOKEN_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
+              permitAsset,
+              permitData.data
+            );
+        }
+        return {
+          calldata: packCommands([permitCall, withdraw, transferCall]),
+          value: NO_VALUE
+        };
+      }
+      case "Borrow" /* Borrow */: {
+        let intermediateReceiver = composerAddress;
+        if (isAaveType(lenderData.group) && !params.aaveBorrowMode) {
+          throw new Error("Borrow mode is required for AaveV2/V3 borrows");
+        }
+        const borrow = ComposerLendingActions.createBorrow({
+          receiver: intermediateReceiver,
+          amount: params.amount,
+          lender: params.lender,
+          aaveInterestMode: params.aaveBorrowMode,
+          morphoParams
+        });
+        let transferCall;
+        if (!outIsNative) {
+          transferCall = encodeSweep(asset, receiver, BigInt(rawAmount), SweepType.AMOUNT);
+        } else {
+          transferCall = encodeUnwrap(wrappedNative, receiver, BigInt(rawAmount), SweepType.AMOUNT);
+        }
+        if (permitData && permitData.data !== "0x") {
+          const permitAsset = getPermitAsset(lenderData.group, lenderData, params.aaveBorrowMode);
+          if (permitAsset)
+            permitCall = encodePermit(
+              BigInt(isAaveType(lenderData.group) ? PermitIds.AAVE_V3_CREDIT_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
+              permitAsset,
+              permitData.data
+            );
+        }
+        return {
+          calldata: packCommands([permitCall, borrow, transferCall]),
+          value: NO_VALUE
+        };
+      }
+      case "Repay" /* Repay */: {
+        const adjustedAmount = adjustAmountForAll(rawAmount, isAll);
+        const repay = ComposerLendingActions.createRepay({
+          receiver,
+          amount: params.amount,
+          lender: params.lender,
+          aaveInterestMode: params.aaveBorrowMode,
+          morphoParams,
+          transferType: isAll && !isAaveType(lenderData.group) ? 1 /* UserBalance */ : 0 /* Amount */
+        });
+        let transferCall;
+        if (!inIsNative) {
+          transferCall = isPermit2 ? encodePermit2TransferFrom(asset, composerAddress, BigInt(adjustedAmount)) : encodeTransferIn(asset, composerAddress, BigInt(adjustedAmount));
+          if (permitData && permitData.data !== "0x") {
+            permitCall = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), asset, permitData.data);
+          }
+        } else {
+          transferCall = encodeWrap(adjustedAmount, wrappedNative);
+          value = adjustedAmount.toString();
+        }
+        const commands = [permitCall, transferCall, repay];
+        if (isAll) {
+          if (inIsNative) commands.push(encodeUnwrap(wrappedNative, receiver, 0n, SweepType.VALIDATE));
+          else commands.push(encodeSweep(asset, receiver, 0n, SweepType.VALIDATE));
+        }
+        return {
+          calldata: packCommands(commands),
+          value
+        };
+      }
+    }
+  }
+  ComposerDirectLending2.composeDirectMoneyMarketAction = composeDirectMoneyMarketAction;
+})(ComposerDirectLending || (ComposerDirectLending = {}));
+var ComposerQuickActions;
+((ComposerQuickActions2) => {
+  function createSweepCalldata(tokenAddress, receiver) {
+    return encodeSweep(tokenAddress, receiver, 0n, SweepType.VALIDATE);
+  }
+  function swapAndDeposit(params) {
+    const { trade, slippageBps, receiver, lender, morphoParams, useOverride, externalCall, permitData, composer } = params;
+    validateExactInputTrade(trade);
+    const chainId = getChainIdFromTrade(trade);
+    const composerAddress = composer ?? getComposerAddress(chainId);
+    const swapCalldata = ComposerSpot.composeSpotCalldata({
+      trade,
+      slippageTolerance: slippageBps,
+      receiver: composerAddress,
+      composer: composerAddress,
+      externalCall,
+      permitData
+    });
+    const depositAmount = {
+      currency: trade.outputAmount.currency,
+      amount: "0"
+    };
+    const depositCalldata = ComposerLendingActions.createDeposit({
+      receiver,
+      amount: depositAmount,
+      lender,
+      morphoParams,
+      transferType: 2 /* ContractBalance */,
+      useOverride
+    });
+    const sweepCalldata = createSweepCalldata(trade.outputAmount.currency.address, receiver);
+    const combinedCalldata = packCommands([swapCalldata.calldata, depositCalldata, sweepCalldata]);
+    return {
+      calldata: combinedCalldata,
+      value: swapCalldata.value
+    };
+  }
+  ComposerQuickActions2.swapAndDeposit = swapAndDeposit;
+  function swapAndRepay(params) {
+    const {
+      trade,
+      slippageBps,
+      receiver,
+      lender,
+      repayMaximum = false,
+      aaveInterestMode,
+      morphoParams,
+      useOverride,
+      externalCall,
+      permitData,
+      composer
+    } = params;
+    validateExactInputTrade(trade);
+    const chainId = getChainIdFromTrade(trade);
+    const composerAddress = composer ?? getComposerAddress(chainId);
+    const swapCalldata = ComposerSpot.composeSpotCalldata({
+      trade,
+      slippageTolerance: slippageBps,
+      receiver: composerAddress,
+      composer: composerAddress,
+      externalCall,
+      permitData
+    });
+    const repayAmount = {
+      currency: trade.outputAmount.currency,
+      amount: CurrencyUtils.getAmount(trade.outputAmount).toString()
+    };
+    const repayCalldata = ComposerLendingActions.createRepay({
+      receiver,
+      amount: repayAmount,
+      lender,
+      aaveInterestMode,
+      morphoParams,
+      transferType: repayMaximum ? 2 /* ContractBalance */ : 0 /* Amount */,
+      useOverride
+    });
+    const sweepCalldata = createSweepCalldata(trade.outputAmount.currency.address, receiver);
+    const combinedCalldata = packCommands([swapCalldata.calldata, repayCalldata, sweepCalldata]);
+    return {
+      calldata: combinedCalldata,
+      value: swapCalldata.value
+    };
+  }
+  ComposerQuickActions2.swapAndRepay = swapAndRepay;
+  function borrowAndSwap(params) {
+    const {
+      trade,
+      slippageBps,
+      receiver,
+      lender,
+      aaveInterestMode,
+      morphoParams,
+      useOverride,
+      externalCall,
+      permitData,
+      composer
+    } = params;
+    validateExactInputTrade(trade);
+    const chainId = getChainIdFromTrade(trade);
+    const composerAddress = composer ?? getComposerAddress(chainId);
+    const lenderData = getLenderData(lender, chainId, trade.inputAmount.currency.address);
+    const borrowAmount = {
+      currency: trade.inputAmount.currency,
+      amount: CurrencyUtils.getAmount(trade.inputAmount).toString()
+    };
+    let permitCalldata = "0x";
+    if (permitData) {
+      const permitAsset = getPermitAsset(lenderData.group, lenderData, aaveInterestMode);
+      if (permitAsset) {
+        permitCalldata = encodePermit(
+          BigInt(isAaveType(lenderData.group) ? PermitIds.AAVE_V3_CREDIT_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
+          permitAsset,
+          permitData.data
+        );
+      }
+    }
+    const borrowReceiver = externalCall ? externalCall.callForwarder : composerAddress;
+    const borrowCalldata = ComposerLendingActions.createBorrow({
+      receiver: borrowReceiver,
+      amount: borrowAmount,
+      lender,
+      aaveInterestMode,
+      morphoParams,
+      useOverride
+    });
+    const swapCalldata = ComposerSpot.composeSpotCalldata({
+      trade,
+      slippageTolerance: slippageBps,
+      receiver,
+      composer: composerAddress,
+      externalCall,
+      // we already ensure that the contracts are funded
+      skipFunding: true,
+      // permits are not used here
+      permitData: void 0
+    });
+    const sweepInputCalldata = createSweepCalldata(trade.inputAmount.currency.address, receiver);
+    const sweepOutputCalldata = createSweepCalldata(trade.outputAmount.currency.address, receiver);
+    const combinedCalldata = packCommands([
+      permitCalldata,
+      borrowCalldata,
+      swapCalldata.calldata,
+      sweepInputCalldata,
+      sweepOutputCalldata
+    ]);
+    return {
+      calldata: combinedCalldata,
+      value: 0n
+    };
+  }
+  ComposerQuickActions2.borrowAndSwap = borrowAndSwap;
+  function withdrawAndSwap(params) {
+    const {
+      trade,
+      slippageBps,
+      receiver,
+      lender,
+      withdrawMaximum = false,
+      morphoParams,
+      useOverride,
+      externalCall,
+      permitData,
+      composer
+    } = params;
+    validateExactInputTrade(trade);
+    const chainId = getChainIdFromTrade(trade);
+    const composerAddress = composer ?? getComposerAddress(chainId);
+    const lenderData = getLenderData(lender, chainId, trade.inputAmount.currency.address);
+    const withdrawAmount = {
+      currency: trade.inputAmount.currency,
+      amount: CurrencyUtils.getAmount(trade.inputAmount).toString()
+    };
+    let permitCalldata = "0x";
+    if (permitData) {
+      const permitAsset = getPermitAsset(lenderData.group, lenderData);
+      if (permitAsset) {
+        permitCalldata = encodePermit(
+          BigInt(isAaveType(lenderData.group) ? PermitIds.TOKEN_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
+          permitAsset,
+          permitData.data
+        );
+      }
+    }
+    const withdrawReceiver = externalCall && !withdrawMaximum ? externalCall.callForwarder : composerAddress;
+    const withdrawCalldata = ComposerLendingActions.createWithdraw({
+      receiver: withdrawReceiver,
+      amount: withdrawAmount,
+      lender,
+      transferType: withdrawMaximum ? 1 /* UserBalance */ : 0 /* Amount */,
+      morphoParams,
+      useOverride
+    });
+    let transferToCallforwarder = "0x";
+    if (externalCall && withdrawMaximum) {
+      transferToCallforwarder = encodeSweep(
+        trade.inputAmount.currency.address,
+        externalCall.callForwarder,
+        trade.inputAmount.amount,
+        SweepType.AMOUNT
+      );
+    }
+    const swapCalldata = ComposerSpot.composeSpotCalldata({
+      trade,
+      slippageTolerance: slippageBps,
+      receiver,
+      composer: composerAddress,
+      externalCall,
+      // skip funding call as we already control this with the code above
+      skipFunding: true,
+      // permits are not used here
+      permitData: void 0
+    });
+    const sweepInputCalldata = createSweepCalldata(trade.inputAmount.currency.address, receiver);
+    const combinedCalldata = packCommands([
+      permitCalldata,
+      withdrawCalldata,
+      transferToCallforwarder,
+      swapCalldata.calldata,
+      sweepInputCalldata
+    ]);
+    return {
+      calldata: combinedCalldata,
+      value: 0n
+    };
+  }
+  ComposerQuickActions2.withdrawAndSwap = withdrawAndSwap;
+  function composedQuickAction(params) {
+    switch (params.quickActionType) {
+      case "Deposit" /* Deposit */: {
+        return swapAndDeposit(params);
+      }
+      case "Borrow" /* Borrow */: {
+        return borrowAndSwap(params);
+      }
+      case "Repay" /* Repay */: {
+        return swapAndRepay({ ...params, repayMaximum: params.maximum });
+      }
+      case "Withdraw" /* Withdraw */: {
+        return withdrawAndSwap({ ...params, withdrawMaximum: params.maximum });
+      }
+    }
+  }
+  ComposerQuickActions2.composedQuickAction = composedQuickAction;
+})(ComposerQuickActions || (ComposerQuickActions = {}));
+
+// src/evm/utils/index.ts
+function getComposerAddress(chainId) {
+  try {
+    return ONE_DELTA_COMPOSER[chainId];
+  } catch (error) {
+    throw new Error(`Composer not deployed on chain ${chainId}`);
+  }
+}
+function validateExactInputTrade(trade) {
+  if (trade.tradeType !== 0 /* EXACT_INPUT */) {
+    throw new Error("Only exact input swaps are supported for quick actions");
+  }
+}
+
+export { AaveInterestMode, BPS, BPS_BASE, COMPOUND_V2_LENDERS, COMPOUND_V3_LENDERS, ComposerDirectLending, ComposerFlashSwap, ComposerLendingActions, ComposerMargin, ComposerQuickActions, ComposerSpot, CurrencyUtils, DEBASED_NO_CONTEXT, DEFAULT_PROVIDER_PER_CHAIN, FLASH_LOAN_PROVIDERS, FLASH_PROVIDERS_WITHOUT_FEE, FlashLoanProvider, LenderGroups, MarginTradeType, NATIVE_SUPPORTING_PROTOCOLS, NO_CONTEXT, NO_VALUE, ONE_DELTA_COMPOSER, PRE_FUNDABLE_DEXES, QuickActionType, SingletonTypeFlashLoanProvider, TradeType, TransferToLenderType, UINT112_MAX, adjustAmountForAll, adjustForFlashLoanFee, createFlashLoan, encodePermit4 as encodePermit, flashLoanIsFree, flashLoanIsFromLender, getAdjustedHopCount, getAssetFromAmount, getAssetInFromTrade, getAssetOutFromTrade, getAssetParamsFromAmount, getChainIdFromTrade, getCollateralToken, getComposerAddress, getDebtToken, getDeltaComposerAddress, getDeltaComposerProxyAddress, getFlashInfo, getFlashLoanProviderAndFeePerChain, getFlashLoanType, getIsBaseToken, getLenderAssets, getLenderData, getLenderGroup, getLenderId, getLenderIdFromLender, getPermitAsset, getPool, getProviderAddressForSingletonType, getSplits, getWethAddress, handleRepay, handleWithdraw, isAave, isAaveType, isAaveV2Type, isAaveV3Type, isCompoundV2, isCompoundV3, isPreFundableDex, maximumAmountInFromAmount, maximumAmountInFromTrade, minimumAmountOutFromTrade, needsFlashLoanAdjustment, needsUnwrap, needsWrap, packCommands, supportsNativeToken, validateExactInputTrade };
