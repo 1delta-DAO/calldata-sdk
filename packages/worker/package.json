@@ -1,6 +1,6 @@
 {
-	"name": "liquidity-fetcher-worker",
-	"version": "1.0.0",
+	"name": "calldata-worker",
+	"version": "0.0.1",
 	"description": "",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
