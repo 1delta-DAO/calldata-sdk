@@ -33,38 +33,9 @@ import {
 import { AdditionalSwapInfo, SwapEncoder } from '../../spot/dexCoder'
 import { buildMarginInnerCall } from './utils'
 import { HandleMarginParams } from '../types/marginHandlers'
-import { UNISWAP_V2_FORKS, UniV2ForkType } from '@1delta/dex-registry'
-
 
 function printSwap(swap: SerializedSwapStep) {
   console.log(swap.route.pools.map(p => p.protocol).join(" --> "))
-}
-
-function createStableAndVol(f: string) {
-  return [f + "_VOLATILE", f + "_STABLE"]
-}
-
-// get uni V2 forks, expand for solidlies 
-const ALL_V2_FORKS: string[] = Object.entries(UNISWAP_V2_FORKS).map(a =>
-  [
-    UniV2ForkType.RamsesV1,
-    UniV2ForkType.Solidly,
-    UniV2ForkType.Camelot
-  ].includes(a[1].forkType.default as any) ?
-    createStableAndVol(a[0]) :
-    [a[0]]
-)
-  .reduce((acc, b) => [...acc, ...b], [])
-
-
-/**
- * Important distiction: Uni V2 forks cannot pre-dund the next dex in margin via flash
- * That is, because the flash target is also the receiver
- * As such, reject pre-fund and send funds to composer 
- */
-function canPreFundMargin(currentProtocol: string, nextProtocol: string) {
-  const nextIsPreFundable = isPreFundableDex(nextProtocol)
-  return nextIsPreFundable && ALL_V2_FORKS.includes(currentProtocol)
 }
 
 /** 
@@ -266,14 +237,12 @@ function getPoolReceiverData(
   composer: Address,
   slippageTolerance: string
 ): FlashSwapInstruction {
-  const preFunded = step.route.pools.length > 1 && canPreFundMargin(step.route.pools[0].protocol, step.route.pools[1].protocol)
-  const receiver = preFunded ? step.route.pools[1].address : composer
   return {
     // @ts-ignore
-    receiver,
+    receiver: composer, // receiver must be the composer as it  needs to read a balanceOf()
     pool: step.route.pools[0],
     remainingPath: sliceSwapStep(step),
-    preFunded,
+    preFunded: false, // never pre-fund the secn margin step
     minimumOut: minimumAmountOutFromTrade(step, slippageTolerance, TradeType.EXACT_INPUT)
   }
 }

@@ -54,9 +54,18 @@ describe('createMarginFlashLoan', () => {
             expect(result).to.toBe(expectedCalldataFlashSwap)
             expect(result).toMatch(/^0x[0-9a-fA-F]+$/)
         })
+
+        it('should create flash swap for CSWAP margin trade', () => {
+
+            // @ts-ignore
+            const result = ComposerFlashSwap.composeFlashSwapCalldata(FLASH_SWAP_V2S_COMPLEX)
+
+            expect(result).to.toBe(expectedCalldataFlashSwapComplex)
+            expect(result).toMatch(/^0x[0-9a-fA-F]+$/)
+        })
     })
 
-    describe.only('Flash swap MI Single', () => {
+    describe('Flash swap MI Single', () => {
         it('should create flash loan for CLOSE margin trade', () => {
 
             // @ts-ignore
@@ -588,4 +597,588 @@ const FLASH_SWAP_MAX_IN_SINGLE = {
     "isMaxOut": false,
     "composerOverride": "0xCDef0A216fcEF809258aA4f341dB1A5aB296ea72",
     "slippageTolerance": "6000"
+}
+
+
+/** Succeeds on optimism with this data */
+// address mockSender = 0x448CC254819520BF086BCf01245982fAB75c3F66;
+// uint256 internal constant forkBlock = 72849776;
+const expectedCalldataFlashSwapComplex = "0x1000000000000000000000086954db3b6b000000000000000000000000000000017ceb23fd6bc0add59e62ac25578270cff1b9f61900000d500b1d8e8ef31e21c99d1db9a6444d3adf1270fd245e732b40b6bf2038e42b476bd06580585326001a34eabbe928bf431b679959379b2225d60d9cda0d01f406ca1000000000000000000000000000000000000000000000000000000000000000000d500b1d8e8ef31e21c99d1db9a6444d3adf12700000d6df932a45c0f255f85145f286ea0b292b21c90bfd245e732b40b6bf2038e42b476bd0658058532600b3866eb993e1aef93f219c3da0a71c3f11becbf20001f40001100000000000000000000010d2a9b676d7000000000000000000000000000000017ceb23fd6bc0add59e62ac25578270cff1b9f61900000d500b1d8e8ef31e21c99d1db9a6444d3adf1270fd245e732b40b6bf2038e42b476bd0658058532600479e1b71a702a595e19b6d5932cd5c863ab57ee0006bb905d81000000000000000000000000000000000000000000000000000000000000000000d500b1d8e8ef31e21c99d1db9a6444d3adf1270010000008f3cf7ad23cd3cadbd9735aff958023239c6a063fd245e732b40b6bf2038e42b476bd06580585326000f663c16dd7c65cf87edb9229464ca77aeea536b0001f400010000d6df932a45c0f255f85145f286ea0b292b21c90bfd245e732b40b6bf2038e42b476bd0658058532600d20f057b05f1d62c1fe306f6ee77ab4c8fd7e2fb000bb80001100000000000000000000010d2a9b676d7000000000000000000000000000000017ceb23fd6bc0add59e62ac25578270cff1b9f61900000d500b1d8e8ef31e21c99d1db9a6444d3adf1270fd245e732b40b6bf2038e42b476bd065805853260086f1d8390222a3691c28938ec7404a1661e618e00001f404a01000000000000000000000000000000000000000000000000000000000000000000d500b1d8e8ef31e21c99d1db9a6444d3adf12700000d6df932a45c0f255f85145f286ea0b292b21c90bfd245e732b40b6bf2038e42b476bd0658058532601b2bb7c1c176ba8f2ef4230e28175b841e60ef69226f20000011000000000000000000000193bfe91b242000000000000000000000000000000017ceb23fd6bc0add59e62ac25578270cff1b9f61900000d500b1d8e8ef31e21c99d1db9a6444d3adf1270fd245e732b40b6bf2038e42b476bd065805853260162fc1e1fdabc0c9f2b096019e2d98204da049457270b8603ae1000000000000000000000000000000000000000000000000000000000000000000d500b1d8e8ef31e21c99d1db9a6444d3adf12700000d6df932a45c0f255f85145f286ea0b292b21c90bfd245e732b40b6bf2038e42b476bd065805853260142ed6d85ccf43859cbc46f6efa1f21e21cc2403026fc0c0001100000000000000000000064effa46c90a000000000000000000000000000000007ceb23fd6bc0add59e62ac25578270cff1b9f6190000d6df932a45c0f255f85145f286ea0b292b21c90bfd245e732b40b6bf2038e42b476bd065805853260025fb97799f80433e422f47e75173314e54dae1740001f402bc4005d6df932a45c0f255f85145f286ea0b292b21c90b794a61358d6845594f94dc1db02a252b5b4814ad300003e7d6df932a45c0f255f85145f286ea0b292b21c90b00000000000000000000000000000000448cc254819520bf086bcf01245982fab75c3f66794a61358d6845594f94dc1db02a252b5b4814ad5000e50fa9b3c56ffb159cb0fca61f5c9d750e8128c800640000000000000000000000000000000000000000000000000000a865b22f44506850767516b30f31b315be0973d988b16cc43cf0998b859fa165bc5e2a157e5161a23a7d46dc09895f33a6b48339352e92a1574153aba698173ad7ea86c538c6368c75d7300303e77ceb23fd6bc0add59e62ac25578270cff1b9f6190000fffffffffffffffffffffffffffffd245e732b40b6bf2038e42b476bd06580585326e50fa9b3c56ffb159cb0fca61f5c9d750e8128c8794a61358d6845594f94dc1db02a252b5b4814ad40017ceb23fd6bc0add59e62ac25578270cff1b9f61925fb97799f80433e422f47e75173314e54dae174010000000000000000000064effa46c90a40017ceb23fd6bc0add59e62ac25578270cff1b9f61962fc1e1fdabc0c9f2b096019e2d98204da0494570100000000000000000000193bfe91b24240017ceb23fd6bc0add59e62ac25578270cff1b9f61986f1d8390222a3691c28938ec7404a1661e618e0010000000000000000000010d2a9b676d740017ceb23fd6bc0add59e62ac25578270cff1b9f619479e1b71a702a595e19b6d5932cd5c863ab57ee0010000000000000000000010d2a9b676d740017ceb23fd6bc0add59e62ac25578270cff1b9f6191a34eabbe928bf431b679959379b2225d60d9cda0100000000000000000000086954db3b6b40017ceb23fd6bc0add59e62ac25578270cff1b9f619448cc254819520bf086bcf01245982fab75c3f660000000000000000000000000000000000"
+
+
+
+const FLASH_SWAP_V2S_COMPLEX = {
+    "trade": {
+        "inputAmount": {
+            "currency": {
+                "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                "chainId": "137",
+                "decimals": 18,
+                "symbol": "WETH",
+                "name": "Wrapped Ether"
+            },
+            "amount": "184969764840551"
+        },
+        "outputAmount": {
+            "currency": {
+                "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                "chainId": "137",
+                "decimals": 18,
+                "symbol": "AAVE",
+                "name": "Aave"
+            },
+            "amount": "1695304240879495"
+        },
+        "tradeType": 0,
+        "aggregator": "1delta",
+        "interfaceTrade": {
+            "tradeType": 0,
+            "inputAmount": {
+                "currency": {
+                    "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                    "chainId": "137",
+                    "decimals": 18,
+                    "symbol": "WETH",
+                    "name": "Wrapped Ether"
+                },
+                "amount": "184969764840551"
+            },
+            "outputAmount": {
+                "currency": {
+                    "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                    "chainId": "137",
+                    "decimals": 18,
+                    "symbol": "AAVE",
+                    "name": "Aave"
+                },
+                "amount": "1695304240879495"
+            },
+            "swaps": [
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "UNISWAP_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "WETH",
+                                    "name": "Wrapped Ether"
+                                },
+                                "tokenOut": {
+                                    "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "AAVE",
+                                    "name": "Aave"
+                                },
+                                "address": "0x25FB97799F80433e422f47E75173314e54dAE174",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 0,
+                                    "fee": 500,
+                                    "pool": "0x25FB97799F80433e422f47E75173314e54dAE174"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "WETH",
+                                "name": "Wrapped Ether"
+                            },
+                            {
+                                "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "AAVE",
+                                "name": "Aave"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                            "chainId": "137",
+                            "decimals": 18,
+                            "symbol": "WETH",
+                            "name": "Wrapped Ether"
+                        },
+                        "amount": "110981858904330"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                            "chainId": "137",
+                            "decimals": 18,
+                            "symbol": "AAVE",
+                            "name": "Aave"
+                        },
+                        "amount": "1016459522018982"
+                    }
+                },
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "DYSTOPIA_VOLATILE",
+                                "dexId": 1,
+                                "tokenIn": {
+                                    "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "WETH",
+                                    "name": "Wrapped Ether"
+                                },
+                                "tokenOut": {
+                                    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "WMATIC",
+                                    "name": "Wrapped MATIC"
+                                },
+                                "address": "0x62fC1E1fDABC0C9f2b096019e2D98204DA049457",
+                                "swapParams": {
+                                    "dexId": 1,
+                                    "feeDenom": 9995,
+                                    "forkId": "134",
+                                    "pool": "0x62fC1E1fDABC0C9f2b096019e2D98204DA049457"
+                                }
+                            },
+                            {
+                                "protocol": "APESWAP",
+                                "dexId": 1,
+                                "tokenIn": {
+                                    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "WMATIC",
+                                    "name": "Wrapped MATIC"
+                                },
+                                "tokenOut": {
+                                    "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "AAVE",
+                                    "name": "Aave"
+                                },
+                                "address": "0x42eD6D85ccF43859cBc46F6efA1f21e21cC24030",
+                                "swapParams": {
+                                    "dexId": 1,
+                                    "feeDenom": 9980,
+                                    "forkId": "12",
+                                    "pool": "0x42eD6D85ccF43859cBc46F6efA1f21e21cC24030"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "WETH",
+                                "name": "Wrapped Ether"
+                            },
+                            {
+                                "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "WMATIC",
+                                "name": "Wrapped MATIC"
+                            },
+                            {
+                                "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "AAVE",
+                                "name": "Aave"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                            "chainId": "137",
+                            "decimals": 18,
+                            "symbol": "WETH",
+                            "name": "Wrapped Ether"
+                        },
+                        "amount": "27745464726082"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                            "chainId": "137",
+                            "decimals": 18,
+                            "symbol": "AAVE",
+                            "name": "Aave"
+                        },
+                        "amount": "254825990120983"
+                    }
+                },
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "UNISWAP_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "Wrapped Ether",
+                                    "name": "WETH"
+                                },
+                                "tokenOut": {
+                                    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "WPOL",
+                                    "name": "Wrapped POL"
+                                },
+                                "address": "0x86f1d8390222A3691C28938eC7404A1661E618e0",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 0,
+                                    "fee": 500,
+                                    "pool": "0x86f1d8390222A3691C28938eC7404A1661E618e0"
+                                }
+                            },
+                            {
+                                "protocol": "UNISWAP_V2",
+                                "dexId": 1,
+                                "tokenIn": {
+                                    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "WMATIC",
+                                    "name": "Wrapped MATIC"
+                                },
+                                "tokenOut": {
+                                    "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "AAVE",
+                                    "name": "Aave"
+                                },
+                                "address": "0xb2bB7c1c176Ba8F2Ef4230e28175b841e60ef692",
+                                "swapParams": {
+                                    "dexId": 1,
+                                    "feeDenom": 9970,
+                                    "forkId": "0",
+                                    "pool": "0xb2bB7c1c176Ba8F2Ef4230e28175b841e60ef692"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "WETH",
+                                "name": "Wrapped Ether"
+                            },
+                            {
+                                "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "WPOL",
+                                "name": "Wrapped POL"
+                            },
+                            {
+                                "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "AAVE",
+                                "name": "Aave"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                            "chainId": "137",
+                            "decimals": 18,
+                            "symbol": "WETH",
+                            "name": "Wrapped Ether"
+                        },
+                        "amount": "18496976484055"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                            "chainId": "137",
+                            "decimals": 18,
+                            "symbol": "AAVE",
+                            "name": "Aave"
+                        },
+                        "amount": "169557468084800"
+                    }
+                },
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "QUICKSWAP_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "Wrapped Ether",
+                                    "name": "WETH"
+                                },
+                                "tokenOut": {
+                                    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "WPOL",
+                                    "name": "Wrapped POL"
+                                },
+                                "address": "0x479e1B71A702a595e19b6d5932CD5c863ab57ee0",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 0,
+                                    "fee": 27577,
+                                    "pool": "0x479e1B71A702a595e19b6d5932CD5c863ab57ee0"
+                                }
+                            },
+                            {
+                                "protocol": "UNISWAP_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "WPOL",
+                                    "name": "Wrapped POL"
+                                },
+                                "tokenOut": {
+                                    "address": "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "Dai Stablecoin",
+                                    "name": "DAI"
+                                },
+                                "address": "0x0f663c16Dd7C65cF87eDB9229464cA77aEea536b",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 0,
+                                    "fee": 500,
+                                    "pool": "0x0f663c16Dd7C65cF87eDB9229464cA77aEea536b"
+                                }
+                            },
+                            {
+                                "protocol": "UNISWAP_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "Dai Stablecoin",
+                                    "name": "DAI"
+                                },
+                                "tokenOut": {
+                                    "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "AAVE",
+                                    "name": "Aave"
+                                },
+                                "address": "0xd20f057B05F1D62c1fe306f6EE77ab4c8fD7e2FB",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 0,
+                                    "fee": 3000,
+                                    "pool": "0xd20f057B05F1D62c1fe306f6EE77ab4c8fD7e2FB"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "WETH",
+                                "name": "Wrapped Ether"
+                            },
+                            {
+                                "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "WPOL",
+                                "name": "Wrapped POL"
+                            },
+                            {
+                                "address": "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "Dai Stablecoin",
+                                "name": "DAI"
+                            },
+                            {
+                                "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "AAVE",
+                                "name": "Aave"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                            "chainId": "137",
+                            "decimals": 18,
+                            "symbol": "WETH",
+                            "name": "Wrapped Ether"
+                        },
+                        "amount": "18496976484055"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                            "chainId": "137",
+                            "decimals": 18,
+                            "symbol": "AAVE",
+                            "name": "Aave"
+                        },
+                        "amount": "169725538192728"
+                    }
+                },
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "RETRO",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "Wrapped Ether",
+                                    "name": "WETH"
+                                },
+                                "tokenOut": {
+                                    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "WPOL",
+                                    "name": "Wrapped POL"
+                                },
+                                "address": "0x1a34EaBbe928Bf431B679959379b2225d60D9cdA",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 13,
+                                    "fee": 500,
+                                    "pool": "0x1a34EaBbe928Bf431B679959379b2225d60D9cdA"
+                                }
+                            },
+                            {
+                                "protocol": "UNISWAP_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "WPOL",
+                                    "name": "Wrapped POL"
+                                },
+                                "tokenOut": {
+                                    "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                                    "chainId": "137",
+                                    "decimals": 18,
+                                    "symbol": "AAVE",
+                                    "name": "Aave"
+                                },
+                                "address": "0xB3866Eb993e1aEf93f219C3da0a71c3f11BeCBf2",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 0,
+                                    "fee": 500,
+                                    "pool": "0xB3866Eb993e1aEf93f219C3da0a71c3f11BeCBf2"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "WETH",
+                                "name": "Wrapped Ether"
+                            },
+                            {
+                                "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "WPOL",
+                                "name": "Wrapped POL"
+                            },
+                            {
+                                "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                                "chainId": "137",
+                                "decimals": 18,
+                                "symbol": "AAVE",
+                                "name": "Aave"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+                            "chainId": "137",
+                            "decimals": 18,
+                            "symbol": "WETH",
+                            "name": "Wrapped Ether"
+                        },
+                        "amount": "9248488242027"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0xd6df932a45c0f255f85145f286ea0b292b21c90b",
+                            "chainId": "137",
+                            "decimals": 18,
+                            "symbol": "AAVE",
+                            "name": "Aave"
+                        },
+                        "amount": "84735722462002"
+                    }
+                }
+            ]
+        },
+        "approvalTarget": "0xFd245e732b40b6BF2038e42b476bD06580585326",
+        "stringified": "",
+        "flashLoanSource": "None",
+        "inputAmountRealized": 0.000184969764840551,
+        "outputAmountRealized": 0.001695304240879495,
+        "slippage": {
+            "numerator": "100",
+            "denominator": "10000",
+            "isPercent": true
+        }
+    },
+    "externalCall": {
+        "callForwarder": "0xfCa1154C643C32638AEe9a43eeE7f377f515c801",
+        "value": "0"
+    },
+    "account": "0x448CC254819520BF086BCf01245982fAB75c3F66",
+    "marginData": {
+        "irModeIn": 0,
+        "irModeOut": 0,
+        "marginTradeType": "CollateralSwap",
+        "permitData": {
+            "data": "0x0000000000000000000000000000000000000000000000000000a865b22f44506850767516b30f31b315be0973d988b16cc43cf0998b859fa165bc5e2a157e5161a23a7d46dc09895f33a6b48339352e92a1574153aba698173ad7ea86c538c6368c75d7",
+            "isPermit2": false
+        },
+        "lender": "AAVE_V3"
+    },
+    "isMaxIn": true,
+    "isMaxOut": false,
+    "composerOverride": "0xFd245e732b40b6BF2038e42b476bD06580585326",
+    "slippageTolerance": "10000"
 }
