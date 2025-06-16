@@ -26,3 +26,110 @@ export const COMPOSER_PROXIES = {
 }
 
 ```
+
+Example usage for opening a position on Aave V3
+
+```Typescript
+
+// Exapmle for opening short on 1 WETH using USDC as collateral
+
+
+const chainId = "10"
+const composer = COMPOSER_PROXIES[chainId]
+// the caller
+const account = "0x..."
+// operation is opening
+const marginTradeType = "Open"
+// the intended input amount
+const input = 1_000_000_000_000_000_000n // 1e18
+const assetIn = {symbol: "WETH", name: "WETH", address: "0x4200000000000000000000000000000000000006", chainId}
+const assetOut = {symbol: "USDC", name: "USDC", address: "0x0b2c639c533813f4aa9d7837caf62653d097ff85", chainId} 
+// lender to use (check via `Lender` enum in asset-registry)
+const lender = "AAVE_V3"
+// step 1: fetch flash liquidity
+// returns
+//  [
+//   {
+//     "id": 0,
+//     "name": "AAVE_V3",
+//     "type": 2,
+//     "source": "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
+//     "fee": "5",
+//     "availableRaw": "7742114549858607894570",
+//     "available": 7742.11454985861
+//   },
+//   {
+//     ...
+//     ]
+const assetLiquidities = await (await fetch(`https://lending.1delta.io/flashloan-asset/10/0x4200000000000000000000000000000000000006`)).json()
+// we just pick the first, ideally the lowest fee one is selected.
+const flashLoanSource = assetLiquidities[0]
+// the flash loan fee is used to amend the quote input
+const flashFee = BigInt(flashLoanSource.fee)
+
+// step 2) fetch trade
+// we have a 5 bps flash fee, we can therefore calculate the adjusted input to exactly borrow 1 ETH via
+const amendedInput = (input * 10_000n) / (10_000n + flashFee)
+
+// query an api of a swap provider
+// important: send the funds to the composer contract
+const apiBody = {..., amountIn: amendedInput, receiver: composer}
+const apiReturn = await (await fetch(`https://www.quote.odos....`)).json()
+
+// get calldata from api - this varies based on the provider 
+const {calldata, target} = await (await fetch(`https://www.assemble.odos....`)).json()
+
+
+// step 3) produce trade object inputs for SDK
+
+const trade: GenericTrade = {
+    tradeType: 0, // exact in
+    inputAmount:  { currency: assetIn, amount: amendedInput},
+    outputAmount:  { currency: assetOut, amount: apiReturn.output}, // the output is unsed in the calldata
+    target,
+    approvalTarget: target,
+    // this needs to be set to `true` if `apiBody` does not allow to specify the receiver
+    sweepToReceiver: false,
+}
+
+const externalCall = { 
+    target, 
+    calldata,
+    value: "0", // this is the default value (only used for native as input)
+    useSelfbalance: false,
+    callForwarder: FORWARDER
+}
+
+const marginData =  {
+  marginTradeType,
+  // STABLE is deactivated for most aave forks
+  irModeIn: AaveInterestMode.VARIABLE
+  // unused
+  irModeOut: AaveInterestMode.NONE
+  lender,
+  morphoParams: undefined, // no morpho execution
+  permitData: undefined // no permits in this example
+}
+
+// this returns a bytes string for the 1delta composer
+const composerOperation = ComposerMargin.createMarginFlashLoan({
+    trade,
+    externalCall,
+    marginData,
+    maxIn: false, // defualt value, only for non-open operations
+    maxOut: false, // defualt value, only for non-open operations
+    composerOverride: composer, // composer provided here
+    flashInfoOverride: flashLoanSource // flash source info
+})
+
+// Note that ANY composer operation can be added beforehadn,e.g. 
+
+// This is the calldata to be sent to the composer, e.g. ComposerDirectLending.composeDirectMoneyMarketAction(...)
+// could be used to generate a deposit calldata set that can be added beforehand
+const contractCall = encodeFunctionData({
+  abi: composerAbi,
+  functionName: 'deltaCompose',
+  args: [composerOperation]
+})
+
+```
