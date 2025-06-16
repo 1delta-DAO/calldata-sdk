@@ -121,8 +121,8 @@ const trade: GenericTrade = {
     tradeType: 0, // exact in
     inputAmount:  { currency: assetIn, amount: amendedInput},
     outputAmount:  { currency: assetOut, amount: apiReturn.output}, // the output is unsed in the calldata
-    target,
-    approvalTarget: target,
+    target, // call target
+    approvalTarget: target, // typically the call target is the approval target, this can deviate for some aggregators.
     // this needs to be set to `true` if `apiBody` does not allow to specify the receiver
     sweepToReceiver: false,
 }
