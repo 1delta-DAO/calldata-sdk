@@ -160,7 +160,8 @@ const composerOperation = ComposerMargin.createMarginFlashLoan({
 // Note that ANY composer operation can be added beforehadn,e.g. 
 
 // This is the calldata to be sent to the composer, e.g. ComposerDirectLending.composeDirectMoneyMarketAction(...)
-// could be used to generate a deposit calldata set that can be added beforehand
+// could be used to generate a deposit calldata set that can be added beforehand via
+// `const depositAndOpen = encodePacked(["bytes","bytes"], [depositCalldata, composerOperation])`
 const contractCall = encodeFunctionData({
   abi: composerAbi,
   functionName: 'deltaCompose',
