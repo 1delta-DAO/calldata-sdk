@@ -27,7 +27,9 @@ export const COMPOSER_PROXIES = {
 
 ```
 
-Example usage for depositing to Aave V3
+## Example usage for depositing to Aave V3
+
+Deposits assets to Aave. The caller needs to ensure that the contract has enough permissions (e.g. `token.approve(...)`)
 
 ```Typescript
 // config for chain
@@ -58,7 +60,9 @@ const {calldata, value} = ComposerDirectLending.composeDirectMoneyMarketAction(o
 
 ```
 
-Example usage for opening a position on Aave V3
+## Example usage for opening a position on Aave V3
+
+Open a position on Aave. The caller needs to ensure that the contract has enough permissions (e.g. via `debtToken.approveDelegation(...)`)
 
 ```Typescript
 
