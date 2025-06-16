@@ -27,6 +27,37 @@ export const COMPOSER_PROXIES = {
 
 ```
 
+Example usage for depositing to Aave V3
+
+```Typescript
+// config for chain
+const chainId = "10"
+// the caller
+const composer = COMPOSER_PROXIES[chainId]
+// asset selected
+const input = 1_000_000_000n // 1e9 (1000 USDC)
+const depositAsset = {symbol: "USDC", name: "USDC", address: "0x0b2c639c533813f4aa9d7837caf62653d097ff85", chainId} 
+// caller
+const account = "0x..."
+
+const lender = "AAVE_V3"
+const action = QuickActionType.Deposit
+const operation = {
+    params: { amount: { currency: depositAsset, amount: input } }, // amount params
+    receiver: account, // the caller deposits on their own behalf
+    isAll: false, // only used ofr withdraw & repy
+    inIsNative: false, // use this to signal that one uses the native asset to deposit - the operation then wraps ETH
+    outIsNative: false, // use this if the output needs to be wrapped (e.g. withdraw WETH and unwrap to ETH)
+    composerAddress: composer, // composer
+    permitData: undefined, // no permit
+    morphoParams: undefined, // no morpho
+    useOverride: undefined // we do not use a custom aave fork
+}
+
+const {calldata, value} = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
+
+```
+
 Example usage for opening a position on Aave V3
 
 ```Typescript
