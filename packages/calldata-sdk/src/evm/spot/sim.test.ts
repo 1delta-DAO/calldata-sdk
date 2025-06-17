@@ -53,6 +53,17 @@ describe('Sim Tests - Metis', () => {
         },
         { timeout: 25000 },
     )
+
+    it(
+        'Tests mantle simple',
+        async () => {
+            // @ts-ignore
+            const { calldata, value } = ComposerSpot.composeSpotCalldata(PARAMS_SIMPLE)
+            console.log("calldata", calldata)
+            expect(calldata).to.equal("0x10000000000000000000071afd498d0000000000000000000000000000003cc106000000000000000000000000000000000000000001000000a51894664a773981c6c112c43ce576f315d5b1b6594ce4b82a81930cc637f1a59afdfb0d70054232fe0002000007d83526730c7438048d55a4fc0b850e2aab6f0b91ae002a960e63ccb0e5bde83a8c13e51e1cb91aa0ef4a016f3e54c4520220ade7a496842ecbf83e0901")
+        },
+        { timeout: 25000 },
+    )
 })
 
 const TEST_TRADE = {
@@ -731,4 +742,136 @@ const SINGLE_ROUTE = {
     "receiver": "0x91ae002a960e63Ccb0E5bDE83A8C13E51e1cB91A",
     "composer": "0x594cE4B82A81930cC637f1A59afdFb0D70054232",
     "fotInput": false
+}
+
+const PARAMS_SIMPLE = {
+    "trade": {
+        "inputAmount": {
+            "currency": {
+                "chainId": "5000",
+                "name": "Mantle",
+                "symbol": "MNT",
+                "decimals": 18,
+                "address": "0x0000000000000000000000000000000000000000"
+            },
+            "amount": "200000000000000000"
+        },
+        "outputAmount": {
+            "currency": {
+                "address": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+                "chainId": "5000",
+                "decimals": 6,
+                "symbol": "USDC",
+                "name": "USD Coin"
+            },
+            "amount": "130456"
+        },
+        "tradeType": 0,
+        "aggregator": "1delta",
+        "interfaceTrade": {
+            "tradeType": 0,
+            "inputAmount": {
+                "currency": {
+                    "address": "0x0000000000000000000000000000000000000000",
+                    "chainId": "5000",
+                    "decimals": 18,
+                    "symbol": "MNT",
+                    "name": "Mantle"
+                },
+                "amount": "200000000000000000"
+            },
+            "outputAmount": {
+                "currency": {
+                    "address": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+                    "chainId": "5000",
+                    "decimals": 6,
+                    "symbol": "USDC",
+                    "name": "USD Coin"
+                },
+                "amount": "130456"
+            },
+            "swaps": [
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "CRUST_V1_STABLE",
+                                "dexId": 1,
+                                "tokenIn": {
+                                    "address": "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8",
+                                    "chainId": "5000",
+                                    "decimals": 18,
+                                    "symbol": "WMNT",
+                                    "name": "Wrapped Mantle"
+                                },
+                                "tokenOut": {
+                                    "address": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+                                    "chainId": "5000",
+                                    "decimals": 6,
+                                    "symbol": "USDC",
+                                    "name": "USD Coin"
+                                },
+                                "address": "0x14Bdf0998a2313F8E5772866FDAC029f3d58eb2b",
+                                "swapParams": {
+                                    "dexId": 1,
+                                    "feeDenom": 9999,
+                                    "forkId": "64",
+                                    "pool": "0x14Bdf0998a2313F8E5772866FDAC029f3d58eb2b"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8",
+                                "chainId": "5000",
+                                "decimals": 18,
+                                "symbol": "WMNT",
+                                "name": "Wrapped Mantle"
+                            },
+                            {
+                                "address": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+                                "chainId": "5000",
+                                "decimals": 6,
+                                "symbol": "USDC",
+                                "name": "USD Coin"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x0000000000000000000000000000000000000000",
+                            "chainId": "5000",
+                            "decimals": 18,
+                            "symbol": "MNT",
+                            "name": "Mantle"
+                        },
+                        "amount": "200000000000000000"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+                            "chainId": "5000",
+                            "decimals": 6,
+                            "symbol": "USDC",
+                            "name": "USD Coin"
+                        },
+                        "amount": "130456"
+                    }
+                }
+            ]
+        },
+        "approvalTarget": "0x5c019a146758287c614fe654caec1ba1caf05f4e",
+        "stringified": "",
+        "flashLoanSource": "None",
+        "inputAmountRealized": 0.2,
+        "outputAmountRealized": 0.130456,
+        "slippage": {
+            "numerator": "30",
+            "denominator": "10000",
+            "isPercent": true
+        }
+    },
+    "composer": "0x5c019a146758287c614fe654caec1ba1caf05f4e",
+    "receiver": "0xc08BFef7E778f3519D79E96780b77066F5d4FCC0",
+    "slippageTolerance": "3000"
 }
