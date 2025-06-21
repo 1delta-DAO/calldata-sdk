@@ -56,7 +56,8 @@ function encodeSwap(
       receiver,
       // override dex for FOT to Uniswap V2 type
       fot ? DexTypeMappings.UNISWAP_V2_FOT_ID : pool.swapParams.dexId,
-      pool.address as Address, poolSpecificData as Hex
+      pool.address as Address, 
+      poolSpecificData as Hex
     ],
   )
 }
@@ -124,7 +125,6 @@ function processTrade(
       DexPayConfig.PRE_FUND, // this is ignored as native always needs to be in the contract
     )
   }
-
   // check if unwrap is required as the last branch
   if (isUnwrapRequired) {
     /*
@@ -181,7 +181,6 @@ function processTrade(
       // Handle native token wrapping if needed (not for first hop)
       if (hopIndex > 0 && CurrencyUtils.isNative(currentToken) && !supportsNativeToken(pool.protocol)) {
         const wrapReceiver = isPreFundableDex(pool.protocol) ? (pool.address as Address) : composerAddress
-
         swapCalldata = attachBranch(swapCalldata, 0n, 0n, '0x')
         swapCalldata = encodeWrapperSwap(
           swapCalldata,
@@ -203,7 +202,6 @@ function processTrade(
       } else {
         hopReceiver = receiver
       }
-
       // Encode the swap
       swapCalldata = attachBranch(swapCalldata, 0n, 0n, '0x')
       swapCalldata += encodeSwap(

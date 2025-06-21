@@ -64,6 +64,17 @@ describe('Sim Tests - Metis', () => {
         },
         { timeout: 25000 },
     )
+
+    it.only(
+        'Tests wrapswap',
+        async () => {
+            // @ts-ignore
+            const { calldata, value } = ComposerSpot.composeSpotCalldata(WRAP_SWAP)
+            console.log("calldata", calldata)
+            // expect(calldata).to.equal("0x10000000000000000000071afd498d0000000000000000000000000000003cc106000000000000000000000000000000000000000001000000a51894664a773981c6c112c43ce576f315d5b1b6594ce4b82a81930cc637f1a59afdfb0d70054232fe0002000007d83526730c7438048d55a4fc0b850e2aab6f0b91ae002a960e63ccb0e5bde83a8c13e51e1cb91aa0ef4a016f3e54c4520220ade7a496842ecbf83e0901")
+        },
+        { timeout: 25000 },
+    )
 })
 
 const TEST_TRADE = {
@@ -874,4 +885,565 @@ const PARAMS_SIMPLE = {
     "composer": "0x5c019a146758287c614fe654caec1ba1caf05f4e",
     "receiver": "0xc08BFef7E778f3519D79E96780b77066F5d4FCC0",
     "slippageTolerance": "3000"
+}
+
+const WRAP_SWAP = {
+    "trade": {
+        "inputAmount": {
+            "currency": {
+                "chainId": "1088",
+                "name": "Metis",
+                "symbol": "METIS",
+                "decimals": 18,
+                "address": "0x0000000000000000000000000000000000000000"
+            },
+            "amount": "111000000000000000"
+        },
+        "outputAmount": {
+            "currency": {
+                "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                "chainId": "1088",
+                "decimals": 6,
+                "symbol": "m.USDC",
+                "name": "Bridged USDC"
+            },
+            "amount": "1665025"
+        },
+        "tradeType": 0,
+        "aggregator": "1delta",
+        "interfaceTrade": {
+            "tradeType": 0,
+            "inputAmount": {
+                "currency": {
+                    "address": "0x0000000000000000000000000000000000000000",
+                    "chainId": "1088",
+                    "decimals": 18,
+                    "symbol": "METIS",
+                    "name": "Metis"
+                },
+                "amount": "111000000000000000"
+            },
+            "outputAmount": {
+                "currency": {
+                    "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                    "chainId": "1088",
+                    "decimals": 6,
+                    "symbol": "m.USDC",
+                    "name": "Bridged USDC"
+                },
+                "amount": "1665025"
+            },
+            "swaps": [
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "SUSHISWAP_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+                                    "chainId": "1088",
+                                    "decimals": 18,
+                                    "symbol": "WMETIS",
+                                    "name": "Wrapped Metis"
+                                },
+                                "tokenOut": {
+                                    "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDC",
+                                    "name": "Bridged USDC"
+                                },
+                                "address": "0xF956887F404883A838a388b7884ca85b223Bd54D",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 1,
+                                    "fee": 3000,
+                                    "pool": "0xF956887F404883A838a388b7884ca85b223Bd54D"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+                                "chainId": "1088",
+                                "decimals": 18,
+                                "symbol": "WMETIS",
+                                "name": "Wrapped Metis"
+                            },
+                            {
+                                "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                                "chainId": "1088",
+                                "decimals": 6,
+                                "symbol": "m.USDC",
+                                "name": "Bridged USDC"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x0000000000000000000000000000000000000000",
+                            "chainId": "1088",
+                            "decimals": 18,
+                            "symbol": "METIS",
+                            "name": "Metis"
+                        },
+                        "amount": "22200000000000000"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                            "chainId": "1088",
+                            "decimals": 6,
+                            "symbol": "m.USDC",
+                            "name": "Bridged USDC"
+                        },
+                        "amount": "328692"
+                    }
+                },
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "HERCULES",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+                                    "chainId": "1088",
+                                    "decimals": 18,
+                                    "symbol": "WMETIS",
+                                    "name": "Wrapped Metis"
+                                },
+                                "tokenOut": {
+                                    "address": "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDT",
+                                    "name": "Bridged USDT"
+                                },
+                                "address": "0xf75C20C485c6aB97dF2Fc20790531617a179AE7b",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 30,
+                                    "fee": 3000,
+                                    "pool": "0xf75C20C485c6aB97dF2Fc20790531617a179AE7b"
+                                }
+                            },
+                            {
+                                "protocol": "HERCULES",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDT",
+                                    "name": "Bridged USDT"
+                                },
+                                "tokenOut": {
+                                    "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDC",
+                                    "name": "Bridged USDC"
+                                },
+                                "address": "0xa1B0a025669EAe9dd3133e9FA2C2C30Ea8399B2a",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 30,
+                                    "fee": 1200,
+                                    "pool": "0xa1B0a025669EAe9dd3133e9FA2C2C30Ea8399B2a"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+                                "chainId": "1088",
+                                "decimals": 18,
+                                "symbol": "WMETIS",
+                                "name": "Wrapped Metis"
+                            },
+                            {
+                                "address": "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+                                "chainId": "1088",
+                                "decimals": 6,
+                                "symbol": "m.USDT",
+                                "name": "Bridged USDT"
+                            },
+                            {
+                                "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                                "chainId": "1088",
+                                "decimals": 6,
+                                "symbol": "m.USDC",
+                                "name": "Bridged USDC"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x0000000000000000000000000000000000000000",
+                            "chainId": "1088",
+                            "decimals": 18,
+                            "symbol": "METIS",
+                            "name": "Metis"
+                        },
+                        "amount": "22200000000000000"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                            "chainId": "1088",
+                            "decimals": 6,
+                            "symbol": "m.USDC",
+                            "name": "Bridged USDC"
+                        },
+                        "amount": "329214"
+                    }
+                },
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "HERCULES",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+                                    "chainId": "1088",
+                                    "decimals": 18,
+                                    "symbol": "WMETIS",
+                                    "name": "Wrapped Metis"
+                                },
+                                "tokenOut": {
+                                    "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDC",
+                                    "name": "Bridged USDC"
+                                },
+                                "address": "0xA4E4949e0cccd8282f30e7E113D8A551A1eD1aeb",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 30,
+                                    "fee": 1882,
+                                    "pool": "0xA4E4949e0cccd8282f30e7E113D8A551A1eD1aeb"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+                                "chainId": "1088",
+                                "decimals": 18,
+                                "symbol": "WMETIS",
+                                "name": "Wrapped Metis"
+                            },
+                            {
+                                "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                                "chainId": "1088",
+                                "decimals": 6,
+                                "symbol": "m.USDC",
+                                "name": "Bridged USDC"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x0000000000000000000000000000000000000000",
+                            "chainId": "1088",
+                            "decimals": 18,
+                            "symbol": "METIS",
+                            "name": "Metis"
+                        },
+                        "amount": "22200000000000000"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                            "chainId": "1088",
+                            "decimals": 6,
+                            "symbol": "m.USDC",
+                            "name": "Bridged USDC"
+                        },
+                        "amount": "329295"
+                    }
+                },
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "WAGMI",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+                                    "chainId": "1088",
+                                    "decimals": 18,
+                                    "symbol": "WMETIS",
+                                    "name": "Wrapped Metis"
+                                },
+                                "tokenOut": {
+                                    "address": "0x420000000000000000000000000000000000000a",
+                                    "chainId": "1088",
+                                    "decimals": 18,
+                                    "symbol": "WETH",
+                                    "name": "Wrapped Ether"
+                                },
+                                "address": "0xdf99c7073c7685192dB6Cbbf69732BEe3354E117",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 15,
+                                    "fee": 3000,
+                                    "pool": "0xdf99c7073c7685192dB6Cbbf69732BEe3354E117"
+                                }
+                            },
+                            {
+                                "protocol": "MAIA_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x420000000000000000000000000000000000000a",
+                                    "chainId": "1088",
+                                    "decimals": 18,
+                                    "symbol": "WETH",
+                                    "name": "Wrapped Ether"
+                                },
+                                "tokenOut": {
+                                    "address": "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDT",
+                                    "name": "Bridged USDT"
+                                },
+                                "address": "0x51f9247562B86f66149126bf9e200528522D527E",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 16,
+                                    "fee": 100,
+                                    "pool": "0x51f9247562B86f66149126bf9e200528522D527E"
+                                }
+                            },
+                            {
+                                "protocol": "MAIA_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDT",
+                                    "name": "Bridged USDT"
+                                },
+                                "tokenOut": {
+                                    "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDC",
+                                    "name": "Bridged USDC"
+                                },
+                                "address": "0x69A4CcA3bfcB4133A153222134CAea849f94b9BD",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 16,
+                                    "fee": 3000,
+                                    "pool": "0x69A4CcA3bfcB4133A153222134CAea849f94b9BD"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+                                "chainId": "1088",
+                                "decimals": 18,
+                                "symbol": "WMETIS",
+                                "name": "Wrapped Metis"
+                            },
+                            {
+                                "address": "0x420000000000000000000000000000000000000a",
+                                "chainId": "1088",
+                                "decimals": 18,
+                                "symbol": "WETH",
+                                "name": "Wrapped Ether"
+                            },
+                            {
+                                "address": "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+                                "chainId": "1088",
+                                "decimals": 6,
+                                "symbol": "m.USDT",
+                                "name": "Bridged USDT"
+                            },
+                            {
+                                "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                                "chainId": "1088",
+                                "decimals": 6,
+                                "symbol": "m.USDC",
+                                "name": "Bridged USDC"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x0000000000000000000000000000000000000000",
+                            "chainId": "1088",
+                            "decimals": 18,
+                            "symbol": "METIS",
+                            "name": "Metis"
+                        },
+                        "amount": "22200000000000000"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                            "chainId": "1088",
+                            "decimals": 6,
+                            "symbol": "m.USDC",
+                            "name": "Bridged USDC"
+                        },
+                        "amount": "338780"
+                    }
+                },
+                {
+                    "route": {
+                        "pools": [
+                            {
+                                "protocol": "HERCULES",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+                                    "chainId": "1088",
+                                    "decimals": 18,
+                                    "symbol": "WMETIS",
+                                    "name": "Wrapped Metis"
+                                },
+                                "tokenOut": {
+                                    "address": "0x420000000000000000000000000000000000000a",
+                                    "chainId": "1088",
+                                    "decimals": 18,
+                                    "symbol": "WETH",
+                                    "name": "Wrapped Ether"
+                                },
+                                "address": "0xbD718c67cD1e2f7FBe22d47bE21036cD647C7714",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 30,
+                                    "fee": 3000,
+                                    "pool": "0xbD718c67cD1e2f7FBe22d47bE21036cD647C7714"
+                                }
+                            },
+                            {
+                                "protocol": "MAIA_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0x420000000000000000000000000000000000000a",
+                                    "chainId": "1088",
+                                    "decimals": 18,
+                                    "symbol": "WETH",
+                                    "name": "Wrapped Ether"
+                                },
+                                "tokenOut": {
+                                    "address": "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDT",
+                                    "name": "Bridged USDT"
+                                },
+                                "address": "0x500A1959a86358500B24DbF5b7a32298E20D2c71",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 16,
+                                    "fee": 3000,
+                                    "pool": "0x500A1959a86358500B24DbF5b7a32298E20D2c71"
+                                }
+                            },
+                            {
+                                "protocol": "MAIA_V3",
+                                "dexId": 0,
+                                "tokenIn": {
+                                    "address": "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDT",
+                                    "name": "Bridged USDT"
+                                },
+                                "tokenOut": {
+                                    "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                                    "chainId": "1088",
+                                    "decimals": 6,
+                                    "symbol": "m.USDC",
+                                    "name": "Bridged USDC"
+                                },
+                                "address": "0x926873c13835E44516073Aa6b45e56116EfA59B4",
+                                "swapParams": {
+                                    "dexId": 0,
+                                    "forkId": 16,
+                                    "fee": 100,
+                                    "pool": "0x926873c13835E44516073Aa6b45e56116EfA59B4"
+                                }
+                            }
+                        ],
+                        "path": [
+                            {
+                                "address": "0x75cb093e4d61d2a2e65d8e0bbb01de8d89b53481",
+                                "chainId": "1088",
+                                "decimals": 18,
+                                "symbol": "WMETIS",
+                                "name": "Wrapped Metis"
+                            },
+                            {
+                                "address": "0x420000000000000000000000000000000000000a",
+                                "chainId": "1088",
+                                "decimals": 18,
+                                "symbol": "WETH",
+                                "name": "Wrapped Ether"
+                            },
+                            {
+                                "address": "0xbb06dca3ae6887fabf931640f67cab3e3a16f4dc",
+                                "chainId": "1088",
+                                "decimals": 6,
+                                "symbol": "m.USDT",
+                                "name": "Bridged USDT"
+                            },
+                            {
+                                "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                                "chainId": "1088",
+                                "decimals": 6,
+                                "symbol": "m.USDC",
+                                "name": "Bridged USDC"
+                            }
+                        ]
+                    },
+                    "inputAmount": {
+                        "currency": {
+                            "address": "0x0000000000000000000000000000000000000000",
+                            "chainId": "1088",
+                            "decimals": 18,
+                            "symbol": "METIS",
+                            "name": "Metis"
+                        },
+                        "amount": "22200000000000000"
+                    },
+                    "outputAmount": {
+                        "currency": {
+                            "address": "0xea32a96608495e54156ae48931a7c20f0dcc1a21",
+                            "chainId": "1088",
+                            "decimals": 6,
+                            "symbol": "m.USDC",
+                            "name": "Bridged USDC"
+                        },
+                        "amount": "339044"
+                    }
+                }
+            ]
+        },
+        "approvalTarget": "0xCe434378adacC51d54312c872113D687Ac19B516",
+        "stringified": "",
+        "flashLoanSource": "None",
+        "inputAmountRealized": 0.111,
+        "outputAmountRealized": 1.665025,
+        "slippage": {
+            "numerator": "30",
+            "denominator": "10000",
+            "isPercent": true
+        }
+    },
+    "slippageTolerance": "3000",
+    "receiver": "0x91ae002a960e63Ccb0E5bDE83A8C13E51e1cB91A",
+    "composer": "0xCe434378adacC51d54312c872113D687Ac19B516",
+    "fotInput": false
 }

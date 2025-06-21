@@ -1,4 +1,4 @@
-import { Address, encodeAbiParameters, Hex, maxUint16 } from 'viem'
+import { Address, encodePacked, Hex, maxUint16 } from 'viem'
 import { NATIVE_SUPPORTING_PROTOCOLS, PRE_FUNDABLE_DEXES } from '../evm/consts'
 import { WRAPPED_NATIVE_INFO } from '@1delta/asset-registry'
 import { SwapObject } from './genericTrade'
@@ -9,12 +9,11 @@ import { TradeType, BPS_BASE } from '../evm'
 export function getSplits(inputAmount: bigint, splitShares: bigint[]) {
   if (splitShares.length === 1) return '0x'
 
-  const splitData = encodeAbiParameters(
-    Array(splitShares.length - 1).fill({ type: 'uint16' }),
+  const splitData = encodePacked(
+    Array(splitShares.length - 1).fill('uint16'),
     splitShares.slice(0, -1).map((share) => (share * maxUint16) / inputAmount),
   ) as Hex
-
-  return shiftLeft(splitData, 32 - 2 * (splitShares.length - 1))
+  return splitData
 }
 
 function shiftLeft(data: Hex, shift: number): Hex {
@@ -75,7 +74,7 @@ export function needsWrap(trade: SerializedTrade, chainId: ChainIdLike): boolean
   return CurrencyUtils.isNativeAmount(trade.inputAmount)
 }
 
-export function getAdjustedHopCount(swap:SerializedSwapStep, numHops: number): number {
+export function getAdjustedHopCount(swap: SerializedSwapStep, numHops: number): number {
   const path = swap.route.path
   const pools = swap.route.pools
   let additionalHops = 0
