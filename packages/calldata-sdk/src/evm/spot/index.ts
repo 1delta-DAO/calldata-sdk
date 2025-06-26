@@ -56,7 +56,7 @@ function encodeSwap(
       receiver,
       // override dex for FOT to Uniswap V2 type
       fot ? DexTypeMappings.UNISWAP_V2_FOT_ID : pool.swapParams.dexId,
-      pool.address as Address, 
+      pool.address as Address,
       poolSpecificData as Hex
     ],
   )
