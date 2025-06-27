@@ -239,7 +239,7 @@ function getPoolReceiverData(
 ): FlashSwapInstruction {
   return {
     // @ts-ignore
-    receiver: composer, // receiver must be the composer as it  needs to read a balanceOf()
+    receiver: composer, // receiver must be the composer as it needs to read a balanceOf()
     pool: step.route.pools[0],
     remainingPath: sliceSwapStep(step),
     preFunded: false, // never pre-fund the secn margin step

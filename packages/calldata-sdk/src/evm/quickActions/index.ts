@@ -109,7 +109,7 @@ export namespace ComposerQuickActions {
       lender,
       aaveInterestMode,
       morphoParams,
-      transferType: repayMaximum ? TransferToLenderType.ContractBalance : TransferToLenderType.Amount,
+      transferType: repayMaximum ? TransferToLenderType.UserBalance : TransferToLenderType.ContractBalance,
       useOverride,
     })
 
