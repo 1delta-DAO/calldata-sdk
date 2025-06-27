@@ -25,7 +25,8 @@ export function getLenderData(lender: Lender, chainId: ChainIdLike, asset: strin
   // check if the lender is aave (all aave forks)
   if (AAVE_LENDERS.includes(lender)) {
     const key = lender as keyof typeof AAVE_FORK_POOL_DATA
-    const { pool } = AAVE_FORK_POOL_DATA[key][chainId]
+    // @ts-ignore
+    const { pool } = AAVE_FORK_POOL_DATA?.[key]?.[chainId]
     const aaveTokens = AAVE_STYLE_TOKENS[key]
     const chainKey = chainId as keyof typeof aaveTokens
     // aave only accepts wNative, adjust for this here
