@@ -35,6 +35,11 @@ import { UINT112_MAX } from '../consts'
 import { Lender } from '@1delta/asset-registry'
 import { SerializedCurrencyAmount } from '@1delta/type-sdk'
 
+/** Yldr is lieke aave, just with no borrow mode */
+function isYldr(lender: string) {
+  return lender === Lender.YLDR
+}
+
 export namespace ComposerLendingActions {
   function getAssetData(amount: SerializedCurrencyAmount | OverrideAmount, lender: Lender) {
     if (isOverrideAmount(amount)) {
@@ -183,7 +188,7 @@ export namespace ComposerLendingActions {
         if (!pool || !mode) {
           throw new Error('Pool and mode should be defined for AaveV2/V3 borrows')
         }
-        return encodePacked(['bytes', 'uint8', 'address'], [genericPart, mode, pool as Address])
+        return encodePacked(['bytes', 'uint8', 'address'], [genericPart, isYldr(lender) ? 0 : mode, pool as Address])
       case LenderGroups.CompoundV2:
         // collateral tokens for compound V2
         const lendingToken = useOverride?.collateralToken ?? getCollateralToken(lenderData)
@@ -278,7 +283,7 @@ export namespace ComposerLendingActions {
             asset as Address,
             BigInt(amountUsed),
             receiver as Address,
-            mode,
+            isYldr(lender) ? 0 : mode,
             debtToken as Address,
             pool as Address,
           ],
