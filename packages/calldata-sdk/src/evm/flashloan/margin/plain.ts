@@ -320,12 +320,18 @@ export namespace ComposerMargin {
     if (shouldUseDebasedFlow) {
       // debased flow
       flashloanData = packCommands([
-        context.debasedCalls.depositIntermediateCall, // 1. Deposit intermediate asset to Compound
-        context.debasedCalls.withdrawTargetCall, // 2. Withdraw target compound asset from Compound
-        swapCall, // 3. Swap target asset to final asset
-        context.debasedCalls.finalDepositCall, // 4. Deposit/repay final asset
-        context.debasedCalls.withdrawIntermediateCall, // 5. Withdraw intermediate asset from Compound
-        safetySweep, // 6. Safety sweep
+        // 1. Deposit proxy asset to lender (compound)
+        context.debasedCalls.depositIntermediateCall,
+        // 2. Withdraw target compound asset from lender (compound)
+        context.debasedCalls.withdrawTargetCall,
+        // 3. Swap target asset to final asset
+        swapCall,
+        // 4. Deposit/repay final asset
+        context.debasedCalls.finalDepositCall,
+        // 5. Withdraw proxy asset from lender (compound) to repay flash loan
+        context.debasedCalls.withdrawIntermediateCall,
+        // 6. Safety sweep
+        safetySweep,
       ])
     } else {
       // regular flow
