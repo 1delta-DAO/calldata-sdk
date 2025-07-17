@@ -172,7 +172,11 @@ export namespace ComposerMargin {
       flashLoanProvider = provider
       flashPoolType = poolType!
       flashRepayBalanceHolder =
-        balanceHolder ?? (poolType === FlashLoanIds.BALANCER_V2 ? providerAddress! : composerAddress!)
+        balanceHolder ??
+        // balancers go directly to the pool
+        (poolType === FlashLoanIds.BALANCER_V2 || provider === FlashLoanProvider.BALANCER_V3
+          ? providerAddress!
+          : composerAddress!)
       flashPool = providerAddress!
     } else {
       // if debased, use intermediate asset for flash loan provider selection
