@@ -10,6 +10,8 @@ export interface FlashInfo {
   provider: FlashLoanProvider
   providerAddress?: string
   balanceHolder?: string
+  /** The intermediate asset to use for de-based flash loan, if amount is set to zero, then inputAmount will be used */
+  proxyAsset?: SerializedCurrencyAmount | undefined
 }
 export interface HandleMarginParams {
   /** swap object */
@@ -32,7 +34,4 @@ export interface HandleMarginParams {
 
   /** ignored for ext aggregators */
   slippageTolerance?: string
-
-  /** The intermediate asset to use for de-based flash loan, if amount is set to zero, then inputAmount will be used */
-  proxyAsset?: SerializedCurrencyAmount | undefined
 }

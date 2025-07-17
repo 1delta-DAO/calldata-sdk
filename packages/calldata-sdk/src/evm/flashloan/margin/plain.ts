@@ -124,8 +124,6 @@ export namespace ComposerMargin {
     // these are poarameters that allow a UI to override details
     composerOverride = undefined,
     flashInfoOverride = undefined,
-    // used for de-based flashloans
-    proxyAsset = undefined,
   }: HandleMarginParams) {
     // ensure params are given
     if (!trade || !externalCall || !marginData || !account) return '0x'
@@ -135,6 +133,8 @@ export namespace ComposerMargin {
 
     // handle max cases
     if (isMaxIn && isMaxOut) throw new Error('Cannot be maxIn and maxOut at the same time')
+
+    const { proxyAsset } = flashInfoOverride ?? {}
 
     /** get token and lender info */
     const tokenIn = getAssetInFromTrade(trade) as Address
