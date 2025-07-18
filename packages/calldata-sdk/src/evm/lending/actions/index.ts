@@ -12,7 +12,9 @@ import {
   ComposerCommands,
   encodeApprove,
   encodeMorphoBorrow,
+  encodeMorphoDeposit,
   encodeMorphoDepositCollateral,
+  encodeMorphoWithdraw,
   encodeMorphoWithdrawCollateral,
   encodeUint8AndBytes,
   generateAmountBitmap,
@@ -74,13 +76,27 @@ export namespace ComposerLendingActions {
       if (!morphoParams) {
         throw new Error('Morpho params should be defined for MorphoBlue deposits')
       }
-      return encodeMorphoDepositCollateral(
+
+      // this is to deposit collateral
+      if (!morphoParams.isLoanToken)
+        return encodeMorphoDepositCollateral(
+          morphoParams.market,
+          amountUsed,
+          receiver as Address,
+          morphoParams.data,
+          morphoParams.morphoB as Address,
+          BigInt(morphoParams.pId)
+        )
+
+      // this deposits the earn token
+      return encodeMorphoDeposit(
         morphoParams.market,
+        morphoParams.isShares,
         amountUsed,
         receiver as Address,
         morphoParams.data,
         morphoParams.morphoB as Address,
-        BigInt(morphoParams.pId),
+        BigInt(morphoParams.pId)
       )
     }
 
@@ -100,7 +116,7 @@ export namespace ComposerLendingActions {
         amountUsed,
         receiver as Address,
         pool as Address,
-      ],
+      ]
     )
   }
 
@@ -126,7 +142,7 @@ export namespace ComposerLendingActions {
         asset as Address,
         BigInt(amountUsed),
         receiver as Address,
-      ],
+      ]
     )
     switch (lenderData.group) {
       case LenderGroups.AaveV2:
@@ -150,12 +166,21 @@ export namespace ComposerLendingActions {
         if (!morphoParams) {
           throw new Error('Morpho params should be defined for MorphoBlue withdrawals')
         }
-        return encodeMorphoWithdrawCollateral(
-          morphoParams.market,
-          BigInt(amountUsed),
-          receiver as Address,
-          morphoParams.morphoB as Address,
-        )
+        if (!morphoParams.isLoanToken)
+          return encodeMorphoWithdrawCollateral(
+            morphoParams.market,
+            BigInt(amountUsed),
+            receiver as Address,
+            morphoParams.morphoB as Address
+          )
+
+         return encodeMorphoWithdraw(
+            morphoParams.market,
+            morphoParams.isShares,
+            BigInt(amountUsed),
+            receiver as Address,
+            morphoParams.morphoB as Address
+          )
       default:
         throw new Error('Lender not supported')
     }
@@ -180,7 +205,7 @@ export namespace ComposerLendingActions {
         asset as Address,
         amountUsed,
         receiver as Address,
-      ],
+      ]
     )
     switch (lenderData.group) {
       case LenderGroups.AaveV2:
@@ -207,7 +232,7 @@ export namespace ComposerLendingActions {
           morphoParams.isShares,
           amountUsed,
           receiver as Address,
-          morphoParams.morphoB as Address,
+          morphoParams.morphoB as Address
         )
       default:
         throw new Error('Lender not supported')
@@ -268,7 +293,7 @@ export namespace ComposerLendingActions {
 
     const genericPart = encodePacked(
       ['bytes', 'uint8', 'uint8', 'uint16'],
-      [approveCall, ComposerCommands.LENDING, LenderOps.REPAY, getLenderId(lenderData.group)],
+      [approveCall, ComposerCommands.LENDING, LenderOps.REPAY, getLenderId(lenderData.group)]
     )
     switch (lenderData.group) {
       case LenderGroups.AaveV2:
@@ -286,7 +311,7 @@ export namespace ComposerLendingActions {
             isYldr(lender) ? 0 : mode,
             debtToken as Address,
             pool as Address,
-          ],
+          ]
         )
       case LenderGroups.CompoundV2:
         if (!collateralToken) {
@@ -294,7 +319,7 @@ export namespace ComposerLendingActions {
         }
         return encodePacked(
           ['bytes', 'address', 'uint128', 'address', 'address'],
-          [genericPart, asset as Address, amountUsed, receiver as Address, collateralToken as Address],
+          [genericPart, asset as Address, amountUsed, receiver as Address, collateralToken as Address]
         )
       case LenderGroups.CompoundV3:
         if (!pool) {
@@ -302,7 +327,7 @@ export namespace ComposerLendingActions {
         }
         return encodePacked(
           ['bytes', 'address', 'uint128', 'address', 'address'],
-          [genericPart, asset as Address, BigInt(amountUsed), receiver as Address, pool as Address],
+          [genericPart, asset as Address, BigInt(amountUsed), receiver as Address, pool as Address]
         )
       case LenderGroups.MorphoBlue:
         if (!morphoParams) {
@@ -318,13 +343,13 @@ export namespace ComposerLendingActions {
               uint128(BigInt(amountUsed)),
               morphoParams.isShares,
               morphoParams.unsafeRepayment,
-              false,
+              false
             ),
             receiver as Address,
             morphoParams.morphoB as Address,
             uint16(morphoParams.data.length > 0 ? morphoParams.data.length + 1 : 0),
             morphoParams.data.length == 0 ? '0x' : encodeUint8AndBytes(uint8(morphoParams.pId), morphoParams.data),
-          ],
+          ]
         )
       default:
         throw new Error('Lender not supported')

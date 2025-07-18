@@ -105,21 +105,22 @@ export enum TransferToLenderType {
   ContractBalance, // Use contract balance
 }
 
+/** Morpho market params: MUST be attached when using MB */
 export interface MorphoParams {
+  /** tightly packed market as hex */
   market: Hex
+  /** use shares - ignored for collateral */
   isShares: boolean
+  /** morpho address */
   morphoB: string
+  /** flash callback composer data */
   data: Hex
+  /** fork id */
   pId: number
+  /** confidently repay and fail if too much */
   unsafeRepayment: boolean
-}
-
-export interface MorphoMarket {
-  loanToken: string
-  collateralToken: string
-  oracle: string
-  irm: string
-  lltv: bigint
+  /** loan token interaction: deposit/wirhdraw only */
+  isLoanToken?: boolean
 }
 
 export interface OverrideAmount {
