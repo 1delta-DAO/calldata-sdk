@@ -29,6 +29,7 @@ import { MarginData } from '../types/margin'
 
 /**
  * Build the inner call sequence for debased flash loan
+ * Note this should not be used for morpho, we skip the markets here.
  */
 function buildDebasedInnerCall(
   trade: GenericTrade,
@@ -41,7 +42,7 @@ function buildDebasedInnerCall(
   composerAddress: string,
   flashRepayBalanceHolder: string
 ) {
-  const { lender, morphoParams } = marginData
+  const { lender } = marginData
   const chainId = trade.inputAmount.currency.chainId
 
   // 1. Deposit proxy asset to lender (compound)
@@ -49,7 +50,7 @@ function buildDebasedInnerCall(
     receiver: account,
     amount: { asset: proxyToken, amount: proxyAmount, chainId },
     lender: lender,
-    morphoParams,
+    morphoParams: undefined,
     transferType: TransferToLenderType.Amount,
   })
 
@@ -62,7 +63,7 @@ function buildDebasedInnerCall(
       chainId,
     },
     lender: lender,
-    morphoParams,
+    morphoParams: undefined,
     transferType: TransferToLenderType.Amount,
   })
 
@@ -71,7 +72,7 @@ function buildDebasedInnerCall(
     receiver: account,
     amount: { asset: finalTokenOut, amount: 0n, chainId: trade.outputAmount.currency.chainId },
     lender: lender,
-    morphoParams,
+    morphoParams: undefined,
     transferType: TransferToLenderType.ContractBalance,
   })
 
@@ -84,7 +85,7 @@ function buildDebasedInnerCall(
       chainId,
     },
     lender: lender,
-    morphoParams,
+    morphoParams: undefined,
     transferType: TransferToLenderType.Amount,
   })
 
