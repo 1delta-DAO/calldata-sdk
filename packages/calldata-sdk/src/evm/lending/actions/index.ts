@@ -334,11 +334,10 @@ export namespace ComposerLendingActions {
           throw new Error('Morpho params should be defined for MorphoBlue withdrawals')
         }
         return encodePacked(
-          ['bytes', 'bytes', 'address', 'uint128', 'address', 'address', 'uint16', 'bytes'],
+          ['bytes', 'bytes', 'uint128', 'address', 'address', 'uint16', 'bytes'],
           [
             genericPart,
             morphoParams.market,
-            asset as Address,
             generateAmountBitmap(
               uint128(BigInt(amountUsed)),
               morphoParams.isShares,
