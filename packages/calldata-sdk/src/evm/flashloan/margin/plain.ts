@@ -266,7 +266,7 @@ export namespace ComposerMargin {
 
     // define sweep data if desired
     let sweepOutputCalldata: Hex = '0x'
-    if (trade.sweepToReceiver) {
+    if (trade.sweepToReceiver || shouldUseDebasedFlow) {
       // Sweep output to composer (as we need to put the funds into the lender)
       sweepOutputCalldata = ComposerSpot.createSweepCalldata(
         trade.outputAmount.currency.address as Address,
@@ -326,15 +326,22 @@ export namespace ComposerMargin {
       flashloanData = packCommands([
         // 1. Deposit proxy asset to lender (compound)
         context.debasedCalls.depositIntermediateCall,
-        // 2. Withdraw target compound asset from lender (compound)
+        // 2. Withdraw target compound asset from lender (compound) to composer
         context.debasedCalls.withdrawTargetCall,
-        // 3. Swap target asset to final asset
+        // 3. Transfer target asset from composer to call forwarder for swap
+        encodeSweep(
+          trade.inputAmount.currency.address as Address,
+          externalCall.callForwarder as Address,
+          BigInt(trade.inputAmount.amount),
+          SweepType.AMOUNT
+        ),
+        // 4. Swap target asset to final asset
         swapCall,
-        // 4. Deposit/repay final asset
+        // 5. Deposit/repay final asset
         context.debasedCalls.finalDepositCall,
-        // 5. Withdraw proxy asset from lender (compound) to repay flash loan
+        // 6. Withdraw proxy asset from lender (compound) to repay flash loan
         context.debasedCalls.withdrawIntermediateCall,
-        // 6. Safety sweep
+        // 7. Safety sweep
         safetySweep,
       ])
     } else {
