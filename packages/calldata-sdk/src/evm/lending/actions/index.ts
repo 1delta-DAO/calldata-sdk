@@ -174,13 +174,13 @@ export namespace ComposerLendingActions {
             morphoParams.morphoB as Address
           )
 
-         return encodeMorphoWithdraw(
-            morphoParams.market,
-            morphoParams.isShares,
-            BigInt(amountUsed),
-            receiver as Address,
-            morphoParams.morphoB as Address
-          )
+        return encodeMorphoWithdraw(
+          morphoParams.market,
+          morphoParams.isShares,
+          BigInt(amountUsed),
+          receiver as Address,
+          morphoParams.morphoB as Address
+        )
       default:
         throw new Error('Lender not supported')
     }
@@ -346,8 +346,9 @@ export namespace ComposerLendingActions {
             ),
             receiver as Address,
             morphoParams.morphoB as Address,
-            uint16(morphoParams.data.length > 0 ? morphoParams.data.length + 1 : 0),
-            morphoParams.data.length == 0 ? '0x' : encodeUint8AndBytes(uint8(morphoParams.pId), morphoParams.data),
+            // length > 2 indicates that there is more than just 0x
+            uint16(morphoParams.data.length > 2 ? (morphoParams.data.length - 2) / 2 : 0),
+            morphoParams.data.length > 2 ? encodeUint8AndBytes(uint8(morphoParams.pId), morphoParams.data) : '0x',
           ]
         )
       default:
