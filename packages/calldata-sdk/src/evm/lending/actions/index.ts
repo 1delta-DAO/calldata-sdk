@@ -347,7 +347,8 @@ export namespace ComposerLendingActions {
             receiver as Address,
             morphoParams.morphoB as Address,
             // length > 2 indicates that there is more than just 0x
-            uint16(morphoParams.data.length > 2 ? (morphoParams.data.length - 2) / 2 : 0),
+            // we use length / 2 as we add one byte unit for the poolId at the end
+            uint16(morphoParams.data.length > 2 ? morphoParams.data.length / 2 : 0),
             morphoParams.data.length > 2 ? encodeUint8AndBytes(uint8(morphoParams.pId), morphoParams.data) : '0x',
           ]
         )
