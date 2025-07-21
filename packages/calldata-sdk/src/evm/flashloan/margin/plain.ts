@@ -76,10 +76,10 @@ function buildDebasedInnerCall(
     marginData,
     inLenderData,
     outLenderData,
-    flashRepayBalanceHolder,
-    forwarder,
-    trade.inputAmount.amount.toString(),
-    isMaxIn,
+    flashRepayBalanceHolder, // <- this should be the composer or flash pool
+    forwarder, // <- the intermediate (we borrow or withdraw to) is the forwarder
+    trade.inputAmount.amount.toString(), // <- the amount is unadjusted (no flash fee adjustmetn)
+    isMaxIn, // flags as before
     isMaxOut
   )
   // 3. Withdraw proxy asset from lender (compound) to repay flash loan
