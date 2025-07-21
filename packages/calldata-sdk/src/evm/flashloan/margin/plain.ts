@@ -323,7 +323,7 @@ export namespace ComposerMargin {
      * This is the case for pool-based flash loans
      */
     let transferToCallForwarder: Hex = '0x'
-    if (flashData.type === 'Pool') {
+    if (flashData.type === 'Pool' && !shouldUseDebasedFlow) {
       transferToCallForwarder = encodeSweep(
         tokenIn,
         flashFundsReceiver as Address,
@@ -341,7 +341,12 @@ export namespace ComposerMargin {
         // 2. Pull input asset from lender (compound) to forwarder
         context.callIn,
         // 3. fund call forwarder
-        transferToCallForwarder,
+        encodeSweep(
+          trade.inputAmount.currency.address as Address,
+          flashFundsReceiver as Address,
+          BigInt(trade.inputAmount.amount.toString()),
+          SweepType.AMOUNT
+        ),
         // 4. Swap input asset to output asset
         swapCall,
         // 5. pay output asset to lender
