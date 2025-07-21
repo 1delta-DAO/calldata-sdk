@@ -343,7 +343,7 @@ export namespace ComposerMargin {
         // 3. fund call forwarder
         encodeSweep(
           trade.inputAmount.currency.address as Address,
-          flashFundsReceiver as Address,
+          externalCall.callForwarder as Address,
           BigInt(trade.inputAmount.amount.toString()),
           SweepType.AMOUNT
         ),
