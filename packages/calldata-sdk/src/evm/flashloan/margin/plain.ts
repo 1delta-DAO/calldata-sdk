@@ -90,7 +90,8 @@ function buildDebasedInnerCall(
   })
 
   const safetySweep = encodeSweep(finalTokenOut, account, 0n, SweepType.VALIDATE)
-  const cleanup = encodeSweep(proxyToken, account, 0n, SweepType.VALIDATE)
+  // we already sweep that token, skip that part here
+  const cleanup = finalTokenOut === proxyToken ? '0x' : encodeSweep(proxyToken, account, 0n, SweepType.VALIDATE)
 
   return {
     depositIntermediateCall,
@@ -342,8 +343,7 @@ export namespace ComposerMargin {
         context.debasedCalls.finalDepositCall,
         // 6. Withdraw proxy asset from lender (compound) to repay flash loan
         context.debasedCalls.withdrawIntermediateCall,
-        // 7. Safety sweep
-        safetySweep,
+        // 7. Safety sweep -> done at the end
       ])
     } else {
       // regular flow
@@ -353,7 +353,6 @@ export namespace ComposerMargin {
         context.callIn, // handle tokenOut (repay/deposit)
         context.callOut, // pull tokenIn from lender (borrow/withdraw) and repay flash loan
         context.manualFlashLoanRepayTransfer, // can be 0x
-        safetySweep,
       ])
     }
 
@@ -364,6 +363,6 @@ export namespace ComposerMargin {
       ...flashData,
     })
 
-    return packCommands([flashloanCalldata, context.cleanup])
+    return packCommands([flashloanCalldata, context.cleanup, safetySweep])
   }
 }
