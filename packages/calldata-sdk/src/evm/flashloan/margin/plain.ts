@@ -48,7 +48,7 @@ function buildDebasedInnerCall(
   isMaxOut: boolean,
   proxyToken: Address,
   proxyAmount: bigint,
-  forwarder: string,
+  intermediate: string,
   flashRepayBalanceHolder: string
 ) {
   const { lender } = marginData
@@ -77,7 +77,7 @@ function buildDebasedInnerCall(
     inLenderData,
     outLenderData,
     flashRepayBalanceHolder, // <- this should be the composer or flash pool
-    forwarder, // <- the intermediate (we borrow or withdraw to) is the forwarder
+    intermediate, // <- the intermediate needs to be the composer (for maxIn)
     trade.inputAmount.amount.toString(), // <- the amount is unadjusted (no flash fee adjustmetn)
     isMaxIn, // flags as before
     isMaxOut
@@ -232,7 +232,7 @@ export namespace ComposerMargin {
         isMaxOut,
         proxyToken,
         proxyAsset!.amount ? BigInt(proxyAsset!.amount.toString()) : BigInt(trade.inputAmount.amount),
-        externalCall.callForwarder,
+        intermediate,
         flashRepayBalanceHolder
       )
 
@@ -323,7 +323,7 @@ export namespace ComposerMargin {
      * This is the case for pool-based flash loans
      */
     let transferToCallForwarder: Hex = '0x'
-    if (flashData.type === 'Pool' && !shouldUseDebasedFlow) {
+    if (flashData.type === 'Pool') {
       transferToCallForwarder = encodeSweep(
         tokenIn,
         flashFundsReceiver as Address,
@@ -340,13 +340,15 @@ export namespace ComposerMargin {
         context.depositIntermediateCall,
         // 2. Pull input asset from lender (compound) to forwarder
         context.callIn,
-        // 3. Swap input asset to output asset
+        // 3. fund call forwarder
+        transferToCallForwarder,
+        // 4. Swap input asset to output asset
         swapCall,
-        // 4. pay output asset to lender
+        // 5. pay output asset to lender
         context.callOut,
-        // 5. Withdraw proxy asset from lender (compound) to repay flash loan
+        // 6. Withdraw proxy asset from lender (compound) to repay flash loan
         context.withdrawIntermediateCall,
-        // 6. Safety sweep -> done at the end
+        // 7. Safety sweep -> done at the end
       ])
     } else {
       // regular flow
