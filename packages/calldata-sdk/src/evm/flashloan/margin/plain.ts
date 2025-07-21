@@ -20,11 +20,18 @@ import {
   PoolTypeFlashLoanData,
   SingletonTypeFlashLoanData,
 } from '../../../utils'
-import { ONE_DELTA_COMPOSER } from '../../consts'
+import { FORWARDER, ONE_DELTA_COMPOSER } from '../../consts'
 import { HandleMarginParams } from '../types/marginHandlers'
 import { ComposerSpot } from '../../spot'
 import { buildMarginInnerCall } from './utils'
-import { ComposerLendingActions, TransferToLenderType, getLenderData, packCommands, getFlashInfo } from '../../lending'
+import {
+  ComposerLendingActions,
+  TransferToLenderType,
+  getLenderData,
+  packCommands,
+  getFlashInfo,
+  LenderData,
+} from '../../lending'
 import { MarginData } from '../types/margin'
 
 /**
@@ -35,11 +42,13 @@ function buildDebasedInnerCall(
   trade: GenericTrade,
   account: Address,
   marginData: MarginData,
+  inLenderData: LenderData,
+  outLenderData: LenderData,
+  isMaxIn: boolean,
+  isMaxOut: boolean,
   proxyToken: Address,
   proxyAmount: bigint,
-  targetCompoundToken: Address,
-  finalTokenOut: Address,
-  composerAddress: string,
+  forwarder: string,
   flashRepayBalanceHolder: string
 ) {
   const { lender } = marginData
@@ -54,29 +63,26 @@ function buildDebasedInnerCall(
     transferType: TransferToLenderType.Amount,
   })
 
-  // 2. Withdraw target compound asset from lender (compound)
-  const withdrawTargetCall = ComposerLendingActions.createWithdraw({
-    receiver: composerAddress,
-    amount: {
-      asset: targetCompoundToken,
-      amount: BigInt(trade.inputAmount.amount),
-      chainId,
-    },
-    lender: lender,
-    morphoParams: undefined,
-    transferType: TransferToLenderType.Amount,
-  })
-
-  // 3. Deposit final asset after swap
-  const finalDepositCall = ComposerLendingActions.createDeposit({
-    receiver: account,
-    amount: { asset: finalTokenOut, amount: 0n, chainId: trade.outputAmount.currency.chainId },
-    lender: lender,
-    morphoParams: undefined,
-    transferType: TransferToLenderType.ContractBalance,
-  })
-
-  // 4. Withdraw proxy asset from lender (compound) to repay flash loan
+  /**
+   * 2. Build regular calls
+   * We get the regular calls to NOT redo the maxIn/Out handling
+   * A crucial change is that we transfer the pulled funds from the lender directly to
+   * the forwarder (and skip it in the later logic)
+   * Note that the order of callIn/callOut is reverted - we correct this at a later stage
+   */
+  const regularCalls = buildMarginInnerCall(
+    trade,
+    account,
+    marginData,
+    inLenderData,
+    outLenderData,
+    flashRepayBalanceHolder,
+    forwarder,
+    trade.inputAmount.amount.toString(),
+    isMaxIn,
+    isMaxOut
+  )
+  // 3. Withdraw proxy asset from lender (compound) to repay flash loan
   const withdrawIntermediateCall = ComposerLendingActions.createWithdraw({
     receiver: flashRepayBalanceHolder,
     amount: {
@@ -89,17 +95,10 @@ function buildDebasedInnerCall(
     transferType: TransferToLenderType.Amount,
   })
 
-  const safetySweep = encodeSweep(finalTokenOut, account, 0n, SweepType.VALIDATE)
-  // we already sweep that token, skip that part here
-  const cleanup = finalTokenOut === proxyToken ? '0x' : encodeSweep(proxyToken, account, 0n, SweepType.VALIDATE)
-
   return {
     depositIntermediateCall,
-    withdrawTargetCall,
-    finalDepositCall,
+    regularCalls,
     withdrawIntermediateCall,
-    safetySweep,
-    cleanup,
   }
 }
 
@@ -212,31 +211,42 @@ export namespace ComposerMargin {
     if (shouldUseDebasedFlow) {
       // debased flow
       const proxyToken = proxyAsset!.currency.address as Address
-      const targetCompoundToken = trade.inputAmount.currency.address as Address
-      const finalTokenOut = getAssetOutFromTrade(trade) as Address
 
-      const debasedInnerCall = buildDebasedInnerCall(
+      const {
+        // basic calls
+        // the sweep actions are the same for regular as for de-based
+        // for withdarw all, we sweep the excess input amount
+        // cleanups are also the same as we sweep the output after close
+        regularCalls,
+        // the deposit action to increase the credit line
+        depositIntermediateCall,
+        // withdraw to pay back loan
+        withdrawIntermediateCall,
+      } = buildDebasedInnerCall(
         trade,
         account,
         marginData,
+        inLenderData,
+        outLenderData,
+        isMaxIn,
+        isMaxOut,
         proxyToken,
         proxyAsset!.amount ? BigInt(proxyAsset!.amount.toString()) : BigInt(trade.inputAmount.amount),
-        targetCompoundToken,
-        finalTokenOut,
-        composerAddress,
+        externalCall.callForwarder,
         flashRepayBalanceHolder
       )
 
       // Create context object compatible with regular flow
       context = {
-        callIn: debasedInnerCall.depositIntermediateCall,
-        callOut: debasedInnerCall.withdrawIntermediateCall,
+        callIn: regularCalls.context.callOut,
+        callOut: regularCalls.context.callIn,
         manualFlashLoanRepayTransfer: '0x',
-        cleanup: debasedInnerCall.cleanup,
+        cleanup: regularCalls.context.cleanup,
         // Store additional debased calls
-        debasedCalls: debasedInnerCall,
+        depositIntermediateCall,
+        withdrawIntermediateCall,
       }
-      safetySweep = debasedInnerCall.safetySweep
+      safetySweep = regularCalls.safetySweep
     } else {
       // normal flow
       const result = buildMarginInnerCall(
@@ -327,23 +337,16 @@ export namespace ComposerMargin {
       // debased flow
       flashloanData = packCommands([
         // 1. Deposit proxy asset to lender (compound)
-        context.debasedCalls.depositIntermediateCall,
-        // 2. Withdraw target compound asset from lender (compound) to composer
-        context.debasedCalls.withdrawTargetCall,
-        // 3. Transfer target asset from composer to call forwarder for swap
-        encodeSweep(
-          trade.inputAmount.currency.address as Address,
-          externalCall.callForwarder as Address,
-          BigInt(trade.inputAmount.amount),
-          SweepType.AMOUNT
-        ),
-        // 4. Swap target asset to final asset
+        context.depositIntermediateCall,
+        // 2. Pull asset from lender (compound) to composer
+        context.callIn,
+        // 3. Swap target asset to final asset
         swapCall,
-        // 5. Deposit/repay final asset
-        context.debasedCalls.finalDepositCall,
-        // 6. Withdraw proxy asset from lender (compound) to repay flash loan
-        context.debasedCalls.withdrawIntermediateCall,
-        // 7. Safety sweep -> done at the end
+        // 4. pay final asset to lender
+        context.callOut,
+        // 5. Withdraw proxy asset from lender (compound) to repay flash loan
+        context.withdrawIntermediateCall,
+        // 6. Safety sweep -> done at the end
       ])
     } else {
       // regular flow
