@@ -338,11 +338,11 @@ export namespace ComposerMargin {
       flashloanData = packCommands([
         // 1. Deposit proxy asset to lender (compound)
         context.depositIntermediateCall,
-        // 2. Pull asset from lender (compound) to composer
+        // 2. Pull input asset from lender (compound) to forwarder
         context.callIn,
-        // 3. Swap target asset to final asset
+        // 3. Swap input asset to output asset
         swapCall,
-        // 4. pay final asset to lender
+        // 4. pay output asset to lender
         context.callOut,
         // 5. Withdraw proxy asset from lender (compound) to repay flash loan
         context.withdrawIntermediateCall,
