@@ -10,10 +10,18 @@ export enum MarginTradeType {
 }
 
 export interface MarginData {
+  /** operation */
   marginTradeType: MarginTradeType
+  /** Aave style interest mode for input */
   irModeIn: AaveInterestMode
+  /** Aave style interest mode for output */
   irModeOut: AaveInterestMode
+  /** lender id */
   lender: Lender
-  morphoParams?: MorphoParams
+  /** input morpho parameters */
+  morphoParamsIn?: MorphoParams
+  /** output morpho parameters */
+  morphoParamsOut?: MorphoParams
+  /** permit */
   permitData?: PermitData
 }

@@ -174,13 +174,13 @@ export namespace ComposerLendingActions {
             morphoParams.morphoB as Address
           )
 
-         return encodeMorphoWithdraw(
-            morphoParams.market,
-            morphoParams.isShares,
-            BigInt(amountUsed),
-            receiver as Address,
-            morphoParams.morphoB as Address
-          )
+        return encodeMorphoWithdraw(
+          morphoParams.market,
+          morphoParams.isShares,
+          BigInt(amountUsed),
+          receiver as Address,
+          morphoParams.morphoB as Address
+        )
       default:
         throw new Error('Lender not supported')
     }
@@ -334,11 +334,10 @@ export namespace ComposerLendingActions {
           throw new Error('Morpho params should be defined for MorphoBlue withdrawals')
         }
         return encodePacked(
-          ['bytes', 'bytes', 'address', 'uint128', 'address', 'address', 'uint16', 'bytes'],
+          ['bytes', 'bytes', 'uint128', 'address', 'address', 'uint16', 'bytes'],
           [
             genericPart,
             morphoParams.market,
-            asset as Address,
             generateAmountBitmap(
               uint128(BigInt(amountUsed)),
               morphoParams.isShares,
@@ -347,8 +346,10 @@ export namespace ComposerLendingActions {
             ),
             receiver as Address,
             morphoParams.morphoB as Address,
-            uint16(morphoParams.data.length > 0 ? morphoParams.data.length + 1 : 0),
-            morphoParams.data.length == 0 ? '0x' : encodeUint8AndBytes(uint8(morphoParams.pId), morphoParams.data),
+            // length > 2 indicates that there is more than just 0x
+            // we use length / 2 as we add one byte unit for the poolId at the end
+            uint16(morphoParams.data.length > 2 ? morphoParams.data.length / 2 : 0),
+            morphoParams.data.length > 2 ? encodeUint8AndBytes(uint8(morphoParams.pId), morphoParams.data) : '0x',
           ]
         )
       default:
