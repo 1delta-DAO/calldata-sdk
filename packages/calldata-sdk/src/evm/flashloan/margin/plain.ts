@@ -23,7 +23,7 @@ import {
 import { FORWARDER, ONE_DELTA_COMPOSER } from '../../consts'
 import { HandleMarginParams } from '../types/marginHandlers'
 import { ComposerSpot } from '../../spot'
-import { buildMarginInnerCall } from './utils'
+import { buildMarginInnerCall, handlePendle } from './utils'
 import {
   ComposerLendingActions,
   TransferToLenderType,
@@ -349,17 +349,20 @@ export namespace ComposerMargin {
         ),
         // 4. Swap input asset to output asset
         swapCall,
-        // 5. pay output asset to lender
+        // 5. handle pendle
+        handlePendle(trade, account),
+        // 6. pay output asset to lender
         context.callOut,
-        // 6. Withdraw proxy asset from lender (compound) to repay flash loan
+        // 7. Withdraw proxy asset from lender (compound) to repay flash loan
         context.withdrawIntermediateCall,
-        // 7. Safety sweep -> done at the end
+        // 8. Safety sweep -> done at the end
       ])
     } else {
       // regular flow
       flashloanData = packCommands([
         transferToCallForwarder,
         swapCall, // receive funds in tokenIn and swap to tokenOut
+        handlePendle(trade, account), // sweep yt if pendle
         context.callIn, // handle tokenOut (repay/deposit)
         context.callOut, // pull tokenIn from lender (borrow/withdraw) and repay flash loan
         context.manualFlashLoanRepayTransfer, // can be 0x
