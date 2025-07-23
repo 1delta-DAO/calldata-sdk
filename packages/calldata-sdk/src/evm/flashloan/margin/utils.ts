@@ -230,7 +230,7 @@ export function handlePendle(trade: SwapObject, receiver: Address): Hex {
   const outputWithTags = trade.outputAmount.currency as SerializedCurrency & { tags?: string[] | undefined }
   const isPendle = outputWithTags.tags?.some((x) => x.startsWith('PENDLE-PT'))
   if (isPendle) {
-    const ytToken = outputWithTags.tags?.find((x) => x.startsWith('YT'))
+    const ytToken = outputWithTags.tags?.find((x) => x.startsWith('PENDLE-YT'))
     if (ytToken) {
       const ytTokenAddress = ytToken.split(':')[1]
       return encodeSweep(ytTokenAddress as Address, receiver, 0n, SweepType.VALIDATE)
