@@ -46,7 +46,7 @@ function encodeSwap(
 
   const poolSpecificData = SwapEncoder.encodeSwapCall(pool.swapParams, {
     // for fot, we override the pay config when using permit2
-    payConfig: fot && permit2 ? 1 : payConfig
+    payConfig: fot && permit2 ? 1 : payConfig,
   })
 
   return encodePacked(
@@ -57,8 +57,8 @@ function encodeSwap(
       // override dex for FOT to Uniswap V2 type
       fot ? DexTypeMappings.UNISWAP_V2_FOT_ID : pool.swapParams.dexId,
       pool.address as Address,
-      poolSpecificData as Hex
-    ],
+      poolSpecificData as Hex,
+    ]
   )
 }
 
@@ -82,14 +82,14 @@ function processTrade(
   const numSplits = trade.swaps.length
   const splitData = getSplits(
     CurrencyUtils.getAmount(trade.inputAmount),
-    trade.swaps.map((swap) => BigInt(swap.inputAmount.amount)),
+    trade.swaps.map((swap) => BigInt(swap.inputAmount.amount))
   )
 
   // Create swap head
   let swapCalldata: Hex = swapHead(
     CurrencyUtils.getAmount(trade.inputAmount),
     CurrencyUtils.getAmount(minimumAmountOutFromTrade(trade, slippageTolerance, TradeType.EXACT_INPUT)),
-    trade.inputAmount.currency.address as Address, //
+    trade.inputAmount.currency.address as Address //
   )
 
   // check if a wrap is required as the first branch
@@ -122,7 +122,7 @@ function processTrade(
       getWethAddress(chainId),
       composerAddress, // receiver is self in this case
       WrapOperation.NATIVE,
-      DexPayConfig.PRE_FUND, // this is ignored as native always needs to be in the contract
+      DexPayConfig.PRE_FUND // this is ignored as native always needs to be in the contract
     )
   }
   // check if unwrap is required as the last branch
@@ -187,7 +187,7 @@ function processTrade(
           currentToken.address as Address,
           wrapReceiver,
           WrapOperation.NATIVE,
-          isFirstHop && !isFunded ? DexPayConfig.CALLER_PAYS : DexPayConfig.CONTRACT_PAYS, // if it is the first hop then caller pays, otherwise contract pays
+          isFirstHop && !isFunded ? DexPayConfig.CALLER_PAYS : DexPayConfig.CONTRACT_PAYS // if it is the first hop then caller pays, otherwise contract pays
         )
       }
 
@@ -216,8 +216,8 @@ function processTrade(
         isFirstHop && !isWrapRequired && !isFunded
           ? DexPayConfig.CALLER_PAYS
           : lastReceiver === pool.address
-            ? DexPayConfig.PRE_FUND
-            : DexPayConfig.CONTRACT_PAYS,
+          ? DexPayConfig.PRE_FUND
+          : DexPayConfig.CONTRACT_PAYS,
         isFirstHop && fot,
         permit2
       ).slice(2)
@@ -234,13 +234,17 @@ export namespace ComposerSpot {
   export function encodeExternalCallForCallForwarder(
     params: ExternalCallParams,
     approvalData?: { token: string; target: string },
-    postCalldata = '0x',
+    postCalldata = '0x'
   ): Hex {
-    const { target, calldata, value = '0', useSelfBalance = false, callForwarder } = params
+    const { target, calldata, value = '0', useSelfBalance = false, callForwarder, additionalData } = params
 
     let additionalCalldata = '0x'
     if (approvalData) {
       additionalCalldata = encodeApprove(approvalData.token as Address, approvalData.target as Address)
+    }
+    // prepend additional data (e.g. custom transfers approves)
+    if (additionalData) {
+      additionalCalldata = packCommands([additionalData, additionalCalldata])
     }
 
     return encodeExternalCall(
@@ -252,7 +256,7 @@ export namespace ComposerSpot {
         additionalCalldata, // approve if needed
         encodeExternalCall(target, BigInt(value), useSelfBalance, calldata as Hex), // call to aggregator
         postCalldata, // whatever is needed afterwards on the forwarder level
-      ]),
+      ])
     )
   }
 
@@ -270,7 +274,6 @@ export namespace ComposerSpot {
 
     // Case 1delta
     if (trade.interfaceTrade) {
-
       let swapCalldata: Hex = '0x'
       let permitCalldata: Hex = '0x'
       let transferCalldata: Hex = '0x'
@@ -302,7 +305,7 @@ export namespace ComposerSpot {
         chainId,
         isWrapRequired,
         isUnwrapRequired,
-        // we assume that the swap is funded in case we use permit2 or explicitly 
+        // we assume that the swap is funded in case we use permit2 or explicitly
         // parameterize it like that
         params.permitData?.isPermit2 || skipFunding,
         params.fotInput,
@@ -316,7 +319,7 @@ export namespace ComposerSpot {
           trade.outputAmount.currency.address as Address,
           receiver,
           WrapOperation.NATIVE,
-          DexPayConfig.CONTRACT_PAYS,
+          DexPayConfig.CONTRACT_PAYS
         )
       }
 
@@ -342,7 +345,7 @@ export namespace ComposerSpot {
     let permitCalldata: Hex = '0x'
     /** Difference to 1delta case - we need to always transfer manually to the call forwarder */
     if (!CurrencyUtils.isNativeAmount(inputAmount)) {
-      // skip funding if the forwarder already has the amount  
+      // skip funding if the forwarder already has the amount
       if (!skipFunding) {
         // case permits given
         if (params.permitData) {
@@ -350,21 +353,21 @@ export namespace ComposerSpot {
           permitCalldata = encodePermit(
             BigInt(PermitIds.TOKEN_PERMIT),
             inputAmount.currency.address as Address,
-            params.permitData.data as Hex,
+            params.permitData.data as Hex
           )
           // for permit2, add permit2-based transfer if no FOT input
           if (params.permitData.isPermit2) {
             transferCalldata = encodePermit2TransferFrom(
               inputAmount.currency.address as Address,
               params.externalCall.callForwarder,
-              BigInt(inputAmount.amount),
+              BigInt(inputAmount.amount)
             )
           } else {
             // otherwise ERC20 standard transfer
             transferCalldata = encodeTransferIn(
               inputAmount.currency.address as Address,
               params.externalCall.callForwarder,
-              BigInt(inputAmount.amount),
+              BigInt(inputAmount.amount)
             )
           }
         } else {
@@ -372,7 +375,7 @@ export namespace ComposerSpot {
           transferCalldata = encodeTransferIn(
             inputAmount.currency.address as Address,
             params.externalCall.callForwarder,
-            BigInt(inputAmount.amount),
+            BigInt(inputAmount.amount)
           )
         }
       }
@@ -402,13 +405,7 @@ export namespace ComposerSpot {
     // Sweep input (if any)
     const sweepInputCalldata = createSweepCalldata(inputAmount.currency.address as Address, receiver)
 
-
-    const combinedCalldata = packCommands([
-      permitCalldata,
-      transferCalldata,
-      externalCalldata,
-      sweepInputCalldata,
-    ])
+    const combinedCalldata = packCommands([permitCalldata, transferCalldata, externalCalldata, sweepInputCalldata])
 
     return {
       calldata: combinedCalldata,

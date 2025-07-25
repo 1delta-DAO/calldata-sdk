@@ -15,10 +15,10 @@ export type SpotCalldataParams = {
   composer?: Address
   /** Optional permit info */
   permitData?: PermitData
-  /** 
+  /**
    * If true, assume that the contract is funded
    * For composer direct swaps, composer hjolds the funds
-   * For forwarded aggregator swaps, the forwarder holds the funds 
+   * For forwarded aggregator swaps, the forwarder holds the funds
    */
   skipFunding?: boolean
 
@@ -36,11 +36,18 @@ export interface HandleExternalAggregatorSwapParams {
   permitData?: PermitData
 }
 
+/** Parameterizes an external call */
 export interface ExternalCallParams {
+  /** the target to call - we assume that this also has to be approved if input is nonnative */
   target: Address
+  /** calldata to send to `target` */
   calldata: Hex
+  /** prepend calldata - composer ops executed before the external call */
   additionalData?: Hex
+  /** the callForwarder address */
   callForwarder: Address
+  /** native value to forward */
   value?: string
+  /** use selfBalance in native case */
   useSelfBalance?: boolean
 }
