@@ -13,6 +13,7 @@ import {
 import { handleWithdraw, handleRepay } from './lendingHandlers'
 import { Address, Hex } from 'viem'
 import { ContractCallsContext, getAssetInFromTrade, getAssetOutFromTrade, SwapObject } from '../../../utils'
+import { SerializedCurrency } from '@1delta/type-sdk'
 
 /**
  * These are the lending inner callback lending datas
@@ -223,4 +224,17 @@ export function buildMarginInnerCall(
     context,
     safetySweep,
   }
+}
+
+export function handlePendle(trade: SwapObject, receiver: Address): Hex {
+  const outputWithTags = trade.outputAmount.currency as SerializedCurrency & { tags?: string[] | undefined }
+  const isPendle = outputWithTags.tags?.some((x) => x.startsWith('PENDLE-PT'))
+  if (isPendle) {
+    const ytToken = outputWithTags.tags?.find((x) => x.startsWith('PENDLE-YT'))
+    if (ytToken) {
+      const ytTokenAddress = ytToken.split(':')[1]
+      return encodeSweep(ytTokenAddress as Address, receiver, 0n, SweepType.VALIDATE)
+    }
+  }
+  return '0x'
 }

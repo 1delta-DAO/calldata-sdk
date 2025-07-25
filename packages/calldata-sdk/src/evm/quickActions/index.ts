@@ -19,6 +19,7 @@ import {
 } from './types'
 import { Address, Hex } from 'viem'
 import { encodePermit, encodeSweep, PermitIds, SweepType } from '@1delta/calldatalib'
+import { handlePendle } from '../flashloan/margin/utils'
 
 export * from './types' // Export types
 
@@ -62,7 +63,9 @@ export namespace ComposerQuickActions {
     // sweep any remaining output token
     const sweepCalldata = createSweepCalldata(trade.outputAmount.currency.address as Address, receiver)
 
-    const combinedCalldata = packCommands([swapCalldata.calldata, depositCalldata, sweepCalldata])
+    const pendleSweep = handlePendle(trade, receiver)
+
+    const combinedCalldata = packCommands([swapCalldata.calldata, pendleSweep, depositCalldata, sweepCalldata])
 
     return {
       calldata: combinedCalldata,
@@ -155,7 +158,7 @@ export namespace ComposerQuickActions {
         permitCalldata = encodePermit(
           BigInt(isAaveType(lenderData.group) ? PermitIds.AAVE_V3_CREDIT_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
           permitAsset as Address,
-          permitData.data as Hex,
+          permitData.data as Hex
         )
       }
     }
@@ -237,7 +240,7 @@ export namespace ComposerQuickActions {
         permitCalldata = encodePermit(
           BigInt(isAaveType(lenderData.group) ? PermitIds.TOKEN_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
           permitAsset as Address,
-          permitData.data as Hex,
+          permitData.data as Hex
         )
       }
     }
@@ -288,7 +291,7 @@ export namespace ComposerQuickActions {
       withdrawCalldata,
       transferToCallforwarder,
       swapCalldata.calldata,
-      sweepInputCalldata
+      sweepInputCalldata,
     ])
 
     return {
