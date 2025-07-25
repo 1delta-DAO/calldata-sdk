@@ -227,13 +227,12 @@ export function buildMarginInnerCall(
 }
 
 export function handlePendle(trade: SwapObject, receiver: Address): Hex {
-  const outputWithTags = trade.outputAmount.currency as SerializedCurrency & { tags?: string[] | undefined }
-  const isPendle = outputWithTags.tags?.some((x) => x.startsWith('PENDLE-PT'))
+  const outputWithProps = trade.outputAmount.currency as SerializedCurrency & { props?: { [key: string]: any } }
+  const isPendle = outputWithProps.props?.pendle?.tokenType === 'PT'
   if (isPendle) {
-    const ytToken = outputWithTags.tags?.find((x) => x.startsWith('PENDLE-YT'))
+    const ytToken = outputWithProps.props?.pendle?.ytAddress
     if (ytToken) {
-      const ytTokenAddress = ytToken.split(':')[1]
-      return encodeSweep(ytTokenAddress as Address, receiver, 0n, SweepType.VALIDATE)
+      return encodeSweep(ytToken as Address, receiver, 0n, SweepType.VALIDATE)
     }
   }
   return '0x'
