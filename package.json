@@ -18,8 +18,8 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@1delta/asset-registry": "^0.0.169",
-    "@1delta/dex-registry": "^0.0.62",
+    "@1delta/asset-registry": "^0.0.171",
+    "@1delta/dex-registry": "^0.0.64",
     "@1delta/type-sdk": "^0.0.3",
     "@types/lodash": "^4.17.20",
     "axios": "^1.10.0"
