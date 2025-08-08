@@ -38,14 +38,14 @@ const chainId = "10"
 const composer = COMPOSER_PROXIES[chainId]
 // asset selected
 const input = 1_000_000_000n // 1e9 (1000 USDC)
-const depositAsset = {symbol: "USDC", name: "USDC", address: "0x0b2c639c533813f4aa9d7837caf62653d097ff85", chainId} 
+const depositAsset = {symbol: "USDC", name: "USDC", address: "0x0b2c639c533813f4aa9d7837caf62653d097ff85", chainId}
 // caller
 const account = "0x..."
 
 const lender = "AAVE_V3"
 const action = QuickActionType.Deposit
 const operation = {
-    params: { amount: { currency: depositAsset, amount: input } }, // amount params
+    params: { lender, amount: { currency: depositAsset, amount: input } }, // amount params
     receiver: account, // the caller deposits on their own behalf
     isAll: false, // only used ofr withdraw & repy
     inIsNative: false, // use this to signal that one uses the native asset to deposit - the operation then wraps ETH
@@ -78,7 +78,7 @@ const marginTradeType = "Open"
 // the intended input amount
 const input = 1_000_000_000_000_000_000n // 1e18
 const assetIn = {symbol: "WETH", name: "WETH", address: "0x4200000000000000000000000000000000000006", chainId}
-const assetOut = {symbol: "USDC", name: "USDC", address: "0x0b2c639c533813f4aa9d7837caf62653d097ff85", chainId} 
+const assetOut = {symbol: "USDC", name: "USDC", address: "0x0b2c639c533813f4aa9d7837caf62653d097ff85", chainId}
 // lender to use (check via `Lender` enum in asset-registry)
 const lender = "AAVE_V3"
 // step 1: fetch flash liquidity
@@ -111,7 +111,7 @@ const amendedInput = (input * 10_000n) / (10_000n + flashFee)
 const apiBody = {..., amountIn: amendedInput, receiver: composer}
 const apiReturn = await (await fetch(`https://www.quote.odos....`)).json()
 
-// get calldata from api - this varies based on the provider 
+// get calldata from api - this varies based on the provider
 const {calldata, target} = await (await fetch(`https://www.assemble.odos....`)).json()
 
 
@@ -127,8 +127,8 @@ const trade: GenericTrade = {
     sweepToReceiver: false,
 }
 
-const externalCall = { 
-    target, 
+const externalCall = {
+    target,
     calldata,
     value: "0", // this is the default value (only used for native as input)
     useSelfbalance: false,
@@ -157,7 +157,7 @@ const composerOperation = ComposerMargin.createMarginFlashLoan({
     flashInfoOverride: flashLoanSource // flash source info
 })
 
-// Note that ANY composer operation can be added beforehadn,e.g. 
+// Note that ANY composer operation can be added beforehadn,e.g.
 
 // This is the calldata to be sent to the composer, e.g. ComposerDirectLending.composeDirectMoneyMarketAction(...)
 // could be used to generate a deposit calldata set that can be added beforehand via
