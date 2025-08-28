@@ -23,5 +23,11 @@
     "@1delta/type-sdk": "^0.0.3",
     "@types/lodash": "^4.17.20",
     "axios": "^1.11.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@1delta/asset-registry": "^0.0.190",
+      "@1delta/dex-registry": "^0.0.72"
+    }
   }
 }
