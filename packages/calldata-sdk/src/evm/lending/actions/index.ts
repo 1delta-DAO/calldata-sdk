@@ -34,7 +34,7 @@ import {
   getPool,
 } from '../utils'
 import { UINT112_MAX } from '../consts'
-import { Lender } from '@1delta/asset-registry'
+import { Lender } from '@1delta/lender-registry'
 import { SerializedCurrencyAmount } from '@1delta/type-sdk'
 
 /** Yldr is lieke aave, just with no borrow mode */

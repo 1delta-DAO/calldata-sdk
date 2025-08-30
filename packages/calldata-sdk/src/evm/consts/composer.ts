@@ -1,4 +1,4 @@
-import { Chain } from '@1delta/asset-registry'
+import { Chain } from '@1delta/chain-registry'
 
 // forwarder: also deployed on all those chains
 export const FORWARDER = "0xfCa1154C643C32638AEe9a43eeE7f377f515c801"

@@ -6,8 +6,8 @@ import {
   COMPOUND_STYLE_RESERVE_ASSETS,
   INIT_STYLE_RESERVE_ASSETS,
   Lender,
-} from '@1delta/asset-registry'
-import { COMPOUND_V2_LENDERS, COMPOUND_V3_LENDERS } from '../../lending/types'
+} from '@1delta/lender-registry'
+import { COMPOUND_V2_LENDERS } from '../../lending/types'
 import { ChainIdLike } from '@1delta/type-sdk'
 
 export function isAaveV3Type(lender: Lender) {
@@ -23,7 +23,7 @@ export function isAave(lender: Lender) {
 }
 
 export function isCompoundV3(lender: Lender) {
-  return COMPOUND_V3_LENDERS.includes(lender)
+  return lender.startsWith('COMPOUND_V3')
 }
 
 export function isCompoundV2(lender: Lender) {

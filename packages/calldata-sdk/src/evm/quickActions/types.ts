@@ -1,5 +1,5 @@
 import { Address } from 'viem'
-import { Lender } from '@1delta/asset-registry'
+import { Lender } from '@1delta/lender-registry'
 import { AaveInterestMode, MorphoParams, LendingOverrides, QuickActionType } from '../lending/types'
 import { ExternalCallParams } from '../spot'
 import { GenericTrade, PermitData } from '..'

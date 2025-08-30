@@ -1,5 +1,5 @@
 import { Address } from 'viem'
-import { Lender } from '@1delta/asset-registry'
+import { Lender } from '@1delta/lender-registry'
 import { MarginData } from '../types'
 import { ContractCallsContext } from '../../../utils'
 import { MorphoParams } from '../../lending/types'

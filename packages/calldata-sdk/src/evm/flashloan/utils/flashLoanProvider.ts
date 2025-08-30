@@ -1,5 +1,12 @@
-import { AAVE_LENDERS, Lender, MORPHO_BLUE_POOL_DATA } from '@1delta/asset-registry'
-import { DEFAULT_PROVIDER_PER_CHAIN, FLASH_LOAN_PROVIDERS, FLASH_PROVIDERS_WITHOUT_FEE, FlashLoanData, FlashLoanProvider, SingletonTypeFlashLoanProvider } from '../../../utils'
+import { AAVE_LENDERS, Lender, MORPHO_BLUE_LENDERS } from '@1delta/lender-registry'
+import {
+  DEFAULT_PROVIDER_PER_CHAIN,
+  FLASH_LOAN_PROVIDERS,
+  FLASH_PROVIDERS_WITHOUT_FEE,
+  FlashLoanData,
+  FlashLoanProvider,
+  SingletonTypeFlashLoanProvider,
+} from '../../../utils'
 import { BPS } from '../consts'
 import { getLenderAssets, isAave, isAaveV3Type } from './lenderUtils'
 import { ChainIdLike } from '@1delta/type-sdk'
@@ -25,7 +32,7 @@ export function getFlashLoanProviderAndFeePerChain(
   chainId: ChainIdLike,
   preSelectedSource: FlashLoanProvider | undefined,
   lenderInQuestion: Lender,
-  assetToFlash: string | undefined = undefined,
+  assetToFlash: string | undefined = undefined
 ) {
   const providers = FLASH_LOAN_PROVIDERS[chainId]
 
@@ -82,7 +89,7 @@ export function adjustForFlashLoanFee(amount: string | bigint, fee: bigint | str
 }
 
 const BALANCER_V2S = Object.keys(BALANCER_V2_FORKS)
-const MORPHOS = Object.keys(MORPHO_BLUE_POOL_DATA)
+const MORPHOS = MORPHO_BLUE_LENDERS
 
 /**
  * Create calldata for supported flash loan providers
@@ -105,7 +112,7 @@ export function createFlashLoan(provider: FlashLoanProvider, data: FlashLoanData
           data.asset,
           data.receiver,
           BigInt(data.amount),
-          data.data,
+          data.data
         )
       case FlashLoanProvider.UNISWAP_V4:
         return encodeUniswapV4FlashLoan(
@@ -114,7 +121,7 @@ export function createFlashLoan(provider: FlashLoanProvider, data: FlashLoanData
           data.asset,
           data.receiver,
           BigInt(data.amount),
-          data.data,
+          data.data
         )
       default:
         throw new Error('Invalid singleton type flash loan provider')
@@ -130,7 +137,7 @@ export function createFlashLoan(provider: FlashLoanProvider, data: FlashLoanData
     if (AAVE_LENDERS.includes(provider as any) && data.pool && data.poolType) {
       return encodeFlashLoan(data.asset, BigInt(data.amount), data.pool, data.poolType, data.flashloanId, data.data)
     }
-    if (MORPHOS.includes(provider) && data.pool && data.poolType !== undefined) {
+    if (MORPHOS.includes(provider as any) && data.pool && data.poolType !== undefined) {
       return encodeFlashLoan(data.asset, BigInt(data.amount), data.pool, data.poolType, data.flashloanId, data.data)
     }
   }

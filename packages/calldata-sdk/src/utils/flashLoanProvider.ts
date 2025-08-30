@@ -1,4 +1,5 @@
-import { Chain, Lender } from '@1delta/asset-registry'
+import { Lender } from '@1delta/lender-registry'
+import { Chain } from '@1delta/chain-registry'
 import { FlashLoanIds } from '@1delta/calldatalib'
 import { DexProtocol, FLASH_LOAN_IDS } from '@1delta/dex-registry'
 import { ChainIdLike } from '@1delta/type-sdk'
@@ -24,7 +25,6 @@ export enum FlashLoanProvider {
 }
 
 export const SingletonTypeFlashLoanProvider = [FlashLoanProvider.BALANCER_V3, FlashLoanProvider.UNISWAP_V4]
-
 
 export const FLASH_LOAN_PROVIDERS: { [c: ChainIdLike]: { [l: string]: FlashLoanProviderData } } = {
   [Chain.MANTLE]: {
