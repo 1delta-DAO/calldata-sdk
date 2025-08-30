@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "@1delta/chain-registry": "^0.0.1",
-    "@1delta/data-sdk": "0.0.4",
-    "@1delta/dex-registry": "^0.0.72",
+    "@1delta/data-sdk": "0.0.8",
+    "@1delta/dex-registry": "^0.0.73",
     "@1delta/lender-registry": "^0.0.2",
     "@1delta/type-sdk": "^0.0.3",
     "@types/lodash": "^4.17.20",

@@ -29,7 +29,7 @@ export function flashLoanIsFromLender(provider?: FlashLoanProvider) {
 
 /** Retrieve the flash laon provider and flash loan fee on given chain */
 export function getFlashLoanProviderAndFeePerChain(
-  chainId: ChainIdLike,
+  chainId: string,
   preSelectedSource: FlashLoanProvider | undefined,
   lenderInQuestion: Lender,
   assetToFlash: string | undefined = undefined

@@ -21,7 +21,7 @@ import {
   compoundV3Pools,
   morphoPools,
 } from '@1delta/data-sdk'
-import { WRAPPED_NATIVE_INFO } from '@1delta/asset-registry'
+import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 
 export * from './permit'
 

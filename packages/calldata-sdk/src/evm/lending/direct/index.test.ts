@@ -2,11 +2,101 @@ import { describe, it, expect } from 'vitest'
 import { ComposerDirectLending } from './index'
 import { QuickActionType, LendingOperation, AaveInterestMode, MorphoParams } from '../types'
 import { Address, Hex } from 'viem'
-import { AAVE_LENDERS, Lender } from '@1delta/asset-registry'
 import { SerializedCurrency } from '@1delta/type-sdk'
 import { CurrencyUtils } from '../../../utils'
+import { initializeChainData, initializeLenderData } from '@1delta/data-sdk'
+import { AAVE_LENDERS, Lender } from '@1delta/lender-registry'
 
-describe('composeDirectMoneyMarketAction', () => {
+const baseUrl = 'https://raw.githubusercontent.com/1delta-DAO/lender-metadata/multi-fetch'
+const aavePools = baseUrl + '/config/aave-pools.json'
+const aaveOracles = baseUrl + '/data/aave-oracles.json'
+const morphoOracles = baseUrl + '/data/morpho-oracles.json'
+const compoundV2Pools = baseUrl + '/config/compound-v2-pools.json'
+const compoundV3Pools = baseUrl + '/config/compound-v3-pools.json'
+// const initPools = baseUrl + '/config/init-pools.json'
+const morphoPools = baseUrl + '/config/morpho-pools.json'
+
+const aaveReserves = baseUrl + '/data/aave-reserves.json'
+const compoundV2Reserves = baseUrl + '/data/compound-v2-reserves.json'
+const compoundV3Reserves = baseUrl + '/data/compound-v3-reserves.json'
+const initConfig = baseUrl + '/data/init-config.json'
+const aaveTokens = baseUrl + '/data/aave-tokens.json'
+const compoundV2CTokens = baseUrl + '/data/compound-v2-c-tokens.json'
+const compoundV3Base = baseUrl + '/data/compound-v3-base-data.json'
+const baseUrlChains = 'https://raw.githubusercontent.com/1delta-DAO/chains/main'
+
+const chains = baseUrlChains + '/data.json'
+
+function inititalizeAllData(params: any) {
+  const { chainsOverride, ...lenderOverrides } = params
+
+  initializeLenderData(lenderOverrides)
+
+  initializeChainData({ chainsOverride })
+}
+
+async function fetchLenderMetaFromDirAndInitialize() {
+  const params = await fetchLenderMetaFromDir()
+  inititalizeAllData(params)
+}
+
+async function fetchLenderMetaFromDir() {
+  const promises = [
+    aavePools,
+    compoundV2Pools,
+    compoundV3Pools,
+    // initPools,
+    morphoPools,
+    aaveReserves,
+    compoundV2Reserves,
+    compoundV3Reserves,
+    initConfig,
+    aaveTokens,
+    compoundV2CTokens,
+    compoundV3Base,
+    aaveOracles,
+    morphoOracles,
+    chains,
+  ].map(async (a) => fetch(a).then(async (b) => await b.json()))
+
+  const [
+    aavePoolsOverride,
+    compoundV2PoolsOverride,
+    compoundV3PoolsOverride,
+    // initPoolsOverride,
+    morphoPoolsOverride,
+    aaveReservesOverride,
+    compoundV2ReservesOverride,
+    compoundV3ReservesOverride,
+    initConfigOverride,
+    aaveTokensOverride,
+    compoundV2TokensOverride,
+    compoundV3BaseDataOverride,
+    aaveOraclesOverride,
+    morphoOraclesOverride,
+    chainsOverride,
+  ] = await Promise.all(promises)
+
+  return {
+    aavePoolsOverride,
+    compoundV2PoolsOverride,
+    compoundV3PoolsOverride,
+    // initPoolsOverride,
+    morphoPoolsOverride,
+    aaveReservesOverride,
+    compoundV2ReservesOverride,
+    compoundV3ReservesOverride,
+    initConfigOverride,
+    aaveTokensOverride,
+    compoundV2TokensOverride,
+    compoundV3BaseDataOverride,
+    aaveOraclesOverride,
+    morphoOraclesOverride,
+    chainsOverride,
+  }
+}
+
+describe('composeDirectMoneyMarketAction', async () => {
   const expectedDirectLendingOutputs = {
     deposit_aave_v3_usdt: {
       calldata:
@@ -15,7 +105,7 @@ describe('composeDirectMoneyMarketAction', () => {
     },
     deposit_aave_v3_native: {
       calldata:
-        '0x400100000000000000000000000000000000000000002e234dae75c793f67a35089c9d99245e1c58470b0100000000000000000de0b6b3a764000040050d500b1d8e8ef31e21c99d1db9a6444d3adf1270794a61358d6845594f94dc1db02a252b5b4814ad300003e70d500b1d8e8ef31e21c99d1db9a6444d3adf127000000000000000000de0b6b3a76400001de17a0000000000000000000000000000003333794a61358d6845594f94dc1db02a252b5b4814ad' as Hex,
+        '0x400100000000000000000000000000000000000000000d500b1d8e8ef31e21c99d1db9a6444d3adf12700100000000000000000de0b6b3a764000040050d500b1d8e8ef31e21c99d1db9a6444d3adf1270794a61358d6845594f94dc1db02a252b5b4814ad300003e70d500b1d8e8ef31e21c99d1db9a6444d3adf127000000000000000000de0b6b3a76400001de17a0000000000000000000000000000003333794a61358d6845594f94dc1db02a252b5b4814ad' as Hex,
       value: '1000000000000000000',
     },
     withdraw_aave_v3_usdt: {
@@ -70,7 +160,9 @@ describe('composeDirectMoneyMarketAction', () => {
   const MORPHO_BLUE = '0x1bF0c2541F820E775182832f06c0B7Fc27A25f67' as Address
   const MORPHO_MARKET = '0x7506b33817b57f686e37b87b5d4c5c93fdef4cffd21bbf9291f18b2f29ab0550' as Hex
 
-  const createTestTokens = () => {
+  await fetchLenderMetaFromDirAndInitialize()
+  
+  const createTestTokens = async () => {
     const chainId = '137'
     return {
       usdt: {
@@ -102,7 +194,7 @@ describe('composeDirectMoneyMarketAction', () => {
     lender: Lender,
     amount: string,
     token: SerializedCurrency,
-    overrides?: Partial<LendingOperation>,
+    overrides?: Partial<LendingOperation>
   ): LendingOperation => {
     return {
       params: {
@@ -131,9 +223,9 @@ describe('composeDirectMoneyMarketAction', () => {
     unsafeRepayment: false,
   })
 
-  describe('Deposit operations', () => {
-    it('should create calldata for USDT deposit to Aave V3', () => {
-      const { usdt } = createTestTokens()
+  describe('Deposit operations', async () => {
+    it('should create calldata for USDT deposit to Aave V3', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Deposit, Lender.AAVE_V3, TEST_AMOUNT, usdt)
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
@@ -142,8 +234,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.calldata).toEqual(expectedDirectLendingOutputs.deposit_aave_v3_usdt.calldata)
     })
 
-    it('should create calldata for native POL deposit to Aave V3', () => {
-      const { wpol } = createTestTokens()
+    it('should create calldata for native POL deposit to Aave V3', async () => {
+      const { wpol } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Deposit, Lender.AAVE_V3, TEST_AMOUNT_ETH, wpol, {
         inIsNative: true,
       })
@@ -154,8 +246,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.calldata).toEqual(expectedDirectLendingOutputs.deposit_aave_v3_native.calldata)
     })
 
-    it.skip('should create calldata for USDT deposit to Compound V2', () => {
-      const { usdt } = createTestTokens()
+    it.skip('should create calldata for USDT deposit to Compound V2', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Deposit, Lender.VENUS, TEST_AMOUNT, usdt)
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
@@ -164,8 +256,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.value).toBeUndefined()
     })
 
-    it('should create calldata for USDT deposit to Compound V3', () => {
-      const { usdt } = createTestTokens()
+    it('should create calldata for USDT deposit to Compound V3', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Deposit, Lender.COMPOUND_V3_USDT, TEST_AMOUNT, usdt)
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
@@ -174,8 +266,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.value).toBeUndefined()
     })
 
-    it.skip('should create calldata for USDT deposit to Morpho Blue', () => {
-      const { usdt } = createTestTokens()
+    it.skip('should create calldata for USDT deposit to Morpho Blue', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Deposit, Lender.MORPHO_BLUE, TEST_AMOUNT, usdt, {
         morphoParams: createMorphoParams(),
       })
@@ -186,8 +278,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.value).toBeUndefined()
     })
 
-    it('should create calldata for deposit with Permit2', () => {
-      const { usdt } = createTestTokens()
+    it('should create calldata for deposit with Permit2', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Deposit, Lender.AAVE_V3, TEST_AMOUNT, usdt, {
         permitData: {
           isPermit2: true,
@@ -201,9 +293,9 @@ describe('composeDirectMoneyMarketAction', () => {
     })
   })
 
-  describe('Withdrawal operations', () => {
-    it('should create calldata for USDT withdrawal from Aave V3', () => {
-      const { usdt } = createTestTokens()
+  describe('Withdrawal operations', async () => {
+    it('should create calldata for USDT withdrawal from Aave V3', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Withdraw, Lender.AAVE_V3, TEST_AMOUNT, usdt)
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
@@ -212,8 +304,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.value).toBe('0') // NO_VALUE for withdrawals
     })
 
-    it('should create calldata for native POL withdrawal from Aave V3', () => {
-      const { wpol } = createTestTokens()
+    it('should create calldata for native POL withdrawal from Aave V3', async () => {
+      const { wpol } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Withdraw, Lender.AAVE_V3, TEST_AMOUNT_ETH, wpol, {
         outIsNative: true,
       })
@@ -224,8 +316,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.value).toBe('0')
     })
 
-    it.skip('should create calldata for withdraw all from Compound V2', () => {
-      const { usdt } = createTestTokens()
+    it.skip('should create calldata for withdraw all from Compound V2', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Withdraw, Lender.OVIX, TEST_AMOUNT, usdt, {
         isAll: true,
       })
@@ -235,8 +327,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
     })
 
-    it('should create calldata for withdrawal from Morpho Blue', () => {
-      const { usdt } = createTestTokens()
+    it('should create calldata for withdrawal from Morpho Blue', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Withdraw, Lender.MORPHO_BLUE, TEST_AMOUNT, usdt, {
         morphoParams: createMorphoParams(),
       })
@@ -247,9 +339,9 @@ describe('composeDirectMoneyMarketAction', () => {
     })
   })
 
-  describe('Borrow operations', () => {
-    it('should create calldata for USDT borrow from Aave V3', () => {
-      const { usdt } = createTestTokens()
+  describe('Borrow operations', async () => {
+    it('should create calldata for USDT borrow from Aave V3', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Borrow, Lender.AAVE_V3, TEST_AMOUNT, usdt)
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
@@ -258,8 +350,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.value).toBe('0')
     })
 
-    it('should create calldata for native POL borrow from Aave V3', () => {
-      const { wpol } = createTestTokens()
+    it('should create calldata for native POL borrow from Aave V3', async () => {
+      const { wpol } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Borrow, Lender.AAVE_V3, TEST_AMOUNT_ETH, wpol, {
         outIsNative: true,
       })
@@ -269,8 +361,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
     })
 
-    it('should create calldata for stable rate borrow from Aave V3', () => {
-      const { usdt } = createTestTokens()
+    it('should create calldata for stable rate borrow from Aave V3', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Borrow, Lender.AAVE_V3, TEST_AMOUNT, usdt, {
         params: {
           lender: Lender.AAVE_V3,
@@ -284,8 +376,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
     })
 
-    it('should throw error for Aave borrow without mode', () => {
-      const { usdt } = createTestTokens()
+    it('should throw error for Aave borrow without mode', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Borrow, Lender.AAVE_V3, TEST_AMOUNT, usdt, {
         params: {
           lender: Lender.AAVE_V3,
@@ -299,8 +391,8 @@ describe('composeDirectMoneyMarketAction', () => {
       }).toThrow('Borrow mode is required for AaveV2/V3 borrows')
     })
 
-    it('should create calldata for borrow from Compound V3', () => {
-      const { usdt } = createTestTokens()
+    it('should create calldata for borrow from Compound V3', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Borrow, Lender.COMPOUND_V3_USDT, TEST_AMOUNT, usdt)
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
@@ -308,8 +400,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
     })
 
-    it('should create calldata for borrow from Morpho Blue', () => {
-      const { usdt } = createTestTokens()
+    it('should create calldata for borrow from Morpho Blue', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Borrow, Lender.MORPHO_BLUE, TEST_AMOUNT, usdt, {
         morphoParams: createMorphoParams(),
       })
@@ -320,9 +412,9 @@ describe('composeDirectMoneyMarketAction', () => {
     })
   })
 
-  describe('Repay operations', () => {
-    it('should create calldata for USDT repay to Aave V3', () => {
-      const { usdt } = createTestTokens()
+  describe('Repay operations', async () => {
+    it('should create calldata for USDT repay to Aave V3', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Repay, Lender.AAVE_V3, TEST_AMOUNT, usdt)
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
@@ -331,8 +423,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.value).toBeUndefined() // No ETH value for ERC20 repay
     })
 
-    it('should create calldata for native POL repay to Aave V3', () => {
-      const { wpol } = createTestTokens()
+    it('should create calldata for native POL repay to Aave V3', async () => {
+      const { wpol } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Repay, Lender.AAVE_V3, TEST_AMOUNT_ETH, wpol, {
         inIsNative: true,
       })
@@ -343,8 +435,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.value).toBe(TEST_AMOUNT_ETH) // ETH value for native repay
     })
 
-    it('should create calldata for repay all to Aave V3', () => {
-      const { usdt } = createTestTokens()
+    it('should create calldata for repay all to Aave V3', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Repay, Lender.AAVE_V3, TEST_AMOUNT, usdt, {
         isAll: true,
         outIsNative: false, // Sweep leftover USDT
@@ -355,8 +447,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
     })
 
-    it.skip('should create calldata for repay all to Compound V2', () => {
-      const { usdt } = createTestTokens()
+    it.skip('should create calldata for repay all to Compound V2', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Repay, Lender.OVIX, TEST_AMOUNT, usdt, {
         isAll: true,
         outIsNative: false,
@@ -367,8 +459,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
     })
 
-    it('should create calldata for repay to Morpho Blue', () => {
-      const { usdt } = createTestTokens()
+    it('should create calldata for repay to Morpho Blue', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Repay, Lender.MORPHO_BLUE, TEST_AMOUNT, usdt, {
         morphoParams: createMorphoParams(),
       })
@@ -378,8 +470,8 @@ describe('composeDirectMoneyMarketAction', () => {
       expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
     })
 
-    it('should create calldata for repay with Permit2', () => {
-      const { usdt } = createTestTokens()
+    it('should create calldata for repay with Permit2', async () => {
+      const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Repay, Lender.AAVE_V3, TEST_AMOUNT, usdt, {
         permitData: {
           isPermit2: true,
@@ -393,8 +485,8 @@ describe('composeDirectMoneyMarketAction', () => {
     })
   })
 
-  describe('Input validation', () => {
-    it('should throw error when no amount is provided', () => {
+  describe('Input validation', async () => {
+    it('should throw error when no amount is provided', async () => {
       const operation = {
         params: {
           lender: Lender.AAVE_V3,

@@ -25,7 +25,7 @@ import {
   AaveInterestMode,
 } from '..'
 
-import { WRAPPED_NATIVE_INFO } from '@1delta/asset-registry'
+import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 
 export namespace ComposerDirectLending {
   export function composeDirectMoneyMarketAction(op: LendingOperation): { calldata: Hex; value: string | undefined } {
