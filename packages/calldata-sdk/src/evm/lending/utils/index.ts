@@ -2,10 +2,9 @@ import {
   Lender,
   AAVE_V2_LENDERS,
   AAVE_LENDERS,
-  WRAPPED_NATIVE_INFO,
   COMPOUND_V3_LENDERS,
   COMPOUND_V2_LENDERS,
-} from '@1delta/asset-registry'
+} from '@1delta/lender-registry'
 import { LenderData, LenderGroups } from '../types'
 import { ComposerCommands, FlashLoanIds, LenderIds, PermitIds, uint16 } from '@1delta/calldatalib'
 import { Address, encodePacked, Hex, zeroAddress } from 'viem'
@@ -14,7 +13,15 @@ import { FLASH_LOAN_PROVIDERS, FlashLoanProvider } from '../../../utils'
 import { BALANCER_V2_FORKS } from '@1delta/dex-registry'
 import { FlashInfo } from '../../flashloan/types/marginHandlers'
 import { isAaveV2Type, isAaveV3Type, isCompoundV2, isCompoundV3 } from '../../flashloan'
-import { aavePools, aaveTokens, compoundV2Tokens, compoundV3BaseData, compoundV3Pools, morphoPools } from '@1delta/data-sdk'
+import {
+  aavePools,
+  aaveTokens,
+  compoundV2Tokens,
+  compoundV3BaseData,
+  compoundV3Pools,
+  morphoPools,
+} from '@1delta/data-sdk'
+import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 
 export * from './permit'
 
