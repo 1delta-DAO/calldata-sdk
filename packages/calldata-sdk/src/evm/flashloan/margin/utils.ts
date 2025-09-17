@@ -44,6 +44,54 @@ export function buildMarginInnerCall(
   const tokenOut = getAssetOutFromTrade(trade) as Address
 
   switch (marginData.marginTradeType) {
+    case MarginTradeType.ZapIn: {
+      context = { ...NO_CONTEXT }
+      context.callIn = ComposerLendingActions.createDeposit({
+        receiver: account as Address,
+        amount: { asset: tokenOut, amount: 0n, chainId: trade.outputAmount.currency.chainId },
+        lender: lender,
+        morphoParams: morphoParamsOut,
+        transferType: TransferToLenderType.ContractBalance,
+        useOverride: morphoParamsOut
+          ? undefined
+          : {
+              pool: getPool(outLenderData)!,
+            },
+      })
+
+      let borrowPermitCall: Hex = '0x'
+      if (permitData && permitData.data !== '0x') {
+        const permitAsset = getPermitAsset(inLenderData.group, inLenderData, marginData.irModeIn)
+        if (permitAsset) {
+          borrowPermitCall = encodePermit(
+            BigInt(isAaveType(inLenderData.group) ? PermitIds.AAVE_V3_CREDIT_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
+            permitAsset as Address,
+            permitData.data
+          )
+        }
+      }
+
+      const borrowCalldata = ComposerLendingActions.createBorrow({
+        receiver: flashRepayBalanceHolder as Address,
+        amount: {
+          asset: tokenIn,
+          amount: BigInt(flashLoanAmountWithFee),
+          chainId: trade.inputAmount.currency.chainId,
+        },
+        lender: lender,
+        aaveInterestMode: marginData.irModeIn,
+        morphoParams: morphoParamsIn,
+        useOverride: morphoParamsIn
+          ? undefined
+          : {
+              pool: getPool(inLenderData),
+              collateralToken: getCollateralToken(inLenderData),
+            },
+      })
+
+      context.callOut = packCommands([borrowPermitCall, borrowCalldata])
+      break
+    }
     case MarginTradeType.Open: {
       context = { ...NO_CONTEXT }
       context.callIn = ComposerLendingActions.createDeposit({
