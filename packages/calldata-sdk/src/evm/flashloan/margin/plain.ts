@@ -1,4 +1,12 @@
-import { encodeSweep, SweepType, FlashLoanIds } from '@1delta/calldatalib'
+import {
+  encodeSweep,
+  SweepType,
+  FlashLoanIds,
+  encodePermit,
+  PermitIds,
+  encodeTransferIn,
+  encodePermit2TransferFrom,
+} from '@1delta/calldatalib'
 import { FLASH_LOAN_IDS } from '@1delta/dex-registry'
 import { Address, Hex } from 'viem'
 import { ChainIdLike } from '@1delta/type-sdk'
@@ -32,7 +40,7 @@ import {
   getFlashInfo,
   LenderData,
 } from '../../lending'
-import { MarginData } from '../types/margin'
+import { MarginData, MarginTradeType } from '../types/margin'
 
 /**
  * Build the inner call sequence for debased flash loan
@@ -198,8 +206,19 @@ export namespace ComposerMargin {
       flashRepayBalanceHolder = flashInfo.balanceHolder!
     }
 
-    const inputReference =
+    let inputReference =
       shouldUseDebasedFlow && proxyAsset!.amount ? BigInt(proxyAsset!.amount.toString()) : trade.inputAmount.amount
+
+    // ZapIn :: debt asset path
+    if (
+      marginData.marginTradeType === MarginTradeType.ZapIn &&
+      marginData.zapData &&
+      !marginData.zapData.useCollateralAsset
+    ) {
+      const zapBorrow = marginData.zapData.borrowAmount
+      if (!zapBorrow) throw new Error('borrowAmount is required for zapIn debt asset')
+      inputReference = BigInt(zapBorrow.amount)
+    }
 
     /** compute the flash loan repay amount */
     const flashLoanAmountWithFee = adjustForFlashLoanFee(inputReference, flashLoanData.fee)
@@ -286,11 +305,41 @@ export namespace ComposerMargin {
       )
     }
 
-    // Encode external swap through forwarder
-    const swapCall = ComposerSpot.encodeExternalCallForCallForwarder(externalCall, approvalData, sweepOutputCalldata)
+    // Zap pre-funding (debt-asset path only)
+    let zapAdditional: Hex = '0x'
+    if (marginData.zapData && !marginData.zapData.useCollateralAsset) {
+      const { inAsset: userContribution, userPermit } = marginData.zapData
+      if (!CurrencyUtils.isNativeAmount(userContribution)) {
+        const inAddress = userContribution.currency.address as Address
+        let permitCalldata: Hex = '0x'
+        let transferCalldata: Hex = '0x'
+        if (userPermit) {
+          permitCalldata = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), inAddress, userPermit.data as any)
+          if (userPermit.isPermit2) {
+            transferCalldata = encodePermit2TransferFrom(
+              inAddress,
+              externalCall.callForwarder,
+              BigInt(userContribution.amount)
+            )
+          } else {
+            transferCalldata = encodeTransferIn(inAddress, externalCall.callForwarder, BigInt(userContribution.amount))
+          }
+        } else {
+          transferCalldata = encodeTransferIn(inAddress, externalCall.callForwarder, BigInt(userContribution.amount))
+        }
+        zapAdditional = packCommands([permitCalldata, transferCalldata])
+      } else {
+        const existing = externalCall.value ? BigInt(externalCall.value) : 0n
+        const updated = (existing + BigInt(userContribution.amount)).toString()
+        externalCall = { ...externalCall, value: updated as any }
+      }
+    }
+
+    const externalWithZap = zapAdditional !== '0x' ? { ...externalCall, additionalData: zapAdditional } : externalCall
+    const swapCall = ComposerSpot.encodeExternalCallForCallForwarder(externalWithZap, approvalData, sweepOutputCalldata)
 
     // For debased flows, flash funds receiver should be composer; for regular flows, the call forwarder
-    const flashFundsReceiver = shouldUseDebasedFlow ? composerAddress : externalCall.callForwarder
+    const flashFundsReceiver = shouldUseDebasedFlow ? composerAddress : externalWithZap.callForwarder
 
     const flashLoanType = getFlashLoanType(flashLoanProvider as any)
 
@@ -343,7 +392,7 @@ export namespace ComposerMargin {
         // 3. fund call forwarder
         encodeSweep(
           trade.inputAmount.currency.address as Address,
-          externalCall.callForwarder as Address,
+          externalWithZap.callForwarder as Address,
           BigInt(trade.inputAmount.amount.toString()),
           SweepType.AMOUNT
         ),
