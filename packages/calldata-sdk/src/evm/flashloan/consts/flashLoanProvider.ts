@@ -4,7 +4,7 @@ import {
   FlashLoanProvider,
 } from '../../../utils'
 import { flashLoanIsFree } from '../utils'
-import { Chain } from '@1delta/asset-registry'
+import { Chain } from '@1delta/chain-registry'
 
 export function needsFlashLoanAdjustment(provider?: FlashLoanProvider) {
   if (!provider) return false

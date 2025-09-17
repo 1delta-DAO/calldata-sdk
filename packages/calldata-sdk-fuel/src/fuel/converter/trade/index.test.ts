@@ -1,4 +1,4 @@
-import { TradeType } from '@1delta/base-sdk'
+
 import { describe, it, expect } from 'vitest'
 import { getFuelParametersExactInFromTrade } from './toParameters'
 import { DIESEL_AMM_ID, MIRA_AMM_ID } from '../../constants'
@@ -681,6 +681,6 @@ const args2 = {
   tokenOutDecimals: 9,
   tokenOutSymbol: 'ETH',
   routerPreference: 'none',
-  tradeType: TradeType.EXACT_OUTPUT,
+  tradeType: 1,
   flashSwap: false,
 }

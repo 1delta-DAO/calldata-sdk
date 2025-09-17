@@ -1,4 +1,4 @@
-import { Lender } from '@1delta/asset-registry'
+import { Lender } from '@1delta/lender-registry'
 import { AaveInterestMode, MorphoParams } from '../../lending/types'
 import { PermitData } from '../..'
 
