@@ -24,17 +24,17 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@1delta/calldatalib": "0.0.35",
+    "@1delta/calldatalib": "0.0.39",
     "@1delta/data-sdk": "0.0.8",
     "@1delta/wnative": "^0.0.2",
     "lodash": "^4.17.21",
     "tiny-invariant": "^1.3.3",
     "tiny-warning": "^1.0.3",
-    "viem": "^2.37.4"
+    "viem": "^2.37.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.20",
-    "jsdom": "^26.1.0",
+    "jsdom": "^27.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
