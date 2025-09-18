@@ -49,7 +49,7 @@ export interface ZapInParams extends HandleMarginParams {
   externalCalls?: ExternalCallParams[]
 }
 
-export function createZapInFlashLoan({
+export function createZapInMargin({
   trade,
   externalCall,
   account,
