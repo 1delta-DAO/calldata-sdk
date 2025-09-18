@@ -34,6 +34,7 @@ import { buildMarginInnerCall, handlePendle } from '../margin/utils'
 import { HandleMarginParams, FlashInfo } from '../types/marginHandlers'
 import { GenericTrade } from '../../../utils'
 import { ExternalCallParams } from '../../spot/types'
+import { Lender } from '@1delta/lender-registry'
 
 export interface ZapInParams extends HandleMarginParams {
   /** If false -> debt asset path, else collateral asset path */
@@ -138,23 +139,23 @@ export function createZapInFlashLoan({
     composerAddress as Address
   )
 
-  let approvalData: any = undefined
+  let approvalData: { token: Address; target: Address } | undefined = undefined
   if (selectedTrade.approvalTarget && !CurrencyUtils.isNative(selectedTrade.inputAmount.currency)) {
     approvalData = {
-      token: selectedTrade.inputAmount.currency.address,
-      target: selectedTrade.approvalTarget,
+      token: selectedTrade.inputAmount.currency.address as Address,
+      target: selectedTrade.approvalTarget as Address,
     }
   }
 
   const swapCall = ComposerSpot.encodeExternalCallForCallForwarder(updatedExternal, approvalData, sweepOutputCalldata)
 
-  const flashLoanType = getFlashLoanType(flashLoanProvider as any)
+  const flashLoanType = getFlashLoanType(flashLoanProvider)
   let flashData: SingletonTypeFlashLoanData | PoolTypeFlashLoanData
   if (flashLoanType === 'Singleton') {
     flashData = {
       type: 'Singleton',
       receiver: composerAddress as Address,
-      ...getProviderAddressForSingletonType(flashLoanProvider as any, chainId),
+      ...getProviderAddressForSingletonType(flashLoanProvider, chainId),
     } as SingletonTypeFlashLoanData
   } else {
     flashData = {
@@ -187,7 +188,7 @@ export function createZapInFlashLoan({
     context.manualFlashLoanRepayTransfer,
   ])
 
-  const flashloanCalldata = createFlashLoan(flashLoanProvider as any, {
+  const flashloanCalldata = createFlashLoan(flashLoanProvider, {
     asset: flashLoanAssetAddress,
     amount: inputReference.toString(),
     data: flashloanData,
@@ -201,40 +202,39 @@ function getFlashLoanData(
   flashInfoOverride: FlashInfo | undefined,
   chainId: ChainIdLike,
   selectedTrade: GenericTrade,
-  lender: string,
+  lender: Lender,
   tokenIn: Address,
   composerAddress: Address
 ) {
   let flashLoanData: FlashLoanProviderData
   let flashLoanProvider: FlashLoanProvider
-  let flashRepayBalanceHolder: string
-  let flashPoolType: number
+  let flashRepayBalanceHolder: Address
+  let flashPoolType: FlashLoanIds | undefined
   let flashPool: string
 
   if (flashInfoOverride) {
     const { data, provider, balanceHolder, providerAddress, poolType } = flashInfoOverride
     flashLoanData = data
     flashLoanProvider = provider
-    flashPoolType = poolType as any
+    flashPoolType = poolType
     flashRepayBalanceHolder = (balanceHolder ??
       (poolType === FlashLoanIds.BALANCER_V2 || provider === FlashLoanProvider.BALANCER_V3
         ? providerAddress!
-        : composerAddress!)) as string
+        : composerAddress!)) as Address
     flashPool = providerAddress!
   } else {
     const data = getFlashLoanProviderAndFeePerChain(
       chainId,
       selectedTrade.flashLoanSource,
-      lender as any,
+      lender,
       tokenIn.toLowerCase()
     )
-    const flashInfo = getFlashInfo(data.flashLoanProvider as any, chainId, composerAddress)
-    // @ts-ignore
+    const flashInfo = getFlashInfo(data.flashLoanProvider as FlashLoanProvider, chainId, composerAddress)
     flashPoolType = flashInfo.poolType
     flashLoanData = flashInfo.data
     flashLoanProvider = flashInfo.provider
     flashPool = flashInfo.providerAddress!
-    flashRepayBalanceHolder = flashInfo.balanceHolder!
+    flashRepayBalanceHolder = flashInfo.balanceHolder! as Address
   }
 
   return {
@@ -268,7 +268,7 @@ function getDebtAssetPrefunding(
         let permitCalldata: Hex = '0x'
         let transferCalldata: Hex = '0x'
         if (userPermit) {
-          permitCalldata = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), userTokenAddress, userPermit.data as any)
+          permitCalldata = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), userTokenAddress, userPermit.data)
           if (userPermit.isPermit2) {
             transferCalldata = encodePermit2TransferFrom(userTokenAddress, selectedExternal.callForwarder, userAmount)
           } else {
@@ -282,7 +282,7 @@ function getDebtAssetPrefunding(
       } else {
         const existing = selectedExternal.value ? BigInt(selectedExternal.value) : 0n
         const updated = (existing + userAmount).toString()
-        updatedExternal = { ...selectedExternal, value: updated as any }
+        updatedExternal = { ...selectedExternal, value: updated }
       }
     }
   }
