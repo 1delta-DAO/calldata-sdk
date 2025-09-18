@@ -27,6 +27,7 @@ import {
   PermitIds,
   encodeTransferIn,
   encodePermit2TransferFrom,
+  encodeWrap,
 } from '@1delta/calldatalib'
 import { ONE_DELTA_COMPOSER } from '../../consts'
 import { getFlashInfo, getLenderData, packCommands } from '../../lending'
@@ -35,12 +36,11 @@ import { HandleMarginParams, FlashInfo } from '../types/marginHandlers'
 import { GenericTrade } from '../../../utils'
 import { ExternalCallParams } from '../../spot/types'
 import { Lender } from '@1delta/lender-registry'
+import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 
 export interface ZapInParams extends HandleMarginParams {
-  /** If false -> debt asset path, else collateral asset path */
-  useCollateralAsset: boolean
   /** flash loan amount for debt-asset path */
-  flashAmount?: SerializedCurrencyAmount
+  userPayAmount: SerializedCurrencyAmount
   /** Optional user token permit for debt-asset path */
   userPermit?: { data: Hex; isPermit2?: boolean }
   /** Optional: multiple trades, if omitted, uses single trade */
@@ -58,8 +58,7 @@ export function createZapInMargin({
   isMaxOut = false,
   composerOverride,
   flashInfoOverride,
-  useCollateralAsset,
-  flashAmount,
+  userPayAmount,
   userPermit,
   trades,
   externalCalls,
@@ -99,38 +98,61 @@ export function createZapInMargin({
     composerAddress
   )
 
-  let inputReference = selectedTrade.inputAmount.amount
-  if (!useCollateralAsset) {
-    if (!flashAmount) throw new Error('flash loan amount required for debt-asset zapIn')
-    inputReference = BigInt(flashAmount.amount)
+  const wnativeAddress = WRAPPED_NATIVE_INFO[userPayAmount.currency.chainId]?.address?.toLowerCase()
+
+  // detect whether the user asset matches the collateral or debt (we convert to wnative)
+  let userAssetIsCollateral: boolean
+  if (CurrencyUtils.isNativeAmount(userPayAmount)) {
+    userAssetIsCollateral = wnativeAddress === trade?.inputAmount.currency.address.toLowerCase()
+    // throw if it does not match either
+    if (!userAssetIsCollateral && wnativeAddress !== trade?.outputAmount.currency.address.toLowerCase())
+      throw new Error('Pay token is neither collateral nor debt')
+  } else {
+    userAssetIsCollateral =
+      userPayAmount.currency.address.toLowerCase() === trade?.inputAmount.currency.address.toLowerCase()
+    // throw if it does not match either
+    if (
+      !userAssetIsCollateral &&
+      userPayAmount.currency.address.toLowerCase() === trade?.outputAmount.currency.address.toLowerCase()
+    )
+      throw new Error('Pay token is neither collateral nor debt')
   }
 
-  const flashLoanAmountWithFee = adjustForFlashLoanFee(inputReference, flashLoanData.fee)
+  /** This is the flash loan amount */
+  let flashInputReference: bigint
+  /** user asset is the debt asset */
+  if (!userAssetIsCollateral) {
+    // we flash loan the tradeAmount minus user provided amount
+    flashInputReference = BigInt(trade?.inputAmount.amount ?? 0n) - BigInt(userPayAmount.amount ?? 0n)
+  } else {
+    /** user asset is collateral */
+    // just flash loan the trade input
+    flashInputReference = BigInt(trade?.inputAmount.amount ?? 0n)
+  }
 
-  const intermediate = composerAddress
+  const flashLoanAmountWithFee = adjustForFlashLoanFee(flashInputReference, flashLoanData.fee)
 
-  const result = buildMarginInnerCall(
+  const { context, safetySweep } = buildMarginInnerCall(
     selectedTrade,
     account as Address,
     marginData,
     inLenderData,
     outLenderData,
     flashRepayBalanceHolder,
-    intermediate,
+    composerAddress,
     flashLoanAmountWithFee,
     isMaxIn,
     isMaxOut
   )
-  const context = result.context
-  const safetySweep = result.safetySweep
 
-  // Debt asset path pre-funding
-  const { zapAdditional, updatedExternal } = getDebtAssetPrefunding(
-    useCollateralAsset,
-    selectedTrade,
-    flashAmount,
+  // pre-funding calldata
+  const paymentCalldata = getPaymentCalldata(
+    userAssetIsCollateral,
+    userPayAmount,
     userPermit,
-    selectedExternal
+    selectedExternal,
+    composerAddress,
+    wnativeAddress
   )
 
   let sweepOutputCalldata: Hex = '0x'
@@ -147,7 +169,7 @@ export function createZapInMargin({
     }
   }
 
-  const swapCall = ComposerSpot.encodeExternalCallForCallForwarder(updatedExternal, approvalData, sweepOutputCalldata)
+  const swapCall = ComposerSpot.encodeExternalCallForCallForwarder(selectedExternal, approvalData, sweepOutputCalldata)
 
   const flashLoanType = getFlashLoanType(flashLoanProvider)
   let flashData: SingletonTypeFlashLoanData | PoolTypeFlashLoanData
@@ -172,14 +194,13 @@ export function createZapInMargin({
   if (flashData.type === 'Pool') {
     transferToCallForwarder = encodeSweep(
       tokenIn,
-      updatedExternal.callForwarder as Address,
-      BigInt(inputReference.toString()),
+      selectedExternal.callForwarder as Address,
+      BigInt(flashInputReference.toString()),
       SweepType.AMOUNT
     )
   }
 
   const flashloanData = packCommands([
-    zapAdditional,
     transferToCallForwarder,
     swapCall,
     handlePendle(selectedTrade, account as Address),
@@ -190,12 +211,23 @@ export function createZapInMargin({
 
   const flashloanCalldata = createFlashLoan(flashLoanProvider, {
     asset: flashLoanAssetAddress,
-    amount: inputReference.toString(),
+    amount: flashInputReference.toString(),
     data: flashloanData,
     ...flashData,
   })
 
-  return packCommands([flashloanCalldata, context.cleanup, safetySweep])
+  return {
+    // attach the value if payment is native
+    value: CurrencyUtils.isNativeAmount(userPayAmount) ? userPayAmount.amount : '0',
+    // add composer as target
+    to: composerAddress,
+    data: packCommands([
+      paymentCalldata, // payment data is outisde the flash loan
+      flashloanCalldata,
+      context.cleanup,
+      safetySweep,
+    ]),
+  }
 }
 
 function getFlashLoanData(
@@ -246,49 +278,57 @@ function getFlashLoanData(
   }
 }
 
-function getDebtAssetPrefunding(
-  useCollateralAsset: boolean,
-  selectedTrade: GenericTrade,
-  flashAmount: SerializedCurrencyAmount | undefined,
+/**
+ * Facilitates the transfer from the user to the contracts
+ * 1) userAssetIsCollateral == true : pay to the composer and wrap if needed
+ * 2) userAssetIsCollateral == false: wrap and transfer to composer (we assume that the swapp is for the ein tire amount in wnative)
+ */
+function getPaymentCalldata(
+  userAssetIsCollateral: boolean,
+  userPayAmount: SerializedCurrencyAmount,
   userPermit: { data: Hex; isPermit2?: boolean } | undefined,
-  selectedExternal: ExternalCallParams
+  selectedExternal: ExternalCallParams,
+  composer: string,
+  wnativeAddress: string
 ) {
-  let zapAdditional: Hex = '0x'
-  let updatedExternal = selectedExternal
+  let paymentCalldata: Hex = '0x'
 
-  if (!useCollateralAsset) {
-    const totalIn = CurrencyUtils.getAmount(selectedTrade.inputAmount)
-    const borrowIn = BigInt(flashAmount!.amount)
-    const userAmount = totalIn > borrowIn ? totalIn - borrowIn : 0n
-    const userTokenAddress: Address = selectedTrade.inputAmount.currency.address as Address
-    const isNativeUser = CurrencyUtils.isNativeAmount(selectedTrade.inputAmount)
+  // funds are sent to the
+  const payFundsReceiver: any = userAssetIsCollateral ? composer : selectedExternal.callForwarder
 
-    if (userAmount > 0n) {
-      if (!isNativeUser) {
-        let permitCalldata: Hex = '0x'
-        let transferCalldata: Hex = '0x'
-        if (userPermit) {
-          permitCalldata = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), userTokenAddress, userPermit.data)
-          if (userPermit.isPermit2) {
-            transferCalldata = encodePermit2TransferFrom(userTokenAddress, selectedExternal.callForwarder, userAmount)
-          } else {
-            transferCalldata = encodeTransferIn(userTokenAddress, selectedExternal.callForwarder, userAmount)
-          }
+  const userAmount = BigInt(userPayAmount.amount)
+  const userTokenAddress: Address = userPayAmount.currency.address as Address
+  const isNativeUser = CurrencyUtils.isNativeAmount(userPayAmount)
+
+  // should always be positive
+  if (userAmount > 0n) {
+    // non-native case accepts permits
+    if (!isNativeUser) {
+      let permitCalldata: Hex = '0x'
+      let transferCalldata: Hex = '0x'
+      if (userPermit) {
+        permitCalldata = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), userTokenAddress, userPermit.data)
+        if (userPermit.isPermit2) {
+          transferCalldata = encodePermit2TransferFrom(userTokenAddress, payFundsReceiver, userAmount)
         } else {
-          transferCalldata = encodeTransferIn(userTokenAddress, selectedExternal.callForwarder, userAmount)
+          transferCalldata = encodeTransferIn(userTokenAddress, payFundsReceiver, userAmount)
         }
-        zapAdditional = packCommands([permitCalldata, transferCalldata])
-        updatedExternal = { ...selectedExternal, additionalData: zapAdditional }
       } else {
-        const existing = selectedExternal.value ? BigInt(selectedExternal.value) : 0n
-        const updated = (existing + userAmount).toString()
-        updatedExternal = { ...selectedExternal, value: updated }
+        transferCalldata = encodeTransferIn(userTokenAddress, payFundsReceiver, userAmount)
       }
+      paymentCalldata = packCommands([permitCalldata, transferCalldata])
+    } 
+    // native case is more specific -> wrap and send wnative to call forwarder for swap
+    else {
+      paymentCalldata = packCommands([
+        // wrap
+        encodeWrap(userPayAmount.amount as any, wnativeAddress as any),
+        userAssetIsCollateral
+          ? '0x' // no data if collateral, otherwise sweep to payer
+          : encodeSweep(wnativeAddress as any, payFundsReceiver as any, userPayAmount.amount as any, SweepType.AMOUNT),
+      ])
     }
   }
 
-  return {
-    zapAdditional,
-    updatedExternal,
-  }
+  return paymentCalldata
 }

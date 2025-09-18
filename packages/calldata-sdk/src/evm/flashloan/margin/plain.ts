@@ -1,12 +1,4 @@
-import {
-  encodeSweep,
-  SweepType,
-  FlashLoanIds,
-  encodePermit,
-  PermitIds,
-  encodeTransferIn,
-  encodePermit2TransferFrom,
-} from '@1delta/calldatalib'
+import { encodeSweep, SweepType, FlashLoanIds } from '@1delta/calldatalib'
 import { FLASH_LOAN_IDS } from '@1delta/dex-registry'
 import { Address, Hex } from 'viem'
 import { ChainIdLike } from '@1delta/type-sdk'
@@ -28,7 +20,7 @@ import {
   PoolTypeFlashLoanData,
   SingletonTypeFlashLoanData,
 } from '../../../utils'
-import { FORWARDER, ONE_DELTA_COMPOSER } from '../../consts'
+import { ONE_DELTA_COMPOSER } from '../../consts'
 import { HandleMarginParams } from '../types/marginHandlers'
 import { ComposerSpot } from '../../spot'
 import { buildMarginInnerCall, handlePendle } from './utils'
