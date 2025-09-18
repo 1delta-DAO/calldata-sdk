@@ -113,7 +113,7 @@ export function createZapInMargin({
     // throw if it does not match either
     if (
       !userAssetIsCollateral &&
-      userPayAmount.currency.address.toLowerCase() === trade?.inputAmount.currency.address.toLowerCase()
+      userPayAmount.currency.address.toLowerCase() !== trade?.inputAmount.currency.address.toLowerCase()
     )
       throw new Error('Pay token is neither collateral nor debt')
   }
