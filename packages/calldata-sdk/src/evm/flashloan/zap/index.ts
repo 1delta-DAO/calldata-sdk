@@ -103,17 +103,17 @@ export function createZapInMargin({
   // detect whether the user asset matches the collateral or debt (we convert to wnative)
   let userAssetIsCollateral: boolean
   if (CurrencyUtils.isNativeAmount(userPayAmount)) {
-    userAssetIsCollateral = wnativeAddress === trade?.inputAmount.currency.address.toLowerCase()
+    userAssetIsCollateral = wnativeAddress === trade?.outputAmount.currency.address.toLowerCase()
     // throw if it does not match either
-    if (!userAssetIsCollateral && wnativeAddress !== trade?.outputAmount.currency.address.toLowerCase())
+    if (!userAssetIsCollateral && wnativeAddress !== trade?.inputAmount.currency.address.toLowerCase())
       throw new Error('Pay token is neither collateral nor debt')
   } else {
     userAssetIsCollateral =
-      userPayAmount.currency.address.toLowerCase() === trade?.inputAmount.currency.address.toLowerCase()
+      userPayAmount.currency.address.toLowerCase() === trade?.outputAmount.currency.address.toLowerCase()
     // throw if it does not match either
     if (
       !userAssetIsCollateral &&
-      userPayAmount.currency.address.toLowerCase() === trade?.outputAmount.currency.address.toLowerCase()
+      userPayAmount.currency.address.toLowerCase() === trade?.inputAmount.currency.address.toLowerCase()
     )
       throw new Error('Pay token is neither collateral nor debt')
   }
