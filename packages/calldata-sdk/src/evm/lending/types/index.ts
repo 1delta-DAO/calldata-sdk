@@ -1,4 +1,4 @@
-import { Lender } from '@1delta/asset-registry'
+import { Lender } from '@1delta/lender-registry'
 import { ChainIdLike, SerializedCurrencyAmount } from '@1delta/type-sdk'
 import { Hex } from 'viem'
 import { PermitData } from '../..'
@@ -70,18 +70,6 @@ export const COMPOUND_V2_LENDERS: Lender[] = [
   Lender.ENCLABS_PT_ETH,
   Lender.BENQI,
   Lender.BENQI_AVALANCE_ECOSYSTEM,
-]
-
-export const COMPOUND_V3_LENDERS: Lender[] = [
-  Lender.COMPOUND_V3_USDC,
-  Lender.COMPOUND_V3_USDT,
-  Lender.COMPOUND_V3_USDE,
-  Lender.COMPOUND_V3_USDBC,
-  Lender.COMPOUND_V3_USDCE,
-  Lender.COMPOUND_V3_USDS,
-  Lender.COMPOUND_V3_WETH,
-  Lender.COMPOUND_V3_AERO,
-  Lender.COMPOUND_V3_WSTETH,
 ]
 
 export enum LenderGroups {

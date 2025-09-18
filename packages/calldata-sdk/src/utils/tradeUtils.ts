@@ -1,6 +1,6 @@
 import { Address, encodePacked, Hex, maxUint16 } from 'viem'
 import { NATIVE_SUPPORTING_PROTOCOLS, PRE_FUNDABLE_DEXES } from '../evm/consts'
-import { WRAPPED_NATIVE_INFO } from '@1delta/asset-registry'
+import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 import { SwapObject } from './genericTrade'
 import { ChainIdLike, SerializedCurrencyAmount, SerializedSwapStep, SerializedTrade } from '@1delta/type-sdk'
 import { CurrencyUtils } from './currencyUtils'
