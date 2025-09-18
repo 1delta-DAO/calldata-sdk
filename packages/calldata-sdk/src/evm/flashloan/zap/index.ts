@@ -138,7 +138,15 @@ export function createZapInFlashLoan({
     composerAddress as Address
   )
 
-  const swapCall = ComposerSpot.encodeExternalCallForCallForwarder(updatedExternal, undefined, sweepOutputCalldata)
+  let approvalData: any = undefined
+  if (selectedTrade.approvalTarget && !CurrencyUtils.isNative(selectedTrade.inputAmount.currency)) {
+    approvalData = {
+      token: selectedTrade.inputAmount.currency.address,
+      target: selectedTrade.approvalTarget,
+    }
+  }
+
+  const swapCall = ComposerSpot.encodeExternalCallForCallForwarder(updatedExternal, approvalData, sweepOutputCalldata)
 
   const flashLoanType = getFlashLoanType(flashLoanProvider as any)
   let flashData: SingletonTypeFlashLoanData | PoolTypeFlashLoanData
