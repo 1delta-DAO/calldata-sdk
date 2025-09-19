@@ -342,7 +342,6 @@ export namespace ComposerLendingActions {
               uint128(BigInt(amountUsed)),
               morphoParams.isShares,
               morphoParams.unsafeRepayment,
-              false
             ),
             receiver as Address,
             morphoParams.morphoB as Address,

@@ -1,6 +1,7 @@
 import { Lender } from '@1delta/lender-registry'
 import { AaveInterestMode, MorphoParams } from '../../lending/types'
-import { PermitData } from '../..'
+import { GenericTrade, PermitData } from '../..'
+import { SerializedCurrencyAmount } from '@1delta/type-sdk'
 
 export enum MarginTradeType {
   Open = 'Open',

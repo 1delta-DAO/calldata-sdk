@@ -20,7 +20,7 @@ import {
   PoolTypeFlashLoanData,
   SingletonTypeFlashLoanData,
 } from '../../../utils'
-import { FORWARDER, ONE_DELTA_COMPOSER } from '../../consts'
+import { ONE_DELTA_COMPOSER } from '../../consts'
 import { HandleMarginParams } from '../types/marginHandlers'
 import { ComposerSpot } from '../../spot'
 import { buildMarginInnerCall, handlePendle } from './utils'
@@ -32,7 +32,7 @@ import {
   getFlashInfo,
   LenderData,
 } from '../../lending'
-import { MarginData } from '../types/margin'
+import { MarginData, MarginTradeType } from '../types/margin'
 
 /**
  * Build the inner call sequence for debased flash loan
@@ -198,7 +198,7 @@ export namespace ComposerMargin {
       flashRepayBalanceHolder = flashInfo.balanceHolder!
     }
 
-    const inputReference =
+    let inputReference =
       shouldUseDebasedFlow && proxyAsset!.amount ? BigInt(proxyAsset!.amount.toString()) : trade.inputAmount.amount
 
     /** compute the flash loan repay amount */
@@ -286,7 +286,6 @@ export namespace ComposerMargin {
       )
     }
 
-    // Encode external swap through forwarder
     const swapCall = ComposerSpot.encodeExternalCallForCallForwarder(externalCall, approvalData, sweepOutputCalldata)
 
     // For debased flows, flash funds receiver should be composer; for regular flows, the call forwarder
