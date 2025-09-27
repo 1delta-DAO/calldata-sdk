@@ -176,7 +176,8 @@ export function createZapInMargin({
   if (flashLoanType === 'Singleton') {
     flashData = {
       type: 'Singleton',
-      receiver: composerAddress as Address,
+      // the receiver is the forwarder in this case
+      receiver: selectedExternal.callForwarder as Address,
       ...getProviderAddressForSingletonType(flashLoanProvider, chainId),
     } as SingletonTypeFlashLoanData
   } else {
@@ -317,7 +318,7 @@ function getPaymentCalldata(
         transferCalldata = encodeTransferIn(userTokenAddress, payFundsReceiver, userAmount)
       }
       paymentCalldata = packCommands([permitCalldata, transferCalldata])
-    } 
+    }
     // native case is more specific -> wrap and send wnative to call forwarder for swap
     else {
       paymentCalldata = packCommands([

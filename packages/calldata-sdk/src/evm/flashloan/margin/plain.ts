@@ -32,7 +32,7 @@ import {
   getFlashInfo,
   LenderData,
 } from '../../lending'
-import { MarginData, MarginTradeType } from '../types/margin'
+import { MarginData } from '../types/margin'
 
 /**
  * Build the inner call sequence for debased flash loan
