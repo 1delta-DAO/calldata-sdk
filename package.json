@@ -21,7 +21,7 @@
     "@1delta/chain-registry": "^0.0.2",
     "@1delta/data-sdk": "0.0.8",
     "@1delta/dex-registry": "^0.0.80",
-    "@1delta/lender-registry": "^0.0.5",
+    "@1delta/lender-registry": "^0.0.6",
     "@1delta/type-sdk": "^0.0.3",
     "@types/lodash": "^4.17.20",
     "axios": "^1.12.2"
