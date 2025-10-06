@@ -260,8 +260,8 @@ export namespace ComposerSpot {
     )
   }
 
-  export function createSweepCalldata(tokenAddress: Address, receiver: Address): Hex {
-    return encodeSweep(tokenAddress, receiver, 0n, SweepType.VALIDATE)
+  export function createSweepCalldata(tokenAddress: Address, receiver: Address, minAmount: bigint = 0n): Hex {
+    return encodeSweep(tokenAddress, receiver, minAmount, SweepType.VALIDATE)
   }
 
   /** Trade with 1delta path or external aggregator */
@@ -337,7 +337,7 @@ export namespace ComposerSpot {
   function handleExternalAggregator(params: SpotCalldataParams): EVMCallParams {
     // require calldata
     if (!params.externalCall) throw new Error('External call data required')
-    const { trade, receiver, skipFunding = false } = params
+    const { trade, receiver, skipFunding = false, slippageTolerance } = params
     const { inputAmount } = trade
 
     // Transfer to call forwarder
@@ -396,7 +396,10 @@ export namespace ComposerSpot {
     let sweepOutputCalldata: Hex = '0x'
     if (trade.sweepToReceiver) {
       // Sweep output to receiver
-      sweepOutputCalldata = createSweepCalldata(trade.outputAmount.currency.address as Address, receiver)
+      const minAmountOut = CurrencyUtils.getAmount(
+        minimumAmountOutFromTrade(trade, slippageTolerance, TradeType.EXACT_INPUT)
+      )
+      sweepOutputCalldata = createSweepCalldata(trade.outputAmount.currency.address as Address, receiver, minAmountOut)
     }
 
     // Encode external aggregator call
