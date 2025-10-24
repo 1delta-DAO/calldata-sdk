@@ -177,6 +177,8 @@ export function getLenderId(lender: LenderGroups) {
       return LenderIds.UP_TO_COMPOUND_V3 - 1
     case LenderGroups.MorphoBlue:
       return LenderIds.UP_TO_MORPHO - 1
+    // case LenderGroups.SILO_V2:
+    //   return LenderIds.UP_TO_SILO_V2 - 1
     default:
       throw new Error('Unsupported lender')
   }
@@ -258,4 +260,8 @@ export function getLenderGroup(lender: Lender) {
   if (isCompoundV3(lender)) return LenderGroups.CompoundV3
   if (isCompoundV2(lender)) return LenderGroups.CompoundV2
   return LenderGroups.MorphoBlue
+}
+
+export function isNativeAddress(a: string) {
+  return a === zeroAddress
 }
