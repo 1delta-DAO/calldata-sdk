@@ -32,6 +32,7 @@ import {
   getLenderData,
   getLenderId,
   getPool,
+  isNativeAddress,
 } from '../utils'
 import { UINT112_MAX } from '../consts'
 import { Lender } from '@1delta/lender-registry'
@@ -108,7 +109,7 @@ export namespace ComposerLendingActions {
     return encodePacked(
       ['bytes', 'uint8', 'uint8', 'uint16', 'address', 'uint128', 'address', 'address'],
       [
-        encodeApprove(asset as Address, pool as Address),
+        isNativeAddress(asset) ? '0x' : encodeApprove(asset as Address, pool as Address),
         ComposerCommands.LENDING,
         LenderOps.DEPOSIT,
         getLenderId(lenderData.group),
@@ -338,11 +339,7 @@ export namespace ComposerLendingActions {
           [
             genericPart,
             morphoParams.market,
-            generateAmountBitmap(
-              uint128(BigInt(amountUsed)),
-              morphoParams.isShares,
-              morphoParams.unsafeRepayment,
-            ),
+            generateAmountBitmap(uint128(BigInt(amountUsed)), morphoParams.isShares, morphoParams.unsafeRepayment),
             receiver as Address,
             morphoParams.morphoB as Address,
             // length > 2 indicates that there is more than just 0x
