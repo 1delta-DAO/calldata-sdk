@@ -412,7 +412,8 @@ export namespace ComposerSpot {
 
     return {
       calldata: combinedCalldata,
-      value: CurrencyUtils.isNativeAmount(inputAmount) ? CurrencyUtils.getAmount(inputAmount) : 0n,
+      // skipFunding applies to native, too
+      value: CurrencyUtils.isNativeAmount(inputAmount) && !skipFunding ? CurrencyUtils.getAmount(inputAmount) : 0n,
     }
   }
 }
