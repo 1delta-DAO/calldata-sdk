@@ -8,6 +8,7 @@ import {
   getLenderData,
   isAaveType,
   QuickActionType,
+  isNativeAddress,
 } from '../lending'
 import { ComposerSpot, EVMCallParams, getComposerAddress, validateExactInputTrade } from '..'
 import {
@@ -141,6 +142,10 @@ export namespace ComposerQuickActions {
       composer,
     } = params
     validateExactInputTrade(trade)
+
+    // validate non-native as input
+    if (isNativeAddress(trade.inputAmount.currency.address)) throw new Error('Borrow and swap for native not supported')
+
     const chainId = getChainIdFromTrade(trade)
     const composerAddress = composer ?? getComposerAddress(chainId)
     const lenderData = getLenderData(lender, chainId, trade.inputAmount.currency.address)
@@ -246,7 +251,14 @@ export namespace ComposerQuickActions {
     }
 
     // withdrawal recipient
-    const withdrawReceiver = externalCall && !withdrawMaximum ? externalCall.callForwarder : composerAddress
+    const withdrawReceiver =
+      externalCall && !withdrawMaximum
+        ? // native we also keep in the composer as it auto-attaches
+          // at no additional cost
+          isNativeAddress(trade.inputAmount.currency.address)
+          ? composerAddress
+          : externalCall.callForwarder
+        : composerAddress
 
     const withdrawCalldata = ComposerLendingActions.createWithdraw({
       receiver: withdrawReceiver,
