@@ -86,7 +86,7 @@ export function getLenderData(lender: Lender, chainId: ChainIdLike, asset: strin
   }
 
   // check if the lender is morpho
-  if (lender === Lender.MORPHO_BLUE) {
+  if (isMorphoType(lender)) {
     if (Object.keys(morphoPools()).includes(lender.toString())) {
       const lenderData = morphoPools()[lender]
       if (Object.keys(lenderData).includes(chainId.toString())) {
