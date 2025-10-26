@@ -11,6 +11,7 @@ import {
 import {
   ComposerCommands,
   encodeApprove,
+  encodeCompoundV2SelectorId,
   encodeMorphoBorrow,
   encodeMorphoDeposit,
   encodeMorphoDepositCollateral,
@@ -37,6 +38,19 @@ import {
 import { UINT112_MAX } from '../consts'
 import { Lender } from '@1delta/lender-registry'
 import { SerializedCurrencyAmount } from '@1delta/type-sdk'
+import { isCompoundV2, isMorphoType } from '../../flashloan'
+
+enum CompoundV2Selector {
+  MINT_BEHALF = 0,
+  MINT = 1,
+
+  REDEEM = 0,
+  REDEEM_BEHALF = 1,
+}
+
+function isVenusType(lender: string) {
+  return lender.startsWith('VENUS')
+}
 
 /** Yldr is lieke aave, just with no borrow mode */
 function isYldr(lender: string) {
@@ -73,7 +87,7 @@ export namespace ComposerLendingActions {
     if (transferType === TransferToLenderType.ContractBalance) amountUsed = 0n // deposit balance
 
     // handle morpho case
-    if (lender === Lender.MORPHO_BLUE) {
+    if (isMorphoType(lender)) {
       if (!morphoParams) {
         throw new Error('Morpho params should be defined for MorphoBlue deposits')
       }
@@ -105,6 +119,26 @@ export namespace ComposerLendingActions {
 
     if (!pool) {
       throw new Error('Pool should be defined for deposits')
+    }
+
+    if (isCompoundV2(lender)) {
+      return encodePacked(
+        ['bytes', 'uint8', 'uint8', 'uint16', 'address', 'uint128', 'address', 'address'],
+        [
+          isNativeAddress(asset) ? '0x' : encodeApprove(asset as Address, pool as Address),
+          ComposerCommands.LENDING,
+          LenderOps.DEPOSIT,
+          getLenderId(lenderData.group),
+          asset as Address,
+          encodeCompoundV2SelectorId(
+            amountUsed,
+            // MINT_BEHALF for VENUS & forks, otherwise MINT
+            isVenusType(lender) && !isNativeAddress(asset) ? CompoundV2Selector.MINT_BEHALF : CompoundV2Selector.MINT
+          ),
+          receiver as Address,
+          pool as Address,
+        ]
+      )
     }
     return encodePacked(
       ['bytes', 'uint8', 'uint8', 'uint16', 'address', 'uint128', 'address', 'address'],
@@ -156,6 +190,19 @@ export namespace ComposerLendingActions {
         if (!collateralToken) {
           throw new Error('collateralToken should be defined for CompoundV2 withdrawals')
         }
+        encodePacked(
+          ['uint8', 'uint8', 'uint16', 'address', 'uint128', 'address', 'address'],
+          [
+            ComposerCommands.LENDING,
+            LenderOps.WITHDRAW,
+            getLenderId(lenderData.group),
+            asset as Address,
+            // we leave the all-supported REDEEM here for now
+            encodeCompoundV2SelectorId(amountUsed, CompoundV2Selector.REDEEM),
+            receiver as Address,
+            collateralToken as Address,
+          ]
+        )
         return encodePacked(['bytes', 'address'], [genericPart, collateralToken as Address])
       case LenderGroups.CompoundV3:
         const isBase = getIsBaseToken(lenderData, asset)
