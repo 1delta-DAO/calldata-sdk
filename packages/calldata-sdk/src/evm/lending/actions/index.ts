@@ -240,6 +240,8 @@ export namespace ComposerLendingActions {
       ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) }
       : getAssetData(amount, lender)
 
+    if (isNativeAddress(asset)) throw new Error('Cannot delegate native borrowing')
+
     const amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount)
 
     const pool = useOverride?.pool ?? getPool(lenderData)
