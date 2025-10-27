@@ -22,7 +22,7 @@ import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
  * Parametrize a repay transaction for margin.
  * Special cases:
  *    maximum out: needs sweep of output token to user in case we attempt to repay too much
- * 
+ *
  * Native is already handled correctly
  */
 export function handleRepay(params: HandleRepayParams) {
@@ -169,10 +169,12 @@ export function handleWithdraw(params: HandleWithdrawParams) {
         )
       }
     } else {
-      // if we wrap here, we will hold the correct amount in wnative
-      context.manualFlashLoanRepayTransfer = encodeWrap(flashLoanAmountWithFeeBigInt, wnative)
+      if (inputIsNative) {
+        // if we wrap here, we will hold the correct amount in wnative
+        context.manualFlashLoanRepayTransfer = encodeWrap(flashLoanAmountWithFeeBigInt, wnative)
+      }
     }
-  } 
+  }
   // default case -  we withdraw an exact amount
   else {
     let withdrawCalldata = '0x'
