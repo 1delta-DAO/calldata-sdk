@@ -123,7 +123,7 @@ export function getFlashInfo(provider: FlashLoanProvider, chainId: ChainIdLike, 
     }
   }
 
-  if (provider === FlashLoanProvider.MORPHO) {
+  if (provider === FlashLoanProvider.MORPHO || provider === FlashLoanProvider.LISTA) {
     // @ts-ignore
     const pool = morphoPools?.[provider]?.[chainId]
     return {

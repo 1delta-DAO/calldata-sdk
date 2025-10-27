@@ -325,7 +325,10 @@ export namespace ComposerSpot {
 
       return {
         calldata: packCommands([permitCalldata, transferCalldata, swapCalldata]) as Hex,
-        value: CurrencyUtils.isNativeAmount(trade.inputAmount) && !skipFunding ? CurrencyUtils.getAmount(trade.inputAmount) : 0n,
+        value:
+          CurrencyUtils.isNativeAmount(trade.inputAmount) && !skipFunding
+            ? CurrencyUtils.getAmount(trade.inputAmount)
+            : 0n,
       }
     }
     // case external aggregator

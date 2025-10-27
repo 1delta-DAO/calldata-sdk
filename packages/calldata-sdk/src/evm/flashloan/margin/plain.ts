@@ -1,4 +1,4 @@
-import { encodeSweep, SweepType, FlashLoanIds } from '@1delta/calldatalib'
+import { encodeSweep, SweepType, FlashLoanIds, encodeUnwrap } from '@1delta/calldatalib'
 import { FLASH_LOAN_IDS } from '@1delta/dex-registry'
 import { Address, Hex } from 'viem'
 import { ChainIdLike } from '@1delta/type-sdk'
@@ -10,7 +10,6 @@ import {
   getProviderAddressForSingletonType,
 } from '..'
 import {
-  CurrencyUtils,
   FlashLoanProvider,
   FlashLoanProviderData,
   GenericTrade,
@@ -31,8 +30,10 @@ import {
   packCommands,
   getFlashInfo,
   LenderData,
+  isNativeAddress,
 } from '../../lending'
 import { MarginData } from '../types/margin'
+import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 
 /**
  * Build the inner call sequence for debased flash loan
@@ -269,7 +270,7 @@ export namespace ComposerMargin {
 
     // define approval data if any
     let approvalData: any = undefined
-    if (trade.approvalTarget && !CurrencyUtils.isNative(trade.inputAmount.currency)) {
+    if (trade.approvalTarget && !isNativeAddress(trade.inputAmount.currency.address)) {
       approvalData = {
         token: trade.inputAmount.currency.address,
         target: trade.approvalTarget,
@@ -293,10 +294,25 @@ export namespace ComposerMargin {
 
     const flashLoanType = getFlashLoanType(flashLoanProvider as any)
 
+    /**
+     * The input might be native here (Compound V2)
+     * We allways flash loan wNative.
+     * In this case we add 2 operations
+     * - unwrap for the trade input
+     * - once we fund the repayment, we have to wrap again
+     *    - wrap the repay amount
+     *    - refund native excess
+     *
+     * For debased flows, we deterministically prevent this operation for now.
+     */
+    const inputIsNative = isNativeAddress(tokenIn)
+    const wnative = WRAPPED_NATIVE_INFO[chainId].address as Address
+
     /** get the flash loan call based on the selected type */
     let flashData: SingletonTypeFlashLoanData | PoolTypeFlashLoanData
     // handles uniswap v4 and balancer v3
     if (flashLoanType === 'Singleton') {
+      if (inputIsNative) throw new Error('Native flash loans with singletons not yet supported')
       flashData = {
         type: 'Singleton',
         receiver: flashFundsReceiver as Address,
@@ -314,7 +330,12 @@ export namespace ComposerMargin {
     }
 
     // The asset we're flash loaning (proxy asset for debased flows, tokenIn for normal flows)
-    const flashLoanAssetAddress = shouldUseDebasedFlow ? (proxyAsset!.currency.address as Address) : tokenIn
+    const flashLoanAssetAddress = shouldUseDebasedFlow
+      ? (proxyAsset!.currency.address as Address)
+      : // always use wrapped as flash loan asset
+      inputIsNative
+      ? wnative
+      : tokenIn
 
     /**
      * for some flash loans, we need to send the funds to the
@@ -323,16 +344,28 @@ export namespace ComposerMargin {
      */
     let transferToCallForwarder: Hex = '0x'
     if (flashData.type === 'Pool' && !shouldUseDebasedFlow) {
-      transferToCallForwarder = encodeSweep(
-        tokenIn,
-        flashFundsReceiver as Address,
-        BigInt(inputReference.toString()),
-        SweepType.AMOUNT
-      )
+      // unwrap if native is input
+      if (inputIsNative) {
+        // important: we automatically forward native to the callForwarder via the externalCall definition
+        // as such, we keep native in the composer here and just unwrap
+        transferToCallForwarder = encodeUnwrap(
+          wnative,
+          composerAddress as Address,
+          BigInt(inputReference.toString()),
+          SweepType.AMOUNT
+        )
+      } else // otherwise useregular transfer
+        transferToCallForwarder = encodeSweep(
+          tokenIn,
+          flashFundsReceiver as Address,
+          BigInt(inputReference.toString()),
+          SweepType.AMOUNT
+        )
     }
 
     let flashloanData: Hex
     if (shouldUseDebasedFlow) {
+      if (inputIsNative) throw new Error('Debasing native not supported')
       // debased flow
       flashloanData = packCommands([
         // 1. Deposit proxy asset to lender (compound)
