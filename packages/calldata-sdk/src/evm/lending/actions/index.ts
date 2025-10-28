@@ -24,6 +24,7 @@ import {
   uint128,
   uint16,
   uint8,
+  CompoundV2Selector,
 } from '@1delta/calldatalib'
 import {
   getAssetParamsFromAmount,
@@ -39,14 +40,6 @@ import { UINT112_MAX } from '../consts'
 import { Lender } from '@1delta/lender-registry'
 import { SerializedCurrencyAmount } from '@1delta/type-sdk'
 import { isCompoundV2, isMorphoType } from '../../flashloan'
-
-enum CompoundV2Selector {
-  MINT_BEHALF = 0,
-  MINT = 1,
-
-  REDEEM = 0,
-  REDEEM_BEHALF = 1,
-}
 
 function isVenusType(lender: string) {
   return lender.startsWith('VENUS')
