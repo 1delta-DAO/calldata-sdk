@@ -21,7 +21,7 @@ export type SpotCalldataParams = {
    * For forwarded aggregator swaps, the forwarder holds the funds
    */
   skipFunding?: boolean
-
+  
   /** If true, we assume that the input is an FOT token */
   fotInput?: boolean
 }

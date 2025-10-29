@@ -22,6 +22,10 @@ export function isCompoundV2(lender: Lender) {
   return COMPOUND_V2_LENDERS.includes(lender)
 }
 
+export function isMorphoType(lender: Lender) {
+  return lender.startsWith('LISTA_DAO') || lender.startsWith('MORPHO_BLUE')
+}
+
 export const getLenderAssets = (chainId: string | undefined, lendingProtocol = Lender.AAVE_V3): string[] => {
   if (!chainId) return []
   if (isAave(lendingProtocol)) return aaveReserves()?.[lendingProtocol]?.[chainId] ?? []

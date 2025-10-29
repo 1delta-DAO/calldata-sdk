@@ -30,8 +30,8 @@ export interface LendingOperation {
   actionType: QuickActionType
   receiver: string
   isAll?: boolean
-  inIsNative: boolean
-  outIsNative: boolean
+  callerAssetAddress: string
+  lenderAssetAddress: string
   composerAddress: string
   permitData?: PermitData
   morphoParams?: MorphoParams
@@ -78,6 +78,7 @@ export enum LenderGroups {
   CompoundV2,
   CompoundV3,
   MorphoBlue,
+  SiloV2,
 }
 
 export enum QuickActionType {

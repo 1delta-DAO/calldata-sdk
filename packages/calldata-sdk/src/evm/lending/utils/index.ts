@@ -12,7 +12,7 @@ import { ChainIdLike, SerializedCurrencyAmount } from '@1delta/type-sdk'
 import { FLASH_LOAN_PROVIDERS, FlashLoanProvider } from '../../../utils'
 import { BALANCER_V2_FORKS } from '@1delta/dex-registry'
 import { FlashInfo } from '../../flashloan/types/marginHandlers'
-import { isAaveV2Type, isAaveV3Type, isCompoundV2, isCompoundV3 } from '../../flashloan'
+import { isAaveV2Type, isAaveV3Type, isCompoundV2, isCompoundV3, isMorphoType } from '../../flashloan'
 import {
   aavePools,
   aaveTokens,
@@ -86,7 +86,7 @@ export function getLenderData(lender: Lender, chainId: ChainIdLike, asset: strin
   }
 
   // check if the lender is morpho
-  if (lender === Lender.MORPHO_BLUE) {
+  if (isMorphoType(lender)) {
     if (Object.keys(morphoPools()).includes(lender.toString())) {
       const lenderData = morphoPools()[lender]
       if (Object.keys(lenderData).includes(chainId.toString())) {
@@ -123,7 +123,7 @@ export function getFlashInfo(provider: FlashLoanProvider, chainId: ChainIdLike, 
     }
   }
 
-  if (provider === FlashLoanProvider.MORPHO) {
+  if (provider === FlashLoanProvider.MORPHO || provider === FlashLoanProvider.LISTA) {
     // @ts-ignore
     const pool = morphoPools?.[provider]?.[chainId]
     return {
@@ -162,7 +162,8 @@ export function getLenderIdFromLender(lender: Lender) {
   if (isAaveV2Type(lender)) return LenderIds.UP_TO_AAVE_V2 - 1
   if (isCompoundV3(lender)) return LenderIds.UP_TO_COMPOUND_V3 - 1
   if (isCompoundV2(lender)) return LenderIds.UP_TO_COMPOUND_V2 - 1
-  return LenderIds.UP_TO_MORPHO - 1
+  if (isMorphoType(lender)) return LenderIds.UP_TO_MORPHO - 1
+  return LenderIds.UP_TO_SILO_V2 - 1
 }
 
 export function getLenderId(lender: LenderGroups) {
@@ -177,6 +178,8 @@ export function getLenderId(lender: LenderGroups) {
       return LenderIds.UP_TO_COMPOUND_V3 - 1
     case LenderGroups.MorphoBlue:
       return LenderIds.UP_TO_MORPHO - 1
+    case LenderGroups.SiloV2:
+      return LenderIds.UP_TO_SILO_V2 - 1
     default:
       throw new Error('Unsupported lender')
   }
@@ -257,5 +260,10 @@ export function getLenderGroup(lender: Lender) {
   if (isAaveV2Type(lender)) return LenderGroups.AaveV2
   if (isCompoundV3(lender)) return LenderGroups.CompoundV3
   if (isCompoundV2(lender)) return LenderGroups.CompoundV2
-  return LenderGroups.MorphoBlue
+  if (isMorphoType(lender)) return LenderGroups.MorphoBlue
+  return LenderGroups.SiloV2
+}
+
+export function isNativeAddress(a: string) {
+  return a === zeroAddress
 }

@@ -29,7 +29,7 @@ export function buildMarginInnerCall(
   inLenderData: LenderData,
   outLenderData: LenderData,
   flashRepayBalanceHolder: string,
-  intermediate: string,
+  intermediate: string, // <- expected to be the composer
   flashLoanAmountWithFee: string,
   isMaxIn: boolean,
   isMaxOut: boolean

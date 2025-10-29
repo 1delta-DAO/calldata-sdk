@@ -12,6 +12,7 @@ export enum FlashLoanProvider {
   AAVE_V3 = Lender.AAVE_V3,
   YLDR = Lender.YLDR,
   MORPHO = Lender.MORPHO_BLUE,
+  LISTA = Lender.LISTA_DAO,
   AURELIUS = Lender.AURELIUS,
   BALANCER_V2 = DexProtocol.BALANCER_V2,
   BALANCER_V3 = DexProtocol.BALANCER_V3,

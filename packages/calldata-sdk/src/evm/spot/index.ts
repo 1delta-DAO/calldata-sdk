@@ -234,7 +234,7 @@ export namespace ComposerSpot {
   export function encodeExternalCallForCallForwarder(
     params: ExternalCallParams,
     approvalData?: { token: string; target: string },
-    postCalldata = '0x'
+    postCalldata = '0x',
   ): Hex {
     const { target, calldata, value = '0', useSelfBalance = false, callForwarder, additionalData } = params
 
@@ -325,7 +325,10 @@ export namespace ComposerSpot {
 
       return {
         calldata: packCommands([permitCalldata, transferCalldata, swapCalldata]) as Hex,
-        value: CurrencyUtils.isNativeAmount(trade.inputAmount) ? CurrencyUtils.getAmount(trade.inputAmount) : 0n,
+        value:
+          CurrencyUtils.isNativeAmount(trade.inputAmount) && !skipFunding
+            ? CurrencyUtils.getAmount(trade.inputAmount)
+            : 0n,
       }
     }
     // case external aggregator
@@ -412,7 +415,8 @@ export namespace ComposerSpot {
 
     return {
       calldata: combinedCalldata,
-      value: CurrencyUtils.isNativeAmount(inputAmount) ? CurrencyUtils.getAmount(inputAmount) : 0n,
+      // skipFunding applies to native, too
+      value: CurrencyUtils.isNativeAmount(inputAmount) && !skipFunding ? CurrencyUtils.getAmount(inputAmount) : 0n,
     }
   }
 }

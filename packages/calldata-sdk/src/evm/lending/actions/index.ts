@@ -11,6 +11,7 @@ import {
 import {
   ComposerCommands,
   encodeApprove,
+  encodeCompoundV2SelectorId,
   encodeMorphoBorrow,
   encodeMorphoDeposit,
   encodeMorphoDepositCollateral,
@@ -23,6 +24,7 @@ import {
   uint128,
   uint16,
   uint8,
+  CompoundV2Selector,
 } from '@1delta/calldatalib'
 import {
   getAssetParamsFromAmount,
@@ -32,10 +34,16 @@ import {
   getLenderData,
   getLenderId,
   getPool,
+  isNativeAddress,
 } from '../utils'
 import { UINT112_MAX } from '../consts'
 import { Lender } from '@1delta/lender-registry'
 import { SerializedCurrencyAmount } from '@1delta/type-sdk'
+import { isCompoundV2, isMorphoType } from '../../flashloan'
+
+function isVenusType(lender: string) {
+  return lender.startsWith('VENUS')
+}
 
 /** Yldr is lieke aave, just with no borrow mode */
 function isYldr(lender: string) {
@@ -72,7 +80,7 @@ export namespace ComposerLendingActions {
     if (transferType === TransferToLenderType.ContractBalance) amountUsed = 0n // deposit balance
 
     // handle morpho case
-    if (lender === Lender.MORPHO_BLUE) {
+    if (isMorphoType(lender)) {
       if (!morphoParams) {
         throw new Error('Morpho params should be defined for MorphoBlue deposits')
       }
@@ -105,10 +113,30 @@ export namespace ComposerLendingActions {
     if (!pool) {
       throw new Error('Pool should be defined for deposits')
     }
+
+    if (isCompoundV2(lender)) {
+      return encodePacked(
+        ['bytes', 'uint8', 'uint8', 'uint16', 'address', 'uint128', 'address', 'address'],
+        [
+          isNativeAddress(asset) ? '0x' : encodeApprove(asset as Address, pool as Address),
+          ComposerCommands.LENDING,
+          LenderOps.DEPOSIT,
+          getLenderId(lenderData.group),
+          asset as Address,
+          encodeCompoundV2SelectorId(
+            amountUsed,
+            // MINT_BEHALF for VENUS & forks, otherwise MINT
+            isVenusType(lender) && !isNativeAddress(asset) ? CompoundV2Selector.MINT_BEHALF : CompoundV2Selector.MINT
+          ),
+          receiver as Address,
+          pool as Address,
+        ]
+      )
+    }
     return encodePacked(
       ['bytes', 'uint8', 'uint8', 'uint16', 'address', 'uint128', 'address', 'address'],
       [
-        encodeApprove(asset as Address, pool as Address),
+        isNativeAddress(asset) ? '0x' : encodeApprove(asset as Address, pool as Address),
         ComposerCommands.LENDING,
         LenderOps.DEPOSIT,
         getLenderId(lenderData.group),
@@ -155,6 +183,19 @@ export namespace ComposerLendingActions {
         if (!collateralToken) {
           throw new Error('collateralToken should be defined for CompoundV2 withdrawals')
         }
+        encodePacked(
+          ['uint8', 'uint8', 'uint16', 'address', 'uint128', 'address', 'address'],
+          [
+            ComposerCommands.LENDING,
+            LenderOps.WITHDRAW,
+            getLenderId(lenderData.group),
+            asset as Address,
+            // we leave the all-supported REDEEM here for now
+            encodeCompoundV2SelectorId(amountUsed, CompoundV2Selector.REDEEM),
+            receiver as Address,
+            collateralToken as Address,
+          ]
+        )
         return encodePacked(['bytes', 'address'], [genericPart, collateralToken as Address])
       case LenderGroups.CompoundV3:
         const isBase = getIsBaseToken(lenderData, asset)
@@ -191,6 +232,8 @@ export namespace ComposerLendingActions {
     const { asset, lenderData } = isOverrideAmount(amount)
       ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) }
       : getAssetData(amount, lender)
+
+    if (isNativeAddress(asset)) throw new Error('Cannot delegate native borrowing')
 
     const amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount)
 
@@ -338,11 +381,7 @@ export namespace ComposerLendingActions {
           [
             genericPart,
             morphoParams.market,
-            generateAmountBitmap(
-              uint128(BigInt(amountUsed)),
-              morphoParams.isShares,
-              morphoParams.unsafeRepayment,
-            ),
+            generateAmountBitmap(uint128(BigInt(amountUsed)), morphoParams.isShares, morphoParams.unsafeRepayment),
             receiver as Address,
             morphoParams.morphoB as Address,
             // length > 2 indicates that there is more than just 0x
