@@ -4,7 +4,6 @@ import { MarginTradeType } from '../types'
 import { createFlashLoan } from '../utils'
 import { FlashLoanProvider } from '../../../utils'
 import { isNativeAddress, packCommands, UINT112_MAX } from '../../lending'
-import { Chain } from '@1delta/chain-registry'
 import {
   ComposerCommands,
   CompoundV2Selector,
@@ -20,20 +19,13 @@ import {
 import { getLenderId, LenderGroups } from '@1delta/lender-registry'
 
 interface MarginWrapper {
-  chainId: string
   assetIn: string
   assetOut: string
   maxIn?: boolean
   amount: string | bigint
   operation: MarginTradeType
   composerAddress: string
-  collateralTokenIn?: string
-  collateralTokenOut?: string
   callerAddress: string
-}
-
-interface MarginWrapperWithWNative extends MarginWrapper {
-  wnative: string
 }
 
 /** We hard-code lista here for simplicity */
@@ -49,9 +41,9 @@ const WBNB = '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c'
 
 export namespace VenusMarginWrapperOperations {
   /** safety validation */
-  function validateVenus(assetIn: string, assetOut: string, chainId: string) {
+  function validateVenus(assetIn: string, assetOut: string) {
     // for venus we only allow this for vbnb
-    if (chainId !== Chain.BNB_SMART_CHAIN_MAINNET || (!isNativeAddress(assetIn) && !isNativeAddress(assetOut))) {
+    if (!isNativeAddress(assetIn) && !isNativeAddress(assetOut)) {
       throw new Error('Only Venus WBNB-BNB supported')
     }
   }
@@ -70,10 +62,10 @@ export namespace VenusMarginWrapperOperations {
   }
 
   // wrap BNB <-> WBNB on margin
-  export function venusMarignWrapper(params: MarginWrapperWithWNative) {
-    const { chainId, assetIn, assetOut, maxIn = false, amount, composerAddress, callerAddress, operation } = params
-
-    validateVenus(assetIn, assetOut, chainId)
+  // e.g. closing BNB->wBNB via flash loan - repay WBNB, withdraw BNB, wrap repay
+  export function venusMarignWrapper(params: MarginWrapper) {
+    const { assetIn, assetOut, maxIn = false, amount, composerAddress, callerAddress, operation } = params
+    validateVenus(assetIn, assetOut)
 
     const wnative = WBNB
 
@@ -83,30 +75,30 @@ export namespace VenusMarginWrapperOperations {
 
     // note that we always wrap or unwrap the entire balance
     // therefore not input sweep is needed when withdrwaing the maximum
-    let wrap = '0x'
-    let unwrap = '0x'
-    const innerWrapOperation = isNativeAddress(assetIn)
-      ? encodeWrap(0n, wnative as any) // native -> wnative
-      : encodeUnwrap(wnative as any, composerAddress as any, 0n, SweepType.VALIDATE) // wnative -> native
+    let exitWrap = '0x'
+    let unwrapToPay = '0x'
 
     // output is native: unwrap flash loan amount
     if (isNativeAddress(assetOut)) {
-      unwrap = encodeUnwrap(wnative as any, composerAddress as any, 0n, SweepType.VALIDATE)
+      unwrapToPay = encodeUnwrap(wnative as any, composerAddress as any, BigInt(amount), SweepType.AMOUNT)
     }
 
     // input is native: wrap when repaying
     if (isNativeAddress(assetIn)) {
-      wrap = encodeWrap(0n, wnative as any)
+      // note: this MUST be exact to repay the fash loan
+      exitWrap = encodeWrap(BigInt(amount), wnative as any)
     }
 
     let receive = '0x'
     let pay = '0x'
     let sweep = '0x'
+    let sweepInput = '0x'
     switch (operation) {
       case MarginTradeType.CollateralSwap: {
         // pull finds to repay flash loan
         receive = compoundV2Withdraw(assetIn, amount, maxIn, composerAddress)
-
+        // sweep input leftovers
+        if (maxIn) sweepInput = sweepAmount(assetIn, callerAddress)
         // mint to increase credit line
         pay = compoundV2Deposit(assetOut, callerAddress)
         break
@@ -114,7 +106,8 @@ export namespace VenusMarginWrapperOperations {
       case MarginTradeType.Close: {
         // pull finds to repay flash loan
         receive = compoundV2Withdraw(assetIn, amount, maxIn, composerAddress)
-
+        // sweep input leftovers
+        if (maxIn) sweepInput = sweepAmount(assetIn, callerAddress)
         // mint to increase credit line
         pay = compoundV2Repay(assetOut, callerAddress)
 
@@ -148,16 +141,18 @@ export namespace VenusMarginWrapperOperations {
     }
 
     const data = packCommands([
-      unwrap, // optional unwrap (lista loan to native)
+      unwrapToPay, // optional wrap (lista loan to native)
       pay,
-      innerWrapOperation, // inner wrap
       receive,
-      wrap, // optional wrap
-      sweep, // operation dependent sweep
+      exitWrap, // optional wrap
     ])
 
     // create  deternministic lista loan
-    return createListaLoan(wnative, amount, data)
+    return packCommands([
+      createListaLoan(wnative, amount, data),
+      sweep, // operation dependent sweep
+      sweepInput, // sweeps inputs for max cases
+    ])
   }
 
   /** Simple withdraw function */
