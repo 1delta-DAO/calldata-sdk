@@ -27,6 +27,7 @@ import {
   CompoundV2Selector,
 } from '@1delta/calldatalib'
 import {
+  getAssetData,
   getAssetParamsFromAmount,
   getCollateralToken,
   getDebtToken,
@@ -35,6 +36,7 @@ import {
   getLenderId,
   getPool,
   isNativeAddress,
+  isOverrideAmount,
 } from '../utils'
 import { UINT112_MAX } from '../consts'
 import { Lender } from '@1delta/lender-registry'
@@ -51,24 +53,6 @@ function isYldr(lender: string) {
 }
 
 export namespace ComposerLendingActions {
-  function getAssetData(amount: SerializedCurrencyAmount | OverrideAmount, lender: Lender) {
-    if (isOverrideAmount(amount)) {
-      return {
-        asset: amount.asset,
-        lenderData: getLenderData(lender, amount.chainId, amount.asset),
-      }
-    }
-    const { asset, chainId } = getAssetParamsFromAmount(amount as SerializedCurrencyAmount)
-    return {
-      asset: asset,
-      lenderData: getLenderData(lender, chainId, asset),
-    }
-  }
-
-  function isOverrideAmount(amount: SerializedCurrencyAmount | OverrideAmount): amount is OverrideAmount {
-    return 'asset' in amount && 'amount' in amount && 'chainId' in amount && !!amount.asset && !!amount.chainId
-  }
-
   export function createDeposit(params: CreateDepositParams) {
     const { receiver, amount, lender, morphoParams, transferType = TransferToLenderType.Amount, useOverride } = params
     const { asset, lenderData } = isOverrideAmount(amount)

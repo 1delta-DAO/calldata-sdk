@@ -5,7 +5,7 @@ import {
   COMPOUND_V3_LENDERS,
   COMPOUND_V2_LENDERS,
 } from '@1delta/lender-registry'
-import { LenderData, LenderGroups } from '../types'
+import { LenderData, LenderGroups, OverrideAmount } from '../types'
 import { ComposerCommands, FlashLoanIds, LenderIds, PermitIds, uint16 } from '@1delta/calldatalib'
 import { Address, encodePacked, Hex, zeroAddress } from 'viem'
 import { ChainIdLike, SerializedCurrencyAmount } from '@1delta/type-sdk'
@@ -24,6 +24,27 @@ import {
 import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 
 export * from './permit'
+
+
+export const isVenusType = (lender: string) => lender.startsWith('VENUS')
+
+export function isOverrideAmount(amount: SerializedCurrencyAmount | OverrideAmount): amount is OverrideAmount {
+  return 'asset' in amount && 'amount' in amount && 'chainId' in amount && !!amount.asset && !!amount.chainId
+}
+
+export function getAssetData(amount: SerializedCurrencyAmount | OverrideAmount, lender: Lender) {
+  if (isOverrideAmount(amount)) {
+    return {
+      asset: amount.asset,
+      lenderData: getLenderData(lender, amount.chainId, amount.asset),
+    }
+  }
+  const { asset, chainId } = getAssetParamsFromAmount(amount as SerializedCurrencyAmount)
+  return {
+    asset: asset,
+    lenderData: getLenderData(lender, chainId, asset),
+  }
+}
 
 export function getLenderData(lender: Lender, chainId: ChainIdLike, asset: string): LenderData {
   // check if the lender is aave (all aave forks)
