@@ -8,14 +8,13 @@ import {
 } from '@1delta/calldatalib'
 import {
   ChainIdLike,
-  SerializedCurrencyAmount,
   SerializedPool,
   SerializedSwapStep,
   SerializedTrade
 } from '@1delta/type-sdk'
 import {
   MarginData,
-  PRE_FUNDABLE_DEXES,
+  ShallowCurrencyAmount,
   TradeType,
   getComposerAddress,
   getLenderData,
@@ -221,7 +220,7 @@ interface FlashSwapInstruction {
   pool: SerializedPool,
   remainingPath: SerializedSwapStep | undefined
   preFunded: boolean,
-  minimumOut: SerializedCurrencyAmount
+  minimumOut: ShallowCurrencyAmount
 }
 
 

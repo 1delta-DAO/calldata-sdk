@@ -29,16 +29,14 @@ import {
 import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 import { isCompoundV2 } from '../../flashloan'
 
-function validateCompoundV2(callerAssetAddress: string, wrappedNative: string, lender: string) {
+function validateCompoundV2WnativePayment(callerAssetAddress: string, wrappedNative: string, lender: string) {
   if (callerAssetAddress !== wrappedNative) throw new Error('caller asset needs to be wNative')
   if (!isCompoundV2(lender as any)) throw new Error('only compoundV2 types support native asset')
 }
 
-function validateCompoundV2Native(callerAssetAddress: string, lender: string) {
-  if (callerAssetAddress !== zeroAddress) throw new Error('caller asset needs to be wNative')
+function validateCompoundV2Lender(lender: string) {
   if (!isCompoundV2(lender as any)) throw new Error('only compoundV2 types support native asset')
 }
-
 
 export namespace ComposerDirectLending {
   export function composeDirectMoneyMarketAction(op: LendingOperation): { calldata: Hex; value: string | undefined } {
@@ -82,7 +80,7 @@ export namespace ComposerDirectLending {
         if (!isNativeAddress(callerAssetAddress)) {
           // native pool: Compound V2 only
           if (isNativeAddress(lenderAssetAddress)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, params.lender)
+            validateCompoundV2WnativePayment(callerAssetAddress, wrappedNative, params.lender)
             // add unwrap call to get native
             unwrapCall = encodeUnwrap(wrappedNative, composerAddress as Address, BigInt(rawAmount), SweepType.AMOUNT)
           }
@@ -95,7 +93,7 @@ export namespace ComposerDirectLending {
         } else {
           // native pool: Compound V2 only ETH->cETH
           if (isNativeAddress(lenderAssetAddress)) {
-            validateCompoundV2Native(callerAssetAddress, params.lender)
+            validateCompoundV2Lender(params.lender)
             transferCall = '0x' // no transfer needed
           } else {
             transferCall = encodeWrap(BigInt(rawAmount), wrappedNative)
@@ -124,7 +122,7 @@ export namespace ComposerDirectLending {
         if (!isNativeAddress(callerAssetAddress)) {
           // native pool: Compound V2 only: Handle cETH->WETH
           if (isNativeAddress(lenderAssetAddress)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, params.lender)
+            validateCompoundV2WnativePayment(callerAssetAddress, wrappedNative, params.lender)
             // add unwrap call
             transferCall = encodeUnwrap(wrappedNative, receiver as Address, BigInt(rawAmount), sweepType)
           } else {
@@ -133,7 +131,8 @@ export namespace ComposerDirectLending {
         } else {
           // native pool: Compound V2 only
           if (isNativeAddress(lenderAssetAddress)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, params.lender)
+            // validate that the caller pays with native
+            validateCompoundV2Lender(params.lender)
             transferCall = '0x' // no transfer needed
           } else {
             transferCall = encodeUnwrap(wrappedNative, receiver as Address, BigInt(amountToUse), sweepType)
@@ -217,13 +216,13 @@ export namespace ComposerDirectLending {
           }
           // compound v2: unwrap after transferring wrapped native
           if (isNativeAddress(asset)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, lenderData.lender)
+            validateCompoundV2WnativePayment(callerAssetAddress, wrappedNative, lenderData.lender)
             unwrapCall = encodeUnwrap(wrappedNative, composerAddress as Address, BigInt(rawAmount), SweepType.AMOUNT)
           }
         } else {
           // compound v2: unwrap after transferring wrapped native
           if (isNativeAddress(asset)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, params.lender)
+            validateCompoundV2WnativePayment(callerAssetAddress, wrappedNative, params.lender)
             transferCall = '0x' // no transfer needed
           } else {
             transferCall = encodeWrap(adjustedAmount, wrappedNative)
