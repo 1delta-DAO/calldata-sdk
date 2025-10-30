@@ -1,9 +1,9 @@
 import { Address, encodePacked, Hex, zeroAddress } from 'viem'
 import {
-  createBorrowParams,
+  CreateBorrowParams,
   CreateDepositParams,
   CreateRepayParams,
-  createWithdrawParams,
+  CreateWithdrawParams,
   LenderGroups,
   TransferToLenderType,
 } from '../types'
@@ -51,13 +51,19 @@ function isYldr(lender: string) {
 
 export namespace ComposerLendingActions {
   export function createDeposit(params: CreateDepositParams) {
-    const { receiver, amount, lender, morphoParams, transferType = TransferToLenderType.Amount, useOverride } = params
-    const { asset, lenderData } = isOverrideAmount(amount)
-      ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) }
-      : getAssetData(amount, lender)
+    const {
+      receiver,
+      amount,
+      lender,
+      morphoParams,
+      chainId,
+      transferType = TransferToLenderType.Amount,
+      useOverride,
+      asset,
+    } = params
 
     if (transferType === TransferToLenderType.UserBalance) throw new Error('Cannot deposit user balance')
-    let amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount)
+    let amountUsed = amount
     if (transferType === TransferToLenderType.ContractBalance) amountUsed = 0n // deposit balance
 
     // handle morpho case
@@ -89,6 +95,7 @@ export namespace ComposerLendingActions {
       )
     }
 
+    const lenderData = getLenderData(lender, chainId, asset)
     const pool = useOverride?.pool ?? getPool(lenderData)
 
     if (!pool) {
@@ -129,12 +136,20 @@ export namespace ComposerLendingActions {
     )
   }
 
-  export function createWithdraw(params: createWithdrawParams) {
-    const { receiver, amount, lender, transferType = TransferToLenderType.Amount, morphoParams, useOverride } = params
-    const { asset, lenderData } = isOverrideAmount(amount)
-      ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) }
-      : getAssetData(amount, lender)
-    let amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount)
+  export function createWithdraw(params: CreateWithdrawParams) {
+    const {
+      receiver,
+      amount,
+      lender,
+      transferType = TransferToLenderType.Amount,
+      morphoParams,
+      useOverride,
+      asset,
+      chainId,
+    } = params
+    const lenderData = getLenderData(lender, chainId, asset)
+
+    let amountUsed = amount
     if (transferType === TransferToLenderType.UserBalance) amountUsed = UINT112_MAX // withdraw max
 
     if (transferType === TransferToLenderType.ContractBalance) throw new Error('Cannot withdraw contract balance')
@@ -208,15 +223,13 @@ export namespace ComposerLendingActions {
     }
   }
 
-  export function createBorrow(params: createBorrowParams) {
-    const { receiver, amount, lender, aaveInterestMode: mode, morphoParams, useOverride } = params
-    const { asset, lenderData } = isOverrideAmount(amount)
-      ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) }
-      : getAssetData(amount, lender)
+  export function createBorrow(params: CreateBorrowParams) {
+    const { receiver, amount, lender, aaveInterestMode: mode, morphoParams, useOverride, chainId, asset } = params
+    const lenderData = getLenderData(lender, chainId, asset)
 
     if (isNativeAddress(asset)) throw new Error('Cannot delegate native borrowing')
 
-    const amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount)
+    const amountUsed = amount
 
     const pool = useOverride?.pool ?? getPool(lenderData)
 
@@ -272,11 +285,11 @@ export namespace ComposerLendingActions {
       morphoParams,
       transferType = TransferToLenderType.Amount,
       useOverride,
+      asset,
+      chainId,
     } = params
-    let amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount)
-    const { asset, lenderData } = isOverrideAmount(amount)
-      ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) }
-      : getAssetData(amount, lender)
+    let amountUsed = amount
+    const lenderData = getLenderData(lender, chainId, asset)
 
     const pool = useOverride?.pool ?? getPool(lenderData)
     const collateralToken = useOverride?.collateralToken ?? getCollateralToken(lenderData)

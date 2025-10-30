@@ -6,7 +6,7 @@ import { PermitData } from '../..'
 export interface ShallowCurrency {
   address: string
   chainId: string
-  [k:string]: any // can have any other fields for convenience
+  [k: string]: any // can have any other fields for convenience
 }
 
 export interface ShallowCurrencyAmount {
@@ -38,6 +38,9 @@ export enum AaveInterestMode {
 
 export interface LendingOperation {
   params: BaseLendingParams & Partial<InterestRateParams>
+  amount: bigint
+  lender: string
+  chainId: string
   actionType: QuickActionType
   receiver: string
   isAll?: boolean
@@ -138,25 +141,31 @@ export interface LendingOverrides {
 
 export interface CreateDepositParams {
   receiver: string
-  amount: ShallowCurrencyAmount | OverrideAmount
+  amount: bigint
+  asset: string
+  chainId: string
   lender: Lender
   morphoParams?: MorphoParams
   transferType?: TransferToLenderType
   useOverride?: Pick<LendingOverrides, 'pool'>
 }
 
-export interface createWithdrawParams {
+export interface CreateWithdrawParams {
   receiver: string
-  amount: ShallowCurrencyAmount | OverrideAmount
+  amount: bigint
+  asset: string
+  chainId: string
   lender: Lender
   transferType?: TransferToLenderType
   morphoParams?: MorphoParams
   useOverride?: Pick<LendingOverrides, 'pool' | 'collateralToken' | 'isBase'>
 }
 
-export interface createBorrowParams {
+export interface CreateBorrowParams {
   receiver: string
-  amount: ShallowCurrencyAmount | OverrideAmount
+  amount: bigint
+  asset: string
+  chainId: string
   lender: Lender
   aaveInterestMode?: AaveInterestMode
   morphoParams?: MorphoParams
@@ -165,7 +174,9 @@ export interface createBorrowParams {
 
 export interface CreateRepayParams {
   receiver: string
-  amount: ShallowCurrencyAmount | OverrideAmount
+  amount: bigint
+  asset: string
+  chainId: string
   lender: Lender
   aaveInterestMode?: AaveInterestMode
   morphoParams?: MorphoParams

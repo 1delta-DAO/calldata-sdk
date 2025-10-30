@@ -7,8 +7,8 @@ import {
   packCommands,
   isAaveType,
   getPermitAsset,
-  ComposerLendingActions,
   LenderData,
+  ComposerLendingActions,
 } from '../../lending'
 import { handleWithdraw, handleRepay } from './lendingHandlers'
 import { Address, Hex } from 'viem'
@@ -48,7 +48,9 @@ export function buildMarginInnerCall(
       context = { ...NO_CONTEXT }
       context.callIn = ComposerLendingActions.createDeposit({
         receiver: account as Address,
-        amount: { asset: tokenOut, amount: 0n, chainId: trade.outputAmount.currency.chainId },
+        amount: 0n,
+        asset: tokenOut,
+        chainId: trade.outputAmount.currency.chainId,
         lender: lender,
         morphoParams: morphoParamsOut,
         transferType: TransferToLenderType.ContractBalance,
@@ -73,11 +75,9 @@ export function buildMarginInnerCall(
 
       const borrowCalldata = ComposerLendingActions.createBorrow({
         receiver: flashRepayBalanceHolder as Address,
-        amount: {
-          asset: tokenIn,
-          amount: BigInt(flashLoanAmountWithFee),
-          chainId: trade.inputAmount.currency.chainId,
-        },
+        asset: tokenIn,
+        amount: BigInt(flashLoanAmountWithFee),
+        chainId: trade.inputAmount.currency.chainId,
         lender: lender,
         aaveInterestMode: marginData.irModeIn,
         morphoParams: morphoParamsIn,
@@ -127,7 +127,9 @@ export function buildMarginInnerCall(
       context = { ...NO_CONTEXT }
       context.callIn = ComposerLendingActions.createDeposit({
         receiver: account as Address,
-        amount: { asset: tokenOut, amount: 0n, chainId: trade.outputAmount.currency.chainId },
+        asset: tokenOut,
+        amount: 0n,
+        chainId: trade.outputAmount.currency.chainId,
         lender: lender,
         morphoParams: morphoParamsOut,
         transferType: TransferToLenderType.ContractBalance,
@@ -182,11 +184,9 @@ export function buildMarginInnerCall(
       // borrow
       const borrowCalldata = ComposerLendingActions.createBorrow({
         receiver: flashRepayBalanceHolder as Address,
-        amount: {
-          asset: tokenIn,
-          amount: BigInt(flashLoanAmountWithFee),
-          chainId: trade.inputAmount.currency.chainId,
-        },
+        asset: tokenIn,
+        amount: BigInt(flashLoanAmountWithFee),
+        chainId: trade.inputAmount.currency.chainId,
         lender: lender,
         aaveInterestMode: marginData.irModeIn,
         morphoParams: morphoParamsIn,

@@ -7,7 +7,7 @@ import { CurrencyUtils } from '../../../utils'
 import { initializeChainData, initializeLenderData } from '@1delta/data-sdk'
 import { AAVE_LENDERS, Lender } from '@1delta/lender-registry'
 
-const baseUrl = 'https://raw.githubusercontent.com/1delta-DAO/lender-metadata/multi-fetch'
+const baseUrl = 'https://raw.githubusercontent.com/1delta-DAO/lender-metadata/main'
 const aavePools = baseUrl + '/config/aave-pools.json'
 const aaveOracles = baseUrl + '/data/aave-oracles.json'
 const morphoOracles = baseUrl + '/data/morpho-oracles.json'
@@ -160,6 +160,7 @@ describe('composeDirectMoneyMarketAction', async () => {
   const MORPHO_BLUE = '0x1bF0c2541F820E775182832f06c0B7Fc27A25f67' as Address
   const MORPHO_MARKET = '0x7506b33817b57f686e37b87b5d4c5c93fdef4cffd21bbf9291f18b2f29ab0550' as Hex
 
+  /** Important: set lender data here */
   await fetchLenderMetaFromDirAndInitialize()
 
   const createTestTokens = async () => {
@@ -193,6 +194,13 @@ describe('composeDirectMoneyMarketAction', async () => {
         symbol: 'POL',
         name: 'Pol',
       },
+      usdt_bnb: {
+        chainId: '56',
+        address: '0x55d398326f99059ff775485246999027b3197955',
+        decimals: 18,
+        symbol: 'USDT',
+        name: 'USDT',
+      },
     }
   }
 
@@ -209,7 +217,10 @@ describe('composeDirectMoneyMarketAction', async () => {
         amount: CurrencyUtils.fromRawAmount(token, amount),
         aaveBorrowMode: AAVE_LENDERS.includes(lender) ? AaveInterestMode.VARIABLE : undefined,
       },
+      amount: BigInt(amount),
       actionType,
+      lender,
+      chainId: token.chainId,
       receiver: TEST_RECEIVER,
       callerAssetAddress: token.address,
       lenderAssetAddress: token.address,
@@ -254,9 +265,9 @@ describe('composeDirectMoneyMarketAction', async () => {
       expect(result.calldata).toEqual(expectedDirectLendingOutputs.deposit_aave_v3_native.calldata)
     })
 
-    it.skip('should create calldata for USDT deposit to Compound V2', async () => {
-      const { usdt } = await createTestTokens()
-      const operation = createBaseLendingOperation(QuickActionType.Deposit, Lender.VENUS, TEST_AMOUNT, usdt)
+    it('should create calldata for USDT deposit to Compound V2', async () => {
+      const { usdt_bnb } = await createTestTokens()
+      const operation = createBaseLendingOperation(QuickActionType.Deposit, Lender.VENUS, TEST_AMOUNT, usdt_bnb)
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
@@ -436,6 +447,7 @@ describe('composeDirectMoneyMarketAction', async () => {
       const { wpol, pol } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Repay, Lender.AAVE_V3, TEST_AMOUNT_ETH, wpol, {
         callerAssetAddress: pol.address,
+        lenderAssetAddress: wpol.address,
       })
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
@@ -510,7 +522,7 @@ describe('composeDirectMoneyMarketAction', async () => {
       }
 
       expect(() => {
-        ComposerDirectLending.composeDirectMoneyMarketAction(operation)
+        ComposerDirectLending.composeDirectMoneyMarketAction(operation as any)
       }).toThrow('No amount is provided')
     })
   })

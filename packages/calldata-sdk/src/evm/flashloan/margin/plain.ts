@@ -58,7 +58,9 @@ function buildDebasedInnerCall(
   // 1. Deposit proxy asset to lender (compound)
   const depositIntermediateCall = ComposerLendingActions.createDeposit({
     receiver: account,
-    amount: { asset: proxyToken, amount: proxyAmount, chainId },
+    asset: proxyToken,
+    amount: proxyAmount,
+    chainId,
     lender: lender,
     morphoParams: undefined,
     transferType: TransferToLenderType.Amount,
@@ -86,11 +88,9 @@ function buildDebasedInnerCall(
   // 3. Withdraw proxy asset from lender (compound) to repay flash loan
   const withdrawIntermediateCall = ComposerLendingActions.createWithdraw({
     receiver: flashRepayBalanceHolder,
-    amount: {
-      asset: proxyToken,
-      amount: proxyAmount,
-      chainId,
-    },
+    asset: proxyToken,
+    amount: proxyAmount,
+    chainId,
     lender: lender,
     morphoParams: undefined,
     transferType: TransferToLenderType.Amount,
@@ -354,7 +354,8 @@ export namespace ComposerMargin {
           BigInt(inputReference.toString()),
           SweepType.AMOUNT
         )
-      } else // otherwise useregular transfer
+      } // otherwise useregular transfer
+      else
         transferToCallForwarder = encodeSweep(
           tokenIn,
           flashFundsReceiver as Address,

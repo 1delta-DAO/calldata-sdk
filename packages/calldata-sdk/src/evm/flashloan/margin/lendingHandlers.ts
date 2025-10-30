@@ -1,7 +1,6 @@
 import { Address, Hex, zeroAddress } from 'viem'
 import { encodeSweep, SweepType, encodePermit, PermitIds, encodeUnwrap, encodeWrap } from '@1delta/calldatalib'
 import {
-  ComposerLendingActions,
   TransferToLenderType,
   adjustAmountForAll,
   getCollateralToken,
@@ -13,6 +12,7 @@ import {
   isAaveType,
   packCommands,
   isNativeAddress,
+  ComposerLendingActions,
 } from '../../lending'
 import { HandleRepayParams, HandleWithdrawParams } from '../types'
 import { isAave } from '../utils'
@@ -42,7 +42,9 @@ export function handleRepay(params: HandleRepayParams) {
 
     context.callIn = ComposerLendingActions.createRepay({
       receiver: account,
-      amount: { asset: tokenOut.address, amount: BigInt(amount), chainId: tokenOut.chainId },
+      asset: tokenOut.address,
+      amount: BigInt(amount),
+      chainId: tokenOut.chainId,
       lender,
       aaveInterestMode: marginData.irModeOut,
       morphoParams,
@@ -58,7 +60,9 @@ export function handleRepay(params: HandleRepayParams) {
   } else {
     context.callIn = ComposerLendingActions.createRepay({
       receiver: account,
-      amount: { asset: tokenOut.address, amount: BigInt(repayAmount), chainId: tokenOut.chainId },
+      asset: tokenOut.address,
+      amount: BigInt(repayAmount),
+      chainId: tokenOut.chainId,
       lender,
       aaveInterestMode: marginData.irModeOut,
       morphoParams,
@@ -137,7 +141,9 @@ export function handleWithdraw(params: HandleWithdrawParams) {
 
     const withdrawCalldata = ComposerLendingActions.createWithdraw({
       receiver: intermediate, // intermediate receives funds
-      amount: { asset: tokenIn.address, amount: 0n, chainId: tokenIn.chainId }, // amount is ignored in this case
+      asset: tokenIn.address,
+      amount: 0n,
+      chainId: tokenIn.chainId,
       lender,
       transferType: TransferToLenderType.UserBalance,
       morphoParams,
@@ -183,7 +189,9 @@ export function handleWithdraw(params: HandleWithdrawParams) {
         // we withdraw native to the intermediate (composer)
         ComposerLendingActions.createWithdraw({
           receiver: intermediate,
-          amount: { asset: zeroAddress, amount: flashLoanAmountWithFeeBigInt, chainId: tokenIn.chainId },
+          asset: zeroAddress,
+          amount: flashLoanAmountWithFeeBigInt,
+          chainId: tokenIn.chainId,
           lender,
           transferType: TransferToLenderType.Amount,
           morphoParams,
@@ -201,7 +209,9 @@ export function handleWithdraw(params: HandleWithdrawParams) {
       // skips self-transfers
       withdrawCalldata = ComposerLendingActions.createWithdraw({
         receiver: flashRepayBalanceHolder,
-        amount: { asset: tokenIn.address, amount: flashLoanAmountWithFeeBigInt, chainId: tokenIn.chainId },
+        asset: tokenIn.address,
+        amount: flashLoanAmountWithFeeBigInt,
+        chainId: tokenIn.chainId,
         lender,
         transferType: TransferToLenderType.Amount,
         morphoParams,
