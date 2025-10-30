@@ -1,7 +1,8 @@
-import { getAssetData, isNativeAddress, isVenusType } from '../utils'
+import { isNativeAddress, isVenusType } from '../utils'
 import { isCompoundV2 } from '../../flashloan'
 import { encodeFunctionData, parseAbi } from 'viem'
 import { SerializedCurrencyAmount } from '@1delta/type-sdk'
+import { compoundV2Tokens } from '@1delta/data-sdk'
 
 export namespace CompoundV2NativeLending {
   /**
@@ -11,27 +12,29 @@ export namespace CompoundV2NativeLending {
    */
   export function createCompoundV2Borrow(params: { amount: SerializedCurrencyAmount; lender: any }) {
     const { amount, lender } = params
-
-    const { asset, lenderData } = getAssetData(amount, lender)
+    const rawAmount = BigInt(amount.amount)
+    const { chainId, address } = amount.currency
+    const lcAddress = address.toLowerCase()
+    const cToken = compoundV2Tokens()?.[lender]?.[chainId]?.[lcAddress]
 
     // only compound V2s
     if (!isCompoundV2(lender)) throw new Error('Only Compound V2 allowed')
 
     // for venus we only allow this for bnb
-    if (isVenusType(lender) && !isNativeAddress(asset)) {
+    if (isVenusType(lender) && !isNativeAddress(lcAddress)) {
       throw new Error('Use delegation for Venus non-natives')
     }
 
-    if (!lenderData.pool) throw new Error('cToken not provided')
+    if (!cToken) throw new Error('cToken not provided')
     if (!amount.amount) throw new Error('No amount')
 
     const abi = parseAbi(['function borrow(uint256 amount) external returns (uint256)'])
     return {
-      to: lenderData.pool,
+      to: cToken,
       data: encodeFunctionData({
         abi,
         functionName: 'borrow',
-        args: [BigInt(amount.amount)],
+        args: [rawAmount],
       }),
       value: '0',
     }
