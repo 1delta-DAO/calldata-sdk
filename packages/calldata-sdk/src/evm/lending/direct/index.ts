@@ -1,4 +1,4 @@
-import { Address, Hex } from 'viem'
+import { Address, Hex, zeroAddress } from 'viem'
 import {
   PermitIds,
   SweepType,
@@ -33,6 +33,12 @@ function validateCompoundV2(callerAssetAddress: string, wrappedNative: string, l
   if (callerAssetAddress !== wrappedNative) throw new Error('caller asset needs to be wNative')
   if (!isCompoundV2(lender as any)) throw new Error('only compoundV2 types support native asset')
 }
+
+function validateCompoundV2Native(callerAssetAddress: string, lender: string) {
+  if (callerAssetAddress !== zeroAddress) throw new Error('caller asset needs to be wNative')
+  if (!isCompoundV2(lender as any)) throw new Error('only compoundV2 types support native asset')
+}
+
 
 export namespace ComposerDirectLending {
   export function composeDirectMoneyMarketAction(op: LendingOperation): { calldata: Hex; value: string | undefined } {
@@ -87,9 +93,9 @@ export namespace ComposerDirectLending {
             permitCall = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), asset as Address, permitData.data)
           }
         } else {
-          // native pool: Compound V2 only
+          // native pool: Compound V2 only ETH->cETH
           if (isNativeAddress(lenderAssetAddress)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, params.lender)
+            validateCompoundV2Native(callerAssetAddress, params.lender)
             transferCall = '0x' // no transfer needed
           } else {
             transferCall = encodeWrap(BigInt(rawAmount), wrappedNative)

@@ -207,7 +207,7 @@ function sliceSwapStep(step: SerializedSwapStep): SerializedSwapStep | undefined
   const path = step.route.path.slice(1)
   const pools = step.route.pools.slice(1)
   return {
-    inputAmount: CurrencyUtils.fromRawAmount(path[0], 0n),
+    inputAmount: CurrencyUtils.fromRawAmount(path[0], 0n) as any,
     outputAmount: step.outputAmount,
     route: {
       path,

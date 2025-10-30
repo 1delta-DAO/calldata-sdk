@@ -43,7 +43,7 @@ export namespace VenusMarginWrapperOperations {
   /** safety validation */
   function validateVenus(assetIn: string, assetOut: string) {
     // for venus we only allow this for vbnb
-    if (!isNativeAddress(assetIn) && !isNativeAddress(assetOut)) {
+    if ((!isNativeAddress(assetIn) && assetIn !== WBNB) || (!isNativeAddress(assetOut) && assetOut !== WBNB)) {
       throw new Error('Only Venus WBNB-BNB supported')
     }
   }

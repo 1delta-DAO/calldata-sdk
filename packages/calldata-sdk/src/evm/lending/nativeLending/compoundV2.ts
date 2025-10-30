@@ -1,8 +1,8 @@
 import { isNativeAddress, isVenusType } from '../utils'
 import { isCompoundV2 } from '../../flashloan'
 import { encodeFunctionData, parseAbi } from 'viem'
-import { SerializedCurrencyAmount } from '@1delta/type-sdk'
 import { compoundV2Tokens } from '@1delta/data-sdk'
+import { ShallowCurrencyAmount } from '../types'
 
 export namespace CompoundV2NativeLending {
   /**
@@ -10,7 +10,7 @@ export namespace CompoundV2NativeLending {
    * Only to be used for old forks that do not have delegation.
    * Always borrows to caller!
    */
-  export function createCompoundV2Borrow(params: { amount: SerializedCurrencyAmount; lender: any }) {
+  export function createCompoundV2Borrow(params: { amount: ShallowCurrencyAmount; lender: any }) {
     const { amount, lender } = params
     const rawAmount = BigInt(amount.amount)
     const { chainId, address } = amount.currency

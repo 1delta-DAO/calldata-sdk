@@ -1,4 +1,3 @@
-import { SerializedCurrencyAmount } from '@1delta/type-sdk'
 import { CurrencyUtils, getChainIdFromTrade } from '../../utils'
 import {
   ComposerLendingActions,
@@ -9,6 +8,7 @@ import {
   isAaveType,
   QuickActionType,
   isNativeAddress,
+  ShallowCurrencyAmount,
 } from '../lending'
 import { ComposerSpot, EVMCallParams, getComposerAddress, validateExactInputTrade } from '..'
 import {
@@ -47,7 +47,7 @@ export namespace ComposerQuickActions {
       permitData,
     })
 
-    const depositAmount: SerializedCurrencyAmount = {
+    const depositAmount: ShallowCurrencyAmount = {
       currency: trade.outputAmount.currency,
       amount: '0',
     }
@@ -102,7 +102,7 @@ export namespace ComposerQuickActions {
       permitData,
     })
 
-    const repayAmount: SerializedCurrencyAmount = {
+    const repayAmount: ShallowCurrencyAmount = {
       currency: trade.outputAmount.currency,
       amount: CurrencyUtils.getAmount(trade.outputAmount).toString(),
     }
@@ -150,7 +150,7 @@ export namespace ComposerQuickActions {
     const composerAddress = composer ?? getComposerAddress(chainId)
     const lenderData = getLenderData(lender, chainId, trade.inputAmount.currency.address)
 
-    const borrowAmount: SerializedCurrencyAmount = {
+    const borrowAmount: ShallowCurrencyAmount = {
       currency: trade.inputAmount.currency,
       amount: CurrencyUtils.getAmount(trade.inputAmount).toString(),
     }
@@ -232,7 +232,7 @@ export namespace ComposerQuickActions {
     const composerAddress = composer ?? getComposerAddress(chainId)
     const lenderData = getLenderData(lender, chainId, trade.inputAmount.currency.address)
 
-    const withdrawAmount: SerializedCurrencyAmount = {
+    const withdrawAmount: ShallowCurrencyAmount = {
       currency: trade.inputAmount.currency,
       amount: CurrencyUtils.getAmount(trade.inputAmount).toString(),
     }

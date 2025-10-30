@@ -1,5 +1,5 @@
 import { Address, Hex } from 'viem'
-import { ChainIdLike, SerializedCurrencyAmount } from '@1delta/type-sdk'
+import { ChainIdLike } from '@1delta/type-sdk'
 import {
   adjustForFlashLoanFee,
   createFlashLoan,
@@ -30,7 +30,7 @@ import {
   encodeWrap,
 } from '@1delta/calldatalib'
 import { ONE_DELTA_COMPOSER } from '../../consts'
-import { getFlashInfo, getLenderData, packCommands } from '../../lending'
+import { getFlashInfo, getLenderData, packCommands, ShallowCurrencyAmount } from '../../lending'
 import { buildMarginInnerCall, handlePendle } from '../margin/utils'
 import { HandleMarginParams, FlashInfo } from '../types/marginHandlers'
 import { GenericTrade } from '../../../utils'
@@ -40,7 +40,7 @@ import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 
 export interface ZapInParams extends HandleMarginParams {
   /** flash loan amount for debt-asset path */
-  userPayAmount: SerializedCurrencyAmount
+  userPayAmount: ShallowCurrencyAmount
   /** Optional user token permit for debt-asset path */
   userPermit?: { data: Hex; isPermit2?: boolean }
   /** Optional: multiple trades, if omitted, uses single trade */
@@ -286,7 +286,7 @@ function getFlashLoanData(
  */
 function getPaymentCalldata(
   userAssetIsCollateral: boolean,
-  userPayAmount: SerializedCurrencyAmount,
+  userPayAmount: ShallowCurrencyAmount,
   userPermit: { data: Hex; isPermit2?: boolean } | undefined,
   selectedExternal: ExternalCallParams,
   composer: string,

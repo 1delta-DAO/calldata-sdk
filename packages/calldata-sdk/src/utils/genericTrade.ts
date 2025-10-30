@@ -1,12 +1,13 @@
+import { ShallowCurrencyAmount } from '../evm'
 import { TradeType } from '../evm/types'
 import { FlashLoanProvider } from './flashLoanProvider'
-import { SerializedCurrencyAmount, SerializedTrade } from '@1delta/type-sdk'
+import { SerializedTrade } from '@1delta/type-sdk'
 
 export interface SwapObject {
   /** input currency amount that also holds currency data */
-  inputAmount: SerializedCurrencyAmount
+  inputAmount: ShallowCurrencyAmount
   /** output currency amount that also holds currency data */
-  outputAmount: SerializedCurrencyAmount
+  outputAmount: ShallowCurrencyAmount
 }
 
 export interface GenericTrade extends SwapObject {

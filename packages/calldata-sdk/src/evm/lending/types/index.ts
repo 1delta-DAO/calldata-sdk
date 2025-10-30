@@ -1,11 +1,22 @@
 import { Lender } from '@1delta/lender-registry'
-import { ChainIdLike, SerializedCurrencyAmount } from '@1delta/type-sdk'
+import { ChainIdLike } from '@1delta/type-sdk'
 import { Hex } from 'viem'
 import { PermitData } from '../..'
 
+export interface ShallowCurrency {
+  address: string
+  chainId: string
+  [k:string]: any // can have any other fields for convenience
+}
+
+export interface ShallowCurrencyAmount {
+  currency: ShallowCurrency
+  amount: string | bigint
+}
+
 export interface BaseLendingParams {
   lender: Lender
-  amount: SerializedCurrencyAmount
+  amount: ShallowCurrencyAmount
 }
 
 export interface LenderTokens {
@@ -127,7 +138,7 @@ export interface LendingOverrides {
 
 export interface CreateDepositParams {
   receiver: string
-  amount: SerializedCurrencyAmount | OverrideAmount
+  amount: ShallowCurrencyAmount | OverrideAmount
   lender: Lender
   morphoParams?: MorphoParams
   transferType?: TransferToLenderType
@@ -136,7 +147,7 @@ export interface CreateDepositParams {
 
 export interface createWithdrawParams {
   receiver: string
-  amount: SerializedCurrencyAmount | OverrideAmount
+  amount: ShallowCurrencyAmount | OverrideAmount
   lender: Lender
   transferType?: TransferToLenderType
   morphoParams?: MorphoParams
@@ -145,7 +156,7 @@ export interface createWithdrawParams {
 
 export interface createBorrowParams {
   receiver: string
-  amount: SerializedCurrencyAmount | OverrideAmount
+  amount: ShallowCurrencyAmount | OverrideAmount
   lender: Lender
   aaveInterestMode?: AaveInterestMode
   morphoParams?: MorphoParams
@@ -154,7 +165,7 @@ export interface createBorrowParams {
 
 export interface CreateRepayParams {
   receiver: string
-  amount: SerializedCurrencyAmount | OverrideAmount
+  amount: ShallowCurrencyAmount | OverrideAmount
   lender: Lender
   aaveInterestMode?: AaveInterestMode
   morphoParams?: MorphoParams
