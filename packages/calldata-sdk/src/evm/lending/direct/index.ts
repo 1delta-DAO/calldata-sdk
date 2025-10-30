@@ -273,7 +273,8 @@ export namespace ComposerDirectLending {
         const commands = [permitCall, transferCall, unwrapCall, repay]
         // for repaying all, sweep whatever is left in the contract to the receiver
         if (isAll) {
-          if (payInNative) commands.push(encodeUnwrap(wrappedNative, receiver as Address, 0n, SweepType.VALIDATE))
+          // sweep leftovers - unwrap if paid in native (and pool has native asset)
+          if (payInNative && !lenderAssetIsNative) commands.push(encodeUnwrap(wrappedNative, receiver as Address, 0n, SweepType.VALIDATE))
           else commands.push(encodeSweep(lenderAssetAddress as Address, receiver as Address, 0n, SweepType.VALIDATE))
         }
 

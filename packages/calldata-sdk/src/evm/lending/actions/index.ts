@@ -26,7 +26,6 @@ import {
   CompoundV2Selector,
 } from '@1delta/calldatalib'
 import {
-  getAssetData,
   getCollateralToken,
   getDebtToken,
   getIsBaseToken,
@@ -34,7 +33,6 @@ import {
   getLenderId,
   getPool,
   isNativeAddress,
-  isOverrideAmount,
 } from '../utils'
 import { UINT112_MAX } from '../consts'
 import { Lender } from '@1delta/lender-registry'
