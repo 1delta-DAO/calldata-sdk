@@ -271,7 +271,9 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe(
+        '0x400055d398326f99059ff775485246999027b31979552e234dae75c793f67a35089c9d99245e1c58470b0000000000000000000000003b9aca00400555d398326f99059ff775485246999027b3197955fd5840cd36d94d7229439859c0112a4185bc025530000f9f55d398326f99059ff775485246999027b31979550000000000000000000000003b9aca001de17a0000000000000000000000000000003333fd5840cd36d94d7229439859c0112a4185bc0255'
+      )
       expect(result.value).toBeUndefined()
     })
 
@@ -281,7 +283,7 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toMatch('0x4000c2132d05d31c914a87c6611c10748aeb04b58e8f2e234dae75c793f67a35089c9d99245e1c58470b0000000000000000000000003b9aca004005c2132d05d31c914a87c6611c10748aeb04b58e8faeb318360f27748acb200ce616e389a6c9409a0730000bb7c2132d05d31c914a87c6611c10748aeb04b58e8f0000000000000000000000003b9aca001de17a0000000000000000000000000000003333aeb318360f27748acb200ce616e389a6c9409a07')
       expect(result.value).toBeUndefined()
     })
 
@@ -308,7 +310,9 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe(
+        '0x5000c2132d05d31c914a87c6611c10748aeb04b58e8f00081234567890abcdef4004c2132d05d31c914a87c6611c10748aeb04b58e8f2e234dae75c793f67a35089c9d99245e1c58470b0000000000000000000000003b9aca004005c2132d05d31c914a87c6611c10748aeb04b58e8f794a61358d6845594f94dc1db02a252b5b4814ad300003e7c2132d05d31c914a87c6611c10748aeb04b58e8f0000000000000000000000003b9aca001de17a0000000000000000000000000000003333794a61358d6845594f94dc1db02a252b5b4814ad'
+      )
     })
   })
 
@@ -319,7 +323,9 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe(
+        '0x300303e7c2132d05d31c914a87c6611c10748aeb04b58e8f0000000000000000000000003b9aca002e234dae75c793f67a35089c9d99245e1c58470b6ab707aca953edaefbc4fd23ba73294241490620794a61358d6845594f94dc1db02a252b5b4814ad4001c2132d05d31c914a87c6611c10748aeb04b58e8f1de17a0000000000000000000000000000003333010000000000000000000000003b9aca00'
+      )
       expect(result.value).toBe('0') // NO_VALUE for withdrawals
     })
 
@@ -332,7 +338,7 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe('0x300303e70d500b1d8e8ef31e21c99d1db9a6444d3adf127000000000000000000de0b6b3a76400002e234dae75c793f67a35089c9d99245e1c58470b6d80113e533a2c0fe82eabd35f1875dcea89ea97794a61358d6845594f94dc1db02a252b5b4814ad40030d500b1d8e8ef31e21c99d1db9a6444d3adf12701de17a00000000000000000000000000000033330100000000000000000de0b6b3a7640000')
       expect(result.value).toBe('0')
     })
 
@@ -355,7 +361,7 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe('0x300313877506b33817b57f686e37b87b5d4c5c93fdef4cffd21bbf9291f18b2f29ab05500000000000000000000000003b9aca002e234dae75c793f67a35089c9d99245e1c58470b1bf0c2541f820e775182832f06c0b7fc27a25f674001c2132d05d31c914a87c6611c10748aeb04b58e8f1de17a0000000000000000000000000000003333010000000000000000000000003b9aca00')
     })
   })
 
@@ -366,7 +372,7 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe('0x300103e7c2132d05d31c914a87c6611c10748aeb04b58e8f0000000000000000000000003b9aca002e234dae75c793f67a35089c9d99245e1c58470b02794a61358d6845594f94dc1db02a252b5b4814ad4001c2132d05d31c914a87c6611c10748aeb04b58e8f1de17a0000000000000000000000000000003333010000000000000000000000003b9aca00')
       expect(result.value).toBe('0')
     })
 
@@ -378,7 +384,7 @@ describe('composeDirectMoneyMarketAction', async () => {
       })
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe('0x300103e70d500b1d8e8ef31e21c99d1db9a6444d3adf127000000000000000000de0b6b3a76400002e234dae75c793f67a35089c9d99245e1c58470b02794a61358d6845594f94dc1db02a252b5b4814ad40030d500b1d8e8ef31e21c99d1db9a6444d3adf12701de17a00000000000000000000000000000033330100000000000000000de0b6b3a7640000')
     })
 
     it('should create calldata for stable rate borrow from Aave V3', async () => {
@@ -393,7 +399,7 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe('0x300103e7c2132d05d31c914a87c6611c10748aeb04b58e8f0000000000000000000000003b9aca002e234dae75c793f67a35089c9d99245e1c58470b01794a61358d6845594f94dc1db02a252b5b4814ad4001c2132d05d31c914a87c6611c10748aeb04b58e8f1de17a0000000000000000000000000000003333010000000000000000000000003b9aca00')
     })
 
     it('should throw error for Aave borrow without mode', async () => {
@@ -417,7 +423,9 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe(
+        '0x30010bb7c2132d05d31c914a87c6611c10748aeb04b58e8f0000000000000000000000003b9aca002e234dae75c793f67a35089c9d99245e1c58470baeb318360f27748acb200ce616e389a6c9409a074001c2132d05d31c914a87c6611c10748aeb04b58e8f1de17a0000000000000000000000000000003333010000000000000000000000003b9aca00'
+      )
     })
 
     it('should create calldata for borrow from Morpho Blue', async () => {
@@ -428,7 +436,9 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe(
+        '0x300113877506b33817b57f686e37b87b5d4c5c93fdef4cffd21bbf9291f18b2f29ab05500000000000000000000000003b9aca002e234dae75c793f67a35089c9d99245e1c58470b1bf0c2541f820e775182832f06c0b7fc27a25f674001c2132d05d31c914a87c6611c10748aeb04b58e8f1de17a0000000000000000000000000000003333010000000000000000000000003b9aca00'
+      )
     })
   })
 
@@ -439,7 +449,9 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe(
+        '0x4000c2132d05d31c914a87c6611c10748aeb04b58e8f2e234dae75c793f67a35089c9d99245e1c58470b0000000000000000000000003b9aca004005c2132d05d31c914a87c6611c10748aeb04b58e8f794a61358d6845594f94dc1db02a252b5b4814ad300203e7c2132d05d31c914a87c6611c10748aeb04b58e8f0000000000000000000000003b9aca001de17a000000000000000000000000000000333302fb00ac187a8eb5afae4eace434f493eb62672df7794a61358d6845594f94dc1db02a252b5b4814ad'
+      )
       expect(result.value).toBeUndefined() // No ETH value for ERC20 repay
     })
 
@@ -452,7 +464,9 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe(
+        '0x400100000000000000000000000000000000000000000d500b1d8e8ef31e21c99d1db9a6444d3adf12700100000000000000000de0b6b3a764000040050d500b1d8e8ef31e21c99d1db9a6444d3adf1270794a61358d6845594f94dc1db02a252b5b4814ad300203e70d500b1d8e8ef31e21c99d1db9a6444d3adf127000000000000000000de0b6b3a76400001de17a0000000000000000000000000000003333024a1c3ad6ed28a636ee1751c69071f6be75deb8b8794a61358d6845594f94dc1db02a252b5b4814ad'
+      )
       expect(result.value).toBe(TEST_AMOUNT_ETH) // ETH value for native repay
     })
 
@@ -464,7 +478,7 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe('0x4000c2132d05d31c914a87c6611c10748aeb04b58e8f2e234dae75c793f67a35089c9d99245e1c58470b0000000000000000000000003b9e9a904005c2132d05d31c914a87c6611c10748aeb04b58e8f794a61358d6845594f94dc1db02a252b5b4814ad300203e7c2132d05d31c914a87c6611c10748aeb04b58e8f0000000000000000000000003b9aca001de17a000000000000000000000000000000333302fb00ac187a8eb5afae4eace434f493eb62672df7794a61358d6845594f94dc1db02a252b5b4814ad4001c2132d05d31c914a87c6611c10748aeb04b58e8f1de17a00000000000000000000000000000033330000000000000000000000000000000000')
     })
 
     it.skip('should create calldata for repay all to Compound V2', async () => {
@@ -486,7 +500,7 @@ describe('composeDirectMoneyMarketAction', async () => {
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
 
-      expect(result.calldata).toMatch(/^0x[0-9a-fA-F]+$/)
+      expect(result.calldata).toBe('0x4000c2132d05d31c914a87c6611c10748aeb04b58e8f2e234dae75c793f67a35089c9d99245e1c58470b0000000000000000000000003b9aca0040057506b33817b57f686e37b87b5d4c5c93fdef4cff1bf0c2541f820e775182832f06c0b7fc27a25f67300213877506b33817b57f686e37b87b5d4c5c93fdef4cffd21bbf9291f18b2f29ab05500000000000000000000000003b9aca001de17a00000000000000000000000000000033331bf0c2541f820e775182832f06c0b7fc27a25f670000')
     })
 
     it('should create calldata for repay with Permit2', async () => {
