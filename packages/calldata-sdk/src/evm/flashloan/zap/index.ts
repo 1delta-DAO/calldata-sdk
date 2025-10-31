@@ -30,7 +30,7 @@ import {
   encodeWrap,
 } from '@1delta/calldatalib'
 import { ONE_DELTA_COMPOSER } from '../../consts'
-import { getFlashInfo, getLenderData, packCommands, ShallowCurrencyAmount } from '../../lending'
+import { getFlashInfo, getLenderData, isNativeAddress, packCommands, ShallowCurrencyAmount } from '../../lending'
 import { buildMarginInnerCall, handlePendle } from '../margin/utils'
 import { HandleMarginParams, FlashInfo } from '../types/marginHandlers'
 import { GenericTrade } from '../../../utils'
@@ -100,20 +100,22 @@ export function createZapInMargin({
 
   const wnativeAddress = WRAPPED_NATIVE_INFO[userPayAmount.currency.chainId]?.address?.toLowerCase()
 
+  const tradeAddressOut = trade?.outputAmount.currency.address.toLowerCase()
+  const tradeAddressIn =trade?.inputAmount.currency.address.toLowerCase()
   // detect whether the user asset matches the collateral or debt (we convert to wnative)
   let userAssetIsCollateral: boolean
   if (CurrencyUtils.isNativeAmount(userPayAmount)) {
-    userAssetIsCollateral = wnativeAddress === trade?.outputAmount.currency.address.toLowerCase()
+    userAssetIsCollateral = wnativeAddress === tradeAddressOut || isNativeAddress(tradeAddressOut!)
     // throw if it does not match either
-    if (!userAssetIsCollateral && wnativeAddress !== trade?.inputAmount.currency.address.toLowerCase())
+    if (!userAssetIsCollateral && wnativeAddress !== tradeAddressIn)
       throw new Error('Pay token is neither collateral nor debt')
   } else {
     userAssetIsCollateral =
-      userPayAmount.currency.address.toLowerCase() === trade?.outputAmount.currency.address.toLowerCase()
+      userPayAmount.currency.address.toLowerCase() === tradeAddressOut
     // throw if it does not match either
     if (
       !userAssetIsCollateral &&
-      userPayAmount.currency.address.toLowerCase() !== trade?.inputAmount.currency.address.toLowerCase()
+      userPayAmount.currency.address.toLowerCase() !== tradeAddressIn
     )
       throw new Error('Pay token is neither collateral nor debt')
   }
