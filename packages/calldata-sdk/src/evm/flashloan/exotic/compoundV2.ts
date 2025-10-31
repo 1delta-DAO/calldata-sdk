@@ -71,7 +71,6 @@ export namespace VenusMarginWrapperOperations {
 
     const assetInNormal = assetIn.toLowerCase()
     const assetOutNormal = assetOut.toLowerCase()
-    if (assetInNormal !== wnative && assetOutNormal !== wnative) throw new Error('Assets are not wnative-native pair')
 
     // note that we always wrap or unwrap the entire balance
     // therefore not input sweep is needed when withdrwaing the maximum
@@ -95,6 +94,9 @@ export namespace VenusMarginWrapperOperations {
     let sweepInput = '0x'
     switch (operation) {
       case MarginTradeType.CollateralSwap: {
+        // this requires no to be same pair
+        if (assetInNormal !== wnative && assetOutNormal !== wnative)
+          throw new Error('Assets are not wnative-native pair')
         // pull finds to repay flash loan
         receive = compoundV2Withdraw(assetIn, amount, maxIn, composerAddress)
         // sweep input leftovers
@@ -116,6 +118,9 @@ export namespace VenusMarginWrapperOperations {
         break
       }
       case MarginTradeType.DebtSwap: {
+        // this requires no same assets
+        if (assetInNormal !== wnative && assetOutNormal !== wnative)
+          throw new Error('Assets are not wnative-native pair')
         if (assetInNormal !== wnative) throw new Error('only wnatiove ca be borrowed')
         // pull finds to repay flash loan
         receive = compoundV2Borrow(assetIn, amount, composerAddress)
@@ -233,6 +238,7 @@ export namespace VenusMarginWrapperOperations {
     )
   }
 
+  /** Sweep balance to account - native and ERC20 */
   function sweepAmount(asset: string, account: string) {
     return encodeSweep(asset as any, account as any, 0n, SweepType.VALIDATE)
   }
