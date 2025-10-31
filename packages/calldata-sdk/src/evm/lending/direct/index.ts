@@ -72,14 +72,14 @@ export namespace ComposerDirectLending {
     const wrappedNative = WRAPPED_NATIVE_INFO[chainId].address as Address
 
     // native flags
-    const payInNative = isNativeAddress(callerAssetAddress)
+    const userAssetIsNative = isNativeAddress(callerAssetAddress)
     const lenderAssetIsNative = isNativeAddress(lenderAssetAddress)
 
     // validate them for sanity
-    if (payInNative && !lenderAssetIsNative && lenderAssetAddress.toLowerCase() !== wrappedNative)
+    if (userAssetIsNative && !lenderAssetIsNative && lenderAssetAddress.toLowerCase() !== wrappedNative)
       throw new Error('Wrong corresponding pool for native caller asset')
 
-    if (lenderAssetIsNative && !payInNative && callerAssetAddress.toLowerCase() !== wrappedNative)
+    if (lenderAssetIsNative && !userAssetIsNative && callerAssetAddress.toLowerCase() !== wrappedNative)
       throw new Error('Wrong corresponding caller asset for native pool')
 
     switch (actionType) {
@@ -96,7 +96,7 @@ export namespace ComposerDirectLending {
         let transferCall: string
         let unwrapCall = '0x'
         // nonnative case
-        if (!payInNative) {
+        if (!userAssetIsNative) {
           // unwrap if it is e.g. WETH->cETH
           // native pool: Compound V2 only
           if (lenderAssetIsNative) {
@@ -141,12 +141,15 @@ export namespace ComposerDirectLending {
           morphoParams,
         })
         let transferCall: string
-        if (!payInNative) {
+        if (!userAssetIsNative) {
           // native pool: Compound V2 only: Handle cETH->WETH
           if (lenderAssetIsNative) {
             validateCompoundV2WnativePayment(callerAssetAddress, wrappedNative, lender)
             // add unwrap call
-            transferCall = encodeUnwrap(wrappedNative, receiver as Address, amount, sweepType)
+            transferCall = packCommands([
+              encodeWrap(BigInt(amountToUse), wrappedNative), // ETH->WETH
+              encodeSweep(wrappedNative as Address, receiver as Address, BigInt(amountToUse), sweepType), // WETH->caller
+            ])
           } else {
             // neither caller asset nor lender asset native
             transferCall = encodeSweep(
@@ -159,10 +162,17 @@ export namespace ComposerDirectLending {
         } else {
           // native pool: Compound V2 only
           if (lenderAssetIsNative) {
-            // validate that the caller pays with native
+            // validate that the pool is compound V2 - the only case where this can happen
             validateCompoundV2Lender(lender)
-            transferCall = '0x' // no transfer needed
+            // sweep native
+            transferCall = encodeSweep(
+              lenderAssetAddress as Address,
+              receiver as Address,
+              BigInt(amountToUse),
+              sweepType
+            )
           } else {
+            // ERC20-ERC20 -> plain sweep
             transferCall = encodeUnwrap(wrappedNative, receiver as Address, BigInt(amountToUse), sweepType)
           }
         }
@@ -201,7 +211,7 @@ export namespace ComposerDirectLending {
         })
         let transferCall: string
         // handle the caller asset details
-        if (!payInNative) {
+        if (!userAssetIsNative) {
           transferCall = encodeSweep(callerAssetAddress as Address, receiver as Address, amount, SweepType.AMOUNT)
         } else {
           if (lenderAssetIsNative) throw new Error('Borrowing native via smart contract: not supported')
@@ -240,7 +250,7 @@ export namespace ComposerDirectLending {
 
         let transferCall: string
         let unwrapCall = '0x' // only compound V2s might need unwrap for e.g. WETH->cETH repays
-        if (!payInNative) {
+        if (!userAssetIsNative) {
           // ERC20: handle transfer
           transferCall = isPermit2
             ? encodePermit2TransferFrom(
@@ -274,7 +284,8 @@ export namespace ComposerDirectLending {
         // for repaying all, sweep whatever is left in the contract to the receiver
         if (isAll) {
           // sweep leftovers - unwrap if paid in native (and pool has native asset)
-          if (payInNative && !lenderAssetIsNative) commands.push(encodeUnwrap(wrappedNative, receiver as Address, 0n, SweepType.VALIDATE))
+          if (userAssetIsNative && !lenderAssetIsNative)
+            commands.push(encodeUnwrap(wrappedNative, receiver as Address, 0n, SweepType.VALIDATE))
           else commands.push(encodeSweep(lenderAssetAddress as Address, receiver as Address, 0n, SweepType.VALIDATE))
         }
 
