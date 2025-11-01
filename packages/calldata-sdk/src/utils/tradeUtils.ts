@@ -107,7 +107,7 @@ export function getAssetOutFromTrade(trade: SwapObject | undefined) {
 }
 
 export function getAssetFromAmount(amount: ShallowCurrencyAmount) {
-  return amount.currency.address
+  return amount.currency.address?.toLowerCase()
 }
 
 export function getChainIdFromTrade(trade: SwapObject | undefined) {
