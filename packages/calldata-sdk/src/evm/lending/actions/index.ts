@@ -112,7 +112,7 @@ export namespace ComposerLendingActions {
           encodeCompoundV2SelectorId(
             amountUsed,
             // MINT_BEHALF for VENUS & forks, otherwise MINT
-            isVenusType(lender) && !isNativeAddress(asset) ? CompoundV2Selector.MINT_BEHALF : CompoundV2Selector.MINT
+            !isVenusType(lender) || isNativeAddress(asset) ? CompoundV2Selector.MINT : CompoundV2Selector.MINT_BEHALF
           ),
           receiver as Address,
           pool as Address,
