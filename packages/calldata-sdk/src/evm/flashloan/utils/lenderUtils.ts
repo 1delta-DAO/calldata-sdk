@@ -1,5 +1,4 @@
-import { AAVE_LENDERS, AAVE_V2_LENDERS, AAVE_V3_LENDERS, Lender } from '@1delta/lender-registry'
-import { COMPOUND_V2_LENDERS } from '../../lending/types'
+import { AAVE_LENDERS, AAVE_V2_LENDERS, AAVE_V3_LENDERS, COMPOUND_V2_LENDERS, Lender } from '@1delta/lender-registry'
 import { aaveReserves } from '@1delta/data-sdk'
 
 export function isAaveV3Type(lender: Lender) {
