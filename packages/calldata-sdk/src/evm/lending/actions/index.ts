@@ -35,11 +35,11 @@ import {
   isNativeAddress,
 } from '../utils'
 import { UINT112_MAX } from '../consts'
-import { Lender } from '@1delta/lender-registry'
+import { Lender, VENUS_LENDERS } from '@1delta/lender-registry'
 import { isCompoundV2, isMorphoType } from '../../flashloan'
 
 function isVenusType(lender: string) {
-  return lender.startsWith('VENUS')
+  return VENUS_LENDERS.includes(lender as any)
 }
 
 /** Yldr is lieke aave, just with no borrow mode */
