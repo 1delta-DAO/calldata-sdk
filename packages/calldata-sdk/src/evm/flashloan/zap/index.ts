@@ -140,7 +140,8 @@ export function createZapInMargin({
     composerAddress,
     flashLoanAmountWithFee,
     isMaxIn,
-    isMaxOut
+    isMaxOut,
+    composerAddress
   )
 
   // pre-funding calldata

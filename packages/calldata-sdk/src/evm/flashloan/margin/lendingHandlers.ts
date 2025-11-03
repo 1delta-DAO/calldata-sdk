@@ -13,10 +13,13 @@ import {
   packCommands,
   isNativeAddress,
   ComposerLendingActions,
+  CreateWithdrawParams,
 } from '../../lending'
 import { HandleRepayParams, HandleWithdrawParams } from '../types'
 import { isAave } from '../utils'
 import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
+import { Lender } from '@1delta/lender-registry'
+import { Chain } from '@1delta/chain-registry'
 
 /**
  * Parametrize a repay transaction for margin.
@@ -102,6 +105,7 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     context,
     morphoParams,
     permitData,
+    composerAddress,
   } = params
 
   // do the conversion here for simplicity
@@ -139,7 +143,7 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     // transfer what is needed tof flash source
     // sweep leftovers to caller
 
-    const withdrawCalldata = ComposerLendingActions.createWithdraw({
+    const withdrawCalldata = createWithdrawWrapped({
       receiver: intermediate, // intermediate receives funds
       asset: tokenIn.address,
       amount: 0n,
@@ -148,6 +152,8 @@ export function handleWithdraw(params: HandleWithdrawParams) {
       transferType: TransferToLenderType.UserBalance,
       morphoParams,
       useOverride,
+      composerAddress,
+      wnative,
     })
 
     // add permit to withdraw
@@ -187,7 +193,7 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     if (inputIsNative) {
       withdrawCalldata = packCommands([
         // we withdraw native to the intermediate (composer)
-        ComposerLendingActions.createWithdraw({
+        createWithdrawWrapped({
           receiver: intermediate,
           asset: zeroAddress,
           amount: flashLoanAmountWithFeeBigInt,
@@ -196,6 +202,8 @@ export function handleWithdraw(params: HandleWithdrawParams) {
           transferType: TransferToLenderType.Amount,
           morphoParams,
           useOverride,
+          composerAddress,
+          wnative,
         }),
         // then wrap to wnative - note that the do not need to sweep here
         encodeWrap(flashLoanAmountWithFeeBigInt, wnative),
@@ -207,7 +215,7 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     } else {
       // the most common case - withdraw ERC20 directly to whatever the target is
       // skips self-transfers
-      withdrawCalldata = ComposerLendingActions.createWithdraw({
+      withdrawCalldata = createWithdrawWrapped({
         receiver: flashRepayBalanceHolder,
         asset: tokenIn.address,
         amount: flashLoanAmountWithFeeBigInt,
@@ -216,6 +224,8 @@ export function handleWithdraw(params: HandleWithdrawParams) {
         transferType: TransferToLenderType.Amount,
         morphoParams,
         useOverride,
+        composerAddress,
+        wnative,
       })
     }
 
@@ -223,4 +233,49 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     context.callOut = packCommands([permitCall, withdrawCalldata])
   }
   return context
+}
+
+/** wrapped function to handle some special cases */
+function createWithdrawWrapped(params: CreateWithdrawParams & { composerAddress: string; wnative: string }) {
+  const {
+    asset,
+    amount,
+    lender,
+    morphoParams,
+    useOverride,
+    chainId,
+    receiver,
+    composerAddress,
+    transferType,
+    wnative,
+  } = params
+
+  // normal case
+  if (lender !== Lender.MOONWELL || asset !== wnative || chainId === Chain.MOONBEAM) {
+    return ComposerLendingActions.createWithdraw({
+      receiver,
+      asset,
+      amount,
+      chainId,
+      lender,
+      transferType,
+      morphoParams,
+      useOverride,
+    })
+  }
+  // moonwell wnative withdrawal -> we undo the manual unwrap
+  const withdraw = ComposerLendingActions.createWithdraw({
+    receiver: composerAddress,
+    asset,
+    amount,
+    chainId,
+    lender,
+    transferType,
+    morphoParams,
+    useOverride,
+  })
+  const wrap = encodeWrap(amount, wnative as any)
+  const sweep = encodeSweep(wnative as any, receiver as any, amount, SweepType.AMOUNT)
+
+  return packCommands([withdraw, wrap, sweep])
 }

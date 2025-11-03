@@ -184,7 +184,8 @@ function produceInnerCall(
     composer, // interdediate for max withdraw
     amount.toString(), // no flash fee
     isMaxIn,
-    isMaxOut
+    isMaxOut,
+    composer
   )
 
   let poolPayments = "0x"
@@ -373,7 +374,7 @@ export namespace ComposerFlashSwap {
       slippageTolerance!,
       composerAddress,
       packCommands([
-        context.callIn, // poll funds from lender (e.g. withdraw / borrow)
+        context.callIn, // pull funds from lender (e.g. withdraw / borrow)
         context.callOut, // received handling (e.g. deposit)
         poolPayments, // distribute funds to pools
         context.cleanup // refund excess inputs

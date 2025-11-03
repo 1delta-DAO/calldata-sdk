@@ -32,7 +32,8 @@ export function buildMarginInnerCall(
   intermediate: string, // <- expected to be the composer
   flashLoanAmountWithFee: string,
   isMaxIn: boolean,
-  isMaxOut: boolean
+  isMaxOut: boolean,
+  composerAddress: string
 ) {
   const { lender, morphoParamsIn, morphoParamsOut, permitData } = marginData
   /** Build callIn [call before swap] and calOut [call after swap] */
@@ -119,6 +120,7 @@ export function buildMarginInnerCall(
         context,
         morphoParams: morphoParamsIn,
         permitData,
+        composerAddress,
       })
 
       break
@@ -150,6 +152,7 @@ export function buildMarginInnerCall(
         context,
         morphoParams: morphoParamsIn,
         permitData,
+        composerAddress,
       })
 
       break

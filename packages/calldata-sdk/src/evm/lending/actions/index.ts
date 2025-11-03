@@ -177,19 +177,6 @@ export namespace ComposerLendingActions {
         if (!collateralToken) {
           throw new Error('collateralToken should be defined for CompoundV2 withdrawals')
         }
-        encodePacked(
-          ['uint8', 'uint8', 'uint16', 'address', 'uint128', 'address', 'address'],
-          [
-            ComposerCommands.LENDING,
-            LenderOps.WITHDRAW,
-            getLenderId(lenderData.group),
-            asset as Address,
-            // we leave the all-supported REDEEM here for now
-            encodeCompoundV2SelectorId(amountUsed, CompoundV2Selector.REDEEM),
-            receiver as Address,
-            collateralToken as Address,
-          ]
-        )
         return encodePacked(['bytes', 'address'], [genericPart, collateralToken as Address])
       case LenderGroups.CompoundV3:
         const isBase = getIsBaseToken(lenderData, asset)

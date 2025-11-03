@@ -607,6 +607,29 @@ describe('composeDirectMoneyMarketAction', async () => {
         '0x40010000000000000000000000000000000000000000420000000000000000000000000000000000000601000000000000000000024234f43446d540054200000000000000000000000000000000000006b4104c02bbf4e9be85aaa41a62974e4e28d59a3330000f9f4200000000000000000000000000000000000006010000000000000000024234f43446d5bada9c382165b31419f4cc0edf0fa84f80a3c8e5b4104c02bbf4e9be85aaa41a62974e4e28d59a33'
       )
     })
+
+    it.only('should create calldata for withdrawal wnative->native from Moonwell', async () => {
+      const MoonwellParams = {
+        actionType: 'Withdraw',
+        chainId: '10',
+        params: {
+          lender: 'MOONWELL',
+          aaveBorrowMode: 0,
+        },
+        lender: 'MOONWELL',
+        amount: '635745156220629',
+        isAll: true,
+        receiver: '0xbadA9c382165b31419F4CC0eDf0Fa84f80A3C8E5',
+        lenderAssetAddress: '0x4200000000000000000000000000000000000006',
+        callerAssetAddress: '0x0000000000000000000000000000000000000000',
+        composerAddress: '0xCDef0A216fcEF809258aA4f341dB1A5aB296ea72',
+      }
+
+      const result = ComposerDirectLending.composeDirectMoneyMarketAction(MoonwellParams as any)
+      expect(result.calldata).toBe(
+        '0x30030f9f42000000000000000000000000000000000000060000ffffffffffffffffffffffffffffcdef0a216fcef809258aa4f341db1a5ab296ea72b4104c02bbf4e9be85aaa41a62974e4e28d59a3340010000000000000000000000000000000000000000bada9c382165b31419f4cc0edf0fa84f80a3c8e50000000000000000000000000000000000'
+      )
+    })
   })
 
   describe('Input validation', async () => {

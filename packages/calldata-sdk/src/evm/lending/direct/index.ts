@@ -23,6 +23,7 @@ import {
   NO_VALUE,
   AaveInterestMode,
   isNativeAddress,
+  isMoonwellWNativeTransferOut,
 } from '..'
 
 import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
@@ -129,21 +130,26 @@ export namespace ComposerDirectLending {
         const [amountToUse, withdrawType, sweepType] = isAll
           ? [NO_VALUE, TransferToLenderType.UserBalance, SweepType.VALIDATE]
           : [amount, TransferToLenderType.Amount, SweepType.AMOUNT]
-        let intermediateReceiver = composerAddress
 
-        const withdraw = ComposerLendingActions.createWithdraw({
-          receiver: intermediateReceiver,
-          amount,
-          chainId,
-          asset: lenderAssetAddress,
-          lender: lender as any,
-          transferType: withdrawType,
-          morphoParams,
-        })
+        // create withdraw call with adjustable receiver
+        const withdraw = (withdrawReceiver: string) =>
+          ComposerLendingActions.createWithdraw({
+            receiver: withdrawReceiver,
+            amount,
+            chainId,
+            asset: lenderAssetAddress,
+            lender: lender as any,
+            transferType: withdrawType,
+            morphoParams,
+          })
+        let withdrawCall: string
         let transferCall: string
         if (!userAssetIsNative) {
           // native pool: Compound V2 only: Handle cETH->WETH
           if (lenderAssetIsNative) {
+            // simple withdraw to composer
+            withdrawCall = withdraw(composerAddress)
+            // validate payment
             validateCompoundV2WnativePayment(callerAssetAddress, wrappedNative, lender)
             // add unwrap call
             transferCall = packCommands([
@@ -151,17 +157,35 @@ export namespace ComposerDirectLending {
               encodeSweep(wrappedNative as Address, receiver as Address, BigInt(amountToUse), sweepType), // WETH->caller
             ])
           } else {
-            // neither caller asset nor lender asset native
-            transferCall = encodeSweep(
-              lenderAssetAddress as Address,
-              receiver as Address,
-              BigInt(amountToUse),
-              sweepType
-            )
+            if (
+              callerAssetAddress === wrappedNative &&
+              isMoonwellWNativeTransferOut(lender, lenderAssetAddress, wrappedNative, chainId)
+            ) {
+              withdrawCall = packCommands([
+                withdraw(composerAddress), // withdraw native to composer
+                encodeWrap(0n, wrappedNative), // wrap to wnative
+              ])
+              transferCall = encodeSweep(
+                callerAssetAddress as Address,
+                receiver as Address,
+                BigInt(amountToUse),
+                sweepType
+              ) // sweep wnative to receiver
+            } else {
+              // TODO: directly withdraw to receiver
+              withdrawCall = withdraw(composerAddress)
+              transferCall = encodeSweep(
+                lenderAssetAddress as Address,
+                receiver as Address,
+                BigInt(amountToUse),
+                sweepType
+              )
+            }
           }
         } else {
           // native pool: Compound V2 only
           if (lenderAssetIsNative) {
+            withdrawCall = withdraw(composerAddress)
             // validate that the pool is compound V2 - the only case where this can happen
             validateCompoundV2Lender(lender)
             // sweep native
@@ -172,8 +196,16 @@ export namespace ComposerDirectLending {
               sweepType
             )
           } else {
-            // ERC20-ERC20 -> plain sweep
-            transferCall = encodeUnwrap(wrappedNative, receiver as Address, BigInt(amountToUse), sweepType)
+            // wnative -> native
+            if (isMoonwellWNativeTransferOut(lender, lenderAssetAddress, wrappedNative, chainId)) {
+              // moonwell will auto-unwrap to receiver
+              withdrawCall = withdraw(composerAddress)
+              transferCall = encodeSweep(zeroAddress, receiver as Address, BigInt(amountToUse), sweepType)
+            } else {
+              withdrawCall = withdraw(composerAddress)
+              // ERC20-ERC20 -> plain sweep
+              transferCall = encodeUnwrap(wrappedNative, receiver as Address, BigInt(amountToUse), sweepType)
+            }
           }
         }
         if (permitData && permitData.data !== '0x') {
@@ -189,7 +221,7 @@ export namespace ComposerDirectLending {
         }
 
         return {
-          calldata: packCommands([permitCall, withdraw, transferCall]),
+          calldata: packCommands([permitCall, withdrawCall, transferCall]),
           value: NO_VALUE,
         }
       }
@@ -294,6 +326,8 @@ export namespace ComposerDirectLending {
           value,
         }
       }
+      default:
+        throw new Error('Unsupported operation')
     }
   }
 }

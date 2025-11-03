@@ -22,9 +22,9 @@ import {
   morphoPools,
 } from '@1delta/data-sdk'
 import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
+import { Chain } from '@1delta/chain-registry'
 
 export * from './permit'
-
 
 export const isVenusType = (lender: string) => lender.startsWith('VENUS')
 
@@ -287,4 +287,19 @@ export function getLenderGroup(lender: Lender) {
 
 export function isNativeAddress(a: string) {
   return a === zeroAddress
+}
+
+/**
+ * On OP and Base, Moonwell auto-unwraps WNative in out transfers. We have to account for that jank.
+ */
+export function isMoonwellWNativeTransferOut(
+  lender: string,
+  lenderTokenAddress: string,
+  wnative: string,
+  chainId: string
+) {
+  if (lender != Lender.MOONWELL) return false
+  // only on op and base (and other later deployments), on Moonbeam they use immutable native contracts
+  if (chainId !== Chain.MOONBEAM && lenderTokenAddress === wnative) return true
+  return false
 }
