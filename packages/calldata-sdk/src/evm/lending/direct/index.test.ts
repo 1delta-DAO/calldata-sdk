@@ -608,7 +608,7 @@ describe('composeDirectMoneyMarketAction', async () => {
       )
     })
 
-    it.only('should create calldata for withdrawal wnative->native from Moonwell', async () => {
+    it('should create calldata for withdrawal wnative->native from Moonwell', async () => {
       const MoonwellParams = {
         actionType: 'Withdraw',
         chainId: '10',
