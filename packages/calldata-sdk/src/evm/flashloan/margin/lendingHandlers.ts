@@ -1,5 +1,5 @@
 import { Address, Hex, zeroAddress } from 'viem'
-import { encodeSweep, SweepType, encodePermit, PermitIds, encodeUnwrap, encodeWrap } from '@1delta/calldatalib'
+import { encodeSweep, SweepType, encodePermit, PermitIds, encodeWrap } from '@1delta/calldatalib'
 import {
   TransferToLenderType,
   adjustAmountForAll,
@@ -14,6 +14,7 @@ import {
   isNativeAddress,
   ComposerLendingActions,
   CreateWithdrawParams,
+  safeEncodeWrap,
 } from '../../lending'
 import { HandleRepayParams, HandleWithdrawParams } from '../types'
 import { isAave } from '../utils'
@@ -263,6 +264,7 @@ function createWithdrawWrapped(params: CreateWithdrawParams & { composerAddress:
       useOverride,
     })
   }
+
   // moonwell wnative withdrawal -> we undo the manual unwrap
   const withdraw = ComposerLendingActions.createWithdraw({
     receiver: composerAddress,
@@ -274,8 +276,8 @@ function createWithdrawWrapped(params: CreateWithdrawParams & { composerAddress:
     morphoParams,
     useOverride,
   })
-  const wrap = encodeWrap(amount, wnative as any)
-  const sweep = encodeSweep(wnative as any, receiver as any, amount, SweepType.AMOUNT)
+  const wrap = safeEncodeWrap(0n, wnative as any)
+  const sweep = encodeSweep(wnative as any, receiver as any, 0n, SweepType.VALIDATE)
 
   return packCommands([withdraw, wrap, sweep])
 }

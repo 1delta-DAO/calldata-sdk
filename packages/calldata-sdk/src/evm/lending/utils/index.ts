@@ -6,7 +6,16 @@ import {
   COMPOUND_V2_LENDERS,
 } from '@1delta/lender-registry'
 import { LenderData, LenderGroups, OverrideAmount, ShallowCurrencyAmount } from '../types'
-import { ComposerCommands, FlashLoanIds, LenderIds, PermitIds, uint16 } from '@1delta/calldatalib'
+import {
+  ComposerCommands,
+  encodeSweep,
+  encodeWrap,
+  FlashLoanIds,
+  LenderIds,
+  PermitIds,
+  SweepType,
+  uint16,
+} from '@1delta/calldatalib'
 import { Address, encodePacked, Hex, zeroAddress } from 'viem'
 import { ChainIdLike } from '@1delta/type-sdk'
 import { FLASH_LOAN_PROVIDERS, FlashLoanProvider } from '../../../utils'
@@ -302,4 +311,14 @@ export function isMoonwellWNativeTransferOut(
   // only on op and base (and other later deployments), on Moonbeam they use immutable native contracts
   if (chainId !== Chain.MOONBEAM && lenderTokenAddress === wnative) return true
   return false
+}
+
+/** 
+ * prper wrap that supports wrapping balanceOf
+ * TODO: add this directly to the calldata sdk (encodeWrap(0n,...) does nothing atm) 
+ */
+export function safeEncodeWrap(amount: bigint, wnative: string) {
+  return amount !== 0n
+    ? encodeWrap(amount, wnative as any)
+    : encodeSweep(zeroAddress, wnative as any, 0n, SweepType.VALIDATE)
 }

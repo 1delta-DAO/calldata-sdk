@@ -24,6 +24,7 @@ import {
   AaveInterestMode,
   isNativeAddress,
   isMoonwellWNativeTransferOut,
+  safeEncodeWrap,
 } from '..'
 
 import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
@@ -163,7 +164,7 @@ export namespace ComposerDirectLending {
             ) {
               withdrawCall = packCommands([
                 withdraw(composerAddress), // withdraw native to composer
-                encodeWrap(0n, wrappedNative), // wrap to wnative
+                safeEncodeWrap(0n, wrappedNative), // wrap to wnative (balanceOf)
               ])
               transferCall = encodeSweep(
                 callerAssetAddress as Address,
