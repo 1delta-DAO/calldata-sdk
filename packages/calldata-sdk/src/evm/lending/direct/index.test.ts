@@ -382,6 +382,38 @@ describe('composeDirectMoneyMarketAction', async () => {
       expect(result.value).toBe('0')
     })
 
+    it('should create calldata for USDT withdrawal from Venus', async () => {
+      const { usdt_bnb } = await createTestTokens()
+      const BNB_COMPOSER = '0x816EBC5cb8A5651C902Cb06659907A93E574Db0B' as Address
+      const operation = createBaseLendingOperation(QuickActionType.Withdraw, Lender.VENUS, TEST_AMOUNT_ETH, usdt_bnb, {
+        receiver: '0x77bD2F1cBcccdca1e63ca1B687E8b5d73710b0Ef' as Address,
+        composerAddress: BNB_COMPOSER,
+      })
+
+      const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
+      expect(result.calldata).toBe(
+        '0x30030f9f55d398326f99059ff775485246999027b319795500000000000000000de0b6b3a7640000816ebc5cb8a5651c902cb06659907a93e574db0bfd5840cd36d94d7229439859c0112a4185bc0255400155d398326f99059ff775485246999027b319795577bd2f1cbcccdca1e63ca1b687e8b5d73710b0ef0100000000000000000de0b6b3a7640000'
+      )
+      expect(result.value).toBe('0')
+    })
+
+    it('should create calldata for USDT withdraw all from Venus', async () => {
+      const { usdt_bnb } = await createTestTokens()
+      const BNB_COMPOSER = '0x816EBC5cb8A5651C902Cb06659907A93E574Db0B' as Address
+      const operation = createBaseLendingOperation(QuickActionType.Withdraw, Lender.VENUS, TEST_AMOUNT_ETH, usdt_bnb, {
+        isAll: true,
+        receiver: '0x77bD2F1cBcccdca1e63ca1B687E8b5d73710b0Ef' as Address,
+        composerAddress: BNB_COMPOSER,
+      })
+
+      const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
+
+      expect(result.calldata).toBe(
+        '0x30030f9f55d398326f99059ff775485246999027b31979550000ffffffffffffffffffffffffffff816ebc5cb8a5651c902cb06659907a93e574db0bfd5840cd36d94d7229439859c0112a4185bc0255400155d398326f99059ff775485246999027b319795577bd2f1cbcccdca1e63ca1b687e8b5d73710b0ef0000000000000000000000000000000000'
+      )
+      expect(result.value).toBe('0')
+    })
+
     it('should create calldata for native POL withdrawal from Aave V3', async () => {
       const { wpol, pol } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Withdraw, Lender.AAVE_V3, TEST_AMOUNT_ETH, wpol, {
@@ -502,6 +534,22 @@ describe('composeDirectMoneyMarketAction', async () => {
       expect(result.calldata).toBe(
         '0x300113877506b33817b57f686e37b87b5d4c5c93fdef4cffd21bbf9291f18b2f29ab05500000000000000000000000003b9aca002e234dae75c793f67a35089c9d99245e1c58470b1bf0c2541f820e775182832f06c0b7fc27a25f674001c2132d05d31c914a87c6611c10748aeb04b58e8f1de17a0000000000000000000000000000003333010000000000000000000000003b9aca00'
       )
+    })
+
+    it('should create calldata for USDT borrow from Venus', async () => {
+      const { usdt_bnb } = await createTestTokens()
+      const BNB_COMPOSER = '0x816EBC5cb8A5651C902Cb06659907A93E574Db0B' as Address
+      const operation = createBaseLendingOperation(QuickActionType.Borrow, Lender.VENUS, TEST_AMOUNT_ETH, usdt_bnb, {
+        receiver: '0x77bD2F1cBcccdca1e63ca1B687E8b5d73710b0Ef' as Address,
+        composerAddress: BNB_COMPOSER,
+      })
+
+      const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
+
+      expect(result.calldata).toBe(
+        '0x30010f9f55d398326f99059ff775485246999027b319795500000000000000000de0b6b3a7640000816ebc5cb8a5651c902cb06659907a93e574db0bfd5840cd36d94d7229439859c0112a4185bc0255400155d398326f99059ff775485246999027b319795577bd2f1cbcccdca1e63ca1b687e8b5d73710b0ef0100000000000000000de0b6b3a7640000'
+      )
+      expect(result.value).toBe('0')
     })
   })
 
@@ -629,6 +677,55 @@ describe('composeDirectMoneyMarketAction', async () => {
       expect(result.calldata).toBe(
         '0x30030f9f42000000000000000000000000000000000000060000ffffffffffffffffffffffffffffcdef0a216fcef809258aa4f341db1a5ab296ea72b4104c02bbf4e9be85aaa41a62974e4e28d59a3340010000000000000000000000000000000000000000bada9c382165b31419f4cc0edf0fa84f80a3c8e50000000000000000000000000000000000'
       )
+    })
+
+    it('should create calldata for USDT repay to Venus', async () => {
+      const { usdt_bnb } = await createTestTokens()
+      const BNB_COMPOSER = '0x816EBC5cb8A5651C902Cb06659907A93E574Db0B' as Address
+      const repayAmount = '500000000000000000'
+      const operation = createBaseLendingOperation(QuickActionType.Repay, Lender.VENUS, repayAmount, usdt_bnb, {
+        receiver: '0x77bD2F1cBcccdca1e63ca1B687E8b5d73710b0Ef' as Address,
+        composerAddress: BNB_COMPOSER,
+        permitData: {
+          isPermit2: true,
+          data: '0x00000000000000000000000006f05b59d3b200006909bd5f000000026909bd5febef5bc6c23450a8a43b01724b8641158911946e61e4772990f3b82f77ce775cf4a2e0b80320005c45af55dc81dfc650fea8894300dd9566944346ce39831415' as Hex,
+        },
+      })
+
+      const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
+
+      expect(result.calldata).toBe(
+        '0x500055d398326f99059ff775485246999027b3197955006000000000000000000000000006f05b59d3b200006909bd5f000000026909bd5febef5bc6c23450a8a43b01724b8641158911946e61e4772990f3b82f77ce775cf4a2e0b80320005c45af55dc81dfc650fea8894300dd9566944346ce39831415400455d398326f99059ff775485246999027b3197955816ebc5cb8a5651c902cb06659907a93e574db0b000000000000000006f05b59d3b20000400555d398326f99059ff775485246999027b3197955fd5840cd36d94d7229439859c0112a4185bc025530020f9f55d398326f99059ff775485246999027b3197955000000000000000006f05b59d3b2000077bd2f1cbcccdca1e63ca1b687e8b5d73710b0effd5840cd36d94d7229439859c0112a4185bc0255'
+      )
+      expect(result.value).toBeUndefined()
+    })
+
+    it('should create calldata for USDT repay all to Venus', async () => {
+      const { usdt_bnb } = await createTestTokens()
+      const BNB_COMPOSER = '0x816EBC5cb8A5651C902Cb06659907A93E574Db0B' as Address
+
+      const operation = createBaseLendingOperation(
+        QuickActionType.Repay,
+        Lender.VENUS,
+        '1500001419090410071',
+        usdt_bnb,
+        {
+          isAll: true,
+          receiver: '0x77bD2F1cBcccdca1e63ca1B687E8b5d73710b0Ef' as Address,
+          composerAddress: BNB_COMPOSER,
+          permitData: {
+            isPermit2: true,
+            data: '0x00000000000000000000000014ebb88f5e33fbe96909b8eb000000016909b8eb311c91add552ef9516e623f508ef14abec962e05c26801ab8f95ce76f717d0f4d5a6707d921d8d24e0b3203d716e9098b4cc8bec2c9378f27ab7055492c84d70' as Hex,
+          },
+        }
+      )
+
+      const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
+
+      expect(result.calldata).toBe(
+        '0x500055d398326f99059ff775485246999027b3197955006000000000000000000000000014ebb88f5e33fbe96909b8eb000000016909b8eb311c91add552ef9516e623f508ef14abec962e05c26801ab8f95ce76f717d0f4d5a6707d921d8d24e0b3203d716e9098b4cc8bec2c9378f27ab7055492c84d70400455d398326f99059ff775485246999027b3197955816ebc5cb8a5651c902cb06659907a93e574db0b000000000000000014d26867766710d1400555d398326f99059ff775485246999027b3197955fd5840cd36d94d7229439859c0112a4185bc025530020f9f55d398326f99059ff775485246999027b31979550000ffffffffffffffffffffffffffff77bd2f1cbcccdca1e63ca1b687e8b5d73710b0effd5840cd36d94d7229439859c0112a4185bc0255400155d398326f99059ff775485246999027b319795577bd2f1cbcccdca1e63ca1b687e8b5d73710b0ef0000000000000000000000000000000000'
+      )
+      expect(result.value).toBeUndefined()
     })
   })
 
