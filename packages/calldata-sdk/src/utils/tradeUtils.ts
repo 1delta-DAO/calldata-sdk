@@ -4,14 +4,14 @@ import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 import { SwapObject } from './genericTrade'
 import { ChainIdLike, SerializedCurrencyAmount, SerializedSwapStep, SerializedTrade } from '@1delta/type-sdk'
 import { CurrencyUtils } from './currencyUtils'
-import { TradeType, BPS_BASE } from '../evm'
+import { TradeType, BPS_BASE, ShallowCurrencyAmount } from '../evm'
 
 export function getSplits(inputAmount: bigint, splitShares: bigint[]) {
   if (splitShares.length === 1) return '0x'
 
   const splitData = encodePacked(
     Array(splitShares.length - 1).fill('uint16'),
-    splitShares.slice(0, -1).map((share) => (share * maxUint16) / inputAmount),
+    splitShares.slice(0, -1).map((share) => (share * maxUint16) / inputAmount)
   ) as Hex
   return splitData
 }
@@ -36,8 +36,8 @@ export function isPreFundableDex(protocol: string): boolean {
 export function minimumAmountOutFromTrade(
   trade: SwapObject,
   slippageToleranceBps: string,
-  tradeType: TradeType,
-): SerializedCurrencyAmount {
+  tradeType: TradeType
+): ShallowCurrencyAmount {
   if (tradeType !== TradeType.EXACT_INPUT) {
     throw new Error('Only exact input trades are supported')
   }
@@ -106,8 +106,8 @@ export function getAssetOutFromTrade(trade: SwapObject | undefined) {
   return getAssetFromAmount(outputAmount)
 }
 
-export function getAssetFromAmount(amount: SerializedCurrencyAmount) {
-  return amount.currency.address
+export function getAssetFromAmount(amount: ShallowCurrencyAmount) {
+  return amount.currency.address?.toLowerCase()
 }
 
 export function getChainIdFromTrade(trade: SwapObject | undefined) {
@@ -130,8 +130,8 @@ export function getChainIdFromTrade(trade: SwapObject | undefined) {
 export function maximumAmountInFromTrade(
   trade: SwapObject,
   slippageToleranceBps: string,
-  tradeType = TradeType.EXACT_INPUT,
-): SerializedCurrencyAmount {
+  tradeType = TradeType.EXACT_INPUT
+): ShallowCurrencyAmount {
   const slippageToleranceBpsBigInt = BigInt(slippageToleranceBps)
   if (slippageToleranceBpsBigInt < 0n) {
     throw new Error('SLIPPAGE_TOLERANCE')
@@ -155,9 +155,9 @@ export function maximumAmountInFromTrade(
  * @returns The amount in
  */
 export function maximumAmountInFromAmount(
-  amount: SerializedCurrencyAmount | undefined,
+  amount: ShallowCurrencyAmount | undefined,
   slippageToleranceBps: string,
-  tradeType = TradeType.EXACT_INPUT,
+  tradeType = TradeType.EXACT_INPUT
 ): bigint | undefined {
   if (!amount) return undefined
   if (tradeType === TradeType.EXACT_INPUT) {

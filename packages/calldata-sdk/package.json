@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.102",
+  "version": "0.0.116",
   "description": "⚒️ An SDK for building calldata for 1delta smart contracts",
   "files": [
     "dist"
@@ -25,19 +25,19 @@
   },
   "dependencies": {
     "@1delta/calldatalib": "0.0.45",
-    "@1delta/data-sdk": "0.0.9",
+    "@1delta/data-sdk": "0.0.10",
     "@1delta/wnative": "^0.0.4",
     "lodash": "^4.17.21",
     "tiny-invariant": "^1.3.3",
     "tiny-warning": "^1.0.3",
-    "viem": "^2.38.4"
+    "viem": "^2.38.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.20",
-    "jsdom": "^27.0.1",
+    "jsdom": "^27.1.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.3"
+    "vitest": "^4.0.6"
   },
   "peerDependenciesMeta": {
     "test-routing": {

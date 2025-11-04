@@ -50,7 +50,8 @@ function buildDebasedInnerCall(
   proxyToken: Address,
   proxyAmount: bigint,
   intermediate: string,
-  flashRepayBalanceHolder: string
+  flashRepayBalanceHolder: string,
+  composerAddress: string
 ) {
   const { lender } = marginData
   const chainId = trade.inputAmount.currency.chainId
@@ -58,7 +59,9 @@ function buildDebasedInnerCall(
   // 1. Deposit proxy asset to lender (compound)
   const depositIntermediateCall = ComposerLendingActions.createDeposit({
     receiver: account,
-    amount: { asset: proxyToken, amount: proxyAmount, chainId },
+    asset: proxyToken,
+    amount: proxyAmount,
+    chainId,
     lender: lender,
     morphoParams: undefined,
     transferType: TransferToLenderType.Amount,
@@ -81,16 +84,15 @@ function buildDebasedInnerCall(
     intermediate, // <- the intermediate needs to be the composer (for maxIn)
     trade.inputAmount.amount.toString(), // <- the amount is unadjusted (no flash fee adjustmetn)
     isMaxIn, // flags as before
-    isMaxOut
+    isMaxOut,
+    composerAddress
   )
   // 3. Withdraw proxy asset from lender (compound) to repay flash loan
   const withdrawIntermediateCall = ComposerLendingActions.createWithdraw({
     receiver: flashRepayBalanceHolder,
-    amount: {
-      asset: proxyToken,
-      amount: proxyAmount,
-      chainId,
-    },
+    asset: proxyToken,
+    amount: proxyAmount,
+    chainId,
     lender: lender,
     morphoParams: undefined,
     transferType: TransferToLenderType.Amount,
@@ -234,7 +236,8 @@ export namespace ComposerMargin {
         proxyToken,
         proxyAsset!.amount ? BigInt(proxyAsset!.amount.toString()) : BigInt(trade.inputAmount.amount),
         intermediate,
-        flashRepayBalanceHolder
+        flashRepayBalanceHolder,
+        composerAddress
       )
 
       // Create context object compatible with regular flow
@@ -260,7 +263,8 @@ export namespace ComposerMargin {
         intermediate,
         flashLoanAmountWithFee,
         isMaxIn,
-        isMaxOut
+        isMaxOut,
+        composerAddress
       )
       context = result.context
       safetySweep = result.safetySweep
@@ -354,7 +358,8 @@ export namespace ComposerMargin {
           BigInt(inputReference.toString()),
           SweepType.AMOUNT
         )
-      } else // otherwise useregular transfer
+      } // otherwise useregular transfer
+      else
         transferToCallForwarder = encodeSweep(
           tokenIn,
           flashFundsReceiver as Address,

@@ -249,7 +249,7 @@ await fetchLenderMetaFromDirAndInitialize()
 describe('createMarginFlashLoan', () => {
   describe('Margin Trade Types', () => {
     it('should create flash loan for OPEN margin trade', () => {
-      const result = createZapInMargin(testObj)
+      const result = createZapInMargin(testObj as any)
       expect(result).not.toBe('0x')
     })
   })

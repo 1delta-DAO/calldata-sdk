@@ -1,20 +1,20 @@
-import { SerializedCurrency, SerializedCurrencyAmount } from "@1delta/type-sdk";
 import { zeroAddress } from "viem";
+import { ShallowCurrency, ShallowCurrencyAmount } from "../evm";
 
 export namespace CurrencyUtils {
-    export function getAmount(c: SerializedCurrencyAmount) {
+    export function getAmount(c: ShallowCurrencyAmount) {
         return BigInt(c.amount)
     }
 
-    export function isNative(c: SerializedCurrency) {
+    export function isNative(c: ShallowCurrency) {
         return c.address === zeroAddress
     }
 
-    export function isNativeAmount(c: SerializedCurrencyAmount) {
+    export function isNativeAmount(c: ShallowCurrencyAmount) {
         return c.currency.address === zeroAddress
     }
 
-    export function fromRawAmount(currency: SerializedCurrency, amount: bigint | string | number) {
+    export function fromRawAmount(currency: ShallowCurrency, amount: bigint | string | number) {
         return {
             currency,
             amount: String(amount)

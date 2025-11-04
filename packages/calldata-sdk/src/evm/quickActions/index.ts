@@ -1,4 +1,3 @@
-import { SerializedCurrencyAmount } from '@1delta/type-sdk'
 import { CurrencyUtils, getChainIdFromTrade } from '../../utils'
 import {
   ComposerLendingActions,
@@ -9,6 +8,7 @@ import {
   isAaveType,
   QuickActionType,
   isNativeAddress,
+  ShallowCurrencyAmount,
 } from '../lending'
 import { ComposerSpot, EVMCallParams, getComposerAddress, validateExactInputTrade } from '..'
 import {
@@ -47,14 +47,11 @@ export namespace ComposerQuickActions {
       permitData,
     })
 
-    const depositAmount: SerializedCurrencyAmount = {
-      currency: trade.outputAmount.currency,
-      amount: '0',
-    }
-
     const depositCalldata = ComposerLendingActions.createDeposit({
       receiver,
-      amount: depositAmount,
+      asset: trade.outputAmount.currency.address,
+      chainId,
+      amount: 0n,
       lender,
       morphoParams,
       transferType: TransferToLenderType.ContractBalance,
@@ -102,14 +99,11 @@ export namespace ComposerQuickActions {
       permitData,
     })
 
-    const repayAmount: SerializedCurrencyAmount = {
-      currency: trade.outputAmount.currency,
-      amount: CurrencyUtils.getAmount(trade.outputAmount).toString(),
-    }
-
     const repayCalldata = ComposerLendingActions.createRepay({
       receiver,
-      amount: repayAmount,
+      amount: CurrencyUtils.getAmount(trade.outputAmount),
+      asset: trade.outputAmount.currency.address,
+      chainId,
       lender,
       aaveInterestMode,
       morphoParams,
@@ -150,11 +144,6 @@ export namespace ComposerQuickActions {
     const composerAddress = composer ?? getComposerAddress(chainId)
     const lenderData = getLenderData(lender, chainId, trade.inputAmount.currency.address)
 
-    const borrowAmount: SerializedCurrencyAmount = {
-      currency: trade.inputAmount.currency,
-      amount: CurrencyUtils.getAmount(trade.inputAmount).toString(),
-    }
-
     // create permit calldata
     let permitCalldata: Hex = '0x'
     if (permitData) {
@@ -173,7 +162,9 @@ export namespace ComposerQuickActions {
 
     const borrowCalldata = ComposerLendingActions.createBorrow({
       receiver: borrowReceiver,
-      amount: borrowAmount,
+      chainId,
+      asset: trade.inputAmount.currency.address,
+      amount: CurrencyUtils.getAmount(trade.inputAmount),
       lender,
       aaveInterestMode,
       morphoParams,
@@ -232,11 +223,6 @@ export namespace ComposerQuickActions {
     const composerAddress = composer ?? getComposerAddress(chainId)
     const lenderData = getLenderData(lender, chainId, trade.inputAmount.currency.address)
 
-    const withdrawAmount: SerializedCurrencyAmount = {
-      currency: trade.inputAmount.currency,
-      amount: CurrencyUtils.getAmount(trade.inputAmount).toString(),
-    }
-
     // create permit calldata
     let permitCalldata: Hex = '0x'
     if (permitData) {
@@ -262,7 +248,9 @@ export namespace ComposerQuickActions {
 
     const withdrawCalldata = ComposerLendingActions.createWithdraw({
       receiver: withdrawReceiver,
-      amount: withdrawAmount,
+      asset: trade.inputAmount.currency.address,
+      chainId,
+      amount: CurrencyUtils.getAmount(trade.inputAmount),
       lender,
       transferType: withdrawMaximum ? TransferToLenderType.UserBalance : TransferToLenderType.Amount,
       morphoParams,

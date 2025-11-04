@@ -1,11 +1,10 @@
 import { Address, encodePacked, Hex, zeroAddress } from 'viem'
 import {
-  createBorrowParams,
+  CreateBorrowParams,
   CreateDepositParams,
   CreateRepayParams,
-  createWithdrawParams,
+  CreateWithdrawParams,
   LenderGroups,
-  OverrideAmount,
   TransferToLenderType,
 } from '../types'
 import {
@@ -27,7 +26,6 @@ import {
   CompoundV2Selector,
 } from '@1delta/calldatalib'
 import {
-  getAssetParamsFromAmount,
   getCollateralToken,
   getDebtToken,
   getIsBaseToken,
@@ -37,12 +35,11 @@ import {
   isNativeAddress,
 } from '../utils'
 import { UINT112_MAX } from '../consts'
-import { Lender } from '@1delta/lender-registry'
-import { SerializedCurrencyAmount } from '@1delta/type-sdk'
+import { Lender, VENUS_LENDERS } from '@1delta/lender-registry'
 import { isCompoundV2, isMorphoType } from '../../flashloan'
 
 function isVenusType(lender: string) {
-  return lender.startsWith('VENUS')
+  return VENUS_LENDERS.includes(lender as any)
 }
 
 /** Yldr is lieke aave, just with no borrow mode */
@@ -51,32 +48,20 @@ function isYldr(lender: string) {
 }
 
 export namespace ComposerLendingActions {
-  function getAssetData(amount: SerializedCurrencyAmount | OverrideAmount, lender: Lender) {
-    if (isOverrideAmount(amount)) {
-      return {
-        asset: amount.asset,
-        lenderData: getLenderData(lender, amount.chainId, amount.asset),
-      }
-    }
-    const { asset, chainId } = getAssetParamsFromAmount(amount as SerializedCurrencyAmount)
-    return {
-      asset: asset,
-      lenderData: getLenderData(lender, chainId, asset),
-    }
-  }
-
-  function isOverrideAmount(amount: SerializedCurrencyAmount | OverrideAmount): amount is OverrideAmount {
-    return 'asset' in amount && 'amount' in amount && 'chainId' in amount && !!amount.asset && !!amount.chainId
-  }
-
   export function createDeposit(params: CreateDepositParams) {
-    const { receiver, amount, lender, morphoParams, transferType = TransferToLenderType.Amount, useOverride } = params
-    const { asset, lenderData } = isOverrideAmount(amount)
-      ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) }
-      : getAssetData(amount, lender)
+    const {
+      receiver,
+      amount,
+      lender,
+      morphoParams,
+      chainId,
+      transferType = TransferToLenderType.Amount,
+      useOverride,
+      asset,
+    } = params
 
     if (transferType === TransferToLenderType.UserBalance) throw new Error('Cannot deposit user balance')
-    let amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount)
+    let amountUsed = amount
     if (transferType === TransferToLenderType.ContractBalance) amountUsed = 0n // deposit balance
 
     // handle morpho case
@@ -108,6 +93,7 @@ export namespace ComposerLendingActions {
       )
     }
 
+    const lenderData = getLenderData(lender, chainId, asset)
     const pool = useOverride?.pool ?? getPool(lenderData)
 
     if (!pool) {
@@ -126,7 +112,7 @@ export namespace ComposerLendingActions {
           encodeCompoundV2SelectorId(
             amountUsed,
             // MINT_BEHALF for VENUS & forks, otherwise MINT
-            isVenusType(lender) && !isNativeAddress(asset) ? CompoundV2Selector.MINT_BEHALF : CompoundV2Selector.MINT
+            !isVenusType(lender) || isNativeAddress(asset) ? CompoundV2Selector.MINT : CompoundV2Selector.MINT_BEHALF
           ),
           receiver as Address,
           pool as Address,
@@ -148,12 +134,20 @@ export namespace ComposerLendingActions {
     )
   }
 
-  export function createWithdraw(params: createWithdrawParams) {
-    const { receiver, amount, lender, transferType = TransferToLenderType.Amount, morphoParams, useOverride } = params
-    const { asset, lenderData } = isOverrideAmount(amount)
-      ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) }
-      : getAssetData(amount, lender)
-    let amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount)
+  export function createWithdraw(params: CreateWithdrawParams) {
+    const {
+      receiver,
+      amount,
+      lender,
+      transferType = TransferToLenderType.Amount,
+      morphoParams,
+      useOverride,
+      asset,
+      chainId,
+    } = params
+    const lenderData = getLenderData(lender, chainId, asset)
+
+    let amountUsed = amount
     if (transferType === TransferToLenderType.UserBalance) amountUsed = UINT112_MAX // withdraw max
 
     if (transferType === TransferToLenderType.ContractBalance) throw new Error('Cannot withdraw contract balance')
@@ -183,19 +177,6 @@ export namespace ComposerLendingActions {
         if (!collateralToken) {
           throw new Error('collateralToken should be defined for CompoundV2 withdrawals')
         }
-        encodePacked(
-          ['uint8', 'uint8', 'uint16', 'address', 'uint128', 'address', 'address'],
-          [
-            ComposerCommands.LENDING,
-            LenderOps.WITHDRAW,
-            getLenderId(lenderData.group),
-            asset as Address,
-            // we leave the all-supported REDEEM here for now
-            encodeCompoundV2SelectorId(amountUsed, CompoundV2Selector.REDEEM),
-            receiver as Address,
-            collateralToken as Address,
-          ]
-        )
         return encodePacked(['bytes', 'address'], [genericPart, collateralToken as Address])
       case LenderGroups.CompoundV3:
         const isBase = getIsBaseToken(lenderData, asset)
@@ -227,15 +208,13 @@ export namespace ComposerLendingActions {
     }
   }
 
-  export function createBorrow(params: createBorrowParams) {
-    const { receiver, amount, lender, aaveInterestMode: mode, morphoParams, useOverride } = params
-    const { asset, lenderData } = isOverrideAmount(amount)
-      ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) }
-      : getAssetData(amount, lender)
+  export function createBorrow(params: CreateBorrowParams) {
+    const { receiver, amount, lender, aaveInterestMode: mode, morphoParams, useOverride, chainId, asset } = params
+    const lenderData = getLenderData(lender, chainId, asset)
 
     if (isNativeAddress(asset)) throw new Error('Cannot delegate native borrowing')
 
-    const amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount)
+    const amountUsed = amount
 
     const pool = useOverride?.pool ?? getPool(lenderData)
 
@@ -291,11 +270,11 @@ export namespace ComposerLendingActions {
       morphoParams,
       transferType = TransferToLenderType.Amount,
       useOverride,
+      asset,
+      chainId,
     } = params
-    let amountUsed = isOverrideAmount(amount) ? amount.amount : BigInt(amount.amount)
-    const { asset, lenderData } = isOverrideAmount(amount)
-      ? { asset: amount.asset, lenderData: getLenderData(lender, amount.chainId, amount.asset) }
-      : getAssetData(amount, lender)
+    let amountUsed = amount
+    const lenderData = getLenderData(lender, chainId, asset)
 
     const pool = useOverride?.pool ?? getPool(lenderData)
     const collateralToken = useOverride?.collateralToken ?? getCollateralToken(lenderData)

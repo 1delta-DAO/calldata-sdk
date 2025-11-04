@@ -1,7 +1,6 @@
 import { Address, Hex, zeroAddress } from 'viem'
-import { encodeSweep, SweepType, encodePermit, PermitIds, encodeUnwrap, encodeWrap } from '@1delta/calldatalib'
+import { encodeSweep, SweepType, encodePermit, PermitIds, encodeWrap } from '@1delta/calldatalib'
 import {
-  ComposerLendingActions,
   TransferToLenderType,
   adjustAmountForAll,
   getCollateralToken,
@@ -13,10 +12,15 @@ import {
   isAaveType,
   packCommands,
   isNativeAddress,
+  ComposerLendingActions,
+  CreateWithdrawParams,
+  safeEncodeWrap,
 } from '../../lending'
 import { HandleRepayParams, HandleWithdrawParams } from '../types'
 import { isAave } from '../utils'
 import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
+import { Lender } from '@1delta/lender-registry'
+import { Chain } from '@1delta/chain-registry'
 
 /**
  * Parametrize a repay transaction for margin.
@@ -42,7 +46,9 @@ export function handleRepay(params: HandleRepayParams) {
 
     context.callIn = ComposerLendingActions.createRepay({
       receiver: account,
-      amount: { asset: tokenOut.address, amount: BigInt(amount), chainId: tokenOut.chainId },
+      asset: tokenOut.address,
+      amount: BigInt(amount),
+      chainId: tokenOut.chainId,
       lender,
       aaveInterestMode: marginData.irModeOut,
       morphoParams,
@@ -58,7 +64,9 @@ export function handleRepay(params: HandleRepayParams) {
   } else {
     context.callIn = ComposerLendingActions.createRepay({
       receiver: account,
-      amount: { asset: tokenOut.address, amount: BigInt(repayAmount), chainId: tokenOut.chainId },
+      asset: tokenOut.address,
+      amount: BigInt(repayAmount),
+      chainId: tokenOut.chainId,
       lender,
       aaveInterestMode: marginData.irModeOut,
       morphoParams,
@@ -98,6 +106,7 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     context,
     morphoParams,
     permitData,
+    composerAddress,
   } = params
 
   // do the conversion here for simplicity
@@ -135,13 +144,17 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     // transfer what is needed tof flash source
     // sweep leftovers to caller
 
-    const withdrawCalldata = ComposerLendingActions.createWithdraw({
+    const withdrawCalldata = createWithdrawWrapped({
       receiver: intermediate, // intermediate receives funds
-      amount: { asset: tokenIn.address, amount: 0n, chainId: tokenIn.chainId }, // amount is ignored in this case
+      asset: tokenIn.address,
+      amount: 0n,
+      chainId: tokenIn.chainId,
       lender,
       transferType: TransferToLenderType.UserBalance,
       morphoParams,
       useOverride,
+      composerAddress,
+      wnative,
     })
 
     // add permit to withdraw
@@ -181,13 +194,17 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     if (inputIsNative) {
       withdrawCalldata = packCommands([
         // we withdraw native to the intermediate (composer)
-        ComposerLendingActions.createWithdraw({
+        createWithdrawWrapped({
           receiver: intermediate,
-          amount: { asset: zeroAddress, amount: flashLoanAmountWithFeeBigInt, chainId: tokenIn.chainId },
+          asset: zeroAddress,
+          amount: flashLoanAmountWithFeeBigInt,
+          chainId: tokenIn.chainId,
           lender,
           transferType: TransferToLenderType.Amount,
           morphoParams,
           useOverride,
+          composerAddress,
+          wnative,
         }),
         // then wrap to wnative - note that the do not need to sweep here
         encodeWrap(flashLoanAmountWithFeeBigInt, wnative),
@@ -199,13 +216,17 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     } else {
       // the most common case - withdraw ERC20 directly to whatever the target is
       // skips self-transfers
-      withdrawCalldata = ComposerLendingActions.createWithdraw({
+      withdrawCalldata = createWithdrawWrapped({
         receiver: flashRepayBalanceHolder,
-        amount: { asset: tokenIn.address, amount: flashLoanAmountWithFeeBigInt, chainId: tokenIn.chainId },
+        asset: tokenIn.address,
+        amount: flashLoanAmountWithFeeBigInt,
+        chainId: tokenIn.chainId,
         lender,
         transferType: TransferToLenderType.Amount,
         morphoParams,
         useOverride,
+        composerAddress,
+        wnative,
       })
     }
 
@@ -213,4 +234,50 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     context.callOut = packCommands([permitCall, withdrawCalldata])
   }
   return context
+}
+
+/** wrapped function to handle some special cases */
+function createWithdrawWrapped(params: CreateWithdrawParams & { composerAddress: string; wnative: string }) {
+  const {
+    asset,
+    amount,
+    lender,
+    morphoParams,
+    useOverride,
+    chainId,
+    receiver,
+    composerAddress,
+    transferType,
+    wnative,
+  } = params
+
+  // normal case
+  if (lender !== Lender.MOONWELL || asset !== wnative || chainId === Chain.MOONBEAM) {
+    return ComposerLendingActions.createWithdraw({
+      receiver,
+      asset,
+      amount,
+      chainId,
+      lender,
+      transferType,
+      morphoParams,
+      useOverride,
+    })
+  }
+
+  // moonwell wnative withdrawal -> we undo the manual unwrap
+  const withdraw = ComposerLendingActions.createWithdraw({
+    receiver: composerAddress,
+    asset,
+    amount,
+    chainId,
+    lender,
+    transferType,
+    morphoParams,
+    useOverride,
+  })
+  const wrap = safeEncodeWrap(0n, wnative as any)
+  const sweep = encodeSweep(wnative as any, receiver as any, 0n, SweepType.VALIDATE)
+
+  return packCommands([withdraw, wrap, sweep])
 }

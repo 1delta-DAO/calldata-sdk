@@ -1,5 +1,5 @@
 import { Address, Hex } from 'viem'
-import { ChainIdLike, SerializedCurrencyAmount } from '@1delta/type-sdk'
+import { ChainIdLike } from '@1delta/type-sdk'
 import {
   adjustForFlashLoanFee,
   createFlashLoan,
@@ -30,7 +30,7 @@ import {
   encodeWrap,
 } from '@1delta/calldatalib'
 import { ONE_DELTA_COMPOSER } from '../../consts'
-import { getFlashInfo, getLenderData, packCommands } from '../../lending'
+import { getFlashInfo, getLenderData, isNativeAddress, packCommands, ShallowCurrencyAmount } from '../../lending'
 import { buildMarginInnerCall, handlePendle } from '../margin/utils'
 import { HandleMarginParams, FlashInfo } from '../types/marginHandlers'
 import { GenericTrade } from '../../../utils'
@@ -40,7 +40,7 @@ import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 
 export interface ZapInParams extends HandleMarginParams {
   /** flash loan amount for debt-asset path */
-  userPayAmount: SerializedCurrencyAmount
+  userPayAmount: ShallowCurrencyAmount
   /** Optional user token permit for debt-asset path */
   userPermit?: { data: Hex; isPermit2?: boolean }
   /** Optional: multiple trades, if omitted, uses single trade */
@@ -100,21 +100,19 @@ export function createZapInMargin({
 
   const wnativeAddress = WRAPPED_NATIVE_INFO[userPayAmount.currency.chainId]?.address?.toLowerCase()
 
+  const lenderAssetIsNative = isNativeAddress(tokenOut!)
+
   // detect whether the user asset matches the collateral or debt (we convert to wnative)
   let userAssetIsCollateral: boolean
   if (CurrencyUtils.isNativeAmount(userPayAmount)) {
-    userAssetIsCollateral = wnativeAddress === trade?.outputAmount.currency.address.toLowerCase()
+    userAssetIsCollateral = wnativeAddress === tokenOut || lenderAssetIsNative
     // throw if it does not match either
-    if (!userAssetIsCollateral && wnativeAddress !== trade?.inputAmount.currency.address.toLowerCase())
+    if (!userAssetIsCollateral && wnativeAddress !== tokenIn)
       throw new Error('Pay token is neither collateral nor debt')
   } else {
-    userAssetIsCollateral =
-      userPayAmount.currency.address.toLowerCase() === trade?.outputAmount.currency.address.toLowerCase()
+    userAssetIsCollateral = userPayAmount.currency.address.toLowerCase() === tokenOut
     // throw if it does not match either
-    if (
-      !userAssetIsCollateral &&
-      userPayAmount.currency.address.toLowerCase() !== trade?.inputAmount.currency.address.toLowerCase()
-    )
+    if (!userAssetIsCollateral && userPayAmount.currency.address.toLowerCase() !== tokenIn)
       throw new Error('Pay token is neither collateral nor debt')
   }
 
@@ -142,7 +140,8 @@ export function createZapInMargin({
     composerAddress,
     flashLoanAmountWithFee,
     isMaxIn,
-    isMaxOut
+    isMaxOut,
+    composerAddress
   )
 
   // pre-funding calldata
@@ -152,7 +151,8 @@ export function createZapInMargin({
     userPermit,
     selectedExternal,
     composerAddress,
-    wnativeAddress
+    wnativeAddress,
+    lenderAssetIsNative
   )
 
   let sweepOutputCalldata: Hex = '0x'
@@ -286,11 +286,12 @@ function getFlashLoanData(
  */
 function getPaymentCalldata(
   userAssetIsCollateral: boolean,
-  userPayAmount: SerializedCurrencyAmount,
+  userPayAmount: ShallowCurrencyAmount,
   userPermit: { data: Hex; isPermit2?: boolean } | undefined,
   selectedExternal: ExternalCallParams,
   composer: string,
-  wnativeAddress: string
+  wnativeAddress: string,
+  lenderAssetIsNative: boolean
 ) {
   let paymentCalldata: Hex = '0x'
 
@@ -322,8 +323,10 @@ function getPaymentCalldata(
     // native case is more specific -> wrap and send wnative to call forwarder for swap
     else {
       paymentCalldata = packCommands([
-        // wrap
-        encodeWrap(userPayAmount.amount as any, wnativeAddress as any),
+        // wrap if lender target pool is not native (collateral case only)
+        userAssetIsCollateral && lenderAssetIsNative
+          ? '0x'
+          : encodeWrap(userPayAmount.amount as any, wnativeAddress as any),
         userAssetIsCollateral
           ? '0x' // no data if collateral, otherwise sweep to payer
           : encodeSweep(wnativeAddress as any, payFundsReceiver as any, userPayAmount.amount as any, SweepType.AMOUNT),

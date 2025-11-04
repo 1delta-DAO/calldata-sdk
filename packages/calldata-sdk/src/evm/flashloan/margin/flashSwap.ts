@@ -8,14 +8,13 @@ import {
 } from '@1delta/calldatalib'
 import {
   ChainIdLike,
-  SerializedCurrencyAmount,
   SerializedPool,
   SerializedSwapStep,
   SerializedTrade
 } from '@1delta/type-sdk'
 import {
   MarginData,
-  PRE_FUNDABLE_DEXES,
+  ShallowCurrencyAmount,
   TradeType,
   getComposerAddress,
   getLenderData,
@@ -185,7 +184,8 @@ function produceInnerCall(
     composer, // interdediate for max withdraw
     amount.toString(), // no flash fee
     isMaxIn,
-    isMaxOut
+    isMaxOut,
+    composer
   )
 
   let poolPayments = "0x"
@@ -207,7 +207,7 @@ function sliceSwapStep(step: SerializedSwapStep): SerializedSwapStep | undefined
   const path = step.route.path.slice(1)
   const pools = step.route.pools.slice(1)
   return {
-    inputAmount: CurrencyUtils.fromRawAmount(path[0], 0n),
+    inputAmount: CurrencyUtils.fromRawAmount(path[0], 0n) as any,
     outputAmount: step.outputAmount,
     route: {
       path,
@@ -221,7 +221,7 @@ interface FlashSwapInstruction {
   pool: SerializedPool,
   remainingPath: SerializedSwapStep | undefined
   preFunded: boolean,
-  minimumOut: SerializedCurrencyAmount
+  minimumOut: ShallowCurrencyAmount
 }
 
 
@@ -374,7 +374,7 @@ export namespace ComposerFlashSwap {
       slippageTolerance!,
       composerAddress,
       packCommands([
-        context.callIn, // poll funds from lender (e.g. withdraw / borrow)
+        context.callIn, // pull funds from lender (e.g. withdraw / borrow)
         context.callOut, // received handling (e.g. deposit)
         poolPayments, // distribute funds to pools
         context.cleanup // refund excess inputs

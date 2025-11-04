@@ -1,9 +1,7 @@
 import { Address } from 'viem'
 import { MarginData } from '../types'
-import { ExternalCallParams, FlashLoanProvider, FlashLoanProviderData, GenericTrade } from '../..'
+import { ExternalCallParams, FlashLoanProvider, FlashLoanProviderData, GenericTrade, ShallowCurrencyAmount } from '../..'
 import { FlashLoanIds } from '@1delta/calldatalib'
-import { SerializedCurrencyAmount } from '@1delta/type-sdk'
-
 export interface FlashInfo {
   data: FlashLoanProviderData
   poolType: FlashLoanIds | undefined
@@ -11,7 +9,7 @@ export interface FlashInfo {
   providerAddress?: string
   balanceHolder?: string
   /** The intermediate asset to use for de-based flash loan, if amount is set to zero, then inputAmount will be used */
-  proxyAsset?: SerializedCurrencyAmount | undefined
+  proxyAsset?: ShallowCurrencyAmount | undefined
 }
 export interface HandleMarginParams {
   /** swap object */

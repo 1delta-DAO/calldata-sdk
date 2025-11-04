@@ -1,4 +1,4 @@
-import { Address, Hex } from 'viem'
+import { Address, Hex, zeroAddress } from 'viem'
 import {
   PermitIds,
   SweepType,
@@ -16,7 +16,6 @@ import {
   TransferToLenderType,
   adjustAmountForAll,
   getPermitAsset,
-  getAssetParamsFromAmount,
   getLenderData,
   isAaveType,
   packCommands,
@@ -24,24 +23,38 @@ import {
   NO_VALUE,
   AaveInterestMode,
   isNativeAddress,
+  isMoonwellWNativeTransferOut,
+  safeEncodeWrap,
 } from '..'
 
 import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 import { isCompoundV2 } from '../../flashloan'
 
-function validateCompoundV2(callerAssetAddress: string, wrappedNative: string, lender: string) {
+function validateCompoundV2WnativePayment(callerAssetAddress: string, wrappedNative: string, lender: string) {
   if (callerAssetAddress !== wrappedNative) throw new Error('caller asset needs to be wNative')
   if (!isCompoundV2(lender as any)) throw new Error('only compoundV2 types support native asset')
 }
 
+function validateCompoundV2Lender(lender: string) {
+  if (!isCompoundV2(lender as any)) throw new Error('only compoundV2 types support native asset')
+}
+
+/**
+ * Single entrypoint for direct lending actions
+ * Always through the composer.
+ * Handles wrap and unwrap based on user specified asset addresses
+ */
 export namespace ComposerDirectLending {
   export function composeDirectMoneyMarketAction(op: LendingOperation): { calldata: Hex; value: string | undefined } {
-    if (!op.params.amount) {
+    if (!op.amount) {
       throw new Error('No amount is provided')
     }
 
     const {
       params,
+      chainId,
+      amount,
+      lender,
       receiver,
       isAll,
       actionType,
@@ -53,48 +66,61 @@ export namespace ComposerDirectLending {
     } = op
 
     const isPermit2 = permitData?.isPermit2
-    const { asset, rawAmount, chainId } = getAssetParamsFromAmount(params.amount)
 
-    const lenderData: LenderData = getLenderData(params.lender, chainId, asset)
+    const lenderData: LenderData = getLenderData(lender as any, chainId, lenderAssetAddress)
 
     let value: string | undefined = undefined
     let permitCall = '0x'
     const wrappedNative = WRAPPED_NATIVE_INFO[chainId].address as Address
 
+    // native flags
+    const userAssetIsNative = isNativeAddress(callerAssetAddress)
+    const lenderAssetIsNative = isNativeAddress(lenderAssetAddress)
+
+    // validate them for sanity
+    if (userAssetIsNative && !lenderAssetIsNative && lenderAssetAddress.toLowerCase() !== wrappedNative)
+      throw new Error('Wrong corresponding pool for native caller asset')
+
+    if (lenderAssetIsNative && !userAssetIsNative && callerAssetAddress.toLowerCase() !== wrappedNative)
+      throw new Error('Wrong corresponding caller asset for native pool')
+
     switch (actionType) {
       case QuickActionType.Deposit: {
         const depo = ComposerLendingActions.createDeposit({
           receiver,
-          amount: params.amount,
-          lender: params.lender,
+          amount,
+          asset: lenderAssetAddress,
+          chainId,
+          lender: lender as any,
           morphoParams,
           transferType: TransferToLenderType.Amount,
         })
         let transferCall: string
-        let unwrapCall = '0x' // unwrap if it is e.g. WETH->cETH
+        let unwrapCall = '0x'
         // nonnative case
-        if (!isNativeAddress(callerAssetAddress)) {
+        if (!userAssetIsNative) {
+          // unwrap if it is e.g. WETH->cETH
           // native pool: Compound V2 only
-          if (isNativeAddress(lenderAssetAddress)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, params.lender)
+          if (lenderAssetIsNative) {
+            validateCompoundV2WnativePayment(callerAssetAddress, wrappedNative, lender)
             // add unwrap call to get native
-            unwrapCall = encodeUnwrap(wrappedNative, composerAddress as Address, BigInt(rawAmount), SweepType.AMOUNT)
+            unwrapCall = encodeUnwrap(wrappedNative, composerAddress as Address, amount, SweepType.AMOUNT)
           }
           transferCall = isPermit2
-            ? encodePermit2TransferFrom(asset as Address, composerAddress as Address, BigInt(rawAmount))
-            : encodeTransferIn(asset as Address, composerAddress as Address, BigInt(rawAmount))
+            ? encodePermit2TransferFrom(callerAssetAddress as Address, composerAddress as Address, amount)
+            : encodeTransferIn(callerAssetAddress as Address, composerAddress as Address, amount)
           if (permitData && permitData.data !== '0x') {
-            permitCall = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), asset as Address, permitData.data)
+            permitCall = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), callerAssetAddress as Address, permitData.data)
           }
         } else {
-          // native pool: Compound V2 only
-          if (isNativeAddress(lenderAssetAddress)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, params.lender)
+          // native pool: Compound V2 only ETH->cETH
+          if (lenderAssetIsNative) {
+            validateCompoundV2Lender(lender)
             transferCall = '0x' // no transfer needed
           } else {
-            transferCall = encodeWrap(BigInt(rawAmount), wrappedNative)
+            transferCall = encodeWrap(amount, wrappedNative)
           }
-          value = rawAmount.toString()
+          value = amount.toString()
         }
         return {
           calldata: packCommands([permitCall, transferCall, unwrapCall, depo]),
@@ -104,33 +130,83 @@ export namespace ComposerDirectLending {
       case QuickActionType.Withdraw: {
         const [amountToUse, withdrawType, sweepType] = isAll
           ? [NO_VALUE, TransferToLenderType.UserBalance, SweepType.VALIDATE]
-          : [rawAmount, TransferToLenderType.Amount, SweepType.AMOUNT]
-        let intermediateReceiver = composerAddress
+          : [amount, TransferToLenderType.Amount, SweepType.AMOUNT]
 
-        const withdraw = ComposerLendingActions.createWithdraw({
-          receiver: intermediateReceiver,
-          amount: params.amount,
-          lender: params.lender,
-          transferType: withdrawType,
-          morphoParams,
-        })
+        // create withdraw call with adjustable receiver
+        const withdraw = (withdrawReceiver: string) =>
+          ComposerLendingActions.createWithdraw({
+            receiver: withdrawReceiver,
+            amount,
+            chainId,
+            asset: lenderAssetAddress,
+            lender: lender as any,
+            transferType: withdrawType,
+            morphoParams,
+          })
+        let withdrawCall: string
         let transferCall: string
-        if (!isNativeAddress(callerAssetAddress)) {
+        if (!userAssetIsNative) {
           // native pool: Compound V2 only: Handle cETH->WETH
-          if (isNativeAddress(lenderAssetAddress)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, params.lender)
+          if (lenderAssetIsNative) {
+            // simple withdraw to composer
+            withdrawCall = withdraw(composerAddress)
+            // validate payment
+            validateCompoundV2WnativePayment(callerAssetAddress, wrappedNative, lender)
             // add unwrap call
-            transferCall = encodeUnwrap(wrappedNative, receiver as Address, BigInt(rawAmount), sweepType)
+            transferCall = packCommands([
+              encodeWrap(BigInt(amountToUse), wrappedNative), // ETH->WETH
+              encodeSweep(wrappedNative as Address, receiver as Address, BigInt(amountToUse), sweepType), // WETH->caller
+            ])
           } else {
-            transferCall = encodeSweep(asset as Address, receiver as Address, BigInt(amountToUse), sweepType)
+            if (
+              callerAssetAddress === wrappedNative &&
+              isMoonwellWNativeTransferOut(lender, lenderAssetAddress, wrappedNative, chainId)
+            ) {
+              withdrawCall = packCommands([
+                withdraw(composerAddress), // withdraw native to composer
+                safeEncodeWrap(0n, wrappedNative), // wrap to wnative (balanceOf)
+              ])
+              transferCall = encodeSweep(
+                callerAssetAddress as Address,
+                receiver as Address,
+                BigInt(amountToUse),
+                sweepType
+              ) // sweep wnative to receiver
+            } else {
+              // TODO: directly withdraw to receiver
+              withdrawCall = withdraw(composerAddress)
+              transferCall = encodeSweep(
+                lenderAssetAddress as Address,
+                receiver as Address,
+                BigInt(amountToUse),
+                sweepType
+              )
+            }
           }
         } else {
           // native pool: Compound V2 only
-          if (isNativeAddress(lenderAssetAddress)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, params.lender)
-            transferCall = '0x' // no transfer needed
+          if (lenderAssetIsNative) {
+            withdrawCall = withdraw(composerAddress)
+            // validate that the pool is compound V2 - the only case where this can happen
+            validateCompoundV2Lender(lender)
+            // sweep native
+            transferCall = encodeSweep(
+              lenderAssetAddress as Address,
+              receiver as Address,
+              BigInt(amountToUse),
+              sweepType
+            )
           } else {
-            transferCall = encodeUnwrap(wrappedNative, receiver as Address, BigInt(amountToUse), sweepType)
+            // wnative -> native
+            if (isMoonwellWNativeTransferOut(lender, lenderAssetAddress, wrappedNative, chainId)) {
+              // moonwell will auto-unwrap to receiver
+              withdrawCall = withdraw(composerAddress)
+              transferCall = encodeSweep(zeroAddress, receiver as Address, BigInt(amountToUse), sweepType)
+            } else {
+              withdrawCall = withdraw(composerAddress)
+              // ERC20-ERC20 -> plain sweep
+              transferCall = encodeUnwrap(wrappedNative, receiver as Address, BigInt(amountToUse), sweepType)
+            }
           }
         }
         if (permitData && permitData.data !== '0x') {
@@ -146,7 +222,7 @@ export namespace ComposerDirectLending {
         }
 
         return {
-          calldata: packCommands([permitCall, withdraw, transferCall]),
+          calldata: packCommands([permitCall, withdrawCall, transferCall]),
           value: NO_VALUE,
         }
       }
@@ -159,18 +235,22 @@ export namespace ComposerDirectLending {
 
         const borrow = ComposerLendingActions.createBorrow({
           receiver: intermediateReceiver,
-          amount: params.amount,
-          lender: params.lender,
+          amount,
+          lender: lender as any,
           aaveInterestMode: params.aaveBorrowMode,
           morphoParams,
+          asset: lenderAssetAddress,
+          chainId,
         })
         let transferCall: string
-        if (!isNativeAddress(callerAssetAddress)) {
-          transferCall = encodeSweep(asset as Address, receiver as Address, BigInt(rawAmount), SweepType.AMOUNT)
+        // handle the caller asset details
+        if (!userAssetIsNative) {
+          transferCall = encodeSweep(callerAssetAddress as Address, receiver as Address, amount, SweepType.AMOUNT)
         } else {
-          if (isNativeAddress(asset)) throw new Error('Borrowing native via smart contract: not supported')
-          transferCall = encodeUnwrap(wrappedNative, receiver as Address, BigInt(rawAmount), SweepType.AMOUNT)
+          if (lenderAssetIsNative) throw new Error('Borrowing native via smart contract: not supported')
+          transferCall = encodeUnwrap(wrappedNative, receiver as Address, amount, SweepType.AMOUNT)
         }
+        // handle permit
         if (permitData && permitData.data !== '0x') {
           const permitAsset = getPermitAsset(lenderData.group, lenderData, params.aaveBorrowMode)
           if (permitAsset)
@@ -187,37 +267,45 @@ export namespace ComposerDirectLending {
         }
       }
       case QuickActionType.Repay: {
-        const adjustedAmount = adjustAmountForAll(rawAmount, isAll)
+        const adjustedAmount = adjustAmountForAll(amount, isAll)
 
         const repay = ComposerLendingActions.createRepay({
           receiver,
-          amount: params.amount,
-          lender: params.lender,
+          amount,
+          lender: lender as any,
           aaveInterestMode: params.aaveBorrowMode,
           morphoParams,
+          asset: lenderAssetAddress,
+          chainId,
           transferType:
             isAll && !isAaveType(lenderData.group) ? TransferToLenderType.UserBalance : TransferToLenderType.Amount,
         })
 
         let transferCall: string
         let unwrapCall = '0x' // only compound V2s might need unwrap for e.g. WETH->cETH repays
-        const payWithNative = isNativeAddress(callerAssetAddress)
-        if (!payWithNative) {
+        if (!userAssetIsNative) {
+          // ERC20: handle transfer
           transferCall = isPermit2
-            ? encodePermit2TransferFrom(asset as Address, composerAddress as Address, BigInt(adjustedAmount))
-            : encodeTransferIn(asset as Address, composerAddress as Address, BigInt(adjustedAmount))
+            ? encodePermit2TransferFrom(
+                callerAssetAddress as Address,
+                composerAddress as Address,
+                BigInt(adjustedAmount)
+              )
+            : encodeTransferIn(callerAssetAddress as Address, composerAddress as Address, BigInt(adjustedAmount))
+          // attach permit
           if (permitData && permitData.data !== '0x') {
-            permitCall = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), asset as Address, permitData.data)
+            permitCall = encodePermit(BigInt(PermitIds.TOKEN_PERMIT), callerAssetAddress as Address, permitData.data)
           }
           // compound v2: unwrap after transferring wrapped native
-          if (isNativeAddress(asset)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, lenderData.lender)
-            unwrapCall = encodeUnwrap(wrappedNative, composerAddress as Address, BigInt(rawAmount), SweepType.AMOUNT)
+          if (lenderAssetIsNative) {
+            validateCompoundV2Lender(lender)
+            unwrapCall = encodeUnwrap(wrappedNative, composerAddress as Address, amount, SweepType.AMOUNT)
           }
         } else {
           // compound v2: unwrap after transferring wrapped native
-          if (isNativeAddress(asset)) {
-            validateCompoundV2(callerAssetAddress, wrappedNative, params.lender)
+          if (lenderAssetIsNative) {
+            // lender asset is native: no wrap or transfer needed
+            validateCompoundV2Lender(lender)
             transferCall = '0x' // no transfer needed
           } else {
             transferCall = encodeWrap(adjustedAmount, wrappedNative)
@@ -228,8 +316,10 @@ export namespace ComposerDirectLending {
         const commands = [permitCall, transferCall, unwrapCall, repay]
         // for repaying all, sweep whatever is left in the contract to the receiver
         if (isAll) {
-          if (payWithNative) commands.push(encodeUnwrap(wrappedNative, receiver as Address, 0n, SweepType.VALIDATE))
-          else commands.push(encodeSweep(asset as Address, receiver as Address, 0n, SweepType.VALIDATE))
+          // sweep leftovers - unwrap if paid in native (and pool has native asset)
+          if (userAssetIsNative && !lenderAssetIsNative)
+            commands.push(encodeUnwrap(wrappedNative, receiver as Address, 0n, SweepType.VALIDATE))
+          else commands.push(encodeSweep(lenderAssetAddress as Address, receiver as Address, 0n, SweepType.VALIDATE))
         }
 
         return {
@@ -237,6 +327,8 @@ export namespace ComposerDirectLending {
           value,
         }
       }
+      default:
+        throw new Error('Unsupported operation')
     }
   }
 }
