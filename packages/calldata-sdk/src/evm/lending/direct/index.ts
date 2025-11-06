@@ -21,7 +21,7 @@ import {
   packCommands,
   ComposerLendingActions,
   NO_VALUE,
-  AaveInterestMode,
+  LendingMode,
   isNativeAddress,
   isMoonwellWNativeTransferOut,
   safeEncodeWrap,
@@ -212,7 +212,7 @@ export namespace ComposerDirectLending {
         if (permitData && permitData.data !== '0x') {
           // withdrawal means that we need the collateral token
           // we override it here to be sure
-          const permitAsset = getPermitAsset(lenderData.group, lenderData, AaveInterestMode.NONE)
+          const permitAsset = getPermitAsset(lenderData.group, lenderData, LendingMode.NONE)
           if (permitAsset)
             permitCall = encodePermit(
               BigInt(isAaveType(lenderData.group) ? PermitIds.TOKEN_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),

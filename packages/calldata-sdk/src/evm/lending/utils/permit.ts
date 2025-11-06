@@ -1,11 +1,11 @@
-import { isAaveType, AaveInterestMode, LenderData, LenderGroups } from '..'
+import { isAaveType, LendingMode, LenderData, LenderGroups } from '..'
 
-export function getPermitAsset(lender: LenderGroups, lenderData: LenderData, mode = AaveInterestMode.NONE) {
+export function getPermitAsset(lender: LenderGroups, lenderData: LenderData, mode = LendingMode.NONE) {
   if (isAaveType(lender)) {
-    if (mode === AaveInterestMode.VARIABLE) {
+    if (mode === LendingMode.VARIABLE) {
       return lenderData.lenderTokens?.debt
     }
-    if (mode === AaveInterestMode.STABLE) {
+    if (mode === LendingMode.STABLE) {
       return lenderData.lenderTokens?.stableDebt
     }
     return lenderData.lenderTokens?.collateral

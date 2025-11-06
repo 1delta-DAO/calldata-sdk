@@ -27,12 +27,16 @@ export interface LenderTokens {
 }
 
 export interface InterestRateParams {
-  aaveBorrowMode: AaveInterestMode
+  aaveBorrowMode: LendingMode
 }
 
-export enum AaveInterestMode {
+/** Matches Aave interest mode */
+export enum LendingMode {
+  /** This means collateral action / deposits*/
   NONE = 0,
+  /** Stable borrowing */
   STABLE = 1,
+  /** Variable borrowing */
   VARIABLE = 2,
 }
 
@@ -167,7 +171,7 @@ export interface CreateBorrowParams {
   asset: string
   chainId: string
   lender: Lender
-  aaveInterestMode?: AaveInterestMode
+  aaveInterestMode?: LendingMode
   morphoParams?: MorphoParams
   useOverride?: Pick<LendingOverrides, 'pool' | 'collateralToken'>
 }
@@ -178,7 +182,7 @@ export interface CreateRepayParams {
   asset: string
   chainId: string
   lender: Lender
-  aaveInterestMode?: AaveInterestMode
+  aaveInterestMode?: LendingMode
   morphoParams?: MorphoParams
   transferType: TransferToLenderType
   useOverride?: Pick<LendingOverrides, 'pool' | 'debtToken' | 'collateralToken'>

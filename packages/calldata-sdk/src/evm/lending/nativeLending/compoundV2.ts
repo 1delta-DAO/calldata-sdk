@@ -1,8 +1,8 @@
 import { isNativeAddress, isVenusType } from '../utils'
 import { isCompoundV2 } from '../../flashloan'
-import { encodeFunctionData, parseAbi } from 'viem'
 import { compoundV2Tokens } from '@1delta/data-sdk'
 import { ShallowCurrencyAmount } from '../types'
+import { CompoundV2Lending } from '../../generic/compoundV2'
 
 export namespace CompoundV2NativeLending {
   /**
@@ -28,14 +28,9 @@ export namespace CompoundV2NativeLending {
     if (!cToken) throw new Error('cToken not provided')
     if (!amount.amount) throw new Error('No amount')
 
-    const abi = parseAbi(['function borrow(uint256 amount) external returns (uint256)'])
     return {
       to: cToken,
-      data: encodeFunctionData({
-        abi,
-        functionName: 'borrow',
-        args: [rawAmount],
-      }),
+      data: CompoundV2Lending.encodeBorrow(rawAmount),
       value: '0',
     }
   }

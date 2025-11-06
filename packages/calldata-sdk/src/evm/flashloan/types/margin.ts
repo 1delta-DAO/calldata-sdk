@@ -1,5 +1,5 @@
 import { Lender } from '@1delta/lender-registry'
-import { AaveInterestMode, MorphoParams } from '../../lending/types'
+import { LendingMode, MorphoParams } from '../../lending/types'
 import { PermitData } from '../..'
 
 export enum MarginTradeType {
@@ -13,9 +13,9 @@ export interface MarginData {
   /** operation */
   marginTradeType: MarginTradeType
   /** Aave style interest mode for input */
-  irModeIn: AaveInterestMode
+  irModeIn: LendingMode
   /** Aave style interest mode for output */
-  irModeOut: AaveInterestMode
+  irModeOut: LendingMode
   /** lender id */
   lender: Lender
   /** input morpho parameters */

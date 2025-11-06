@@ -1,6 +1,6 @@
 import { Address } from 'viem'
 import { Lender } from '@1delta/lender-registry'
-import { AaveInterestMode, MorphoParams, LendingOverrides, QuickActionType } from '../lending/types'
+import { LendingMode, MorphoParams, LendingOverrides, QuickActionType } from '../lending/types'
 import { ExternalCallParams } from '../spot'
 import { GenericTrade, PermitData } from '..'
 
@@ -22,12 +22,12 @@ export interface SwapAndDepositParams extends BaseQuickActionParams {
 
 export interface SwapAndRepayParams extends BaseQuickActionParams {
   repayMaximum?: boolean
-  aaveInterestMode?: AaveInterestMode
+  aaveInterestMode?: LendingMode
   useOverride?: Pick<LendingOverrides, 'pool' | 'debtToken' | 'collateralToken'>
 }
 
 export interface BorrowAndSwapParams extends BaseQuickActionParams {
-  aaveInterestMode?: AaveInterestMode
+  aaveInterestMode?: LendingMode
   useOverride?: Pick<LendingOverrides, 'pool' | 'collateralToken'>
 }
 
@@ -39,6 +39,6 @@ export interface WithdrawAndSwapParams extends BaseQuickActionParams {
 export interface QuickActionParams extends BaseQuickActionParams {
   quickActionType: QuickActionType
   maximum?: boolean
-  aaveInterestMode?: AaveInterestMode
+  aaveInterestMode?: LendingMode
   useOverride?: LendingOverrides
 }
