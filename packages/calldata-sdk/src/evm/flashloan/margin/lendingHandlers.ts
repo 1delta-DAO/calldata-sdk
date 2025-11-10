@@ -50,7 +50,7 @@ export function handleRepay(params: HandleRepayParams) {
       amount: BigInt(amount),
       chainId: tokenOut.chainId,
       lender,
-      aaveInterestMode: marginData.irModeOut,
+      lendingMode: marginData.irModeOut,
       morphoParams,
       transferType: transferToLenderType,
       useOverride: {
@@ -68,7 +68,7 @@ export function handleRepay(params: HandleRepayParams) {
       amount: BigInt(repayAmount),
       chainId: tokenOut.chainId,
       lender,
-      aaveInterestMode: marginData.irModeOut,
+      lendingMode: marginData.irModeOut,
       morphoParams,
       transferType: TransferToLenderType.ContractBalance,
       useOverride: {

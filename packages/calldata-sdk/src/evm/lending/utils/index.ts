@@ -5,7 +5,7 @@ import {
   COMPOUND_V3_LENDERS,
   COMPOUND_V2_LENDERS,
 } from '@1delta/lender-registry'
-import { LenderData, LenderGroups, OverrideAmount, ShallowCurrencyAmount } from '../types'
+import { LenderData, LenderGroups, ShallowCurrencyAmount } from '../types'
 import {
   ComposerCommands,
   encodeSweep,
@@ -36,24 +36,6 @@ import { Chain } from '@1delta/chain-registry'
 export * from './permit'
 
 export const isVenusType = (lender: string) => lender.startsWith('VENUS')
-
-export function isOverrideAmount(amount: ShallowCurrencyAmount | OverrideAmount): amount is OverrideAmount {
-  return 'asset' in amount && 'amount' in amount && 'chainId' in amount && !!amount.asset && !!amount.chainId
-}
-
-export function getAssetData(amount: ShallowCurrencyAmount | OverrideAmount, lender: Lender) {
-  if (isOverrideAmount(amount)) {
-    return {
-      asset: amount.asset,
-      lenderData: getLenderData(lender, amount.chainId, amount.asset),
-    }
-  }
-  const { asset, chainId } = getAssetParamsFromAmount(amount as ShallowCurrencyAmount)
-  return {
-    asset: asset,
-    lenderData: getLenderData(lender, chainId, asset),
-  }
-}
 
 export function getLenderData(lender: Lender, chainId: ChainIdLike, asset: string): LenderData {
   // check if the lender is aave (all aave forks)

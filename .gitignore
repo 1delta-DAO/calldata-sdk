@@ -3,6 +3,8 @@
 /node_modules
 .wrangler
 
+/worker
+
 # env
 
 *.vars

@@ -138,9 +138,9 @@ const externalCall = {
 const marginData =  {
   marginTradeType,
   // STABLE is deactivated for most aave forks
-  irModeIn: AaveInterestMode.VARIABLE
+  irModeIn: LendingMode.VARIABLE
   // unused
-  irModeOut: AaveInterestMode.NONE
+  irModeOut: LendingMode.NONE
   lender,
   morphoParams: undefined, // no morpho execution
   permitData: undefined // no permits in this example

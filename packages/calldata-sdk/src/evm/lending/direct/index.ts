@@ -51,7 +51,6 @@ export namespace ComposerDirectLending {
     }
 
     const {
-      params,
       chainId,
       amount,
       lender,
@@ -63,6 +62,7 @@ export namespace ComposerDirectLending {
       composerAddress,
       permitData,
       morphoParams,
+      lendingMode,
     } = op
 
     const isPermit2 = permitData?.isPermit2
@@ -229,7 +229,7 @@ export namespace ComposerDirectLending {
       case QuickActionType.Borrow: {
         let intermediateReceiver = composerAddress
 
-        if (isAaveType(lenderData.group) && !params.aaveBorrowMode) {
+        if (isAaveType(lenderData.group) && !lendingMode) {
           throw new Error('Borrow mode is required for AaveV2/V3 borrows')
         }
 
@@ -237,7 +237,7 @@ export namespace ComposerDirectLending {
           receiver: intermediateReceiver,
           amount,
           lender: lender as any,
-          aaveInterestMode: params.aaveBorrowMode,
+          lendingMode: lendingMode,
           morphoParams,
           asset: lenderAssetAddress,
           chainId,
@@ -252,7 +252,7 @@ export namespace ComposerDirectLending {
         }
         // handle permit
         if (permitData && permitData.data !== '0x') {
-          const permitAsset = getPermitAsset(lenderData.group, lenderData, params.aaveBorrowMode)
+          const permitAsset = getPermitAsset(lenderData.group, lenderData, lendingMode)
           if (permitAsset)
             permitCall = encodePermit(
               BigInt(isAaveType(lenderData.group) ? PermitIds.AAVE_V3_CREDIT_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
@@ -273,7 +273,7 @@ export namespace ComposerDirectLending {
           receiver,
           amount,
           lender: lender as any,
-          aaveInterestMode: params.aaveBorrowMode,
+          lendingMode: lendingMode,
           morphoParams,
           asset: lenderAssetAddress,
           chainId,

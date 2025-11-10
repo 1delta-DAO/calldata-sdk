@@ -209,7 +209,7 @@ export namespace ComposerLendingActions {
   }
 
   export function createBorrow(params: CreateBorrowParams) {
-    const { receiver, amount, lender, aaveInterestMode: mode, morphoParams, useOverride, chainId, asset } = params
+    const { receiver, amount, lender, lendingMode: mode, morphoParams, useOverride, chainId, asset } = params
     const lenderData = getLenderData(lender, chainId, asset)
 
     if (isNativeAddress(asset)) throw new Error('Cannot delegate native borrowing')
@@ -266,7 +266,7 @@ export namespace ComposerLendingActions {
       receiver,
       amount,
       lender,
-      aaveInterestMode: mode,
+      lendingMode: mode,
       morphoParams,
       transferType = TransferToLenderType.Amount,
       useOverride,

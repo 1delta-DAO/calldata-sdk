@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.117",
+  "version": "0.0.118",
   "description": "⚒️ An SDK for building calldata for 1delta smart contracts",
   "files": [
     "dist"
@@ -37,7 +37,7 @@
     "jsdom": "^27.1.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.6"
+    "vitest": "^4.0.8"
   },
   "peerDependenciesMeta": {
     "test-routing": {

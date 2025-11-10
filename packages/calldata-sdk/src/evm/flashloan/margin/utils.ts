@@ -80,7 +80,7 @@ export function buildMarginInnerCall(
         amount: BigInt(flashLoanAmountWithFee),
         chainId: trade.inputAmount.currency.chainId,
         lender: lender,
-        aaveInterestMode: marginData.irModeIn,
+        lendingMode: marginData.irModeIn,
         morphoParams: morphoParamsIn,
         useOverride: morphoParamsIn
           ? undefined
@@ -191,7 +191,7 @@ export function buildMarginInnerCall(
         amount: BigInt(flashLoanAmountWithFee),
         chainId: trade.inputAmount.currency.chainId,
         lender: lender,
-        aaveInterestMode: marginData.irModeIn,
+        lendingMode: marginData.irModeIn,
         morphoParams: morphoParamsIn,
         useOverride: morphoParamsIn
           ? undefined

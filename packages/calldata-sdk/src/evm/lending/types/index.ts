@@ -41,11 +41,11 @@ export enum LendingMode {
 }
 
 export interface LendingOperation {
-  params: BaseLendingParams & Partial<InterestRateParams>
   amount: bigint
   lender: string
   chainId: string
   actionType: QuickActionType
+  lendingMode: LendingMode | undefined
   receiver: string
   isAll?: boolean
   callerAssetAddress: string
@@ -66,29 +66,6 @@ export interface LenderData {
   group: LenderGroups
   lender: Lender
 }
-
-export const COMPOUND_V2_LENDERS: Lender[] = [
-  Lender.COMPOUND_V2,
-  Lender.OVIX,
-  Lender.VENUS,
-  Lender.VENUS_ETH,
-  Lender.VENUS_BNB,
-  Lender.VENUS_BTC,
-  Lender.VENUS_MEME,
-  Lender.VENUS_DEFI,
-  Lender.VENUS_GAMEFI,
-  Lender.VENUS_STABLE,
-  Lender.VENUS_TRON,
-  Lender.VENUS_ETHENA,
-  Lender.VENUS_CURVE,
-  Lender.SEGMENT,
-  Lender.ENCLABS,
-  Lender.ENCLABS_LST,
-  Lender.ENCLABS_PT_USD,
-  Lender.ENCLABS_PT_ETH,
-  Lender.BENQI,
-  Lender.BENQI_AVALANCE_ECOSYSTEM,
-]
 
 export enum LenderGroups {
   AaveV2,
@@ -130,12 +107,6 @@ export interface MorphoParams {
   isLoanToken?: boolean
 }
 
-export interface OverrideAmount {
-  asset: string
-  amount: bigint
-  chainId: ChainIdLike
-}
-
 export interface LendingOverrides {
   pool?: string
   collateralToken?: string
@@ -171,7 +142,7 @@ export interface CreateBorrowParams {
   asset: string
   chainId: string
   lender: Lender
-  aaveInterestMode?: LendingMode
+  lendingMode?: LendingMode
   morphoParams?: MorphoParams
   useOverride?: Pick<LendingOverrides, 'pool' | 'collateralToken'>
 }
@@ -182,7 +153,7 @@ export interface CreateRepayParams {
   asset: string
   chainId: string
   lender: Lender
-  aaveInterestMode?: LendingMode
+  lendingMode?: LendingMode
   morphoParams?: MorphoParams
   transferType: TransferToLenderType
   useOverride?: Pick<LendingOverrides, 'pool' | 'debtToken' | 'collateralToken'>

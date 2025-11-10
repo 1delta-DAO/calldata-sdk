@@ -78,7 +78,7 @@ export namespace ComposerQuickActions {
       receiver,
       lender,
       repayMaximum = false,
-      aaveInterestMode,
+      lendingMode,
       morphoParams,
       useOverride,
       externalCall,
@@ -105,7 +105,7 @@ export namespace ComposerQuickActions {
       asset: trade.outputAmount.currency.address,
       chainId,
       lender,
-      aaveInterestMode,
+      lendingMode,
       morphoParams,
       transferType: repayMaximum ? TransferToLenderType.UserBalance : TransferToLenderType.ContractBalance,
       useOverride,
@@ -128,7 +128,7 @@ export namespace ComposerQuickActions {
       slippageBps,
       receiver,
       lender,
-      aaveInterestMode,
+      lendingMode,
       morphoParams,
       useOverride,
       externalCall,
@@ -147,7 +147,7 @@ export namespace ComposerQuickActions {
     // create permit calldata
     let permitCalldata: Hex = '0x'
     if (permitData) {
-      const permitAsset = getPermitAsset(lenderData.group, lenderData, aaveInterestMode)
+      const permitAsset = getPermitAsset(lenderData.group, lenderData, lendingMode)
       if (permitAsset) {
         permitCalldata = encodePermit(
           BigInt(isAaveType(lenderData.group) ? PermitIds.AAVE_V3_CREDIT_PERMIT : PermitIds.ALLOW_CREDIT_PERMIT),
@@ -166,7 +166,7 @@ export namespace ComposerQuickActions {
       asset: trade.inputAmount.currency.address,
       amount: CurrencyUtils.getAmount(trade.inputAmount),
       lender,
-      aaveInterestMode,
+      lendingMode,
       morphoParams,
       useOverride,
     })

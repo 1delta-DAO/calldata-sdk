@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { ComposerDirectLending } from './index'
-import { QuickActionType, LendingOperation, AaveInterestMode, MorphoParams } from '../types'
+import { QuickActionType, LendingOperation, LendingMode, MorphoParams } from '../types'
 import { Address, Hex, zeroAddress } from 'viem'
 import { SerializedCurrency } from '@1delta/type-sdk'
 import { CurrencyUtils } from '../../../utils'
@@ -227,11 +227,7 @@ describe('composeDirectMoneyMarketAction', async () => {
     overrides?: Partial<LendingOperation>
   ): LendingOperation => {
     return {
-      params: {
-        lender,
-        amount: CurrencyUtils.fromRawAmount(token, amount),
-        aaveBorrowMode: AAVE_LENDERS.includes(lender) ? AaveInterestMode.VARIABLE : undefined,
-      },
+      lendingMode: AAVE_LENDERS.includes(lender) ? LendingMode.VARIABLE : undefined,
       amount: BigInt(amount),
       actionType,
       lender,
@@ -483,11 +479,7 @@ describe('composeDirectMoneyMarketAction', async () => {
     it('should create calldata for stable rate borrow from Aave V3', async () => {
       const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Borrow, Lender.AAVE_V3, TEST_AMOUNT, usdt, {
-        params: {
-          lender: Lender.AAVE_V3,
-          amount: CurrencyUtils.fromRawAmount(usdt, TEST_AMOUNT),
-          aaveBorrowMode: AaveInterestMode.STABLE,
-        },
+        lendingMode: LendingMode.STABLE,
       })
 
       const result = ComposerDirectLending.composeDirectMoneyMarketAction(operation)
@@ -500,11 +492,9 @@ describe('composeDirectMoneyMarketAction', async () => {
     it('should throw error for Aave borrow without mode', async () => {
       const { usdt } = await createTestTokens()
       const operation = createBaseLendingOperation(QuickActionType.Borrow, Lender.AAVE_V3, TEST_AMOUNT, usdt, {
-        params: {
-          lender: Lender.AAVE_V3,
-          amount: CurrencyUtils.fromRawAmount(usdt, TEST_AMOUNT),
-          // No aaveBorrowMode
-        },
+        lender: Lender.AAVE_V3,
+        amount: BigInt(TEST_AMOUNT),
+        // No lendingMode
       })
 
       expect(() => {
@@ -638,7 +628,7 @@ describe('composeDirectMoneyMarketAction', async () => {
         chainId: '10',
         params: {
           lender: 'MOONWELL',
-          aaveBorrowMode: 0,
+          lendingMode: 0,
         },
         lender: 'MOONWELL',
         amount: '635745156220629',
@@ -662,7 +652,7 @@ describe('composeDirectMoneyMarketAction', async () => {
         chainId: '10',
         params: {
           lender: 'MOONWELL',
-          aaveBorrowMode: 0,
+          lendingMode: 0,
         },
         lender: 'MOONWELL',
         amount: '635745156220629',

@@ -12,7 +12,7 @@
     "clean": "pnpm -r exec rimraf dist && pnpm store prune && rm -rf node_modules && rm -rf packages/**/node_modules"
   },
   "devDependencies": {
-    "@types/node": "^24.9.2",
+    "@types/node": "^24.10.0",
     "lodash": "^4.17.21",
     "rimraf": "^6.1.0",
     "typescript": "^5.9.3"
@@ -24,6 +24,6 @@
     "@1delta/lender-registry": "^0.0.10",
     "@1delta/type-sdk": "^0.0.3",
     "@types/lodash": "^4.17.20",
-    "axios": "^1.13.1"
+    "axios": "^1.13.2"
   }
 }

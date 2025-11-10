@@ -95,7 +95,7 @@ const PARAMS = {
     },
   },
   lender: 'AAVE_V3',
-  aaveInterestMode: 2,
+  lendingMode: 2,
   slippageBps: '3000',
   externalCall: {
     calldata:
