@@ -24,4 +24,6 @@ export interface MarginData {
   morphoParamsOut?: MorphoParams
   /** permit */
   permitData?: PermitData
+  /** Unwrap wrapped native token to native when closing a position */
+  unwrapOutput?: boolean
 }
