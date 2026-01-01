@@ -1,4 +1,4 @@
-import { encodeSweep, SweepType, encodePermit, PermitIds } from '@1delta/calldatalib'
+import { encodeSweep, SweepType, encodePermit, PermitIds, encodeUnwrap } from '@1delta/calldatalib'
 import { MarginData, MarginTradeType, NO_CONTEXT } from '..'
 import {
   TransferToLenderType,
@@ -9,11 +9,36 @@ import {
   getPermitAsset,
   LenderData,
   ComposerLendingActions,
+  isMoonwellWNativeTransferOut,
 } from '../../lending'
 import { handleWithdraw, handleRepay } from './lendingHandlers'
 import { Address, Hex } from 'viem'
 import { ContractCallsContext, getAssetInFromTrade, getAssetOutFromTrade, SwapObject } from '../../../utils'
-import { SerializedCurrency } from '@1delta/type-sdk'
+import { SerializedCurrency, ChainIdLike } from '@1delta/type-sdk'
+import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
+import { Lender } from '@1delta/lender-registry'
+
+export function isWrappedNative(address: string, chainId: ChainIdLike): boolean {
+  const wnative = WRAPPED_NATIVE_INFO[chainId]?.address
+  return address.toLowerCase() === wnative.toLowerCase()
+}
+
+export function shouldUnwrap(
+  unwrapFlag: boolean | undefined,
+  tokenAddress: string,
+  chainId: ChainIdLike,
+  lender: Lender
+): boolean {
+  if (!unwrapFlag) return false
+  if (!isWrappedNative(tokenAddress, chainId)) return false
+
+  const wnative = WRAPPED_NATIVE_INFO[chainId]?.address
+  if (isMoonwellWNativeTransferOut(lender, tokenAddress, wnative, chainId.toString())) {
+    return false
+  }
+
+  return true
+}
 
 /**
  * These are the lending inner callback lending datas
@@ -121,6 +146,7 @@ export function buildMarginInnerCall(
         morphoParams: morphoParamsIn,
         permitData,
         composerAddress,
+        marginData,
       })
 
       break
@@ -153,6 +179,7 @@ export function buildMarginInnerCall(
         morphoParams: morphoParamsIn,
         permitData,
         composerAddress,
+        marginData,
       })
 
       break
@@ -215,12 +242,25 @@ export function buildMarginInnerCall(
   // safely sweep any output leftovers in case of overpaying
   // this cannot occur for opening and collateral swaps
   if (marginData.marginTradeType === MarginTradeType.Close || marginData.marginTradeType === MarginTradeType.DebtSwap) {
-    safetySweep = encodeSweep(
-      trade.outputAmount.currency.address as Address,
-      account as Address,
-      0n,
-      SweepType.VALIDATE
+    // check if we should unwrap
+    const shouldUnwrapDebt = shouldUnwrap(
+      marginData.unwrapOutput,
+      trade.outputAmount.currency.address,
+      trade.outputAmount.currency.chainId,
+      lender
     )
+
+    if (shouldUnwrapDebt) {
+      const wnative = WRAPPED_NATIVE_INFO[trade.outputAmount.currency.chainId].address as Address
+      safetySweep = encodeUnwrap(wnative, account, 0n, SweepType.VALIDATE)
+    } else {
+      safetySweep = encodeSweep(
+        trade.outputAmount.currency.address as Address,
+        account as Address,
+        0n,
+        SweepType.VALIDATE
+      )
+    }
   }
 
   return {

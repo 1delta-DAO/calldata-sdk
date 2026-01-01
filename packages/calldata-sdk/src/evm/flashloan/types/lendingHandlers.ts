@@ -27,5 +27,6 @@ export interface HandleWithdrawParams {
   context: ContractCallsContext
   morphoParams: MorphoParams | undefined
   permitData?: PermitData
-  composerAddress:string
+  composerAddress: string
+  marginData: MarginData
 }

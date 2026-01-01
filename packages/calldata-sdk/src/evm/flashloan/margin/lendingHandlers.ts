@@ -1,5 +1,5 @@
 import { Address, Hex, zeroAddress } from 'viem'
-import { encodeSweep, SweepType, encodePermit, PermitIds, encodeWrap } from '@1delta/calldatalib'
+import { encodeSweep, SweepType, encodePermit, PermitIds, encodeWrap, encodeUnwrap } from '@1delta/calldatalib'
 import {
   TransferToLenderType,
   adjustAmountForAll,
@@ -21,6 +21,7 @@ import { isAave } from '../utils'
 import { WRAPPED_NATIVE_INFO } from '@1delta/wnative'
 import { Lender } from '@1delta/lender-registry'
 import { Chain } from '@1delta/chain-registry'
+import { shouldUnwrap } from './utils'
 
 /**
  * Parametrize a repay transaction for margin.
@@ -107,6 +108,7 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     morphoParams,
     permitData,
     composerAddress,
+    marginData,
   } = params
 
   // do the conversion here for simplicity
@@ -160,8 +162,21 @@ export function handleWithdraw(params: HandleWithdrawParams) {
     // add permit to withdraw
     context.callOut = packCommands([permitCall, withdrawCalldata])
 
-    // refunds excess funds to caller (will correctly handle native already)
-    context.cleanup = encodeSweep(tokenIn.address as Address, account, 0n, SweepType.VALIDATE)
+    // refunds excess funds to caller
+    // check if we should unwrap
+    const shouldUnwrapCollateral = shouldUnwrap(
+      marginData.unwrapOutput,
+      tokenIn.address,
+      tokenIn.chainId,
+      lender
+    )
+
+    if (shouldUnwrapCollateral) {
+      const wnative = WRAPPED_NATIVE_INFO[tokenIn.chainId].address as Address
+      context.cleanup = encodeUnwrap(wnative, account, 0n, SweepType.VALIDATE)
+    } else {
+      context.cleanup = encodeSweep(tokenIn.address as Address, account, 0n, SweepType.VALIDATE)
+    }
 
     // if the flash loan does not pull funds manually, we add a flash loan repay transfer
     if (flashRepayBalanceHolder !== intermediate) {
